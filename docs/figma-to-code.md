@@ -134,7 +134,7 @@ For each section, verify against Figma:
 
 If a value differs by more than rounding (e.g., 1px on a 60px container), it's a bug. Fix it before moving on — drift accumulates across sections.
 
-**Also verify in both directions.** Toggle `bonyad-lang=ar` cookie and reload. The layout should mirror; if anything stays anchored to a physical side, see [i18n-and-rtl.md](i18n-and-rtl.md) — likely a `-end` utility that should be `-start`.
+**Also verify in both directions.** Toggle the `bonyad-lang` cookie between `en` and `ar` and reload each time. The layout should mirror — and note that this project inverts the direction mapping, so `en` produces `<html dir="rtl">` and `ar` produces `<html dir="ltr">` (see [i18n-and-rtl.md](i18n-and-rtl.md) §Direction mapping). If anything stays anchored to the same physical side across both locales, you have a `-end` utility that should be `-start` (or a physical `left-*`/`right-*` that slipped through).
 
 ## What NOT to do
 

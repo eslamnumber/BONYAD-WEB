@@ -6,7 +6,7 @@ import { useRouter } from 'next/navigation';
 import { useTransition, type MouseEvent } from 'react';
 
 import { ROUTES } from '@/config/routes';
-import { type Locale } from '@/types/locale';
+import { LOCALE_DIRECTION, type Locale } from '@/types/locale';
 
 type HeroToggleProps = {
   postLabel: string;
@@ -24,10 +24,10 @@ const PILL_TRAVEL = 121;
 export function HeroToggle({ postLabel, proLabel, headline, activeTab, locale }: HeroToggleProps) {
   const router = useRouter();
   const [, startTransition] = useTransition();
-  const rtl = locale === 'ar';
   // framer-motion's `x` is a raw CSS pixel transform that ignores writing-mode,
-  // so we negate it under RTL to make the pill slide toward the visual left
-  // (i.e. the inline-end side in RTL) when the pro tab becomes active.
+  // so we negate it under RTL. We derive direction from LOCALE_DIRECTION (not
+  // `locale === 'ar'`) because this project inverts the natural mapping.
+  const rtl = LOCALE_DIRECTION[locale] === 'rtl';
   const offset = activeTab === 'user' ? 0 : rtl ? -PILL_TRAVEL : PILL_TRAVEL;
 
   function navigate(href: string) {

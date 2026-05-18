@@ -18,8 +18,8 @@ type FeatureItemProps = {
 
 function FeatureItem({ Icon, title, body }: FeatureItemProps) {
   return (
-    <div className="flex items-center gap-4">
-      <div className="flex flex-1 flex-col gap-1 text-start">
+    <div className="flex items-center justify-end gap-4">
+      <div className="flex flex-col gap-1 text-end">
         <p className="text-xl font-medium text-foreground">{title}</p>
         <p className="text-base text-muted-foreground">{body}</p>
       </div>
@@ -42,7 +42,7 @@ function ServicesPanel({ title, body, panelClass }: ServicesPanelProps) {
         className="object-cover"
         sizes="(max-width: 768px) 100vw, 518px"
       />
-      <div className="absolute end-[28px] top-[39px] flex max-w-[280px] flex-col gap-3 text-start">
+      <div className="absolute start-[28px] top-[39px] flex max-w-[280px] flex-col gap-3 text-start">
         <h3 className="text-[36px] font-semibold leading-tight text-foreground">{title}</h3>
         <p className="text-[20px] text-foreground/80">{body}</p>
       </div>

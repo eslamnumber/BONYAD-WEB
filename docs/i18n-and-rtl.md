@@ -1,5 +1,18 @@
 # i18n and RTL
 
+## Direction mapping — intentionally inverted
+
+This project ships an **inverted** locale → direction mapping. The single source of truth is `LOCALE_DIRECTION` in `src/types/locale.ts`:
+
+| Locale | `<html dir>` |
+| ------ | ------------ |
+| `en`   | `rtl`        |
+| `ar`   | `ltr`        |
+
+This is the **opposite** of each script's natural direction (English normally flows LTR, Arabic normally flows RTL). Because logical CSS properties resolve relative to `<html dir>`, every rule below still works mechanically — but the rule-of-thumb intuition that "`-start` lines up with the language's reading direction" no longer holds, since `dir` is decoupled from the language. Read the §Common mistake section with this inversion in mind.
+
+If you ever need to revert to the natural mapping, flip the constant in `src/types/locale.ts` and re-test both locales — no other code change required.
+
 ## Setup — initialized once
 
 - i18next is initialized **exactly once** in `src/lib/i18n.ts`, mirroring the RN app's pattern.
@@ -41,35 +54,35 @@
 
 ## Common mistake — `text-end` vs `text-start` (read this before writing JSX)
 
-When you look at an **RTL Figma frame**, Arabic text appears visually right-aligned. The instinct is to type `text-end` because "end = right." **That instinct is wrong** and produces a screen that looks correct in English and broken in Arabic.
+When you look at an **RTL Figma frame**, content appears visually anchored to the right. The instinct is to type `text-end` because "end = right." **That instinct is wrong** and produces a screen that mirrors incorrectly when the locale changes.
 
-The logical utilities are **direction-relative**, not visual:
+The logical utilities are **direction-relative** — they resolve against `<html dir>`, not against the language or the script. Because this project inverts the direction mapping (`en → rtl`, `ar → ltr`), the column labels below are by `<html dir>`, **not** by language:
 
-| Utility       | LTR (English)         | RTL (Arabic)          |
-| ------------- | --------------------- | --------------------- |
-| `text-start`  | left-aligned          | **right-aligned** ✓   |
-| `text-end`    | right-aligned         | **left-aligned** ✗    |
-| `items-start` | cross-axis left       | cross-axis right ✓    |
-| `items-end`   | cross-axis right      | cross-axis left ✗     |
-| `justify-start` (flex-row) | main-axis left | main-axis right ✓ |
-| `justify-end` (flex-row)   | main-axis right| main-axis left ✗ |
+| Utility       | `dir="ltr"` (currently: `ar`)         | `dir="rtl"` (currently: `en`)          |
+| ------------- | ------------------------------------- | -------------------------------------- |
+| `text-start`  | left-aligned                          | **right-aligned**                      |
+| `text-end`    | right-aligned                         | **left-aligned**                       |
+| `items-start` | cross-axis left                       | cross-axis right                       |
+| `items-end`   | cross-axis right                      | cross-axis left                        |
+| `justify-start` (flex-row) | main-axis left           | main-axis right                        |
+| `justify-end` (flex-row)   | main-axis right          | main-axis left                         |
 | `justify-end` (flex-col)   | vertical bottom — **direction-independent**, fine to use |
 
 ### Rule of thumb
 
-**Default to `start`.** Arabic text is naturally right-aligned because reading flows right-to-left — `text-start` gives that for free. English text is naturally left-aligned — `text-start` gives that too. The result mirrors correctly across both locales.
+**Default to `start`.** It anchors content to the leading edge of whichever direction `<html dir>` currently has, so the layout mirrors automatically when the locale toggles. With the inverted mapping, that leading edge is on the **right** for English and the **left** for Arabic — flipped from each script's natural reading direction, but consistent with the rest of the layout because every component is laid out in the same logical frame.
 
-Only reach for `end` when you genuinely want to align against the reading direction — e.g., a timestamp on the trailing side of a chat bubble. That use case is rare; the bug isn't.
+Only reach for `end` when you genuinely want to align against the leading edge — e.g., a timestamp on the trailing side of a chat bubble. That use case is rare; the bug isn't.
 
 ### Real example from this codebase
 
 ```tsx
-// ❌ Looks right in English (Figma is RTL → text on the right edge), broken in Arabic
+// ❌ Anchors to a fixed visual side — the layout will not mirror when the locale toggles
 <div className="flex flex-col items-end gap-6 text-end">
   <h1>{t('home.hero.headline')}</h1>
 </div>
 
-// ✓ Reads naturally in both locales — right-aligned in Arabic, left-aligned in English
+// ✓ Anchors to the leading edge — mirrors correctly between `dir=rtl` (en) and `dir=ltr` (ar)
 <div className="flex flex-col items-start gap-6 text-start">
   <h1>{t('home.hero.headline')}</h1>
 </div>
@@ -77,7 +90,7 @@ Only reach for `end` when you genuinely want to align against the reading direct
 
 ### Verification
 
-After building any component from an RTL Figma frame, **set the cookie `bonyad-lang=ar` and reload**. If text shifts to the opposite side of where Figma showed it, you used `-end` where you needed `-start`. ESLint doesn't catch this — it only blocks the physical `text-left`/`text-right`. Both logical variants pass lint; choosing the right one is on you.
+After building any component from an RTL Figma frame, **toggle the `bonyad-lang` cookie between `en` and `ar` and reload each time**. The layout should mirror: in `en` you should see `<html dir="rtl">` and content anchored to the right; in `ar` you should see `<html dir="ltr">` and content anchored to the left. If a section stays anchored to the same physical side across both locales, you used `-end` where you needed `-start` (or a physical `left-*`/`right-*` slipped through). ESLint catches the physical utilities; choosing `-start` over `-end` is on you.
 
 ## ESLint enforcement
 

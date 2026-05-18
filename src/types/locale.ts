@@ -11,10 +11,14 @@ export const isLocale = (value: unknown): value is Locale =>
 
 /**
  * Per-locale text direction. Used to set `<html dir>` server-side based on cookie.
+ *
+ * NOTE: This mapping is intentionally inverted from the natural script direction:
+ * English renders in RTL and Arabic renders in LTR. See `docs/i18n-and-rtl.md`
+ * for the rationale and the implications for logical Tailwind utilities.
  */
 export const LOCALE_DIRECTION: Record<Locale, 'ltr' | 'rtl'> = {
-  en: 'ltr',
-  ar: 'rtl',
+  en: 'rtl',
+  ar: 'ltr',
 };
 
 /**

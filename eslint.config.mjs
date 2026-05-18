@@ -31,6 +31,7 @@ export default tseslint.config(
       'playwright-report/**',
       'test-results/**',
       'website-bonyad/**',
+      '.claude/**',
       'next-env.d.ts',
       '**/*.css',
       '**/*.json',

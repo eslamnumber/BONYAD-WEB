@@ -10,6 +10,15 @@ import { HeroToggle } from './hero-toggle';
 
 type HomeHeroProps = { locale: Locale; activeTab?: 'user' | 'pro' };
 
+function HeroTrustBadge({ label }: { label: string }) {
+  return (
+    <div className="flex items-center gap-2 text-[12px] text-muted-foreground/70">
+      <TrustBadgeIcon className="size-4 shrink-0" aria-hidden />
+      <span>{label}</span>
+    </div>
+  );
+}
+
 function HeroBgShape({ className }: { className: string }) {
   return (
     <div aria-hidden className={`pointer-events-none absolute ${className}`}>
@@ -105,10 +114,7 @@ export function HomeHero({ locale, activeTab = 'user' }: HomeHeroProps) {
                   label={t('home.hero.searchLabel')}
                   cta={t('home.hero.searchCta')}
                 />
-                <div className="flex items-center gap-2 text-[12px] text-muted-foreground/70">
-                  <TrustBadgeIcon className="size-4 shrink-0" aria-hidden />
-                  <span>{t('home.hero.trustBadge')}</span>
-                </div>
+                <HeroTrustBadge label={t('home.hero.trustBadge')} />
               </>
             ) : (
               <HeroProContent

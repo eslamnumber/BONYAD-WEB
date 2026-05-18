@@ -108,9 +108,7 @@ function ProCta({ headline, body, ctaPrimary, badge }: {
 
           {/* Earnings pill — Figma 1:4872 */}
           <div className="absolute start-[236px] top-[52px] flex items-center rounded-full border-2 border-[#005DAC] bg-white/60 px-4 py-[10px] backdrop-blur-[10px]">
-            <span className="whitespace-nowrap text-[12px] text-foreground" dir="rtl">
-              {badge}
-            </span>
+            <span className="whitespace-nowrap text-[12px] text-foreground">{badge}</span>
           </div>
 
           {/* Content — Figma 1:4865 */}
