@@ -1,0 +1,42 @@
+# Frozen legacy React Native codebase — reference only, never tracked.
+# See CLAUDE.md / AGENTS.md for the policy.
+website-bonyad/
+
+# Node / Next.js
+node_modules/
+.next/
+out/
+build/
+dist/
+*.tsbuildinfo
+next-env.d.ts
+
+# Env files (NEVER commit secrets — only .env.example is tracked)
+.env
+.env.local
+.env.*.local
+
+# Testing / coverage
+coverage/
+.nyc_output/
+playwright-report/
+test-results/
+
+# Editor / OS
+.DS_Store
+.vscode/
+.idea/
+*.swp
+*.swo
+.cursor/
+.windsurf/
+
+# Sentry / Vercel
+.sentryclirc
+.vercel/
+
+# Logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+pnpm-debug.log*

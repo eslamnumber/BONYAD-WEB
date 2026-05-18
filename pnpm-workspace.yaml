@@ -1,0 +1,7 @@
+allowBuilds:
+  '@sentry/cli': true
+  esbuild: true
+  msw: true
+  puppeteer: true
+  sharp: true
+  unrs-resolver: true

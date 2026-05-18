@@ -1,0 +1,66 @@
+/* =============================================================================
+ * Global stylesheet — Tailwind directives + theme tokens ONLY.
+ * Application styles live in component files via Tailwind utilities.
+ * Tokens come from src/styles/tokens.css.
+ * ===========================================================================*/
+
+@import '../styles/tokens.css';
+
+@layer base {
+  *,
+  ::before,
+  ::after {
+    border-color: var(--color-border);
+  }
+
+  html {
+    color-scheme: light dark;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+  }
+
+  body {
+    background-color: var(--color-background);
+    color: var(--color-foreground);
+    font-family: var(--font-sans);
+    min-height: 100dvh;
+  }
+
+  /* Arabic content automatically switches font stack when <html lang="ar">. */
+  :lang(ar) body {
+    font-family: var(--font-arabic);
+  }
+
+  /* Accessible focus ring — never `outline: none` (docs/accessibility.md). */
+  *:focus-visible {
+    outline: 2px solid var(--color-ring);
+    outline-offset: 2px;
+    border-radius: var(--radius-sm);
+  }
+
+  /* Hide content visually but keep it for screen readers. */
+  .sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+    border-width: 0;
+  }
+
+  /* Respect users who request reduced motion. */
+  @media (prefers-reduced-motion: reduce) {
+    *,
+    ::before,
+    ::after {
+      animation-duration: 0.01ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 0.01ms !important;
+      scroll-behavior: auto !important;
+    }
+  }
+}

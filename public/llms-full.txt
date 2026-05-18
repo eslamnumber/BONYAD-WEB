@@ -1,0 +1,70 @@
+# Bonyad — extended summary for LLMs
+
+This is the long-form companion to `llms.txt`. It contains a more complete
+overview of how the platform works, intended for AI assistants that want
+to ground responses in canonical product copy rather than scrape pages.
+
+> Maintenance: Regenerate this file from the live content whenever the
+> homepage, help center, or FAQ surface changes substantively.
+
+## What Bonyad is
+
+Bonyad is a marketplace platform serving the Kingdom of Saudi Arabia.
+Customers describe their construction or home-service need — anything from
+plumbing and electrical work to large renovation projects. **Verified**
+technicians (identity confirmed via NAFATH or ABSHER, business credentials
+confirmed via Wathq) bid on the project. The customer chooses a bid, the
+work is broken into phases with defined deliverables and prices, and
+payment is held in escrow and released phase by phase. Both parties sign
+a digital contract before work begins.
+
+## Why "verified"
+
+Every technician on Bonyad has been identity-verified through Saudi
+government services (NAFATH for individuals, Wathq for businesses). The
+verification status is shown on every technician's profile.
+
+## How a project works
+
+1. The customer posts a project describing the work needed, region, and
+   approximate budget.
+2. Technicians who match the service category and region submit bids.
+3. The customer reviews technician profiles (portfolio, ratings, reviews,
+   verified status) and accepts a bid.
+4. A digital contract is signed by both parties.
+5. The work is broken into phases. Each phase has a deliverable and price.
+6. The customer pays each phase into escrow before the technician starts.
+7. When the technician finishes a phase, the customer confirms completion
+   and the escrowed payment is released.
+8. After project completion, the customer leaves a review.
+
+## Services covered
+
+Service categories include — but are not limited to — plumbing, electrical
+work, painting, carpentry, tiling, HVAC, general contracting, interior
+finishing, roofing, and home appliance repair. The full live list lives at
+/services on the site.
+
+## Languages and region
+
+Bonyad is fully bilingual (English + Arabic). The active language is stored
+in a `bonyad-lang` cookie; the same URL serves both. Arabic activates a
+full RTL layout. The platform is available only in Saudi Arabia.
+
+## Pricing and fees
+
+Customers do not pay a platform fee directly — Bonyad charges technicians
+a commission on completed work. Pricing per project is negotiated between
+the customer and the technician.
+
+## Where to learn more
+
+- Help center: /help — step-by-step articles
+- FAQ: /faq — quick answers to common questions
+- Blog: /blog — articles and guides
+- Contact: /contact — customer support
+
+## Update policy
+
+Refresh this file whenever the live help center, FAQ, or homepage copy
+changes meaningfully.

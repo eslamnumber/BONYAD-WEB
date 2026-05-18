@@ -1,0 +1,297 @@
+{
+  "site": {
+    "name": "Bonyad",
+    "tagline": "Verified construction and home-service technicians in Saudi Arabia.",
+    "description": "A marketplace connecting customers in Saudi Arabia with verified construction and home-service technicians.",
+    "copyright": "Bonyad. All rights reserved."
+  },
+
+  "common": {
+    "loading": "Loading…",
+    "tryAgain": "Try again",
+    "goToHome": "Go to homepage",
+    "comingSoon": "Coming soon"
+  },
+
+  "a11y": {
+    "skipToMain": "Skip to main content",
+    "loading": "Loading"
+  },
+
+  "theme": {
+    "ariaLabel": "Toggle color theme",
+    "light": "Light",
+    "dark": "Dark",
+    "system": "System"
+  },
+
+  "language": {
+    "ariaLabel": "Switch language",
+    "switchToArabic": "العربية",
+    "switchToEnglish": "English"
+  },
+
+  "nav": {
+    "services": "Services",
+    "technicians": "Technicians",
+    "blog": "Blog",
+    "help": "Help",
+    "contact": "Contact"
+  },
+
+  "footer": {
+    "platform": "Platform",
+    "findPro": "Find a professional",
+    "howItWorks": "How it works",
+    "pricing": "Pricing",
+    "browseCategories": "Browse categories",
+    "company": "Company",
+    "about": "About Bonyad",
+    "partner": "Partner with us",
+    "careers": "Careers",
+    "services": "Services",
+    "projectManagement": "Large-scale project management",
+    "supervision": "Supervision",
+    "propertyManagement": "Property management",
+    "materialSupply": "Material supply",
+    "consultation": "Consultation",
+    "legal": "Legal",
+    "privacy": "Privacy Policy",
+    "terms": "Terms of Service",
+    "allRights": "All rights reserved",
+    "xAriaLabel": "Follow Bonyad on X",
+    "linkedinAriaLabel": "Follow Bonyad on LinkedIn",
+    "instagramAriaLabel": "Follow Bonyad on Instagram",
+    "tiktokAriaLabel": "Follow Bonyad on TikTok"
+  },
+
+  "home": {
+    "hero": {
+      "headline": "Find the right professional for your project",
+      "subheadline": "Bonyad connects you with verified architects, civil engineers, and contractors across Saudi Arabia.",
+      "cta": "Get started",
+      "ctaSecondary": "Browse services",
+      "togglePost": "Post a project",
+      "togglePro": "Join as a pro",
+      "searchPlaceholder": "Search for an engineer, designer, electrician...",
+      "searchLabel": "Search for a professional",
+      "searchCta": "Search",
+      "trustBadge": "Contracts verified using Absher and Nafath"
+    },
+    "services": {
+      "headline": "One platform. Every stage of your project.",
+      "subheadline": "Connect customers with professionals in a clearer, smoother experience for executing projects and building reliable working relationships.",
+      "feature1Title": "Verified professionals",
+      "feature1Body": "Connect with engineers and service providers whose credentials have been verified for a safer, more professional experience.",
+      "feature2Title": "A smoother experience",
+      "feature2Body": "Simpler project management and communication, with clear steps to help you get more done efficiently.",
+      "feature3Title": "Better opportunities & connections",
+      "feature3Body": "A platform that connects you with the right people and helps you build reliable, long-term working relationships.",
+      "ctaCardTitle": "Everything you need to execute your project — in one platform.",
+      "ctaCardBody": "A comprehensive experience to find the right service providers, manage communication easily, and make clearer decisions."
+    },
+    "browse": {
+      "headline": "Find the right service for your project",
+      "browseCta": "Browse services by category",
+      "viewMore": "View more",
+      "card1Title": "Material Supply",
+      "card1Body": "Get high-quality building materials with reliable delivery to keep your project moving without delay.",
+      "card2Title": "Supervision",
+      "card2Body": "Manage complex projects with confidence. Coordinate between parties, control budgets, and ensure quality from planning to delivery.",
+      "card3Title": "Property Management",
+      "card3Body": "Comprehensive management of your property operations, maintenance, and tenants.",
+      "card4Title": "Consultation",
+      "card4Body": "Expert advice to help you plan and execute your next project with confidence.",
+      "card5Title": "Large-Scale Projects",
+      "card5Body": "End-to-end delivery of large construction projects with full oversight and professional coordination."
+    },
+    "howItWorks": {
+      "headline": "How does it work?",
+      "subheadline": "Choose the right service, connect with experts, and start executing easily.",
+      "step1Title": "Post your project",
+      "step1Body": "Describe the work needed. Add photos, location, and budget range.",
+      "step2Title": "Review proposals",
+      "step2Body": "Receive competitive quotes. Compare prices, timelines, and past projects.",
+      "step3Title": "Hire & sign",
+      "step3Body": "Choose your expert. Sign a digital contract and deposit funds into escrow.",
+      "step4Title": "Track & pay",
+      "step4Body": "Monitor progress milestone by milestone. Funds released only after your approval.",
+      "learnMore": "Learn how it works"
+    },
+    "trust": {
+      "headline": "No risks. No surprises.",
+      "subheadline": "Hire with confidence, track with clarity, pay with security.",
+      "stat120": "+120",
+      "stat120Body": "Verified professional via Nafath. Every professional on Bonyad has their identity verified through the Nafath platform.",
+      "contractTitle": "Digital contract for every project.",
+      "contractBody": "Bonyad automatically creates a structured contract including scope, price, and milestones.",
+      "supportTitle": "24/7 Customer Service",
+      "supportBody": "Dispute resolution team. If any conflict arises, the Bonyad support team intervenes to mediate and resolve the issue.",
+      "transparentTitle": "Bonyad is completely transparent in every transaction.",
+      "transparentBody": "No hidden fees. The price you agree on with the professional is what you actually pay.",
+      "stat100": "100%",
+      "stat100Body": "Protected by financial guarantee. Your funds are held securely and only released after your approval at each stage."
+    },
+    "professionals": {
+      "headline": "Trusted experts",
+      "subheadline": "Top performers this month",
+      "verified": "Verified",
+      "viewProfile": "View profile",
+      "pro1Name": "Fatima Mahmoud",
+      "pro1Title": "Civil Engineer",
+      "pro1Rate": "SAR 50/hr",
+      "pro1Projects": "250 projects",
+      "pro1Location": "Riyadh",
+      "pro2Name": "Omar Khalil",
+      "pro2Title": "Electrical Engineer",
+      "pro2Rate": "SAR 50/hr",
+      "pro2Projects": "250 projects",
+      "pro2Location": "Jeddah",
+      "pro3Name": "Ahmed Hassan",
+      "pro3Title": "Architect",
+      "pro3Rate": "SAR 50/hr",
+      "pro3Projects": "250 projects",
+      "pro3Location": "Dammam"
+    },
+    "blog": {
+      "headline": "Build smart. Start informed.",
+      "subheadline": "Guides, tips, and expert insights to help you plan your next construction project with confidence.",
+      "readMore": "Read more",
+      "featuredCategory": "Featured",
+      "featuredTitle": "The complete guide to construction permits in Saudi Arabia",
+      "featuredBody": "Everything you need to know about permits, approvals, and legal requirements for construction projects in the Kingdom.",
+      "post1Category": "Legal — 2026",
+      "post1Title": "Requirements for obtaining a building permit in Saudi Arabia",
+      "post1Body": "Learn about the requirements and procedures needed to obtain a building permit in Saudi Arabia.",
+      "post2Category": "Finishing — 2026",
+      "post2Title": "Types of paints in Saudi Arabia",
+      "post2Body": "A comprehensive guide to paint types and finishes used in Saudi Arabian construction projects."
+    },
+
+    "startCta": {
+      "headline": "Start your project with confidence",
+      "body": "Join thousands of customers who found their right professional through Bonyad. Reliable, transparent, and fully accountable from start to finish.",
+      "cta": "Get started now",
+      "ctaSecondary": "How the platform works"
+    }
+  },
+
+  "tech": {
+    "hero": {
+      "proHeadline": "Grow your business with continuous projects",
+      "proSubheadline": "Join 12,400 verified professionals on Bonyad. Submit bids on projects matching your skills and receive payments securely through escrow — with no commission.",
+      "proCta": "Join as a professional",
+      "proStat1": "350+ completed projects",
+      "proStat2": "150+ active professionals"
+    },
+    "services": {
+      "headline": "A platform connecting expertise with opportunities",
+      "subheadline": "Connect professionals with the right projects in a clearer, smoother experience for executing work and building reliable client relationships.",
+      "ctaCardTitle": "Everything you need to grow your career — in one platform.",
+      "ctaCardBody": "A comprehensive experience to find the right projects, manage communication easily, and build your professional reputation."
+    },
+    "howItWorks": {
+      "headline": "How does it work for professionals?",
+      "subheadline": "Join the platform, submit competitive bids, and get paid securely.",
+      "step1Title": "Create your profile",
+      "step1Body": "Build a professional profile showcasing your skills, certifications, and past work.",
+      "step2Title": "Browse & bid",
+      "step2Body": "Find projects matching your expertise and submit competitive proposals.",
+      "step3Title": "Get hired & sign",
+      "step3Body": "Accept the contract digitally. Funds are held securely in escrow.",
+      "step4Title": "Deliver & get paid",
+      "step4Body": "Complete milestones and receive payments automatically upon approval.",
+      "learnMore": "Learn how it works"
+    },
+    "pricing": {
+      "headline": "Simple, transparent pricing",
+      "subheadline": "Choose the plan that fits your business. No hidden fees.",
+      "billingMonthly": "Monthly",
+      "billing6Months": "6 Months",
+      "billingYearly": "Yearly",
+      "perMonth": "/ month",
+      "plan1Name": "Free",
+      "plan1Price": "0",
+      "plan1Desc": "Get started at no cost",
+      "plan1Feature1": "Up to 3 active bids",
+      "plan1Feature2": "Basic profile listing",
+      "plan1Feature3": "Email support",
+      "plan1Feature4": "Access to public projects",
+      "plan1Feature5": "Standard payment processing",
+      "plan1Cta": "Get started free",
+      "plan2Name": "Professional",
+      "plan2Price": "1,250",
+      "plan2Desc": "For growing professionals",
+      "plan2Feature1": "Unlimited active bids",
+      "plan2Feature2": "Priority profile placement",
+      "plan2Feature3": "24/7 priority support",
+      "plan2Feature4": "Access to premium projects",
+      "plan2Feature5": "Faster payment processing",
+      "plan2Cta": "Start professional",
+      "plan3Name": "Growth",
+      "plan3Price": "3,500",
+      "plan3Desc": "For established businesses",
+      "plan3Feature1": "Everything in Professional",
+      "plan3Feature2": "Team management tools",
+      "plan3Feature3": "Dedicated account manager",
+      "plan3Feature4": "Advanced analytics",
+      "plan3Feature5": "Custom contract templates",
+      "plan3Cta": "Start growth",
+      "plan4Name": "Business",
+      "plan4Price": "7,500",
+      "plan4Desc": "For large-scale operations",
+      "plan4Feature1": "Everything in Growth",
+      "plan4Feature2": "Unlimited team members",
+      "plan4Feature3": "API access & integrations",
+      "plan4Feature4": "White-label options",
+      "plan4Feature5": "Enterprise SLA",
+      "plan4Cta": "Contact sales",
+      "currency": "SAR"
+    },
+    "successStories": {
+      "headline": "Professionals who grew with Bonyad",
+      "subheadline": "Real results from verified professionals across Saudi Arabia.",
+      "story1Name": "Ahmed Al-Salem",
+      "story1Title": "Civil Engineer",
+      "story1Quote": "Bonyad helped me find consistent high-value projects. My revenue grew 3× in the first year.",
+      "story2Name": "Mona Al-Yousef",
+      "story2Title": "Interior Designer",
+      "story2Quote": "The escrow system gave my clients confidence and me peace of mind. I've had zero payment disputes.",
+      "story3Name": "Sulaiman Al-Otaibi",
+      "story3Title": "Electrical Contractor",
+      "story3Quote": "I went from freelancing alone to managing a team of 12, all thanks to the steady flow of projects from Bonyad."
+    },
+    "blog": {
+      "headline": "Grow your expertise. Grow your business.",
+      "subheadline": "Tips, guides, and insights to help professionals build stronger careers on Bonyad.",
+      "readMore": "Read more",
+      "featuredCategory": "Featured",
+      "featuredTitle": "How top professionals on Bonyad win more projects",
+      "featuredBody": "Proven strategies from Bonyad's highest-rated professionals on building a compelling profile and winning competitive bids.",
+      "post1Category": "Career — 2026",
+      "post1Title": "How to write a winning project proposal",
+      "post1Body": "Learn what clients look for in proposals and how to stand out from the competition.",
+      "post2Category": "Finance — 2026",
+      "post2Title": "Managing cash flow as a freelance professional",
+      "post2Body": "Practical tips for keeping your finances stable between projects.",
+      "post3Category": "Growth — 2026",
+      "post3Title": "Building long-term client relationships on Bonyad",
+      "post3Body": "How to turn one-time projects into lasting partnerships that fuel steady income."
+    },
+    "cta": {
+      "headline": "Ready to grow your professional career?",
+      "body": "Join thousands of verified professionals already building their businesses on Bonyad. Secure payments, real projects, zero commission.",
+      "cta": "Discover Bonyad Pro",
+      "badge": "+1200 earnings"
+    }
+  },
+
+  "errors": {
+    "generic": "Something went wrong",
+    "genericDescription": "We hit an unexpected error. Try again, or come back in a moment.",
+    "notFoundTitle": "Page not found",
+    "notFoundDescription": "The page you're looking for doesn't exist or has been moved.",
+    "globalCrashTitle": "We're sorry — something broke.",
+    "globalCrashDescription": "The application encountered an unexpected error. Please refresh, or try again later."
+  }
+}

@@ -1,0 +1,248 @@
+/* =============================================================================
+ * Design tokens — single source of truth for every visual constant.
+ * Rules (docs/theming.md):
+ *   - No hex / rgb / hsl literals outside this file.
+ *   - No hardcoded font-family strings outside this file.
+ *   - Token names are semantic, not literal (e.g. --color-primary, not --color-blue-500).
+ *   - Light values live in :root; dark mode overrides live in .dark.
+ *   - @theme inline maps each CSS variable into a Tailwind utility.
+ *
+ * Placeholder OKLCH values below — replace with real Figma variables when the
+ * Figma file is ready (see docs/figma-to-code.md).
+ * ===========================================================================*/
+
+@import 'tailwindcss';
+
+@theme inline {
+  /* Surfaces */
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+
+  /* Semantic states */
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-destructive-foreground: var(--destructive-foreground);
+  --color-success: var(--success);
+  --color-success-foreground: var(--success-foreground);
+  --color-warning: var(--warning);
+  --color-warning-foreground: var(--warning-foreground);
+  --color-info: var(--info);
+  --color-info-foreground: var(--info-foreground);
+
+  /* Borders + form controls */
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Typography */
+  --font-sans: var(--font-sans-stack);
+  --font-arabic: var(--font-arabic-stack);
+  --font-mono: var(--font-mono-stack);
+
+  /* Shape + motion */
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+
+  --duration-fast: var(--motion-fast);
+  --duration-base: var(--motion-base);
+  --duration-slow: var(--motion-slow);
+
+  --ease-out-quint: var(--motion-easing);
+  --ease-decel: var(--motion-easing-decel);
+
+  /* Brand palette */
+  --color-brand-primary: var(--brand-primary);
+  --color-brand-blue: var(--brand-blue);
+  --color-slate-300: var(--slate-300);
+  --color-service-border: var(--service-border);
+
+  /* Hover state surfaces */
+  --color-primary-hover: var(--primary-hover);
+  --color-nav-hover: var(--nav-hover);
+  --color-icon-hover: var(--icon-hover);
+
+  /* Section surfaces */
+  --color-services-cta: var(--services-cta);
+
+  /* Brand navy (search buttons, browse links, CTA) */
+  --color-brand-navy: var(--brand-navy);
+
+  /* Hero subheadline text */
+  --color-hero-subtext: var(--hero-subtext);
+
+  /* Trust section cell backgrounds */
+  --color-trust-bg-light: var(--trust-bg-light);
+  --color-trust-blue-mid: var(--trust-blue-mid);
+
+  /* Services right panel background */
+  --color-services-panel: var(--services-panel-bg);
+
+  /* Blog section background */
+  --color-blog-section: var(--blog-section-bg);
+
+  /* Hero role toggle pill background + inactive label color */
+  --color-toggle-pill: var(--toggle-pill-bg);
+  --color-toggle-inactive: var(--toggle-inactive);
+
+  /* Tech screen decoration blobs */
+  --color-deco-blob-blue-light: var(--deco-blob-blue-light);
+  --color-deco-blob-green: var(--deco-blob-green);
+
+  /* Tech services right panel background */
+  --color-tech-services-panel: var(--tech-services-panel-bg);
+
+  /* Pricing plan backgrounds */
+  --color-pricing-plan-business: var(--pricing-plan-business);
+  --color-pricing-plan-growth: var(--pricing-plan-growth);
+}
+
+:root {
+  /* Surfaces — light */
+  --background: oklch(1 0 0);
+  --foreground: oklch(0.15 0 0);
+  --card: oklch(1 0 0);
+  --card-foreground: oklch(0.15 0 0);
+  --popover: oklch(1 0 0);
+  --popover-foreground: oklch(0.15 0 0);
+
+  /* Brand — placeholder until Figma tokens land */
+  --primary: oklch(0.55 0.2 250);
+  --primary-foreground: oklch(0.98 0 0);
+
+  --secondary: oklch(0.96 0 0);
+  --secondary-foreground: oklch(0.2 0 0);
+
+  --muted: oklch(0.96 0 0);
+  --muted-foreground: oklch(0.45 0 0);
+
+  --accent: oklch(0.96 0 0);
+  --accent-foreground: oklch(0.2 0 0);
+
+  --destructive: oklch(0.55 0.22 25);
+  --destructive-foreground: oklch(0.98 0 0);
+
+  --success: oklch(0.65 0.18 145);
+  --success-foreground: oklch(0.98 0 0);
+
+  --warning: oklch(0.78 0.17 80);
+  --warning-foreground: oklch(0.2 0 0);
+
+  --info: oklch(0.65 0.15 230);
+  --info-foreground: oklch(0.98 0 0);
+
+  /* Borders + inputs */
+  --border: oklch(0.92 0 0);
+  --input: oklch(0.92 0 0);
+  --ring: oklch(0.55 0.2 250);
+
+  /* Shape */
+  --radius: 0.5rem;
+
+  /*
+   * Typography stacks. The actual font choice is in `src/lib/fonts.ts` —
+   * swap fonts there and these stacks pick up the new file automatically via
+   * the stable CSS variables `--font-sans-primary` / `--font-arabic-primary`.
+   */
+  --font-sans-stack: var(--font-sans-primary), system-ui, -apple-system, sans-serif;
+  --font-arabic-stack: var(--font-arabic-primary), system-ui, sans-serif;
+  --font-mono-stack: ui-monospace, 'SF Mono', Menlo, monospace;
+
+  /* Motion */
+  --motion-fast: 150ms;
+  --motion-base: 250ms;
+  --motion-slow: 400ms;
+  --motion-easing: cubic-bezier(0.16, 1, 0.3, 1);
+  --motion-easing-decel: cubic-bezier(0.2, 0, 0, 1);
+
+  /* Brand palette */
+  --brand-primary: oklch(0.43 0.15 250);
+  --brand-blue: oklch(0.47 0.21 265);
+  --slate-300: oklch(0.84 0.02 220);
+  --service-border: oklch(0.50 0.20 264 / 0.2);
+
+  /* Hover state surfaces */
+  --primary-hover: oklch(0.44 0.12 300);
+  --nav-hover: oklch(0.98 0.01 310);
+  --icon-hover: oklch(0.95 0.02 320);
+
+  /* Section surfaces */
+  --services-cta: oklch(0.88 0.02 270);
+
+  /* Figma-matched brand & section colors */
+  --brand-navy: oklch(0.40 0.13 244);
+  --hero-subtext: oklch(0.52 0.03 256);
+  --trust-bg-light: oklch(0.97 0.015 265);
+  --trust-blue-mid: oklch(0.59 0.10 216);   /* #4d8ec5 */
+  --services-panel-bg: oklch(0.86 0.016 294); /* #d9d7e3 */
+  --blog-section-bg: oklch(0.97 0.008 225);
+  --toggle-pill-bg: oklch(0.96 0.003 285);
+  --toggle-inactive: oklch(0.68 0.02 263);  /* Figma #9ba2b0 — inactive tab label */
+
+  /* Tech screen decoration blobs */
+  --deco-blob-blue-light: oklch(0.79 0.08 225);
+  --deco-blob-green: oklch(0.79 0.12 145);
+
+  /* Tech services right panel */
+  --tech-services-panel-bg: oklch(0.86 0.016 294);
+
+  /* Pricing plan card backgrounds */
+  --pricing-plan-business: oklch(0.40 0.15 155);
+  --pricing-plan-growth: oklch(0.25 0.08 235);
+}
+
+.dark {
+  --background: oklch(0.14 0 0);
+  --foreground: oklch(0.98 0 0);
+  --card: oklch(0.18 0 0);
+  --card-foreground: oklch(0.98 0 0);
+  --popover: oklch(0.18 0 0);
+  --popover-foreground: oklch(0.98 0 0);
+
+  --primary: oklch(0.7 0.2 250);
+  --primary-foreground: oklch(0.15 0 0);
+
+  --secondary: oklch(0.24 0 0);
+  --secondary-foreground: oklch(0.98 0 0);
+
+  --muted: oklch(0.24 0 0);
+  --muted-foreground: oklch(0.65 0 0);
+
+  --accent: oklch(0.24 0 0);
+  --accent-foreground: oklch(0.98 0 0);
+
+  --destructive: oklch(0.65 0.22 25);
+  --destructive-foreground: oklch(0.98 0 0);
+
+  --success: oklch(0.7 0.18 145);
+  --success-foreground: oklch(0.15 0 0);
+
+  --warning: oklch(0.82 0.17 80);
+  --warning-foreground: oklch(0.15 0 0);
+
+  --info: oklch(0.72 0.15 230);
+  --info-foreground: oklch(0.15 0 0);
+
+  --border: oklch(0.28 0 0);
+  --input: oklch(0.28 0 0);
+  --ring: oklch(0.7 0.2 250);
+
+  /* Hover state surfaces — dark overrides */
+  --primary-hover: oklch(0.55 0.14 300);
+  --nav-hover: oklch(0.22 0.02 310);
+  --icon-hover: oklch(0.25 0.02 320);
+
+  --services-cta: oklch(0.25 0.02 270);
+}

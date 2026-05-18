@@ -1,0 +1,48 @@
+# Windsurf rules — Bonyad web app (Next.js 15 App Router)
+
+You are working in the Bonyad Next.js 15 web app at the repo root. The architecture is fixed and binding. Full rules are in `CLAUDE.md` and `docs/`. Read them before writing code.
+
+The folder `website-bonyad/` is the frozen legacy React Native codebase. It is `.gitignore`'d and read-only — use it only to learn backend endpoints, auth flow, and request/response shapes. **Never copy UI, JSX, components, styling, or design from it.** Designs come from Figma.
+
+## Tech stack (locked)
+
+Next.js 15 App Router · React 19 · TypeScript strict · Tailwind v4 with CSS-variable tokens · shadcn/ui · TanStack Query v5 · Zustand v5 · react-hook-form + zod · i18next (init once) · next-themes · Vitest + RTL + Playwright + MSW.
+
+## Hard rules (these are violated most often — memorize)
+
+1. **No `fetch()` outside `src/lib/api-client.ts`.** Always go through a TanStack Query hook in `features/X/api/`.
+2. **No endpoint string literal outside `src/config/endpoints.ts`.** Mirror endpoints from `website-bonyad/src/config/api.ts` (the legacy RN app — backend-integration reference only).
+3. **No hardcoded colors, hex, RGB, or font-family.** Use Tailwind utilities backed by tokens in `src/styles/tokens.css`.
+4. **No physical Tailwind direction utilities** (`ml-*`, `mr-*`, `pl-*`, `pr-*`, `left-*`, `right-*`, `text-left`, `text-right`). Use logical (`ms-*`, `me-*`, `ps-*`, `pe-*`, `start-*`, `end-*`, `text-start`, `text-end`) — Arabic users need clean RTL.
+5. **No user-facing string in JSX.** Always `t('namespace.key')` from `react-i18next`, with entries in both `locales/en.json` and `locales/ar.json`.
+6. **Features cannot import from other features.** Lift shared code to `src/components/`, `src/hooks/`, `src/utils/`, etc.
+7. **No `react-native`, `react-native-web`, `expo-*`, or `nativewind`** anywhere. The legacy app at `website-bonyad/src/` is **backend-integration reference only — never copy UI, JSX, styling, or design.**
+8. **File ≤ 200 lines, function ≤ 50 lines, complexity ≤ 10, nesting ≤ 4.** ESLint-enforced. If you hit a limit, extract.
+9. **Server Component by default.** Add `'use client'` only at the leaf component that needs hooks/state/events.
+10. **Every public page needs SSR + metadata + JSON-LD.** See `docs/seo-and-ai-readability.md`.
+11. **JSON-LD must be HTML-escaped before `dangerouslySetInnerHTML`** and carry the CSP nonce. Use the `<JsonLd>` helper.
+12. **No `process.env.X` outside `src/config/env.ts`.** All env access goes through the zod-validated `env` export.
+13. **WCAG 2.2 AA target.** No `outline: none`, every icon-only button has `aria-label`, every form input has a real `<label>`.
+14. **The legacy RN app is backend-integration reference ONLY.** Never copy UI/JSX/styling from it. Visuals come from Figma.
+15. **No invented icons.** Every icon is an SVG exported from Figma, in `src/components/icons/`, with `currentColor` fills/strokes. `lucide-react` only for system glyphs whose default form matches the design.
+16. **Every non-trivial task is split into phases with verification gates.** Phase 0 = plan and stop. After each phase, run typecheck/lint/test and wait for the user before continuing. See `docs/task-workflow.md`.
+
+## Doc index (read on demand)
+
+- `docs/task-workflow.md` — phased execution (MANDATORY)
+- `docs/figma-to-code.md` — Figma MCP, icons, animations, asset structure
+- `docs/new-screen-checklist.md` — 40-step gate
+- `docs/folder-structure.md`, `docs/components.md`
+- `docs/state-management.md`, `docs/api-and-auth.md`
+- `docs/forms-validation.md`, `docs/theming.md`, `docs/i18n-and-rtl.md`
+- `docs/error-handling.md`, `docs/import-boundaries.md`, `docs/naming.md`
+- `docs/seo-and-ai-readability.md`, `docs/caching-and-runtime.md`
+- `docs/security-headers.md`, `docs/accessibility.md`
+- `docs/file-size-limits.md`, `docs/testing.md`
+- `docs/deployment-and-env.md`, `docs/migration-notes.md`
+
+## When in doubt
+
+1. Re-read the relevant doc — don't guess.
+2. Look at an existing feature for an example.
+3. Ask the user — don't invent endpoints, tokens, or icons.

@@ -1,0 +1,33 @@
+# Bonyad
+
+> A marketplace connecting customers in Saudi Arabia with verified construction
+> and home-service technicians. Customers post projects, technicians bid,
+> work is broken into milestone-paid phases, both sides sign digital contracts
+> via NAFATH / ABSHER / Wathq.
+
+## Key pages
+
+- [Home](/): Overview of the platform
+- [Services](/services): Browse service categories
+- [Technicians](/technicians): Verified technicians directory
+- [Help center](/help): How Bonyad works
+- [Blog](/blog): Articles and guides
+- [Contact](/contact): Get in touch
+- [About](/about): About Bonyad
+- [Privacy](/privacy): Privacy policy
+- [Terms](/terms): Terms of service
+
+## Languages
+
+The site is bilingual. The same URL serves both English and Arabic. The
+visitor's preferred locale is stored in a `bonyad-lang` cookie. Default is
+English; Arabic activates full RTL layout.
+
+## Region
+
+Bonyad operates exclusively in the Kingdom of Saudi Arabia.
+
+## Update policy
+
+This file is maintained as the public surface evolves. Re-fetch occasionally
+to catch new sections.
