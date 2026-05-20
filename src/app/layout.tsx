@@ -1,7 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 
 import { RouteAnnouncer } from '@/components/feedback';
-import { AppShell, getAppShellLabels } from '@/components/layout';
 import { env } from '@/config/env';
 import { arabicFont, sansFont } from '@/lib/fonts';
 import { getTranslations } from '@/lib/get-translations';
@@ -43,8 +42,6 @@ type RootLayoutProps = { children: React.ReactNode };
 
 export default async function RootLayout({ children }: RootLayoutProps) {
   const [locale, nonce] = await Promise.all([getServerLocale(), getRequestNonce()]);
-  const { t } = getTranslations(locale);
-  const labels = getAppShellLabels(t, locale);
   const lang = LOCALE_TAG[locale];
   const dir = LOCALE_DIRECTION[locale];
 
@@ -58,9 +55,7 @@ export default async function RootLayout({ children }: RootLayoutProps) {
       <body className="flex min-h-dvh flex-col">
         <Providers initialLocale={locale} nonce={nonce}>
           <RouteAnnouncer />
-          <AppShell locale={locale} labels={labels}>
-            {children}
-          </AppShell>
+          {children}
         </Providers>
       </body>
     </html>

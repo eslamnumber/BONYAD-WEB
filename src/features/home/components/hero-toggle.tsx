@@ -25,8 +25,8 @@ export function HeroToggle({ postLabel, proLabel, headline, activeTab, locale }:
   const router = useRouter();
   const [, startTransition] = useTransition();
   // framer-motion's `x` is a raw CSS pixel transform that ignores writing-mode,
-  // so we negate it under RTL. We derive direction from LOCALE_DIRECTION (not
-  // `locale === 'ar'`) because this project inverts the natural mapping.
+  // so we negate it under RTL. Direction is read from LOCALE_DIRECTION (single
+  // source of truth) rather than `locale === 'ar'`.
   const rtl = LOCALE_DIRECTION[locale] === 'rtl';
   const offset = activeTab === 'user' ? 0 : rtl ? -PILL_TRAVEL : PILL_TRAVEL;
 
@@ -41,11 +41,11 @@ export function HeroToggle({ postLabel, proLabel, headline, activeTab, locale }:
     <div
       role="tablist"
       aria-label={headline}
-      className="relative flex h-[58px] w-[248px] items-center rounded-full bg-toggle-pill p-[5px]"
+      className="bg-toggle-pill relative flex h-[58px] w-[248px] items-center rounded-full p-[5px]"
     >
       <motion.div
         aria-hidden
-        className="absolute start-[5px] top-[5px] h-[48px] w-[122px] rounded-full bg-white shadow-sm"
+        className="bg-toggle-highlight absolute start-[5px] top-[5px] h-[48px] w-[122px] rounded-full shadow-sm"
         initial={false}
         animate={{ x: offset }}
         transition={{ type: 'spring', stiffness: 500, damping: 38 }}

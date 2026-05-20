@@ -7,10 +7,14 @@ web/
 ├── public/                      # Static assets served as-is
 ├── src/
 │   ├── app/                     # Next.js App Router — ROUTES ONLY
-│   │   ├── (auth)/              # Route group: login, register, forgot-password
-│   │   ├── (app)/               # Route group: authenticated routes
+│   │   ├── (auth)/              # Route group: auth shell — no AppShell/footer
+│   │   │   ├── layout.tsx       #   Minimal layout (logo navbar only)
+│   │   │   └── login/page.tsx   #   /login — SSR metadata + labels
+│   │   ├── (main)/              # Route group: public pages with AppShell
+│   │   │   ├── layout.tsx       #   Wraps children in AppShell (header + footer)
+│   │   │   └── page.tsx         #   / — home page
 │   │   ├── api/                 # Next.js route handlers (only if needed)
-│   │   ├── layout.tsx           # Root layout — providers go here
+│   │   ├── layout.tsx           # Root layout — html/body/Providers ONLY
 │   │   ├── error.tsx            # Root error boundary
 │   │   ├── not-found.tsx
 │   │   └── globals.css          # Tailwind directives + theme tokens ONLY
@@ -22,7 +26,7 @@ web/
 │   │   └── data-display/        # DataTable, Pagination, etc.
 │   │
 │   ├── features/                # Business features — see below
-│   │   ├── auth/
+│   │   ├── auth/                # Login, register, forgot-password flows
 │   │   ├── projects/
 │   │   ├── bids/
 │   │   ├── chat/
@@ -87,7 +91,7 @@ features/<feature-name>/
 
 ## Folder rules
 
-1. **Routes contain no logic.** `app/(app)/projects/page.tsx` may only render layout components, render a feature component, and set metadata. Move logic to a feature component.
+1. **Routes contain no logic.** `app/(main)/page.tsx` or `app/(auth)/login/page.tsx` may only render a feature component and set metadata. Move all logic to the feature component.
 2. **A file goes in a feature folder if it's used by ≤1 feature.** If a second feature needs it, promote to the top-level shared folder.
 3. **No "common" or "shared" inside a feature.** If you feel the urge, the thing belongs at the top level.
 4. **No deep nesting.** Max 2 levels inside a feature (`features/auth/components/login-form.tsx` is fine; `features/auth/components/forms/login/index.tsx` is not).

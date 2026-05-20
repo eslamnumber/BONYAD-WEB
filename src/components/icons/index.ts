@@ -35,3 +35,9 @@ export { default as Step4Icon } from './step-4.svg';
 /* Trust & badge icons */
 export { default as TrustSupportIcon } from './trust-support.svg';
 export { default as TrustBadgeIcon } from './trust-badge.svg';
+
+/* Auth form icons */
+export { default as PhoneIcon } from './phone.svg';
+export { default as EyeIcon } from './eye.svg';
+export { default as LockIcon } from './lock.svg';
+export { default as CheckboxIcon } from './checkbox.svg';

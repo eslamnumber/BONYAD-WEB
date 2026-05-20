@@ -6,23 +6,35 @@ import { ROUTES } from '@/config/routes';
 import { getTranslations } from '@/lib/get-translations';
 import { type Locale } from '@/types/locale';
 
+import { HeroContentTransition } from './hero-content-transition';
 import { HeroToggle } from './hero-toggle';
 
 type HomeHeroProps = { locale: Locale; activeTab?: 'user' | 'pro' };
 
 function HeroTrustBadge({ label }: { label: string }) {
   return (
-    <div className="flex items-center gap-2 text-[12px] text-muted-foreground/70">
+    <div className="text-muted-foreground/70 flex items-center gap-2 text-[12px]">
       <TrustBadgeIcon className="size-4 shrink-0" aria-hidden />
       <span>{label}</span>
     </div>
   );
 }
 
-function HeroBgShape({ className }: { className: string }) {
+function HeroBgShapeEnd() {
   return (
-    <div aria-hidden className={`pointer-events-none absolute ${className}`}>
-      <Image src="/images/hero/bg-shapes.webp" alt="" fill priority />
+    <div
+      aria-hidden
+      className="pointer-events-none absolute -end-[121px] -top-[159px] hidden h-[901px] w-[696px] lg:block"
+    >
+      <Image src="/images/hero/bg-left.png" alt="" fill priority className="dark:brightness-0" />
+      {/* Fades the inner edge and top into the card background — var(--card) adapts to dark mode */}
+      <div
+        className="absolute inset-0"
+        style={{
+          backgroundImage:
+            'linear-gradient(to left, transparent 38%, var(--card) 78%), linear-gradient(to bottom, var(--card), transparent 18%)',
+        }}
+      />
     </div>
   );
 }
@@ -31,18 +43,20 @@ type HeroSearchProps = { action: string; placeholder: string; label: string; cta
 
 function HeroSearch({ action, placeholder, label, cta }: HeroSearchProps) {
   return (
-    <form action={action} method="get" className="relative h-[63px] w-[438px]">
-      <label htmlFor="hero-search" className="sr-only">{label}</label>
+    <form action={action} method="get" className="relative h-[63px] w-full max-w-[438px]">
+      <label htmlFor="hero-search" className="sr-only">
+        {label}
+      </label>
       <input
         id="hero-search"
         name="q"
         type="search"
         placeholder={placeholder}
-        className="h-full w-full rounded-full bg-white ps-6 pe-[150px] text-sm shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-brand-navy"
+        className="bg-card text-foreground focus-visible:ring-brand-navy h-full w-full rounded-full ps-6 pe-[120px] text-sm shadow-md focus-visible:ring-2 focus-visible:outline-none sm:pe-[150px]"
       />
       <button
         type="submit"
-        className="absolute end-[5px] top-[4px] h-[55px] rounded-full bg-brand-navy px-6 text-sm font-medium text-white transition-opacity hover:opacity-90"
+        className="bg-brand-navy absolute end-[5px] top-[4px] h-[55px] rounded-full px-4 text-sm font-medium text-white transition-opacity hover:opacity-90 sm:px-6"
       >
         {cta}
       </button>
@@ -58,17 +72,25 @@ type HeroProContentProps = {
   stat2: string;
 };
 
-function HeroProContent({ headline: _headline, subheadline, cta, stat1, stat2 }: HeroProContentProps) {
+function HeroProContent({
+  headline: _headline,
+  subheadline,
+  cta,
+  stat1,
+  stat2,
+}: HeroProContentProps) {
   return (
     <>
-      <p className="max-w-[609px] text-center text-base text-hero-subtext">{subheadline}</p>
+      <p className="text-hero-subtext max-w-[609px] text-center text-sm sm:text-base">
+        {subheadline}
+      </p>
       <Link
         href={ROUTES.REGISTER}
-        className="rounded-full bg-brand-navy px-8 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90"
+        className="bg-brand-navy rounded-full px-8 py-3 text-sm font-medium text-white transition-opacity hover:opacity-90"
       >
         {cta}
       </Link>
-      <div className="flex items-center gap-8 text-sm text-muted-foreground">
+      <div className="text-muted-foreground flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm">
         <div className="flex items-center gap-2">
           <TrustBadgeIcon className="size-4 shrink-0" aria-hidden />
           <span>{stat1}</span>
@@ -88,11 +110,10 @@ export function HomeHero({ locale, activeTab = 'user' }: HomeHeroProps) {
 
   return (
     <section className="bg-background py-6">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="relative h-[622px] overflow-hidden rounded-xl bg-white">
-          <HeroBgShape className="-start-[121px] -top-[159px] h-[781px] w-[603px] -scale-y-100 rotate-180" />
-          <HeroBgShape className="-end-[44px] -top-[159px] h-[901px] w-[696px]" />
-          <div className="absolute inset-0 flex flex-col items-center justify-center gap-6 px-6">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="bg-card relative min-h-[520px] overflow-hidden rounded-xl lg:h-[622px]">
+          <HeroBgShapeEnd />
+          <div className="relative flex flex-col items-center justify-center gap-6 px-4 py-12 sm:px-6 lg:absolute lg:inset-0 lg:py-0">
             <HeroToggle
               postLabel={t('home.hero.togglePost')}
               proLabel={t('home.hero.togglePro')}
@@ -100,31 +121,33 @@ export function HomeHero({ locale, activeTab = 'user' }: HomeHeroProps) {
               activeTab={activeTab}
               locale={locale}
             />
-            <h1 className="max-w-[787px] text-center text-[56px] font-semibold leading-tight text-foreground">
-              {headline}
-            </h1>
-            {activeTab === 'user' ? (
-              <>
-                <p className="max-w-[609px] text-center text-base text-hero-subtext">
-                  {t('home.hero.subheadline')}
-                </p>
-                <HeroSearch
-                  action={ROUTES.TECHNICIANS}
-                  placeholder={t('home.hero.searchPlaceholder')}
-                  label={t('home.hero.searchLabel')}
-                  cta={t('home.hero.searchCta')}
+            <HeroContentTransition>
+              <h1 className="text-foreground max-w-[787px] text-center text-3xl leading-tight font-semibold sm:text-4xl md:text-5xl lg:text-[56px]">
+                {headline}
+              </h1>
+              {activeTab === 'user' ? (
+                <>
+                  <p className="text-hero-subtext max-w-[609px] text-center text-sm sm:text-base">
+                    {t('home.hero.subheadline')}
+                  </p>
+                  <HeroSearch
+                    action={ROUTES.TECHNICIANS}
+                    placeholder={t('home.hero.searchPlaceholder')}
+                    label={t('home.hero.searchLabel')}
+                    cta={t('home.hero.searchCta')}
+                  />
+                  <HeroTrustBadge label={t('home.hero.trustBadge')} />
+                </>
+              ) : (
+                <HeroProContent
+                  headline={headline}
+                  subheadline={t('tech.hero.proSubheadline')}
+                  cta={t('tech.hero.proCta')}
+                  stat1={t('tech.hero.proStat1')}
+                  stat2={t('tech.hero.proStat2')}
                 />
-                <HeroTrustBadge label={t('home.hero.trustBadge')} />
-              </>
-            ) : (
-              <HeroProContent
-                headline={headline}
-                subheadline={t('tech.hero.proSubheadline')}
-                cta={t('tech.hero.proCta')}
-                stat1={t('tech.hero.proStat1')}
-                stat2={t('tech.hero.proStat2')}
-              />
-            )}
+              )}
+            </HeroContentTransition>
           </div>
         </div>
       </div>

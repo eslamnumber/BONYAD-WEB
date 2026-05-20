@@ -12,6 +12,10 @@
  * ===========================================================================*/
 
 @import 'tailwindcss';
+@config '../../tailwind.config';
+
+/* Restrict Tailwind v4 auto-detection to the src tree only. */
+@source '../../src/**/*.{ts,tsx,mdx}';
 
 @theme inline {
   /* Surfaces */
@@ -93,9 +97,10 @@
   /* Blog section background */
   --color-blog-section: var(--blog-section-bg);
 
-  /* Hero role toggle pill background + inactive label color */
+  /* Hero role toggle pill background + inactive label color + active highlighter */
   --color-toggle-pill: var(--toggle-pill-bg);
   --color-toggle-inactive: var(--toggle-inactive);
+  --color-toggle-highlight: var(--toggle-highlight-bg);
 
   /* Tech screen decoration blobs */
   --color-deco-blob-blue-light: var(--deco-blob-blue-light);
@@ -107,6 +112,13 @@
   /* Pricing plan backgrounds */
   --color-pricing-plan-business: var(--pricing-plan-business);
   --color-pricing-plan-growth: var(--pricing-plan-growth);
+
+  /* Header bottom border */
+  --color-header-border: var(--header-border);
+
+  /* Auth / login */
+  --color-brand-dark-navy: var(--brand-dark-navy);
+  --color-login-bg: var(--login-bg);
 }
 
 :root {
@@ -118,8 +130,8 @@
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.15 0 0);
 
-  /* Brand — placeholder until Figma tokens land */
-  --primary: oklch(0.55 0.2 250);
+  /* Brand — #00549b */
+  --primary: oklch(0.41 0.13 243);
   --primary-foreground: oklch(0.98 0 0);
 
   --secondary: oklch(0.96 0 0);
@@ -171,7 +183,7 @@
   --brand-primary: oklch(0.43 0.15 250);
   --brand-blue: oklch(0.47 0.21 265);
   --slate-300: oklch(0.84 0.02 220);
-  --service-border: oklch(0.50 0.20 264 / 0.2);
+  --service-border: oklch(0.5 0.2 264 / 0.2);
 
   /* Hover state surfaces */
   --primary-hover: oklch(0.44 0.12 300);
@@ -182,14 +194,15 @@
   --services-cta: oklch(0.88 0.02 270);
 
   /* Figma-matched brand & section colors */
-  --brand-navy: oklch(0.40 0.13 244);
+  --brand-navy: oklch(0.4 0.13 244);
   --hero-subtext: oklch(0.52 0.03 256);
   --trust-bg-light: oklch(0.97 0.015 265);
-  --trust-blue-mid: oklch(0.59 0.10 216);   /* #4d8ec5 */
+  --trust-blue-mid: oklch(0.59 0.1 216); /* #4d8ec5 */
   --services-panel-bg: oklch(0.86 0.016 294); /* #d9d7e3 */
   --blog-section-bg: oklch(0.97 0.008 225);
   --toggle-pill-bg: oklch(0.96 0.003 285);
-  --toggle-inactive: oklch(0.68 0.02 263);  /* Figma #9ba2b0 — inactive tab label */
+  --toggle-inactive: oklch(0.68 0.02 263); /* Figma #9ba2b0 — inactive tab label */
+  --toggle-highlight-bg: oklch(1 0 0); /* active tab chip — white in light mode */
 
   /* Tech screen decoration blobs */
   --deco-blob-blue-light: oklch(0.79 0.08 225);
@@ -199,8 +212,18 @@
   --tech-services-panel-bg: oklch(0.86 0.016 294);
 
   /* Pricing plan card backgrounds */
-  --pricing-plan-business: oklch(0.40 0.15 155);
+  --pricing-plan-business: oklch(0.4 0.15 155);
   --pricing-plan-growth: oklch(0.25 0.08 235);
+
+  /* Header bottom border — Figma #61a6f2 */
+  --header-border: oklch(0.7 0.14 240);
+
+  /* Auth / login */
+  --brand-dark-navy: oklch(0.26 0.09 242); /* Figma #003867 — "Bonyad" brand name in heading */
+  --login-bg: oklch(1 0 0); /* white form panel */
+
+  /* Gradient blends toward the form panel — flips with page direction */
+  --blend-to-form: to right; /* ltr (ar): form on LEFT, blend left edge of image */
 }
 
 .dark {
@@ -211,8 +234,8 @@
   --popover: oklch(0.18 0 0);
   --popover-foreground: oklch(0.98 0 0);
 
-  --primary: oklch(0.7 0.2 250);
-  --primary-foreground: oklch(0.15 0 0);
+  --primary: oklch(0.65 0.15 243); /* lighter #00549b for dark backgrounds */
+  --primary-foreground: oklch(0.98 0 0);
 
   --secondary: oklch(0.24 0 0);
   --secondary-foreground: oklch(0.98 0 0);
@@ -245,4 +268,46 @@
   --icon-hover: oklch(0.25 0.02 320);
 
   --services-cta: oklch(0.25 0.02 270);
+
+  /* Brand palette — dark overrides */
+  --brand-primary: oklch(0.72 0.16 250);
+  --brand-blue: oklch(0.7 0.18 265);
+  --slate-300: oklch(0.4 0.02 220);
+  --service-border: oklch(0.7 0.18 264 / 0.35);
+
+  /* Figma-matched brand & section colors — dark overrides */
+  --brand-navy: oklch(0.7 0.14 244);
+  --hero-subtext: oklch(0.72 0.02 256);
+  --trust-bg-light: oklch(0.2 0.015 265);
+  --trust-blue-mid: oklch(0.45 0.1 216);
+  --services-panel-bg: oklch(0.22 0.016 294);
+  --blog-section-bg: oklch(0.18 0.008 225);
+  --toggle-pill-bg: oklch(0.22 0.003 285);
+  --toggle-inactive: oklch(0.55 0.02 263);
+  --toggle-highlight-bg: oklch(
+    0.36 0.003 285
+  ); /* lighter than the pill bg so the chip pops in dark mode */
+
+  /* Tech screen decoration blobs — dark overrides */
+  --deco-blob-blue-light: oklch(0.4 0.08 225);
+  --deco-blob-green: oklch(0.4 0.12 145);
+
+  /* Tech services right panel — dark override */
+  --tech-services-panel-bg: oklch(0.22 0.016 294);
+
+  /* Pricing plan card backgrounds — dark overrides */
+  --pricing-plan-business: oklch(0.32 0.13 155);
+  --pricing-plan-growth: oklch(0.2 0.07 235);
+
+  /* Header bottom border — dark override */
+  --header-border: oklch(0.45 0.12 240);
+
+  /* Auth / login — dark overrides */
+  --brand-dark-navy: oklch(0.7 0.12 242);
+  --login-bg: oklch(0.18 0 0);
+}
+
+html[dir='rtl'] {
+  /* en locale maps to rtl — form is on RIGHT, blend the right edge of the image */
+  --blend-to-form: to left;
 }

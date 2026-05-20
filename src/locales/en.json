@@ -5,40 +5,36 @@
     "description": "A marketplace connecting customers in Saudi Arabia with verified construction and home-service technicians.",
     "copyright": "Bonyad. All rights reserved."
   },
-
   "common": {
     "loading": "Loading…",
     "tryAgain": "Try again",
     "goToHome": "Go to homepage",
     "comingSoon": "Coming soon"
   },
-
   "a11y": {
     "skipToMain": "Skip to main content",
     "loading": "Loading"
   },
-
   "theme": {
     "ariaLabel": "Toggle color theme",
     "light": "Light",
     "dark": "Dark",
     "system": "System"
   },
-
   "language": {
     "ariaLabel": "Switch language",
     "switchToArabic": "العربية",
     "switchToEnglish": "English"
   },
-
   "nav": {
     "services": "Services",
-    "technicians": "Technicians",
+    "howItWorks": "How it works",
+    "about": "About",
     "blog": "Blog",
-    "help": "Help",
-    "contact": "Contact"
+    "contact": "Contact",
+    "login": "Log in",
+    "getStarted": "Get started"
   },
-
   "footer": {
     "platform": "Platform",
     "findPro": "Find a professional",
@@ -64,7 +60,6 @@
     "instagramAriaLabel": "Follow Bonyad on Instagram",
     "tiktokAriaLabel": "Follow Bonyad on TikTok"
   },
-
   "home": {
     "hero": {
       "headline": "Find the right professional for your project",
@@ -167,7 +162,6 @@
       "post2Title": "Types of paints in Saudi Arabia",
       "post2Body": "A comprehensive guide to paint types and finishes used in Saudi Arabian construction projects."
     },
-
     "startCta": {
       "headline": "Start your project with confidence",
       "body": "Join thousands of customers who found their right professional through Bonyad. Reliable, transparent, and fully accountable from start to finish.",
@@ -175,7 +169,6 @@
       "ctaSecondary": "How the platform works"
     }
   },
-
   "tech": {
     "hero": {
       "proHeadline": "Grow your business with continuous projects",
@@ -249,17 +242,17 @@
       "currency": "SAR"
     },
     "successStories": {
-      "headline": "Professionals who grew with Bonyad",
-      "subheadline": "Real results from verified professionals across Saudi Arabia.",
+      "headline": "Real Success Stories",
+      "subheadline": "Discover how Bonyad helped professionals access better opportunities and manage their projects more efficiently.",
       "story1Name": "Ahmed Al-Salem",
       "story1Title": "Civil Engineer",
-      "story1Quote": "Bonyad helped me find consistent high-value projects. My revenue grew 3× in the first year.",
+      "story1Quote": "Through the platform I was able to reach serious clients and manage my projects more clearly and easily. It saved me a lot of time and helped me focus on quality.",
       "story2Name": "Mona Al-Yousef",
-      "story2Title": "Interior Designer",
-      "story2Quote": "The escrow system gave my clients confidence and me peace of mind. I've had zero payment disputes.",
+      "story2Title": "Graphic Designer",
+      "story2Quote": "Using the platform gave me the ability to connect with new clients and open new creative horizons. I showcased my work easily and attracted real market attention.",
       "story3Name": "Sulaiman Al-Otaibi",
-      "story3Title": "Electrical Contractor",
-      "story3Quote": "I went from freelancing alone to managing a team of 12, all thanks to the steady flow of projects from Bonyad."
+      "story3Title": "Software Developer",
+      "story3Quote": "The platform helped me organize my projects effectively. I can now track work progress and communicate with clients directly. A wonderful experience."
     },
     "blog": {
       "headline": "Grow your expertise. Grow your business.",
@@ -285,7 +278,6 @@
       "badge": "+1200 earnings"
     }
   },
-
   "errors": {
     "generic": "Something went wrong",
     "genericDescription": "We hit an unexpected error. Try again, or come back in a moment.",
@@ -293,5 +285,100 @@
     "notFoundDescription": "The page you're looking for doesn't exist or has been moved.",
     "globalCrashTitle": "We're sorry — something broke.",
     "globalCrashDescription": "The application encountered an unexpected error. Please refresh, or try again later."
+  },
+  "auth": {
+    "login": {
+      "pageTitle": "Log in to Bonyad",
+      "metaDescription": "Log in to your Bonyad account to manage your construction projects.",
+      "heading": "Log in to",
+      "headingBrand": "Bonyad",
+      "subheading": "All construction services from planning to handover — in one platform.",
+      "phoneLabel": "Mobile number",
+      "phonePlaceholder": "Mobile number",
+      "phoneAriaLabel": "Enter your mobile number",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Password",
+      "passwordAriaLabel": "Enter your password",
+      "togglePasswordVisibility": "Toggle password visibility",
+      "forgotPassword": "Forgot password?",
+      "submitButton": "Log in",
+      "noAccount": "Don't have an account?",
+      "createAccount": "Create account",
+      "roleCustomer": "User",
+      "roleProfessional": "Service Provider",
+      "roleToggleAriaLabel": "Select your account type"
+    },
+    "forgotPassword": {
+      "pageTitle": "Forgot password — Bonyad",
+      "metaDescription": "Enter your mobile number to receive a verification code and reset your password.",
+      "heading": "Forgot your password?",
+      "subheading": "Enter your phone number to receive a verification code",
+      "phoneLabel": "Mobile number",
+      "phonePlaceholder": "Mobile number",
+      "phoneAriaLabel": "Enter your mobile number",
+      "submitButton": "Send verification code",
+      "backButton": "Back",
+      "backToLogin": "Back to login",
+      "successMessage": "Verification code sent to your number"
+    },
+    "verifyOtp": {
+      "pageTitle": "Verify account — Bonyad",
+      "metaDescription": "Enter the verification code sent to your mobile number.",
+      "heading": "Verify your identity",
+      "subheading": "Enter the verification code sent to your number",
+      "didNotReceiveCode": "Didn't receive the code?",
+      "otpLabel": "Verification code",
+      "otpPlaceholder": "Enter code",
+      "otpAriaLabel": "Enter the verification code",
+      "submitButton": "Verify",
+      "backButton": "Back",
+      "backButtonAriaLabel": "Back to forgot password",
+      "resendCode": "Resend code",
+      "resendAriaLabel": "Resend verification code",
+      "successMessage": "Verified successfully"
+    },
+    "register": {
+      "pageTitle": "Create an account",
+      "metaDescription": "Join Bonyad and connect with verified construction and home-service professionals.",
+      "heading": "Trust is built. Opportunities last.",
+      "subheading": "All construction services from planning to handover — in one platform.",
+      "nameLabel": "Full name",
+      "namePlaceholder": "Full name",
+      "nameAriaLabel": "Enter your full name",
+      "phoneLabel": "Mobile number",
+      "phonePlaceholder": "Mobile number",
+      "phoneAriaLabel": "Enter your mobile number",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Enter password",
+      "passwordAriaLabel": "Enter your password",
+      "confirmPasswordLabel": "Re-enter password",
+      "confirmPasswordPlaceholder": "Enter password",
+      "confirmPasswordAriaLabel": "Re-enter your password",
+      "togglePasswordVisibility": "Toggle password visibility",
+      "termsText": "Yes, I understand and agree to Bonyad's Terms of Service, including the User Agreement and Privacy Policy.",
+      "termsAriaLabel": "Accept terms and conditions",
+      "submitButton": "Create account",
+      "hasAccount": "Already have an account?",
+      "loginLink": "Log in",
+      "roleCustomer": "User",
+      "roleProfessional": "Service Provider",
+      "roleToggleAriaLabel": "Select your account type"
+    },
+    "errors": {
+      "phoneRequired": "Mobile number is required",
+      "phoneInvalid": "Enter a valid mobile number (digits only, 9-15 characters)",
+      "nameRequired": "Full name is required",
+      "nameTooShort": "Name must be at least 2 characters",
+      "passwordRequired": "Password is required",
+      "passwordTooShort": "Password must be at least 6 characters",
+      "confirmPasswordRequired": "Please confirm your password",
+      "passwordMismatch": "Passwords do not match",
+      "invalidCredentials": "Invalid phone number or password",
+      "phoneAlreadyRegistered": "This phone number is already registered",
+      "otpRequired": "Verification code is required",
+      "otpInvalid": "Enter a valid verification code (digits only, 4–8 characters)",
+      "genericError": "Something went wrong. Please try again.",
+      "termsRequired": "You must accept the terms and conditions"
+    }
   }
 }

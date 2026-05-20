@@ -13,9 +13,9 @@ function FeaturedPost({ category, title, body, readMoreLabel }: FeaturedPostProp
   return (
     <Link
       href={ROUTES.BLOG}
-      className="group relative flex-1 overflow-hidden rounded-[4px] bg-background transition-shadow duration-200 motion-safe:hover:shadow-md"
+      className="group bg-background relative flex-1 overflow-hidden rounded-[4px] transition-shadow duration-200 motion-safe:hover:shadow-md"
     >
-      <div className="relative h-[340px] w-full">
+      <div className="relative aspect-[16/10] w-full sm:aspect-auto sm:h-[340px]">
         <Image
           src="/images/blog/featured-1.webp"
           alt={title}
@@ -24,11 +24,15 @@ function FeaturedPost({ category, title, body, readMoreLabel }: FeaturedPostProp
           sizes="(max-width: 768px) 100vw, 50vw"
         />
       </div>
-      <div className="flex flex-col gap-2 p-6 text-start">
-        <p className="text-[16px] font-medium uppercase tracking-wide text-brand-navy">{category}</p>
-        <h3 className="text-[20px] font-semibold text-foreground">{title}</h3>
-        <p className="h-[48px] overflow-hidden text-[14px] text-foreground/60">{body}</p>
-        <p className="mt-2 text-sm font-bold text-brand-navy group-hover:underline">{readMoreLabel}</p>
+      <div className="flex flex-col gap-2 p-5 text-end sm:p-6">
+        <p className="text-brand-navy text-sm font-medium tracking-wide uppercase sm:text-[16px]">
+          {category}
+        </p>
+        <h3 className="text-foreground text-lg font-semibold sm:text-[20px]">{title}</h3>
+        <p className="text-foreground/60 overflow-hidden text-sm sm:text-[14px]">{body}</p>
+        <p className="text-brand-navy mt-2 text-sm font-bold group-hover:underline">
+          {readMoreLabel}
+        </p>
       </div>
     </Link>
   );
@@ -46,16 +50,26 @@ function OtherPost({ category, title, body, imgSrc, readMoreLabel }: OtherPostPr
   return (
     <Link
       href={ROUTES.BLOG}
-      className="group flex items-center gap-6 overflow-hidden rounded-[4px] border border-border bg-background transition-shadow duration-200 motion-safe:hover:shadow-sm"
+      className="group border-border bg-background flex items-center gap-6 overflow-hidden rounded-[4px] border transition-shadow duration-200 motion-safe:hover:shadow-sm"
     >
-      <div className="flex flex-1 flex-col gap-1 px-6 py-4 text-start">
-        <p className="text-[16px] font-medium uppercase tracking-wide text-brand-navy">{category}</p>
-        <p className="text-[20px] font-semibold text-foreground">{title}</p>
-        <p className="h-[48px] overflow-hidden text-[14px] text-foreground/60">{body}</p>
-        <p className="mt-1 text-xs font-bold text-brand-navy group-hover:underline">{readMoreLabel}</p>
+      <div className="flex flex-1 flex-col gap-1 px-4 py-3 text-end sm:px-6 sm:py-4">
+        <p className="text-brand-navy text-xs font-medium tracking-wide uppercase sm:text-[16px]">
+          {category}
+        </p>
+        <p className="text-foreground text-base font-semibold sm:text-[20px]">{title}</p>
+        <p className="text-foreground/60 overflow-hidden text-sm sm:text-[14px]">{body}</p>
+        <p className="text-brand-navy mt-1 text-xs font-bold group-hover:underline">
+          {readMoreLabel}
+        </p>
       </div>
-      <div className="relative h-[170px] w-[182px] shrink-0">
-        <Image src={imgSrc} alt={title} fill className="object-cover" sizes="182px" />
+      <div className="relative h-[120px] w-[120px] shrink-0 sm:h-[170px] sm:w-[182px]">
+        <Image
+          src={imgSrc}
+          alt={title}
+          fill
+          className="object-cover"
+          sizes="(max-width: 640px) 120px, 182px"
+        />
       </div>
     </Link>
   );
@@ -66,13 +80,13 @@ export function HomeBlog({ locale }: HomeBlogProps) {
   const readMore = t('home.blog.readMore');
 
   return (
-    <section className="bg-blog-section py-20">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="mb-12 flex flex-col items-center gap-3 text-center">
-          <h2 className="text-4xl font-medium tracking-tight text-foreground md:text-5xl">
+    <section className="bg-blog-section py-12 sm:py-16 lg:py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="mb-10 flex flex-col items-center gap-3 text-center sm:mb-12">
+          <h2 className="text-foreground text-3xl font-medium tracking-tight sm:text-4xl md:text-5xl">
             {t('home.blog.headline')}
           </h2>
-          <p className="max-w-lg text-base text-muted-foreground">{t('home.blog.subheadline')}</p>
+          <p className="text-muted-foreground max-w-lg text-base">{t('home.blog.subheadline')}</p>
         </div>
 
         <div className="flex flex-col gap-[20px] md:flex-row">

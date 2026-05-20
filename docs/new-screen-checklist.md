@@ -6,7 +6,7 @@ Use this every time you add a screen. Treat it as a PR review checklist.
 
 0. **Declare the phase plan** per [task-workflow.md](task-workflow.md). Phase 0 is mandatory before any code is written.
 1. **Does this screen belong to an existing feature?** If yes, work inside `features/<existing>/`. If no, create `features/<new-feature>/` with the standard subfolders.
-2. **Read the Figma frame end-to-end** ([figma-to-code.md](figma-to-code.md)). **Enumerate every section as a node ID** and call `get_design_context` per section — do not work from a single top-frame response that may have been truncated. List every interactive state (loading/empty/error/success), every icon to export, every Lottie/asset needed, every prototype transition.
+2. **Read the Figma frame end-to-end via the layer tree, NOT the screenshot** ([figma-to-code.md](figma-to-code.md) §The contract). Call `get_metadata` on the top frame to enumerate every section as a node ID. For each section, in its own solo phase-5 sub-phase, call `get_design_context` on that exact node and walk every layer — including every background layer (section fill, gradients, blur blobs, decorative shapes, image fills) — and pair each layer with a planned DOM element (kept / inlined / dropped). The screenshot is BANNED as a code-derivation source: it may be opened ONCE per section as a sanity reference, but never to count sections, measure spacing, pick a color, infer a gradient, or decide which layers exist. List every interactive state (loading/empty/error/success), every icon to export, every background image to export to `public/images/bg/`, every Lottie/asset needed, every prototype transition.
 3. **List the API endpoints needed.** Add any missing entries to `config/endpoints.ts` (matching `website-bonyad/src/config/api.ts` in the RN app — RN is reference for the integration only, not for UI).
    3a. **Export all icons from Figma to `src/components/icons/`** with `currentColor` fills/strokes. No invented icons. No `lucide-react` for designed icons.
    3b. **Export Lottie JSONs** for any complex animation to `public/animations/`. Simple transitions stay as Tailwind/Framer per the Figma transition metadata.
@@ -59,7 +59,12 @@ Use this every time you add a screen. Treat it as a PR review checklist.
 26. **`pnpm lint`** passes — including boundary rules and file-size limits.
 27. **`pnpm typecheck`** passes — strict mode.
 28. **`pnpm test`** passes.
-29. **Manual check in browser**: light mode, dark mode, English, Arabic. Note that this project intentionally inverts the direction mapping (`en → rtl`, `ar → ltr` — see [i18n-and-rtl.md](i18n-and-rtl.md) §Direction mapping), so `en` should render with `<html dir="rtl">` and `ar` with `<html dir="ltr">`. For each section, **inspect computed styles** (padding, gap, font size, color, radius, icon size) and compare 1:1 against Figma — see [figma-to-code.md](figma-to-code.md) §Pixel-perfect verification. When toggling locales, every section must mirror; content anchored to the same physical side across both locales means a `-end` utility that should be `-start` ([i18n-and-rtl.md](i18n-and-rtl.md) §Common mistake).
+29. **Manual check in browser, per section, five axes**. For every section of the screen, run the full quintet before moving to the next one — never batch at end-of-screen. See [figma-to-code.md](figma-to-code.md) §Pixel-perfect verification.
+    - **Layer fidelity**: every Figma layer that was planned to render (content AND backgrounds — section fills, gradients, blur blobs, decorative shapes, image fills) has a matching DOM element; every "dropped" layer is absent; no extra wrappers without a documented reason; no JSX value that traces back to a screenshot rather than a layer property.
+    - **Pixel-perfect (light, `en`)**: inspect computed styles (padding, gap, font size, line-height, color, radius, icon size, section background fill, gradient stops + angle, decorative blur blob positions, background images) against Figma 1:1. Background images must be real exports from Figma under `public/images/bg/`, not CSS gradients substituting for image fills.
+    - **RTL mirror (`ar`)**: toggle the `bonyad-lang` cookie to `ar`, reload, confirm `<html dir="rtl">` and that the section mirrors. Same physical side in both locales = `-end` used where `-start` was needed ([i18n-and-rtl.md](i18n-and-rtl.md) §Common mistake).
+    - **Dark mode**: switch the theme toggle to dark; every surface (including background layers) must come from a token with a `.dark` value in [src/styles/tokens.css](../src/styles/tokens.css). Wash-out / black-on-black = a missing `.dark` override. Fix before continuing.
+    - **Responsive (320 / 768 / 1280 px)**: resize, confirm no horizontal scroll, no clipped content, touch targets ≥ 44 px on the 320 floor. No `w-[\d+px]` / `h-[\d+px]` on layout containers; decorative absolute-positioned background elements with hardcoded coordinates gated behind `xl:` ([responsive-design.md](responsive-design.md) §Hard rules).
 30. **Accessibility pass** (see [accessibility.md](accessibility.md)): every form has labels, every image has alt text, every interactive element is keyboard-reachable, focus rings visible (using `--color-ring` token), `vitest-axe` test added for non-trivial components, route-change announcer hits.
 
 ## J. SEO (public pages only — skip for authenticated routes)
@@ -84,6 +89,7 @@ If this screen is **private** (behind auth):
 
 39. **Update `locales/*.json` for both languages**, even if the Arabic strings need product review — never ship `en` alone.
 40. **No `console.log`, no `TODO` without an issue link**, no commented-out code.
+41. **Docs in sync.** Per [doc-maintenance.md](doc-maintenance.md), every new feature folder, endpoint, token, icon, env var, or shared component has the matching doc edit in this PR. The PR description carries a "Doc updates" line naming the files touched (or stating "no doc update required" with a reason).
 
 ## Definition of done
 

@@ -27,20 +27,19 @@
 
 ## Query hook template
 
+The response is `apiClient.get<T>` with a TS type — no runtime zod parse. Strict zod on the response side breaks the moment the backend adds an enum value or a field; see [api-and-auth.md](api-and-auth.md) §Schema strategy.
+
 ```ts
 // features/projects/api/get-projects.ts
 import { useQuery } from '@tanstack/react-query';
 import { apiClient } from '@/lib/api-client';
 import { API_ENDPOINTS } from '@/config/endpoints';
-import { projectListSchema, type Project } from '../schemas/project.schema';
+import type { Project } from '../schemas/project.schema';
 
 export const projectsQueryKey = (filters?: ProjectFilters) => ['projects', filters] as const;
 
 export async function getProjects(filters?: ProjectFilters): Promise<Project[]> {
-  return apiClient.get(API_ENDPOINTS.PROJECTS.LIST, {
-    params: filters,
-    schema: projectListSchema,
-  });
+  return apiClient.get<Project[]>(API_ENDPOINTS.PROJECTS.LIST, { params: filters });
 }
 
 export function useProjects(filters?: ProjectFilters) {
@@ -53,6 +52,8 @@ export function useProjects(filters?: ProjectFilters) {
 
 ## Mutation hook template
 
+Request body is parsed with a **strict** zod schema (we control what we send); response is a TS type only.
+
 ```ts
 // features/projects/api/create-project.ts
 import { useMutation, useQueryClient } from '@tanstack/react-query';
@@ -60,14 +61,13 @@ import { apiClient } from '@/lib/api-client';
 import { API_ENDPOINTS } from '@/config/endpoints';
 import {
   createProjectRequestSchema,
-  projectSchema,
   type CreateProjectRequest,
   type Project,
 } from '../schemas/project.schema';
 
 export async function createProject(input: CreateProjectRequest): Promise<Project> {
   const body = createProjectRequestSchema.parse(input);
-  return apiClient.post(API_ENDPOINTS.PROJECTS.CREATE, { body, schema: projectSchema });
+  return apiClient.post<Project>(API_ENDPOINTS.PROJECTS.CREATE, { body });
 }
 
 export function useCreateProject() {

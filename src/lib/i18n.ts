@@ -19,9 +19,6 @@ let initialized = false;
 
 export function initI18n(initialLocale: Locale): typeof i18n {
   if (initialized) {
-    if (i18n.language !== initialLocale) {
-      void i18n.changeLanguage(initialLocale);
-    }
     return i18n;
   }
   initialized = true;

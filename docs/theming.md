@@ -52,17 +52,22 @@
      Literal scales are only allowed when building the semantic layer.
 5. **Component variants live in shadcn's `cva()` definitions**, not as ad-hoc Tailwind strings repeated everywhere.
 6. **Dark mode is owned by `next-themes`.** `<ThemeProvider attribute="class" defaultTheme="system">` in the root layout. Components never read or set the theme directly — they use Tailwind classes that respond to `.dark`.
-7. **No `dark:` Tailwind variants in shared components** when the same token covers both modes. `bg-background` already flips automatically. Only use `dark:` when light and dark genuinely diverge.
-8. **Spacing, radii, shadows are also tokens.** No `style={{ padding: 13 }}`. Use the Tailwind scale.
+7. **Every token defined in `:root` MUST also be defined in `.dark`.** No exceptions. A token without a `.dark` value renders the same light-mode color under dark mode, producing washed-out cards, black-on-black text, or invisible icons. PR review must reject any new `:root` token that does not have a matching `.dark` entry. This is the #1 dark-mode regression cause in this codebase — treat it as a hard rule, not a nice-to-have.
+8. **No `dark:` Tailwind variants in shared components** when the same token covers both modes. `bg-background` already flips automatically. Only use `dark:` when light and dark genuinely diverge in a way the token can't capture.
+9. **Spacing, radii, shadows are also tokens.** No `style={{ padding: 13 }}`. Use the Tailwind scale.
+
+### Verification gate for tokens
+
+Every PR that adds or modifies a `:root` token must include, in the PR description or a verification screenshot, that the section using the token was visually checked in **both** light and dark mode — see [figma-to-code.md](figma-to-code.md) §Pixel-perfect verification, axis 3. If you cannot verify dark mode (e.g. token only applies to a state you can't reach), say so explicitly in the PR — silent skips are not allowed.
 
 ## Fonts
 
 The app's two pinned fonts, extracted from the Figma design system:
 
-| Locale | Font | Variable | Source |
-|---|---|---|---|
-| Latin / English | **Inter Tight** | `--font-sans-primary` | Figma "Static/_/Font" variables in `Display`, `Headline`, `Body`, `Label`, `Title` style sets |
-| Arabic | **Noto Sans Arabic** | `--font-arabic-primary` | Figma text instances containing Arabic content |
+| Locale          | Font                 | Variable                | Source                                                                                         |
+| --------------- | -------------------- | ----------------------- | ---------------------------------------------------------------------------------------------- |
+| Latin / English | **Inter Tight**      | `--font-sans-primary`   | Figma "Static/\_/Font" variables in `Display`, `Headline`, `Body`, `Label`, `Title` style sets |
+| Arabic          | **Noto Sans Arabic** | `--font-arabic-primary` | Figma text instances containing Arabic content                                                 |
 
 Both are loaded via `next/font/google` in `src/lib/fonts.ts` and applied to `<html>` as CSS variables in `src/app/layout.tsx`. **Never hardcode a font-family in JSX or CSS** — read from the tokens `var(--font-sans)` / `var(--font-arabic)` via the Tailwind utilities `font-sans` / `font-arabic`.
 

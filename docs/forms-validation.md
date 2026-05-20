@@ -23,6 +23,7 @@
 8. **All inputs use shadcn `<FormField>`.** No raw `<input>` outside `components/ui/`.
 9. **No uncontrolled form state.** Every input is registered with RHF.
 10. **Multi-step forms** use one big schema with `.partial()` per step + a parent `useForm` instance lifted to the page.
+11. **`type="tel" | email | number | url | search` inputs need `text-end` plus the primitive's `[direction:inherit]` override — `dir="auto"` is _not_ enough.** Browser UA stylesheets force `direction: ltr` on these input types, which silently overrides ancestor inheritance and any `dir="auto"` heuristic. Result: typed content anchors to the opposite side of the parent's leading icon, breaking the mirror in either `en` or `ar`. The shared `Input` primitive ([src/components/ui/input.tsx](../src/components/ui/input.tsx)) ships with a `[direction:inherit]` class that re-enables inheritance from `<html dir>`; _don't strip it_. On the consumer side, add `text-end` to the input so typed digits align with the parent's `end-*` icon. Do not pass `dir="auto"` for digit-only fields — it does nothing (digits are bidi-weak, falls back to parent, then UA overrides). Reserve `dir="auto"` for genuinely mixed-language free-text fields (names, addresses, descriptions, multilingual comments). See [i18n-and-rtl.md](i18n-and-rtl.md) §RTL rules rule 5.
 
 ## File layout
 

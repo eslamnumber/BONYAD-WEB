@@ -12,19 +12,31 @@
 
 ## Rules
 
-1. **One `ApiError` type for the whole app.** Defined in `src/types/api.ts`:
+1. **One `ApiError` type for the whole app.** Defined in `src/lib/api-client.ts`. It mirrors the backend error envelope (`{ messageEn, messageAr, errorCode }`) so the UI can pick a locale-correct message without an extra translation pass:
+
    ```ts
    export class ApiError extends Error {
+     public readonly messageEn?: string;
+     public readonly messageAr?: string;
+     public readonly errorCode?: string;
+     public readonly fieldErrors?: Record<string, string>;
+
      constructor(
-       public status: number,
-       public code: string | null,
-       public fieldErrors: Record<string, string> | null,
-       message: string,
+       public readonly status: number,
+       public readonly body: unknown,
      ) {
-       super(message);
+       super(`API error ${status}`);
+       // ...populates messageEn / messageAr / errorCode / fieldErrors from body
+     }
+
+     localizedMessage(locale: string): string | undefined {
+       return locale.startsWith('ar')
+         ? (this.messageAr ?? this.messageEn)
+         : (this.messageEn ?? this.messageAr);
      }
    }
    ```
+
 2. **The `apiClient` is the only place that throws `ApiError`.** Features never construct it.
 3. **Auth errors are special.** A 401 triggers `apiClient` to attempt one `/auth/refresh-token` call; on failure, it dispatches `useAuthStore.logout()` and redirects to `/login?reason=expired`.
 4. **Component code uses `query.error` for display.** Never `try/catch` around a `useQuery` call.
@@ -61,5 +73,5 @@
 
 - Don't catch errors and re-throw a generic one — you lose stack and code.
 - Don't log errors to `console.error` in production code paths. The browser console is not a logging system.
-- Don't show raw error messages from the backend to the user — always go through i18n with a known code, or show `t('errors.generic')`.
+- Don't show raw error messages from the backend to the user **unless** they came through `ApiError#localizedMessage` (i.e. the backend already returned `messageEn` + `messageAr`). For any other backend string, route through i18n with a known code or show `t('errors.generic')`.
 - Don't have multiple `try/catch` blocks doing different things in the same function. Errors should bubble up to the layer that knows how to handle them.

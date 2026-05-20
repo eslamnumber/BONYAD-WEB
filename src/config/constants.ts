@@ -18,6 +18,18 @@ export const LOCALE_COOKIE_NAME = 'bonyad-lang';
 export const THEME_COOKIE_NAME = 'bonyad-theme';
 
 // ---------------------------------------------------------------------------
+// Social
+// ---------------------------------------------------------------------------
+
+/** Official social profile URLs — update when marketing confirms handles. */
+export const SOCIAL_LINKS = {
+  x: 'https://x.com',
+  linkedin: 'https://www.linkedin.com',
+  instagram: 'https://www.instagram.com',
+  tiktok: 'https://www.tiktok.com',
+} as const;
+
+// ---------------------------------------------------------------------------
 // Pagination
 // ---------------------------------------------------------------------------
 

@@ -19,7 +19,6 @@ const securityHeaders = [
 ];
 
 const config: NextConfig = {
-  output: 'standalone',
   reactStrictMode: true,
   poweredByHeader: false,
   compress: true,
@@ -55,7 +54,15 @@ const config: NextConfig = {
                 plugins: [
                   {
                     name: 'preset-default',
-                    params: { overrides: { removeViewBox: false } },
+                    params: {
+                      overrides: {
+                        removeViewBox: false,
+                        // Preserve original IDs (gradient/clip refs like s1g0, s2g0…).
+                        // Without this, SVGO renames every ID to "a", causing all
+                        // inlined SVGs on the same page to share the same gradient.
+                        cleanupIds: false,
+                      },
+                    },
                   },
                 ],
               },

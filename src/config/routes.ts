@@ -28,9 +28,11 @@ export const ROUTES = {
   LOGIN: '/login',
   REGISTER: '/register',
   FORGOT_PASSWORD: '/forgot-password',
+  VERIFY_OTP: '/verify-otp',
   RESET_PASSWORD: '/reset-password',
 
   // Authenticated app surface (not yet implemented)
   APP_HOME: '/app',
   APP_PROFILE: '/app/profile',
+  DASHBOARD: '/dashboard',
 } as const;

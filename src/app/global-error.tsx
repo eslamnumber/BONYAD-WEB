@@ -2,10 +2,10 @@
 
 import { useEffect } from 'react';
 
-import { captureException } from '@/lib/sentry';
-
 // Last-resort error boundary — replaces the root layout when it itself crashes.
 // Must render <html> + <body> because the layout failed to.
+// Intentionally imports NOTHING from the app — any module in the graph may be
+// broken when we land here, and importing it would re-throw before rendering.
 // TODO(i18n, Phase 6): t() all strings (English-only is acceptable for the crash screen).
 
 type GlobalErrorProps = {
@@ -15,7 +15,9 @@ type GlobalErrorProps = {
 
 export default function GlobalError({ error, reset }: GlobalErrorProps) {
   useEffect(() => {
-    captureException(error, { digest: error.digest, scope: 'global-error' });
+    // Can't import captureException here — Sentry/env modules may themselves
+    // be the source of the crash. Log locally so devs can still see the error.
+    console.error('[global-error]', error.digest ?? '', error);
   }, [error]);
 
   return (

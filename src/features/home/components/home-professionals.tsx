@@ -54,7 +54,7 @@ type ProfCardProps = {
 
 function ProfCard({ imgSrc, name, title, rate, projects, location, verifiedLabel }: ProfCardProps) {
   return (
-    <div className="group relative h-[460px] w-full shrink-0 overflow-hidden rounded sm:w-[378px]">
+    <div className="group relative h-[420px] w-full overflow-hidden rounded sm:h-[460px]">
       <Image
         src={imgSrc}
         alt={name}
@@ -62,24 +62,26 @@ function ProfCard({ imgSrc, name, title, rate, projects, location, verifiedLabel
         className="object-cover transition-transform duration-300 motion-safe:group-hover:scale-105"
         sizes="(max-width: 640px) 100vw, 378px"
       />
-      <div className="absolute end-0 top-[22px] bg-success px-4 py-2">
-        <span className="text-sm font-medium leading-none text-white">{verifiedLabel}</span>
+      <div className="bg-success absolute end-0 top-[22px] px-4 py-2">
+        <span className="text-sm leading-none font-medium text-white">{verifiedLabel}</span>
       </div>
-      <div className="absolute start-[20px] top-[298px] h-[142px] w-[338px] overflow-hidden rounded-[8px] bg-slate-50/80 p-4 backdrop-blur-[10px]">
-        <div className="flex flex-col gap-1 text-start">
-          <p className="text-[32px] font-medium leading-tight text-foreground">{name}</p>
-          <p className="text-[16px] font-semibold text-foreground/60">{title}</p>
-          <div className="mt-1 flex items-center gap-3 text-sm text-muted-foreground">
+      <div className="absolute inset-x-4 bottom-4 overflow-hidden rounded-[8px] bg-slate-50/80 p-3 backdrop-blur-[10px] sm:p-4">
+        <div className="flex flex-col gap-1 text-end">
+          <p className="text-foreground text-2xl leading-tight font-medium sm:text-[32px]">
+            {name}
+          </p>
+          <p className="text-foreground/60 text-sm font-semibold sm:text-[16px]">{title}</p>
+          <div className="text-muted-foreground mt-1 flex flex-wrap items-center gap-x-3 gap-y-1 text-xs sm:text-sm">
             <div className="flex items-center gap-1">
               <DetailRateIcon className="size-4 shrink-0" aria-hidden />
               <span>{rate}</span>
             </div>
-            <div aria-hidden className="h-[26px] w-px bg-brand-navy opacity-60" />
+            <div aria-hidden className="bg-brand-navy hidden h-[26px] w-px opacity-60 sm:block" />
             <div className="flex items-center gap-1">
               <DetailProjectsIcon className="size-4 shrink-0" aria-hidden />
               <span>{projects}</span>
             </div>
-            <div aria-hidden className="h-[26px] w-px bg-brand-navy opacity-60" />
+            <div aria-hidden className="bg-brand-navy hidden h-[26px] w-px opacity-60 sm:block" />
             <div className="flex items-center gap-1">
               <DetailLocationIcon className="size-4 shrink-0" aria-hidden />
               <span>{location}</span>
@@ -95,15 +97,17 @@ export function HomeProfessionals({ locale }: HomeProfessionalsProps) {
   const { t } = getTranslations(locale);
 
   return (
-    <section className="bg-background py-20">
-      <div className="mx-auto max-w-7xl px-6">
-        <div className="mb-12 flex flex-col items-center gap-3 text-center">
-          <h2 className="text-4xl font-medium tracking-tight text-foreground md:text-5xl">
+    <section className="bg-background py-12 sm:py-16 lg:py-20">
+      <div className="mx-auto max-w-7xl px-4 sm:px-6">
+        <div className="mb-10 flex flex-col items-center gap-3 text-center sm:mb-12">
+          <h2 className="text-foreground text-3xl font-medium tracking-tight sm:text-4xl md:text-5xl">
             {t('home.professionals.headline')}
           </h2>
-          <p className="text-lg text-foreground/80">{t('home.professionals.subheadline')}</p>
+          <p className="text-foreground/80 text-base sm:text-lg">
+            {t('home.professionals.subheadline')}
+          </p>
         </div>
-        <div className="flex flex-col gap-7 sm:flex-row sm:items-center sm:justify-center">
+        <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {PROFESSIONALS.map((pro) => (
             <ProfCard
               key={pro.imgSrc}

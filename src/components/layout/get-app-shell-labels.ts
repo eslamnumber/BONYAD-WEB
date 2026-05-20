@@ -11,14 +11,20 @@ function getHeaderLabels(t: TFunction, locale: Locale): AppShellLabels['header']
     siteName: t('site.name'),
     nav: {
       services: t('nav.services'),
-      technicians: t('nav.technicians'),
+      howItWorks: t('nav.howItWorks'),
+      about: t('nav.about'),
       blog: t('nav.blog'),
-      help: t('nav.help'),
       contact: t('nav.contact'),
+      login: t('nav.login'),
+      getStarted: t('nav.getStarted'),
     },
     languageToggle: {
       ariaLabel: t('language.ariaLabel'),
       switchTo: locale === 'en' ? t('language.switchToArabic') : t('language.switchToEnglish'),
+    },
+    themeToggle: {
+      ariaLabel: t('theme.ariaLabel'),
+      labels: { light: t('theme.light'), dark: t('theme.dark'), system: t('theme.system') },
     },
   };
 }

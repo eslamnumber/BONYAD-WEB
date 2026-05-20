@@ -1,8 +1,9 @@
 'use client';
 
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { MotionConfig } from 'framer-motion';
 import { ThemeProvider } from 'next-themes';
-import { useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { I18nextProvider } from 'react-i18next';
 
 import { THEME_COOKIE_NAME } from '@/config/constants';
@@ -17,34 +18,35 @@ type ProvidersProps = {
   nonce?: string;
 };
 
-/**
- * Client-side providers tree.
- *
- *  - `next-themes` ThemeProvider (light / dark / system).
- *  - `I18nextProvider` — initializes the i18next singleton with the server-known
- *    initial locale, then provides it to `useTranslation()` callers.
- *
- * Will gain in later phases:
- *   - QueryClientProvider (when backend integration lands).
- *   - TooltipProvider, sonner Toaster (when those primitives are added).
- */
 export function Providers({ children, initialLocale, nonce }: ProvidersProps) {
-  const i18n = useMemo(() => initI18n(initialLocale), [initialLocale]);
+  const [i18n] = useState(() => initI18n(initialLocale));
+  const [queryClient] = useState(
+    () =>
+      new QueryClient({
+        defaultOptions: { queries: { staleTime: 60_000, retry: 1 } },
+      }),
+  );
+
+  useEffect(() => {
+    if (i18n.language !== initialLocale) {
+      void i18n.changeLanguage(initialLocale);
+    }
+  }, [i18n, initialLocale]);
 
   return (
-    <ThemeProvider
-      attribute="class"
-      defaultTheme="system"
-      enableSystem
-      disableTransitionOnChange
-      storageKey={THEME_COOKIE_NAME}
-      nonce={nonce}
-    >
-      <I18nextProvider i18n={i18n}>
-        {/* Honour prefers-reduced-motion globally for framer-motion components
-            (e.g. the hero toggle pill). */}
-        <MotionConfig reducedMotion="user">{children}</MotionConfig>
-      </I18nextProvider>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider
+        attribute="class"
+        defaultTheme="system"
+        enableSystem
+        disableTransitionOnChange
+        storageKey={THEME_COOKIE_NAME}
+        nonce={nonce}
+      >
+        <I18nextProvider i18n={i18n}>
+          <MotionConfig reducedMotion="user">{children}</MotionConfig>
+        </I18nextProvider>
+      </ThemeProvider>
+    </QueryClientProvider>
   );
 }

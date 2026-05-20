@@ -12,11 +12,10 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(function Input(
     <input
       ref={ref}
       type={type}
-      // `dir="auto"` lets the browser pick LTR/RTL based on the value — important for
-      // mixed-language fields like names, addresses, descriptions.
-      dir="auto"
       className={cn(
         'border-input bg-background flex h-10 w-full rounded-md border px-3 py-2 text-sm',
+        // Defeats UA `direction: ltr` on type=tel/email/number/url/search — see docs/i18n-and-rtl.md rule 5.
+        '[direction:inherit]',
         'placeholder:text-muted-foreground',
         'focus-visible:ring-ring focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:outline-none',
         'disabled:cursor-not-allowed disabled:opacity-50',
