@@ -9,6 +9,7 @@ Inspired by [bulletproof-react](https://github.com/alan2207/bulletproof-react), 
 - **Any non-trivial task?** Start with [task-workflow.md](task-workflow.md) — phased execution is mandatory.
 - **Adding ANYTHING that lives in `src/` or `config/`?** Read [doc-maintenance.md](doc-maintenance.md) — every new feature, endpoint, token, env var, route, or shared component ships with the matching doc edit in the same PR.
 - Implementing a Figma frame? Read [figma-to-code.md](figma-to-code.md) for the Figma MCP workflow, icons, and animations.
+- Classifying a Figma section as static or backend-driven? Read [section-data-classification.md](section-data-classification.md). Backend-driven sections (plans, services, testimonials, blog posts, etc.) must fetch from the API, never hardcode.
 - Adding a new screen? Start with [new-screen-checklist.md](new-screen-checklist.md).
 - Adding a public/marketing page? Also read [seo-and-ai-readability.md](seo-and-ai-readability.md) + [caching-and-runtime.md](caching-and-runtime.md).
 - Touching styles? Read [theming.md](theming.md) + [responsive-design.md](responsive-design.md).
@@ -46,6 +47,7 @@ Inspired by [bulletproof-react](https://github.com/alan2207/bulletproof-react), 
 24. [ai-onboarding.md](ai-onboarding.md) — Paste-ready bootstrap for ad-hoc chats (web Claude, ChatGPT, etc.). Self-contained — every hard rule + the phased workflow inline.
 25. [responsive-design.md](responsive-design.md) — Mobile-first breakpoints, layout patterns per screen tier (Facebook/X/LinkedIn style), container queries, touch targets, image `sizes`, per-PR device-matrix tests.
 26. [doc-maintenance.md](doc-maintenance.md) — Binding rule that every new feature/file/endpoint/token/icon/env-var ships with the matching architecture-doc edit in the same PR.
+27. [section-data-classification.md](section-data-classification.md) — Static vs backend-driven section rule. When a Figma section renders backend-owned content (plans, services, testimonials, etc.) it must fetch from the API; hardcoded content arrays are review-blocking.
 
 ## AI assistant orientation
 

@@ -18,4 +18,10 @@ export const API_ENDPOINTS = {
     REFRESH_TOKEN: '/auth/refresh-token',
     VALIDATE_TOKEN: '/auth/validate-token',
   },
+  SUBSCRIPTIONS: {
+    CATEGORIES: '/subscriptions/categories',
+  },
+  FAQS: {
+    LIST: '/faqs',
+  },
 } as const;

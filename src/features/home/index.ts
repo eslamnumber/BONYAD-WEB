@@ -9,3 +9,4 @@ export { HomeTrust } from './components/home-trust';
 export { TechBlog } from './components/tech-blog';
 export { TechPricing } from './components/tech-pricing';
 export { TechSuccessStories } from './components/tech-success-stories';
+export { getSubscriptionPlans } from './api/get-subscription-plans';

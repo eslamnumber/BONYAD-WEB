@@ -1,0 +1,16 @@
+<svg preserveAspectRatio="xMidYMid meet" width="100%" height="100%" overflow="visible" style="display: block;" viewBox="0 0 180 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="Frame">
+<path id="Vector" d="M90 15C97.4168 15 104.667 17.1993 110.834 21.3199C117.001 25.4404 121.807 31.2971 124.645 38.1494C127.484 45.0016 128.226 52.5416 126.779 59.8159C125.333 67.0902 121.761 73.772 116.517 79.0165C111.272 84.261 104.59 87.8325 97.3159 89.2795C90.0416 90.7264 82.5016 89.9838 75.6494 87.1455C68.7971 84.3072 62.9404 79.5007 58.8199 73.3339C54.6993 67.167 52.5 59.9168 52.5 52.5L52.5375 50.8725C52.9569 41.2181 57.087 32.0983 64.0667 25.4149C71.0463 18.7316 80.3365 15.0006 90 15Z" fill="url(#paint0_radial_0_394)"/>
+<path id="Vector_2" d="M105 105C114.946 105 124.484 108.951 131.517 115.983C138.549 123.016 142.5 132.554 142.5 142.5V150C142.5 153.978 140.92 157.794 138.107 160.607C135.294 163.42 131.478 165 127.5 165H52.5C48.5218 165 44.7064 163.42 41.8934 160.607C39.0804 157.794 37.5 153.978 37.5 150V142.5C37.5 132.554 41.4509 123.016 48.4835 115.983C55.5161 108.951 65.0544 105 75 105H105Z" fill="url(#paint1_radial_0_394)"/>
+</g>
+<defs>
+<radialGradient id="paint0_radial_0_394" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(90 52.5) rotate(89.9986) scale(69.5454 107.833)">
+<stop stop-color="#005DAC"/>
+<stop offset="1" stop-color="white"/>
+</radialGradient>
+<radialGradient id="paint1_radial_0_394" cx="0" cy="0" r="1" gradientTransform="matrix(0.00230425 55.6363 -150.966 0.0020364 90 135)" gradientUnits="userSpaceOnUse">
+<stop stop-color="#005DAC"/>
+<stop offset="1" stop-color="white"/>
+</radialGradient>
+</defs>
+</svg>

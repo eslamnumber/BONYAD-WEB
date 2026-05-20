@@ -30,6 +30,12 @@ export default function sitemap(): MetadataRoute.Sitemap {
     },
     { url: `${base}${ROUTES.BLOG}`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     { url: `${base}${ROUTES.HELP}`, lastModified: now, changeFrequency: 'weekly', priority: 0.6 },
+    {
+      url: `${base}${ROUTES.HOW_IT_WORKS}`,
+      lastModified: now,
+      changeFrequency: 'monthly',
+      priority: 0.7,
+    },
     { url: `${base}${ROUTES.FAQ}`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
     {
       url: `${base}${ROUTES.CONTACT}`,

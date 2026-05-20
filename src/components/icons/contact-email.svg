@@ -1,0 +1,19 @@
+<svg viewBox="0 0 36 36" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g clip-path="url(#contact-email-clip)">
+    <path d="M33 11.3025V25.5C33.0001 26.6478 32.5615 27.7523 31.7741 28.5874C30.9866 29.4225 29.9098 29.9252 28.764 29.9925L28.5 30H7.5C6.35218 30.0001 5.24773 29.5615 4.41261 28.7741C3.57749 27.9866 3.07484 26.9098 3.0075 25.764L3 25.5V11.3025L17.1675 20.748L17.3415 20.847C17.5466 20.9472 17.7718 20.9993 18 20.9993C18.2282 20.9993 18.4534 20.9472 18.6585 20.847L18.8325 20.748L33 11.3025Z" fill="url(#contact-email-grad0)"/>
+    <path d="M28.5 6C30.12 6 31.5405 6.855 32.3325 8.1405L18 17.6955L3.6675 8.1405C4.0436 7.52965 4.56032 7.0176 5.17456 6.64707C5.7888 6.27655 6.48275 6.05828 7.1985 6.0105L7.5 6H28.5Z" fill="url(#contact-email-grad1)"/>
+  </g>
+  <defs>
+    <radialGradient id="contact-email-grad0" cx="0" cy="0" r="1" gradientTransform="matrix(0.000658356 17.3377 -43.1331 0.000634592 18 20.6512)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#005DAC"/>
+      <stop offset="1" stop-color="white"/>
+    </radialGradient>
+    <radialGradient id="contact-email-grad1" cx="0" cy="0" r="1" gradientTransform="matrix(0.00062906 10.8449 -41.2137 0.000396945 18 11.8477)" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#005DAC"/>
+      <stop offset="1" stop-color="white"/>
+    </radialGradient>
+    <clipPath id="contact-email-clip">
+      <rect width="36" height="36" fill="white"/>
+    </clipPath>
+  </defs>
+</svg>

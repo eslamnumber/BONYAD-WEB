@@ -18,6 +18,7 @@ export const ROUTES = {
   BLOG_POST: (slug: string) => `/blog/${slug}`,
   HELP: '/help',
   HELP_ARTICLE: (id: string) => `/help/${id}`,
+  HOW_IT_WORKS: '/how-it-works',
   FAQ: '/faq',
   CONTACT: '/contact',
   PRIVACY: '/privacy',

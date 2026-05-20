@@ -3,6 +3,7 @@ import { type Metadata } from 'next';
 import { JsonLd } from '@/components/seo';
 import { env } from '@/config/env';
 import {
+  getSubscriptionPlans,
   HomeHero,
   HomeHowItWorks,
   HomeServices,
@@ -28,7 +29,11 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 export default async function ForProsPage() {
-  const [locale, nonce] = await Promise.all([getServerLocale(), getRequestNonce()]);
+  const [locale, nonce, plans] = await Promise.all([
+    getServerLocale(),
+    getRequestNonce(),
+    getSubscriptionPlans().catch(() => []),
+  ]);
   const { t } = getTranslations(locale);
   const site = env.NEXT_PUBLIC_SITE_URL;
 
@@ -53,7 +58,7 @@ export default async function ForProsPage() {
       <HomeServices locale={locale} variant="pro" />
       <HomeHowItWorks locale={locale} variant="pro" />
       <HomeTrust locale={locale} />
-      <TechPricing locale={locale} />
+      <TechPricing locale={locale} plans={plans} />
       <TechSuccessStories locale={locale} />
       <TechBlog locale={locale} />
       <HomeStartCta locale={locale} variant="pro" />

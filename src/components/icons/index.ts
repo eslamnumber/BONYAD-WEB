@@ -41,3 +41,10 @@ export { default as PhoneIcon } from './phone.svg';
 export { default as EyeIcon } from './eye.svg';
 export { default as LockIcon } from './lock.svg';
 export { default as CheckboxIcon } from './checkbox.svg';
+
+/* Currency icons */
+export { default as SaudiRiyalIcon } from './saudi-riyal.svg';
+
+/* How It Works page — contact section icons */
+export { default as ContactEmailIcon } from './contact-email.svg';
+export { default as ContactChatIcon } from './contact-chat.svg';

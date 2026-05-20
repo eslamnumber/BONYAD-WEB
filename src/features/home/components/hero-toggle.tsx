@@ -2,8 +2,7 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { useRouter } from 'next/navigation';
-import { useTransition, type MouseEvent } from 'react';
+import { type MouseEvent } from 'react';
 
 import { ROUTES } from '@/config/routes';
 import { LOCALE_DIRECTION, type Locale } from '@/types/locale';
@@ -14,6 +13,7 @@ type HeroToggleProps = {
   headline: string;
   activeTab: 'user' | 'pro';
   locale: Locale;
+  onTabChange: (tab: 'user' | 'pro') => void;
 };
 
 // Pill geometry matches Figma 1:4432;271:151 — 248×58 outer, 122×48 highlighter,
@@ -21,19 +21,24 @@ type HeroToggleProps = {
 // layout mirrors automatically between LTR and RTL.
 const PILL_TRAVEL = 121;
 
-export function HeroToggle({ postLabel, proLabel, headline, activeTab, locale }: HeroToggleProps) {
-  const router = useRouter();
-  const [, startTransition] = useTransition();
+export function HeroToggle({
+  postLabel,
+  proLabel,
+  headline,
+  activeTab,
+  locale,
+  onTabChange,
+}: HeroToggleProps) {
   // framer-motion's `x` is a raw CSS pixel transform that ignores writing-mode,
   // so we negate it under RTL. Direction is read from LOCALE_DIRECTION (single
   // source of truth) rather than `locale === 'ar'`.
   const rtl = LOCALE_DIRECTION[locale] === 'rtl';
   const offset = activeTab === 'user' ? 0 : rtl ? -PILL_TRAVEL : PILL_TRAVEL;
 
-  function navigate(href: string) {
+  function navigate(tab: 'user' | 'pro') {
     return (event: MouseEvent<HTMLAnchorElement>) => {
       event.preventDefault();
-      startTransition(() => router.push(href));
+      onTabChange(tab);
     };
   }
 
@@ -48,11 +53,11 @@ export function HeroToggle({ postLabel, proLabel, headline, activeTab, locale }:
         className="bg-toggle-highlight absolute start-[5px] top-[5px] h-[48px] w-[122px] rounded-full shadow-sm"
         initial={false}
         animate={{ x: offset }}
-        transition={{ type: 'spring', stiffness: 500, damping: 38 }}
+        transition={{ type: 'spring', stiffness: 260, damping: 28 }}
       />
       <Link
         href={ROUTES.HOME}
-        onClick={navigate(ROUTES.HOME)}
+        onClick={navigate('user')}
         role="tab"
         aria-selected={activeTab === 'user'}
         aria-current={activeTab === 'user' ? 'page' : undefined}
@@ -62,7 +67,7 @@ export function HeroToggle({ postLabel, proLabel, headline, activeTab, locale }:
       </Link>
       <Link
         href={ROUTES.FOR_PROS}
-        onClick={navigate(ROUTES.FOR_PROS)}
+        onClick={navigate('pro')}
         role="tab"
         aria-selected={activeTab === 'pro'}
         aria-current={activeTab === 'pro' ? 'page' : undefined}

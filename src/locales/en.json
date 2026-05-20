@@ -205,42 +205,8 @@
       "billing6Months": "6 Months",
       "billingYearly": "Yearly",
       "perMonth": "/ month",
-      "plan1Name": "Free",
-      "plan1Price": "0",
-      "plan1Desc": "Get started at no cost",
-      "plan1Feature1": "Up to 3 active bids",
-      "plan1Feature2": "Basic profile listing",
-      "plan1Feature3": "Email support",
-      "plan1Feature4": "Access to public projects",
-      "plan1Feature5": "Standard payment processing",
-      "plan1Cta": "Get started free",
-      "plan2Name": "Professional",
-      "plan2Price": "1,250",
-      "plan2Desc": "For growing professionals",
-      "plan2Feature1": "Unlimited active bids",
-      "plan2Feature2": "Priority profile placement",
-      "plan2Feature3": "24/7 priority support",
-      "plan2Feature4": "Access to premium projects",
-      "plan2Feature5": "Faster payment processing",
-      "plan2Cta": "Start professional",
-      "plan3Name": "Growth",
-      "plan3Price": "3,500",
-      "plan3Desc": "For established businesses",
-      "plan3Feature1": "Everything in Professional",
-      "plan3Feature2": "Team management tools",
-      "plan3Feature3": "Dedicated account manager",
-      "plan3Feature4": "Advanced analytics",
-      "plan3Feature5": "Custom contract templates",
-      "plan3Cta": "Start growth",
-      "plan4Name": "Business",
-      "plan4Price": "7,500",
-      "plan4Desc": "For large-scale operations",
-      "plan4Feature1": "Everything in Growth",
-      "plan4Feature2": "Unlimited team members",
-      "plan4Feature3": "API access & integrations",
-      "plan4Feature4": "White-label options",
-      "plan4Feature5": "Enterprise SLA",
-      "plan4Cta": "Contact sales",
+      "cta": "Subscribe",
+      "noPlans": "Plans coming soon",
       "currency": "SAR"
     },
     "successStories": {
@@ -404,6 +370,91 @@
       "special": "One special character",
       "noSpaces": "No spaces",
       "noSequence": "No sequences like 1234"
+    }
+  },
+  "howItWorks": {
+    "meta": {
+      "title": "How Bonyad Works",
+      "description": "Learn how Bonyad connects customers with verified construction and home-service technicians in Saudi Arabia. Browse services, post your project, and hire with confidence."
+    },
+    "hero": {
+      "tag": "How Bonyad Works",
+      "headline": "Start Your Journey with Bonyad",
+      "body": "Whether you're looking for a professional for your project or want to grow your business, Bonyad makes the process easy from start to finish.",
+      "cta": "Get Started"
+    },
+    "contact": {
+      "subtitle": "Contact Us",
+      "headline": "Need More Information? Contact Us!",
+      "body": "Whether you have questions, need support, or want to know more about Bonyad, our team is ready to help you at any time.",
+      "email": {
+        "title": "Email Us",
+        "body": "Don't hesitate to reach out to us at",
+        "address": "support@bonyad.com"
+      },
+      "chat": {
+        "title": "Talk to Us",
+        "body": "Our support team is available 24/7 to help you via live chat.",
+        "cta": "Talk to Support Team"
+      },
+      "location": {
+        "subtitle": "Call Us",
+        "title": "Saudi Arabia",
+        "body": "We serve customers and service providers with a more professional and seamless experience across the Kingdom.",
+        "phone": "Phone: 99550000"
+      }
+    },
+    "steps": {
+      "tabPro": "Service Provider",
+      "tabCustomer": "Customer",
+      "pro": {
+        "headline": "Start Offering Your Services and Share Your Expertise!",
+        "body": "Discover how to use Bonyad step by step to offer your services and grow your business with ease.",
+        "1": {
+          "title": "Create Your Professional Profile",
+          "body": "Showcase your skills, add your portfolio, and set your service rates."
+        },
+        "2": {
+          "title": "Browse Projects",
+          "body": "Explore posted projects that match your expertise and availability."
+        },
+        "3": {
+          "title": "Submit Your Offer",
+          "body": "Send a competitive proposal with your timeline, pricing, and past work."
+        },
+        "4": {
+          "title": "Deliver and Receive",
+          "body": "Complete the work, get client approval, and receive your payment securely."
+        }
+      },
+      "customer": {
+        "headline": "Get Your Projects Done with Trusted Experts!",
+        "body": "Discover how to use Bonyad step by step to reach the right experts and manage your project with greater ease.",
+        "1": {
+          "title": "Post Your Project",
+          "body": "Describe the work required. Add photos, location, and budget range."
+        },
+        "2": {
+          "title": "Review Offers",
+          "body": "Receive competitive quotes. Compare prices, timelines, and previous projects."
+        },
+        "3": {
+          "title": "Hire and Sign",
+          "body": "Choose your expert, sign a digital contract, and deposit funds into escrow."
+        },
+        "4": {
+          "title": "Track and Pay",
+          "body": "Approve each project milestone and release payment upon completion."
+        }
+      }
+    },
+    "cta": {
+      "headline": "Start Simpler. Grow Faster.",
+      "body": "Flexible plans that give you the tools and visibility you need to grow your business.",
+      "button": "Browse Packages"
+    },
+    "faq": {
+      "heading": "Frequently Asked Questions"
     }
   }
 }

@@ -1,64 +1,45 @@
 import { Check } from 'lucide-react';
 import Link from 'next/link';
 
+import { SaudiRiyalIcon } from '@/components/icons';
 import { ROUTES } from '@/config/routes';
 import { getTranslations } from '@/lib/get-translations';
-import { type Locale } from '@/types/locale';
+import { type Locale, LOCALE_DIRECTION } from '@/types/locale';
 
-type TechPricingProps = { locale: Locale };
+import type { SubscriptionPlan } from '../schemas/subscription-plan';
+
 type PlanVariant = 'light' | 'dark-navy' | 'dark-green';
-type PricingPlan = {
-  name: string;
-  price: string;
-  desc: string;
-  features: string[];
-  cta: string;
+type TechPricingProps = { locale: Locale; plans: SubscriptionPlan[] };
+type PlanCardProps = {
+  plan: SubscriptionPlan;
   variant: PlanVariant;
+  name: string;
+  features: string[];
+  currency: string;
+  perMonth: string;
+  cta: string;
 };
-type PlanCardProps = PricingPlan & { currency: string; perMonth: string };
 
-function PlanCard({
-  name,
-  price,
-  desc,
-  features,
-  cta,
-  variant,
-  currency,
-  perMonth,
-}: PlanCardProps) {
-  const isDark = variant !== 'light';
-  const cardClass = isDark
-    ? variant === 'dark-green'
-      ? 'bg-pricing-plan-business text-white'
-      : 'bg-pricing-plan-growth text-white'
-    : 'bg-card text-foreground border border-border';
-  const priceColor = isDark ? 'text-white' : 'text-foreground';
-  const descColor = isDark ? 'text-white/70' : 'text-muted-foreground';
-  return (
-    <div
-      className={`flex w-full max-w-[320px] flex-col gap-6 rounded-[12px] p-6 text-end sm:w-[280px] ${cardClass}`}
-    >
-      <div className="flex flex-col gap-1">
-        <p className={`text-lg font-semibold ${priceColor}`}>{name}</p>
-        <p className={`text-sm ${descColor}`}>{desc}</p>
-      </div>
-      <div className="flex items-end gap-1">
-        <span className={`text-[40px] leading-none font-bold ${priceColor}`}>{price}</span>
-        <span className={`mb-1 text-sm ${descColor}`}>
-          {currency} {perMonth}
-        </span>
-      </div>
-      <hr className={`border-t ${isDark ? 'border-white/20' : 'border-border'}`} />
-      <PlanFeatureList features={features} isDark={isDark} />
-      <Link
-        href={ROUTES.REGISTER}
-        className={`mt-auto rounded-full px-6 py-2.5 text-center text-sm font-medium transition-opacity hover:opacity-90 ${isDark ? 'bg-card text-foreground' : 'border-brand-navy text-brand-navy hover:bg-brand-navy/5 border'}`}
-      >
-        {cta}
-      </Link>
-    </div>
-  );
+function getCardClass(variant: PlanVariant): string {
+  if (variant === 'dark-green') return 'bg-pricing-plan-business text-white';
+  if (variant === 'dark-navy') return 'bg-pricing-plan-growth text-white';
+  return 'bg-card text-foreground border border-border';
+}
+
+function getVariant(index: number, total: number): PlanVariant {
+  if (index === total - 1) return 'dark-green';
+  if (index === total - 2 && total > 1) return 'dark-navy';
+  return 'light';
+}
+
+function getPlanName(plan: SubscriptionPlan, locale: Locale): string {
+  return LOCALE_DIRECTION[locale] === 'ltr' ? plan.nameAr : plan.nameEn;
+}
+
+function getPlanFeatures(plan: SubscriptionPlan, locale: Locale): string[] {
+  if (plan.features?.length) return plan.features;
+  const desc = LOCALE_DIRECTION[locale] === 'ltr' ? plan.descriptionAr : plan.descriptionEn;
+  return desc ? desc.split(/\r?\n/).filter(Boolean) : [];
 }
 
 function PlanFeatureList({ features, isDark }: { features: string[]; isDark: boolean }) {
@@ -80,9 +61,44 @@ function PlanFeatureList({ features, isDark }: { features: string[]; isDark: boo
   );
 }
 
-type BillingToggleProps = { labels: string[] };
+function PlanCard({ plan, variant, name, features, currency, perMonth, cta }: PlanCardProps) {
+  const isDark = variant !== 'light';
+  const cardClass = getCardClass(variant);
+  const priceColor = isDark ? 'text-white' : 'text-foreground';
+  const descColor = isDark ? 'text-white/70' : 'text-muted-foreground';
+  const price = Math.round(plan.finalPrice ?? plan.price ?? 0);
 
-function BillingToggle({ labels }: BillingToggleProps) {
+  return (
+    <div
+      className={`flex w-full max-w-[320px] flex-col gap-6 rounded-[12px] p-6 text-end sm:w-[280px] ${cardClass}`}
+    >
+      <div className="flex flex-col gap-1">
+        <p className={`text-lg font-semibold ${priceColor}`}>{name}</p>
+        {plan.hasActiveDiscount && plan.discountPercentage && (
+          <span className="self-end rounded-full bg-green-500/20 px-2 py-0.5 text-xs font-medium text-green-600">
+            -{plan.discountPercentage}%
+          </span>
+        )}
+      </div>
+      <div className="flex items-end gap-1.5">
+        <SaudiRiyalIcon className={`mb-1 h-6 w-auto shrink-0 ${priceColor}`} aria-hidden />
+        <span className="sr-only">{currency}</span>
+        <span className={`text-[40px] leading-none font-bold ${priceColor}`}>{price}</span>
+        <span className={`mb-1 text-sm ${descColor}`}>{perMonth}</span>
+      </div>
+      <hr className={`border-t ${isDark ? 'border-white/20' : 'border-border'}`} />
+      <PlanFeatureList features={features} isDark={isDark} />
+      <Link
+        href={ROUTES.REGISTER}
+        className={`mt-auto rounded-full px-6 py-2.5 text-center text-sm font-medium transition-opacity hover:opacity-90 ${isDark ? 'bg-card text-foreground' : 'border-brand-navy text-brand-navy hover:bg-brand-navy/5 border'}`}
+      >
+        {cta}
+      </Link>
+    </div>
+  );
+}
+
+function BillingToggle({ labels }: { labels: string[] }) {
   return (
     <div className="mb-10 flex justify-center">
       <div className="border-border bg-card flex items-center gap-1 rounded-full border p-1">
@@ -99,22 +115,11 @@ function BillingToggle({ labels }: BillingToggleProps) {
   );
 }
 
-type BuildPlansArg = ReturnType<typeof getTranslations>['t'];
-
-function buildPlans(t: BuildPlansArg): PricingPlan[] {
-  return [1, 2, 3, 4].map((n) => ({
-    name: t(`tech.pricing.plan${n}Name`),
-    price: t(`tech.pricing.plan${n}Price`),
-    desc: t(`tech.pricing.plan${n}Desc`),
-    features: [1, 2, 3, 4, 5].map((f) => t(`tech.pricing.plan${n}Feature${f}`)),
-    cta: t(`tech.pricing.plan${n}Cta`),
-    variant: (['light', 'light', 'dark-navy', 'dark-green'] as PlanVariant[])[n - 1]!,
-  }));
-}
-
-export function TechPricing({ locale }: TechPricingProps) {
+export function TechPricing({ locale, plans }: TechPricingProps) {
   const { t } = getTranslations(locale);
-  const plans = buildPlans(t);
+  const sorted = [...plans].sort(
+    (a, b) => (a.finalPrice ?? a.price ?? 0) - (b.finalPrice ?? b.price ?? 0),
+  );
 
   return (
     <section className="bg-background relative overflow-hidden py-12 sm:py-16 lg:py-20">
@@ -142,16 +147,24 @@ export function TechPricing({ locale }: TechPricingProps) {
             t('tech.pricing.billingYearly'),
           ]}
         />
-        <div className="flex flex-wrap justify-center gap-4">
-          {plans.map((plan) => (
-            <PlanCard
-              key={plan.name}
-              {...plan}
-              currency={t('tech.pricing.currency')}
-              perMonth={t('tech.pricing.perMonth')}
-            />
-          ))}
-        </div>
+        {sorted.length > 0 ? (
+          <div className="flex flex-wrap justify-center gap-4">
+            {sorted.map((plan, i) => (
+              <PlanCard
+                key={plan.id}
+                plan={plan}
+                variant={getVariant(i, sorted.length)}
+                name={getPlanName(plan, locale)}
+                features={getPlanFeatures(plan, locale)}
+                currency={t('tech.pricing.currency')}
+                perMonth={t('tech.pricing.perMonth')}
+                cta={t('tech.pricing.cta')}
+              />
+            ))}
+          </div>
+        ) : (
+          <p className="text-muted-foreground text-center">{t('tech.pricing.noPlans')}</p>
+        )}
       </div>
     </section>
   );

@@ -14,6 +14,7 @@ Figma is the **single source of truth** for visuals: layout, spacing, colors, ty
 6. **No section is "approximate."** If you can't read a layer because the MCP response was truncated or the frame is huge, call `get_design_context` on the child node directly. Never write JSX for a section you haven't read.
 7. **Backgrounds are layers, not afterthoughts.** Every section's background — solid fills, gradients, decorative blur blobs, behind-content imagery, pattern overlays, glow shapes — must be enumerated in the per-section layer walk and reproduced from the Figma node's fill / image / vector data. Never type a `bg-*` class from memory or eyeball a gradient from a screenshot. If Figma has a background image, export it; if Figma has a gradient, copy the stops and angle exactly; if Figma has a decorative blur shape behind the content, render it (typically as an `absolute` element hidden below `xl:`).
 8. **One section per sub-phase. Always.** Never build two sections — or "just finish the small one below" — in a single round. See [task-workflow.md](task-workflow.md) §Section sub-phasing. Building multiple sections in one pass is the single largest hallucination source on this project and is treated as a defect, not a shortcut.
+9. **Every section is classified as static or backend-driven before any JSX is written.** Subscription plans, service categories, featured technicians, success stories, blog posts, FAQ entries, stat counters — anything the backend owns — are backend-driven and MUST fetch from `src/config/endpoints.ts` (mirrored from `website-bonyad/src/config/api.ts`) via a TanStack Query hook or an RSC fetch + typed prop. Hardcoding the array because "Figma shows three plans" is a defect, even as a placeholder. See [section-data-classification.md](section-data-classification.md).
 
 ## The contract — read the layer tree. The screenshot is BANNED as a code-derivation source.
 
@@ -109,6 +110,7 @@ Naming: `kebab-case.svg` for files, `PascalCase` for the exported React componen
 7. **No `lucide-react` for icons that exist in Figma.** lucide is only allowed for system glyphs (chevron, x, check) and only when the design uses the default lucide form as-is.
 8. **One icon per file**, even if two designs look identical. Future-proofing.
 9. **Every new icon is added to the barrel** `src/components/icons/index.ts` in the same PR ([doc-maintenance.md](doc-maintenance.md)).
+10. **`SaudiRiyalIcon` is the canonical SAR currency glyph** — sourced from the official Saudi Riyal SVG standard asset (not Figma). Use it in every context displaying a Saudi Riyal amount: subscription plan prices, service rates, bid amounts, and any other monetary value in SAR. Never substitute plain text ("SAR", "ر.س", "﷼") as the visible currency marker — use the icon + an `aria-hidden` attribute on it, paired with a `.sr-only` span containing the text "SAR" for screen readers. This rule overrides the Figma-source-only rule for this one specific icon; all other icons must still come from Figma.
 
 ### Verification
 
@@ -119,6 +121,21 @@ After exporting an icon, place the Figma frame screenshot side-by-side with the 
 - **Large named SVGs** (empty states, hero illustrations) → `src/components/illustrations/`, same SVGR pattern.
 - **Raster product imagery** (photos, technician portfolio thumbnails) → served via `next/image` from `public/images/` or the backend CDN. Always with descriptive `alt`.
 - **No raster icons.** If Figma exports a PNG icon, it's a bug — ask the designer for an SVG.
+
+## Asset export integrity — every new asset is verified on disk AND in the browser
+
+The Figma MCP `get_design_context` response embeds asset URLs (`figma.com/api/mcp/asset/...`) for every layer with an image fill or vector frame. Those URLs are **not always trustworthy** — observed failure modes on this project include:
+
+- An SVG node returned with `opacity="0"` on its root group (renders invisibly even when the file loads).
+- An SVG with `viewBox="0 0 32 32"` while the actual `<path>` coordinates extend to ~190 (only a clipped sliver renders).
+- An asset served with `Content-Type: image/svg+xml` but saved to disk under a `.png` extension (`next/image`'s optimizer reads as PNG, fails silently, renders a 0×0 `<img>` element that passes every existing gate).
+
+These bugs all share one property: the asset is technically _present_ — file exists, `<img>` element exists, DOM tree matches Figma — but renders nothing visible. The existing rules ("every kept layer has a matching DOM node ✅") tick green while the user sees an empty card.
+
+**Hard rule:** every new asset under `public/images/`, `src/components/icons/`, or `src/components/illustrations/` must pass **both** checks below in the phase-3 (assets) gate:
+
+1. **On-disk integrity** — run `file <path>` and confirm the printed format matches the extension. `step-c1.png: SVG Scalable Vector Graphics image` is a defect, not a warning; rename to `.svg` or re-export as the correct format. The phase-3 gate report must include the `file` output for every newly added asset.
+2. **Visual integrity** — open the asset in isolation in the browser (`http://localhost:3000/<asset path>`) and confirm it actually renders something visible at the expected dimensions. A 0×0 `<img>`, an SVG with opacity:0, or an SVG with a wrong viewBox all pass step 1 but fail this step. If the MCP-served asset is broken, ask the designer to manually export the node from Figma at 2× the rendered size (PNG/WebP for illustrations, SVG for icons) — never patch a broken export in code; the next re-export will reintroduce the bug.
 
 ## Animations — three tiers
 
@@ -145,6 +162,7 @@ Paste the link in the chat. Claude must then, **in this order**:
 3. **Call `get_variable_defs`** to reconcile design tokens with `tokens.css`. Flag any missing tokens; they must be added (with both `:root` and `.dark` values) in phase 3 before any section is built.
 4. **Open `get_screenshot` on the top frame at most ONCE** as a sanity reference. It may NOT be used to count sections, derive measurements, infer structure, pick a color, read a gradient, or decide which layers exist — `get_metadata` and `get_design_context` are the only authoritative inputs. If you find yourself looking at the screenshot to decide what to write, close it and call the layer-tree API instead.
 5. **Enumerate every section as a node ID** and write them down. Each section becomes its own solo phase-5 sub-phase per [task-workflow.md](task-workflow.md) §Section sub-phasing — bundling is the rare exception, not the default. Each section node will, in its sub-phase, be expanded into its own complete layer list via a fresh `get_design_context` call.
+   5a. **Classify every section as static or backend-driven** ([section-data-classification.md](section-data-classification.md)). For each backend-driven section, name the endpoint (`API_ENDPOINTS.<NAMESPACE>.<KEY>`) and the RN call site (grep `website-bonyad/src/screens/`); if the endpoint is missing on the web side, add the mirror to `src/config/endpoints.ts` from `website-bonyad/src/config/api.ts` in Phase 1. Phases 1 + 2 (schema + fetcher + sibling test) must complete BEFORE that section's Phase 5 sub-phase begins — the section consumes a fetched array, never a hardcoded one.
 6. **List every icon and asset that needs exporting**, with exact filenames matching the [icon naming rules](#asset-folder-structure). Filenames must mirror Figma node names in kebab-case so the mapping is auditable.
 7. **For each prototype interaction in the frame**, list transition metadata and propose the implementation tier (CSS / Framer / Lottie).
 8. **Ask the designer for Lottie exports** if any motion is complex.
@@ -170,13 +188,14 @@ After building each section, **read the rendered DOM**, don't trust the screensh
 
 ### 0. Layer fidelity vs Figma
 
-Reconcile the enumerated layer list (from the §"Per-section: walk the layer tree" step) against the rendered DOM:
+Reconcile the enumerated layer list (from the §"Per-section: walk the layer tree" step) against the rendered DOM **and the rendered pixels**:
 
 - **Every Figma layer that was planned to render in code must have a matching DOM element.** Use `mcp__Claude_Preview__preview_snapshot` or the accessibility tree to confirm.
 - **Every layer marked "dropped: …" in the plan must NOT appear in the DOM.** If a dropped layer leaked through, the implementation diverged silently.
 - **No extra DOM elements that don't trace back to a Figma layer.** Stray wrapper `<div>`s often hide implementation shortcuts; if a wrapper exists, the gate report must explain why.
+- **Visual side-by-side with the Figma frame is mandatory, not optional.** Call `mcp__Claude_Preview__preview_screenshot` on the section in the browser AND `mcp__f497b47f…__get_screenshot` on the same Figma node, then place both images side-by-side and confirm each enumerated layer has the visual mass Figma shows. `preview_snapshot` alone is **not sufficient** — it confirms the `<img>`, `<svg>`, or text node exists, but cannot detect a 0×0 broken image, an SVG with `opacity:0`, a clipped illustration, a token that resolves to `transparent` in the current theme, or any other failure mode where the layer is present in the DOM but invisible to the user. The gate report names the two screenshot URLs and a one-line verdict per planned layer ("`step-c1` illustration: peeks in from left edge of card ✅" / "❌ — empty white box; investigate before declaring done").
 
-This axis runs first because it catches "section incompletely built" before the pixel-level comparison even matters.
+This axis runs first because it catches "section incompletely built" — including silent-invisible exports and theme-token gaps — before the pixel-level comparison even matters.
 
 ### 1. Computed styles vs Figma (light mode, `en`)
 
