@@ -27,7 +27,7 @@
 
 ## Query hook template
 
-The response is `apiClient.get<T>` with a TS type — no runtime zod parse. Strict zod on the response side breaks the moment the backend adds an enum value or a field; see [api-and-auth.md](api-and-auth.md) §Schema strategy.
+The response is `apiClient.get<T>` with a TS type — no runtime zod parse. Strict zod on the response side breaks the moment the backend adds an enum value or a field; see [api-and-auth.md](api-and-auth.md) §Schema strategy. **The fetcher always ships with a sibling `*.test.ts` in the same PR** — see [testing.md](testing.md) §Per-endpoint tests.
 
 ```ts
 // features/projects/api/get-projects.ts
@@ -52,7 +52,7 @@ export function useProjects(filters?: ProjectFilters) {
 
 ## Mutation hook template
 
-Request body is parsed with a **strict** zod schema (we control what we send); response is a TS type only.
+Request body is parsed with a **strict** zod schema (we control what we send); response is a TS type only. **The fetcher always ships with a sibling `*.test.ts` in the same PR** — see [testing.md](testing.md) §Per-endpoint tests.
 
 ```ts
 // features/projects/api/create-project.ts

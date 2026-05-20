@@ -33,7 +33,9 @@
     "blog": "Blog",
     "contact": "Contact",
     "login": "Log in",
-    "getStarted": "Get started"
+    "getStarted": "Get started",
+    "openMenu": "Open menu",
+    "closeMenu": "Close menu"
   },
   "footer": {
     "platform": "Platform",

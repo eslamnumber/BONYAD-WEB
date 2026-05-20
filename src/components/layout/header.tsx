@@ -3,9 +3,12 @@ import Link from 'next/link';
 
 import { LogoIcon, NavGlobeIcon } from '@/components/icons';
 import { LanguageToggle } from '@/components/layout/language-toggle';
+import { MobileMenu } from '@/components/layout/mobile-menu';
 import { ThemeToggle } from '@/components/layout/theme-toggle';
 import { ROUTES } from '@/config/routes';
 import { type Locale } from '@/types/locale';
+
+import { NAV_LINKS } from './nav-links';
 
 type HeaderProps = {
   locale: Locale;
@@ -19,27 +22,18 @@ type HeaderProps = {
       contact: string;
       login: string;
       getStarted: string;
+      openMenu: string;
+      closeMenu: string;
     };
     languageToggle: { ariaLabel: string; switchTo: string };
     themeToggle: { ariaLabel: string; labels: { light: string; dark: string; system: string } };
   };
 };
 
-/*
- * Figma left-to-right order in LTR/Arabic (ar → ltr): Contact · Blog · About · HowItWorks · Services
- * In RTL/English (en → rtl) the flex row mirrors automatically — no code change needed.
- */
-const NAV_LINKS = [
-  { route: ROUTES.CONTACT, key: 'contact' as const },
-  { route: ROUTES.BLOG, key: 'blog' as const },
-  { route: ROUTES.ABOUT, key: 'about' as const },
-  { route: ROUTES.HELP, key: 'howItWorks' as const },
-  { route: ROUTES.SERVICES, key: 'services' as const, hasDropdown: true },
-];
-
 function HeaderControls({ locale, labels }: HeaderProps) {
   return (
     <div className="flex items-center gap-1">
+      <MobileMenu navAriaLabel={labels.siteName} labels={labels.nav} />
       <Link
         href={ROUTES.REGISTER}
         className="bg-primary text-primary-foreground hidden rounded-full px-4 py-2.5 text-sm font-semibold transition-colors duration-200 motion-safe:hover:opacity-90 md:inline-flex md:items-center"

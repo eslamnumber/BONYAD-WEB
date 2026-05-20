@@ -17,6 +17,8 @@ function getHeaderLabels(t: TFunction, locale: Locale): AppShellLabels['header']
       contact: t('nav.contact'),
       login: t('nav.login'),
       getStarted: t('nav.getStarted'),
+      openMenu: t('nav.openMenu'),
+      closeMenu: t('nav.closeMenu'),
     },
     languageToggle: {
       ariaLabel: t('language.ariaLabel'),

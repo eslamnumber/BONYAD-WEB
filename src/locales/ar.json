@@ -33,7 +33,9 @@
     "blog": "المدونة",
     "contact": "اتصال",
     "login": "تسجيل دخول",
-    "getStarted": "ابدأ الآن"
+    "getStarted": "ابدأ الآن",
+    "openMenu": "فتح القائمة",
+    "closeMenu": "إغلاق القائمة"
   },
   "footer": {
     "platform": "المنصة",
