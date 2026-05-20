@@ -100,9 +100,19 @@ function handle(user) {
 
 ## Don't game the limits
 
-Don't split into meaningless `helpers-1.ts`, `helpers-2.ts`, `part-a.ts`, `part-b.ts` just to satisfy the linter. The point is **genuine cohesion**, not raw line count. Each split should have a clear name and a single responsibility.
+Don't split into meaningless `helpers-1.ts`, `helpers-2.ts`, `part-a.ts`, `part-b.ts`. The point is **genuine cohesion**, not raw line count. If a file legitimately needs more lines (rare; usually the design is wrong), disable the rule on that one file with a comment explaining why, and expect pushback in review.
 
-If a file legitimately needs more lines (rare; usually the design is wrong), disable the rule on that one file with a comment explaining why, and expect pushback in review.
+## Rule for AI assistants (and humans who think like them)
+
+**Caps are a design constraint, not a lint cleanup pass.** Anticipate them in Phase 0, write code that fits. Failing the lint cap at the end of a turn is a defect, not a follow-up.
+
+1. **Soft thresholds drive design.** 150 lines / 40 lines per function is the target; 200 / 50 is the lint backstop. Extract at the target, not at the cap.
+2. **Plan extractions in Phase 0.** A plan that says "register-form.tsx" without acknowledging the `register-form-fields/` directory and `use-register-submit` hook it needs is incomplete.
+3. **Refactor adjacent over-cap files first.** Touching an already-over-cap file? Split it in the same PR _before_ adding new code on top — never compound a violation.
+4. **Stop and split mid-flow.** If a `Write` would produce > 200 lines, abort the write, extract, resume. If an `Edit` pushes a function past 50, lift a helper before saving. Do not write code "knowing the linter will catch it".
+5. **Tests cap at 400 lines** — same discipline; long test files mean the unit-under-test is doing too much.
+6. **Exemption list is closed.** Only `src/styles/tokens.css`, `src/locales/**`, `src/config/endpoints.ts`, and generated files skip `max-lines`. No new entries, no `// eslint-disable-next-line max-lines` escape hatches.
+7. **Splits need readable names.** `password-field-group.tsx`, `use-register-submit.ts`, `field-footer.tsx` — yes. `register-helpers.ts`, `part-1.tsx`, `misc.ts` — no.
 
 ## ESLint config snippet
 

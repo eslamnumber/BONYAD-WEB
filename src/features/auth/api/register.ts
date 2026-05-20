@@ -5,22 +5,21 @@ import { apiClient } from '@/lib/api-client';
 
 import {
   registerRequestSchema,
-  registerResponseSchema,
   type RegisterFormValues,
   type RegisterResponse,
 } from '../schemas/register.schema';
+import { normalizePhoneForApi } from '../utils';
 
 type RegisterSubmit = RegisterFormValues & { role: 'USER' | 'TECHNICIAN' };
 
 export async function registerUser(values: RegisterSubmit): Promise<RegisterResponse> {
-  const normalizedPhone = values.phone.replace(/\D/g, '').replace(/^0+/, '').slice(0, 9);
   const body = registerRequestSchema.parse({
     name: values.name,
-    phoneNumber: normalizedPhone,
+    phoneNumber: normalizePhoneForApi(values.phone),
     password: values.password,
     role: values.role,
   });
-  return apiClient.post(API_ENDPOINTS.USERS.REGISTER, { body, schema: registerResponseSchema });
+  return apiClient.post<RegisterResponse>(API_ENDPOINTS.USERS.REGISTER, { body });
 }
 
 export function useRegister() {

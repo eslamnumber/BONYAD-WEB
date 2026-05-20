@@ -2,11 +2,13 @@
 
 ## Three tiers
 
-| Tier                 | Location                                     | What it is                                        | Allowed to know about                |
-| -------------------- | -------------------------------------------- | ------------------------------------------------- | ------------------------------------ |
-| **Primitive**        | `components/ui/`                             | shadcn/ui base components (Button, Input, Dialog) | Nothing app-specific — pure UI       |
-| **Shared composite** | `components/{layout,feedback,data-display}/` | Reusable across features (AppShell, ErrorState)   | Primitives, design tokens            |
-| **Feature**          | `features/X/components/`                     | Specific to one feature (ProjectCard, BidList)    | Everything the feature owns + shared |
+| Tier                 | Location                                     | What it is                                                      | Allowed to know about                |
+| -------------------- | -------------------------------------------- | --------------------------------------------------------------- | ------------------------------------ |
+| **Primitive**        | `components/ui/`                             | shadcn/ui base components (Button, Input, Dialog, FieldHint, …) | Nothing app-specific — pure UI       |
+| **Shared composite** | `components/{layout,feedback,data-display}/` | Reusable across features (AppShell, ErrorState)                 | Primitives, design tokens            |
+| **Feature**          | `features/X/components/`                     | Specific to one feature (ProjectCard, BidList)                  | Everything the feature owns + shared |
+
+**`FieldHint` is the canonical helper-text / inline-error primitive.** Use it wherever a form field carries a static format hint (`"9 digits, starts with 5"`) or an inline validation error. Toggle the `tone` prop between `"neutral"` and `"error"`. Do not roll a one-off `<p className="text-destructive text-sm" role="alert">…</p>` inside a feature file — that pattern is now a defect; it bypasses the shared error-text style and the `role="alert"` wiring. See [forms-validation.md](forms-validation.md) §Field validation rules.
 
 ## Hard rules
 

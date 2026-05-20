@@ -30,6 +30,11 @@ const labels = {
   termsText: 'Yes, I understand and agree to the Terms of Service.',
   termsAriaLabel: 'Accept terms and conditions',
   submitButton: 'Create account',
+  hints: {
+    phoneFormat: '9 digits, starts with 5',
+    nameFormat: 'Letters and spaces only',
+    passwordConfirm: 'Must match the password above',
+  },
   errors: {
     nameRequired: 'Full name is required',
     nameTooShort: 'Name must be at least 2 characters',
@@ -44,6 +49,8 @@ const labels = {
   },
 };
 
+const STRONG_PASSWORD = 'MyPass1!';
+
 function fillValidForm() {
   fireEvent.change(screen.getByRole('textbox', { name: /enter your full name/i }), {
     target: { value: 'Ahmed Ali' },
@@ -52,10 +59,10 @@ function fillValidForm() {
     target: { value: '512345678' },
   });
   fireEvent.change(screen.getByLabelText(/^enter your password$/i), {
-    target: { value: 'pass123' },
+    target: { value: STRONG_PASSWORD },
   });
   fireEvent.change(screen.getByLabelText(/^re-enter your password$/i), {
-    target: { value: 'pass123' },
+    target: { value: STRONG_PASSWORD },
   });
   fireEvent.click(screen.getByRole('checkbox'));
 }
@@ -108,10 +115,10 @@ describe('RegisterForm', () => {
       target: { value: '512345678' },
     });
     fireEvent.change(screen.getByLabelText(/^enter your password$/i), {
-      target: { value: 'pass123' },
+      target: { value: STRONG_PASSWORD },
     });
     fireEvent.change(screen.getByLabelText(/^re-enter your password$/i), {
-      target: { value: 'different' },
+      target: { value: 'Different1!' },
     });
     fireEvent.click(screen.getByRole('button', { name: /create account/i }));
     await waitFor(() => {

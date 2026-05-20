@@ -43,6 +43,11 @@ export default async function RegisterPage() {
     roleCustomer: t('auth.register.roleCustomer'),
     roleProfessional: t('auth.register.roleProfessional'),
     roleToggleAriaLabel: t('auth.register.roleToggleAriaLabel'),
+    hints: {
+      phoneFormat: t('auth.hints.phoneFormat'),
+      nameFormat: t('auth.hints.nameFormat'),
+      passwordConfirm: t('auth.hints.passwordConfirm'),
+    },
     errors: {
       nameRequired: t('auth.errors.nameRequired'),
       nameTooShort: t('auth.errors.nameTooShort'),

@@ -29,6 +29,7 @@ export default async function ForgotPasswordRoutePage({
     phoneLabel: t('auth.forgotPassword.phoneLabel'),
     phonePlaceholder: t('auth.forgotPassword.phonePlaceholder'),
     phoneAriaLabel: t('auth.forgotPassword.phoneAriaLabel'),
+    phoneHint: t('auth.hints.phoneFormat'),
     submitButton: t('auth.forgotPassword.submitButton'),
     backButton: t('auth.forgotPassword.backButton'),
     backButtonAriaLabel: t('auth.forgotPassword.backButton'),

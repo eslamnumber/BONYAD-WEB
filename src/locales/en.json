@@ -367,10 +367,18 @@
     "errors": {
       "phoneRequired": "Mobile number is required",
       "phoneInvalid": "Enter a valid mobile number (digits only, 9-15 characters)",
+      "phoneMust9DigitsStarting5": "Enter a 9-digit Saudi mobile number starting with 5",
       "nameRequired": "Full name is required",
       "nameTooShort": "Name must be at least 2 characters",
+      "nameNoDigits": "Name cannot contain digits",
       "passwordRequired": "Password is required",
       "passwordTooShort": "Password must be at least 6 characters",
+      "password_minLength": "Password must be at least 8 characters",
+      "password_uppercase": "Password must include at least one uppercase letter",
+      "password_digit": "Password must include at least one digit",
+      "password_special": "Password must include at least one special character",
+      "password_noSpaces": "Password cannot contain spaces",
+      "password_noSequence": "Password cannot contain a sequence like 1234",
       "confirmPasswordRequired": "Please confirm your password",
       "passwordMismatch": "Passwords do not match",
       "invalidCredentials": "Invalid phone number or password",
@@ -379,6 +387,21 @@
       "otpInvalid": "Enter a valid verification code (digits only, 4–8 characters)",
       "genericError": "Something went wrong. Please try again.",
       "termsRequired": "You must accept the terms and conditions"
+    },
+    "hints": {
+      "phoneFormat": "9 digits, starts with 5 — e.g. 5XXXXXXXX",
+      "nameFormat": "Letters and spaces only",
+      "passwordConfirm": "Must match the password above",
+      "otpFormat": "4-digit code"
+    },
+    "passwordRules": {
+      "heading": "Password must contain:",
+      "minLength": "At least 8 characters",
+      "uppercase": "One uppercase letter",
+      "digit": "One digit",
+      "special": "One special character",
+      "noSpaces": "No spaces",
+      "noSequence": "No sequences like 1234"
     }
   }
 }

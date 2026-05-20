@@ -5,25 +5,21 @@ import { apiClient } from '@/lib/api-client';
 
 import {
   forgotPasswordRequestSchema,
-  forgotPasswordResponseSchema,
   type ForgotPasswordFormValues,
   type ForgotPasswordResponse,
 } from '../schemas/forgot-password.schema';
+import { normalizePhoneForApi } from '../utils';
 
 type ForgotPasswordSubmit = ForgotPasswordFormValues & { role: 'USER' | 'TECHNICIAN' };
 
 export async function forgotPassword(
   values: ForgotPasswordSubmit,
 ): Promise<ForgotPasswordResponse> {
-  const normalizedPhone = values.phone.replace(/\D/g, '').replace(/^0+/, '');
   const body = forgotPasswordRequestSchema.parse({
-    phoneNumber: normalizedPhone,
+    phoneNumber: normalizePhoneForApi(values.phone),
     role: values.role,
   });
-  return apiClient.post(API_ENDPOINTS.AUTH.FORGOT_PASSWORD, {
-    body,
-    schema: forgotPasswordResponseSchema,
-  });
+  return apiClient.post<ForgotPasswordResponse>(API_ENDPOINTS.AUTH.FORGOT_PASSWORD, { body });
 }
 
 export function useForgotPassword() {

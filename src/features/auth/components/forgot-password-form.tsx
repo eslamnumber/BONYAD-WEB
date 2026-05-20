@@ -1,26 +1,26 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/navigation';
+import { type ChangeEvent, useMemo } from 'react';
 import { type UseFormRegister, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { PhoneIcon } from '@/components/icons';
-import { Input } from '@/components/ui/input';
+import { FieldHint, Input } from '@/components/ui';
 import { Label } from '@/components/ui/label';
-import { ROUTES } from '@/config/routes';
-import { ApiError } from '@/lib/api-client';
 
-import { useForgotPassword } from '../api/forgot-password';
+import { useForgotPasswordSubmit } from '../hooks/use-forgot-password-submit';
 import {
   forgotPasswordFormSchema,
   type ForgotPasswordFormValues,
 } from '../schemas/forgot-password.schema';
+import { normalizePhoneInput } from '../utils';
 
 export type ForgotPasswordFormLabels = {
   phoneLabel: string;
   phonePlaceholder: string;
   phoneAriaLabel: string;
+  phoneHint?: string;
   submitButton: string;
   errors: { genericError: string };
 };
@@ -28,6 +28,7 @@ export type ForgotPasswordFormLabels = {
 type PhoneInputFieldProps = {
   register: UseFormRegister<ForgotPasswordFormValues>;
   errorText?: string;
+  hint?: string;
   labels: Pick<ForgotPasswordFormLabels, 'phoneLabel' | 'phonePlaceholder' | 'phoneAriaLabel'>;
 };
 
@@ -43,7 +44,12 @@ function SubmitButton({ pending, label }: { pending: boolean; label: string }) {
   );
 }
 
-function PhoneInputField({ register, errorText, labels }: PhoneInputFieldProps) {
+function PhoneInputField({ register, errorText, hint, labels }: PhoneInputFieldProps) {
+  const reg = useMemo(() => register('phone'), [register]);
+  const onChange = (e: ChangeEvent<HTMLInputElement>) => {
+    e.target.value = normalizePhoneInput(e.target.value);
+    reg.onChange(e);
+  };
   return (
     <div className="flex flex-col gap-1">
       <Label htmlFor="forgot-phone" className="sr-only">
@@ -57,7 +63,8 @@ function PhoneInputField({ register, errorText, labels }: PhoneInputFieldProps) 
           aria-label={labels.phoneAriaLabel}
           placeholder={labels.phonePlaceholder}
           autoComplete="tel"
-          {...register('phone')}
+          {...reg}
+          onChange={onChange}
           className="bg-login-bg focus-visible:ring-primary h-12 rounded-[6px] border-slate-300 pe-11 text-end text-base"
         />
         <span
@@ -67,11 +74,7 @@ function PhoneInputField({ register, errorText, labels }: PhoneInputFieldProps) 
           <PhoneIcon className="size-6" />
         </span>
       </div>
-      {errorText && (
-        <p className="text-destructive text-sm" role="alert">
-          {errorText}
-        </p>
-      )}
+      <FieldHint tone={errorText ? 'error' : 'neutral'}>{errorText ?? hint}</FieldHint>
     </div>
   );
 }
@@ -84,45 +87,31 @@ export function ForgotPasswordForm({
   accountRole: 'USER' | 'TECHNICIAN';
 }) {
   const { t } = useTranslation();
-  const router = useRouter();
-  const mutation = useForgotPassword();
   const form = useForm<ForgotPasswordFormValues>({
     resolver: zodResolver(forgotPasswordFormSchema),
     defaultValues: { phone: '' },
   });
-
-  const onSubmit = form.handleSubmit((values) =>
-    mutation.mutate(
-      { ...values, role: accountRole },
-      {
-        onSuccess: (_, variables) => {
-          router.push(
-            `${ROUTES.VERIFY_OTP}?phone=${encodeURIComponent(variables.phone)}&role=${variables.role}`,
-          );
-        },
-        onError: (err) => {
-          form.setError('root', {
-            message: err instanceof ApiError ? err.message : labels.errors.genericError,
-          });
-        },
-      },
-    ),
+  const { onSubmit, isPending } = useForgotPasswordSubmit(
+    form,
+    accountRole,
+    labels.errors.genericError,
   );
-
-  const phoneError = form.formState.errors.phone?.message
-    ? t(form.formState.errors.phone.message)
-    : undefined;
-
+  const phoneMsg = form.formState.errors.phone?.message;
   return (
     <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
-      <PhoneInputField register={form.register} errorText={phoneError} labels={labels} />
+      <PhoneInputField
+        register={form.register}
+        errorText={phoneMsg ? t(phoneMsg) : undefined}
+        hint={labels.phoneHint}
+        labels={labels}
+      />
       {form.formState.errors.root && (
         <p className="text-destructive text-center text-sm" role="alert">
           {form.formState.errors.root.message}
         </p>
       )}
       <SubmitButton
-        pending={mutation.isPending || form.formState.isSubmitting}
+        pending={isPending || form.formState.isSubmitting}
         label={labels.submitButton}
       />
     </form>

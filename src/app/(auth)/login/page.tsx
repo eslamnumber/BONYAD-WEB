@@ -36,6 +36,7 @@ export default async function LoginPage() {
     roleCustomer: t('auth.login.roleCustomer'),
     roleProfessional: t('auth.login.roleProfessional'),
     roleToggleAriaLabel: t('auth.login.roleToggleAriaLabel'),
+    phoneHint: t('auth.hints.phoneFormat'),
     errors: {
       invalidCredentials: t('auth.errors.invalidCredentials'),
       genericError: t('auth.errors.genericError'),

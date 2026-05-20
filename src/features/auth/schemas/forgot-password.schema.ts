@@ -1,10 +1,9 @@
 import { z } from 'zod';
 
+import { saudiPhoneSchema } from '../utils';
+
 export const forgotPasswordFormSchema = z.object({
-  phone: z
-    .string()
-    .min(1, { message: 'auth.errors.phoneRequired' })
-    .regex(/^\d{9,15}$/, { message: 'auth.errors.phoneInvalid' }),
+  phone: saudiPhoneSchema,
 });
 
 export type ForgotPasswordFormValues = z.infer<typeof forgotPasswordFormSchema>;

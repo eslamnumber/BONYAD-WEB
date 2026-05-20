@@ -1,19 +1,12 @@
 import { z } from 'zod';
 
+import { personNameSchema, saudiPhoneSchema, strongPasswordSchema } from '../utils';
+
 export const registerFormSchema = z
   .object({
-    name: z
-      .string()
-      .min(1, { message: 'auth.errors.nameRequired' })
-      .min(2, { message: 'auth.errors.nameTooShort' }),
-    phone: z
-      .string()
-      .min(1, { message: 'auth.errors.phoneRequired' })
-      .regex(/^\d{9,15}$/, { message: 'auth.errors.phoneInvalid' }),
-    password: z
-      .string()
-      .min(1, { message: 'auth.errors.passwordRequired' })
-      .min(6, { message: 'auth.errors.passwordTooShort' }),
+    name: personNameSchema,
+    phone: saudiPhoneSchema,
+    password: strongPasswordSchema,
     confirmPassword: z.string().min(1, { message: 'auth.errors.confirmPasswordRequired' }),
     terms: z.boolean().refine((v) => v === true, { message: 'auth.errors.termsRequired' }),
   })

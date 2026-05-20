@@ -46,7 +46,7 @@ describe('ForgotPasswordForm', () => {
     fireEvent.click(screen.getByRole('button', { name: /send verification code/i }));
     await waitFor(() => {
       expect(mockPush).toHaveBeenCalledWith(expect.stringContaining('/verify-otp'));
-      expect(mockPush).toHaveBeenCalledWith(expect.stringContaining('0500000000'));
+      expect(mockPush).toHaveBeenCalledWith(expect.stringContaining('phone=500000000'));
     });
   });
 

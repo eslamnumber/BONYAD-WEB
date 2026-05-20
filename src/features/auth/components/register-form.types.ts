@@ -15,6 +15,11 @@ export type RegisterFormLabels = {
   termsText: string;
   termsAriaLabel: string;
   submitButton: string;
+  hints: {
+    phoneFormat: string;
+    nameFormat: string;
+    passwordConfirm: string;
+  };
   errors: {
     nameRequired: string;
     nameTooShort: string;

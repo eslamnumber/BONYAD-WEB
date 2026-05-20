@@ -1,14 +1,10 @@
 import { z } from 'zod';
 
+import { saudiPhoneSchema } from '../utils';
+
 export const loginFormSchema = z.object({
-  phone: z
-    .string()
-    .min(1, { message: 'auth.errors.phoneRequired' })
-    .regex(/^\d{9,15}$/, { message: 'auth.errors.phoneInvalid' }),
-  password: z
-    .string()
-    .min(1, { message: 'auth.errors.passwordRequired' })
-    .min(6, { message: 'auth.errors.passwordTooShort' }),
+  phone: saudiPhoneSchema,
+  password: z.string().min(1, { message: 'auth.errors.passwordRequired' }),
 });
 
 export type LoginFormValues = z.infer<typeof loginFormSchema>;

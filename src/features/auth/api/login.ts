@@ -9,6 +9,7 @@ import {
   type LoginResponse,
   type LoginResult,
 } from '../schemas/login.schema';
+import { normalizePhoneForApi } from '../utils';
 
 type LoginSubmit = LoginFormValues & { role: 'USER' | 'TECHNICIAN' };
 
@@ -18,10 +19,6 @@ function isPendingMessage(message: string | undefined): boolean {
   if (!message) return false;
   const m = message.toLowerCase();
   return m.includes('pending verification') || m.includes('otp sent');
-}
-
-function normalizePhone(raw: string): string {
-  return raw.replace(/\D/g, '').replace(/^0+/, '');
 }
 
 function pickRole(raw: string | undefined, fallback: 'USER' | 'TECHNICIAN'): 'USER' | 'TECHNICIAN' {
@@ -49,7 +46,7 @@ function toResult(data: LoginResponse, values: LoginSubmit, phoneNumber: string)
 }
 
 export async function loginUser(values: LoginSubmit): Promise<LoginResult> {
-  const phoneNumber = normalizePhone(values.phone);
+  const phoneNumber = normalizePhoneForApi(values.phone);
   const body = loginRequestSchema.parse({
     phoneNumber,
     password: values.password,
