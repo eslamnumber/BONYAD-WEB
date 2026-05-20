@@ -96,8 +96,8 @@ export function HomeHowItWorks({ locale, variant = 'user' }: HomeHowItWorksProps
               href={ROUTES.SERVICES}
               className="text-foreground/80 flex items-center gap-2 rounded-full border border-black/80 px-4 py-2.5 text-sm font-bold tracking-[0.1px] transition-colors hover:bg-black/5"
             >
-              {t(`${ns}.howItWorks.learnMore`)}
               <ChevronRight className="size-5 ltr:-scale-x-100" aria-hidden />
+              {t(`${ns}.howItWorks.learnMore`)}
             </Link>
           </div>
         </div>
