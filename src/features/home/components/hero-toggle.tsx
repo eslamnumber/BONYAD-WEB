@@ -2,7 +2,6 @@
 
 import { motion } from 'framer-motion';
 import Link from 'next/link';
-import { type MouseEvent } from 'react';
 
 import { ROUTES } from '@/config/routes';
 import { LOCALE_DIRECTION, type Locale } from '@/types/locale';
@@ -35,13 +34,6 @@ export function HeroToggle({
   const rtl = LOCALE_DIRECTION[locale] === 'rtl';
   const offset = activeTab === 'user' ? 0 : rtl ? -PILL_TRAVEL : PILL_TRAVEL;
 
-  function navigate(tab: 'user' | 'pro') {
-    return (event: MouseEvent<HTMLAnchorElement>) => {
-      event.preventDefault();
-      onTabChange(tab);
-    };
-  }
-
   return (
     <div
       role="tablist"
@@ -57,7 +49,10 @@ export function HeroToggle({
       />
       <Link
         href={ROUTES.HOME}
-        onClick={navigate('user')}
+        onClick={(e) => {
+          e.preventDefault();
+          onTabChange('user');
+        }}
         role="tab"
         aria-selected={activeTab === 'user'}
         aria-current={activeTab === 'user' ? 'page' : undefined}
@@ -67,7 +62,10 @@ export function HeroToggle({
       </Link>
       <Link
         href={ROUTES.FOR_PROS}
-        onClick={navigate('pro')}
+        onClick={(e) => {
+          e.preventDefault();
+          onTabChange('pro');
+        }}
         role="tab"
         aria-selected={activeTab === 'pro'}
         aria-current={activeTab === 'pro' ? 'page' : undefined}

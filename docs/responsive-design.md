@@ -164,32 +164,9 @@ Solves the "same card looks different in main vs sidebar" problem without prop d
 - Always `next/image` (auto AVIF/WebP, lazy-loaded, prevents CLS).
 - `sizes` is **mandatory** for any image that scales with viewport — otherwise the browser pulls the largest variant on every device.
 
-## Per-section test matrix (run before declaring a section done)
+## Per-section test matrix — see [responsive-verification.md](responsive-verification.md)
 
-Resize the viewport to **320 / 768 / 1280 px** as the per-section gate — these are the floor, the tablet checkpoint, and the desktop checkpoint. Anything past 1280 px is covered by `max-w-*` containers.
-
-| Width   | What to check                                                        |
-| ------- | -------------------------------------------------------------------- |
-| 320 px  | no horizontal scroll, no clipped text/buttons, touch targets ≥ 44 px |
-| 768 px  | tablet layout engaged (2-col grids, drawer collapses, etc.)          |
-| 1280 px | desktop layout matches the Figma desktop frame                       |
-
-Repeat the 320 / 768 / 1280 trio in **EN + AR** (mirror correctness) and **light + dark** (token coverage). A section that passes desktop-only is **not** done. See [figma-to-code.md](figma-to-code.md) §Pixel-perfect verification axis 4.
-
-### Per-PR test matrix (full sweep before requesting review)
-
-After every section is gated individually, run the wider matrix on the full screen:
-
-| Width       | Device       | Check                                 |
-| ----------- | ------------ | ------------------------------------- |
-| 320 × 568   | iPhone SE 1  | nothing clipped, no horizontal scroll |
-| 412 × 915   | Pixel 7      | touch targets 44 px+                  |
-| 768 × 1024  | iPad         | 2-column layout activates             |
-| 1280 × 800  | small laptop | desktop pattern engages               |
-| 1920 × 1080 | full HD      | max-w stops growth                    |
-| 2560 × 1440 | QHD          | content doesn't stretch               |
-
-Each width in **EN + AR** and **light + dark** (4 variants per width). The RTL flip must mirror cleanly at every breakpoint.
+The per-section gate runs the **12-width matrix** (320, 375, 414, 600, 768, 900, 1024, 1100, 1280, 1366, 1440, 1920) — not the old 3-width sample. Between-breakpoint widths (900, 1100, 1366) are first-class — they catch the most common real regressions on this project. Each width in **EN + AR** and **light + dark** (4 variants per width). The RTL flip must mirror cleanly at every breakpoint. See the linked doc for the full table, the DevTools verification script, the touch-target audit, and the fluid-scaling rules (when to use `clamp()`, when to use container queries).
 
 ## Common pitfalls
 
@@ -221,25 +198,6 @@ These are the exact mistakes that produced a desktop-only home page on this proj
 | `<DecorativePanel className="hidden xl:flex" />` on a 2-column auth / marketing screen                                         | A **structural** Figma column is treated as a decoration. Below 1280 px (every laptop ≤ 1366 px in Windows scaling, every iPad-class tablet, every phone) the entire left/right half of the design vanishes and the form sits centered in a sea of white. The Figma file's split layout was not optional.                                                   | Stack the columns at smaller breakpoints — `flex-col xl:flex-row` with the panel rendered (not `hidden`) above/below the form on narrow viewports. Hide _individual_ decorative layers (blur blobs, badge ornaments) below `xl:`, never the entire column. If the designer truly wants single-column on mobile, the Figma file must ship a mobile frame that shows what replaces the panel — never approximate. |
 | Side-panel built as a single `<Image>` + gradient overlay, ignoring Figma's text / logo / illustration layers inside the panel | The Figma "decorative" column usually contains a brand logo, a slogan, an illustration, and an image fill — multiple stacked layers. Implementing only the bottom image (especially a low-contrast one like a white cityscape on a white page bg) renders the panel **invisible**: viewers see blank space and report "the left column wasn't implemented." | Walk every layer inside the panel node with `get_design_context`, just like a content section. Render each kept layer (logo, headline copy, illustration) as its own DOM element on top of the image fill. The image fill alone is _never_ the whole panel. See [figma-to-code.md](figma-to-code.md) §Per-section: walk the layer tree + §Pixel-perfect verification axis 1.                                    |
 
-## Phase-gate responsive verification (pasteable script)
+## Verification script
 
-At the end of every section sub-phase, paste this assertion in the browser console at each width (320 / 768 / 1280):
-
-```js
-const w = window.innerWidth;
-const dw = document.documentElement.scrollWidth;
-console.assert(dw === w, `Horizontal scroll: doc ${dw} > viewport ${w}`);
-const offenders = [];
-document.querySelectorAll('*').forEach((el) => {
-  const r = el.getBoundingClientRect();
-  if (r.right > w + 0.5 && r.width <= w * 2)
-    offenders.push({
-      tag: el.tagName,
-      cls: el.className?.toString?.().slice(0, 80),
-      right: Math.round(r.right),
-    });
-});
-console.log('overflow offenders:', offenders.slice(0, 5));
-```
-
-A clean run produces `[]`. Any offender means a fixed-width element is poking past the viewport — fix it before declaring the sub-phase done.
+See [responsive-verification.md](responsive-verification.md) §The script — pasteable DevTools assertion that runs across all 12 widths and reports overflow offenders + touch-target violations.

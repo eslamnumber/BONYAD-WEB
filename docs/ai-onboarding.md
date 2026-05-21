@@ -40,13 +40,14 @@ Before doing anything, you must follow these rules. They are binding.
 
 ## Phased execution (mandatory)
 
-For any non-trivial task (new screen, new feature, refactor, integration), run these 6 phases. **At the end of each phase, run gate commands (typecheck/lint/test), produce a gate report, and STOP. Wait for the user to say "next" before continuing.** Do not collapse phases.
+For any non-trivial task (new screen, new feature, refactor, integration), run these 6 phases. **At the end of each phase, run gate commands (typecheck/lint/test), produce a gate report, and STOP. Wait for the user to say "next" before continuing.** Do not collapse phases. **Within a single phase, run independent work in parallel** (sibling layer fetches, icon exports, schemas for independent endpoints, test files) — one message, multiple tool calls. Sections themselves NEVER run in parallel.
 
-- **Phase 0 — Plan.** List relevant docs, files to create/touch, endpoints needed, Figma assets to export (icons + Lottie), missing tokens to add, animation strategy, open questions. STOP.
-- **Phase 1 — Schemas + endpoints.** zod schemas in `features/<f>/schemas/`. Mirror endpoints to `config/endpoints.ts`.
-- **Phase 2 — API hooks + MSW handlers.** One file per endpoint in `features/<f>/api/`. Query-key factories.
-- **Phase 3 — Assets.** Export SVG icons from Figma → `src/components/icons/` with `currentColor`. Lottie → `public/animations/`. Missing tokens → `src/styles/tokens.css`.
-- **Phase 4 — Components + route + metadata + animations.** Server Component pages. `<JsonLd>` for public pages. Animations match Figma transition metadata (CSS / Framer Motion / Lottie). Manually verify EN + AR + light + dark + all four states (pending/error/empty/success).
+- **Phase 0 — Plan (cheap).** `get_metadata` on the top frame ONLY. List relevant docs. Enumerate every section with a **tentative** risk score (HIGH/MEDIUM/LOW) derived from metadata signals. Classify each section static vs backend-driven. STOP. No deep `get_design_context`, no token/asset/file lists yet — those come in Phase 0.5.
+- **Phase 0.5 — Skeleton scan.** Depth-1 shallow walk per section: one `get_design_context` per section root, **all sections fanned out in a single parallel message** + `get_variable_defs` on the top frame in the same message. Confirm or promote each risk score (truncation, ≥3 variant children, ≥5 background layers at depth 1, state-variant suffixes → auto-promote to HIGH). Lock sub-sub-phase splits. Seed the **background-layer registry**. Produce the lists previously crammed into Phase 0: files to create/touch, endpoints needed, depth-1 assets, missing tokens (with `:root` + `.dark` values), parallel-dispatch plan. Cache section roots in the session `visited_nodes` map. STOP.
+- **Phase 1 — Schemas + endpoints.** zod schemas in `features/<f>/schemas/`. Mirror endpoints to `config/endpoints.ts`. Independent endpoints run in parallel.
+- **Phase 2 — API hooks + MSW handlers.** One file per endpoint in `features/<f>/api/`. Query-key factories. Sibling test file per endpoint. Independent hooks run in parallel.
+- **Phase 3 — Assets.** Export SVG icons from Figma → `src/components/icons/` with `currentColor`. Lottie → `public/animations/`. Missing tokens → `src/styles/tokens.css` (every `:root` value has a `.dark` counterpart). Icon exports run in parallel (one Agent per icon).
+- **Phase 4 — Components + route + metadata + animations.** Server Component pages. `<JsonLd>` for public pages. Animations match Figma transition metadata (CSS / Framer Motion / Lottie). **Per section sub-phase: deep recursive BFS layer walk to every leaf + leaf pixel ledger + 5-axis gate** (layer fidelity / pixel-perfect vs ledger / RTL / dark / responsive). The section root is a cache hit from Phase 0.5 — never re-fetched. Sibling fetches at the same depth are MANDATORY parallel — sequential siblings are a defect. Append background layers to the session registry as you find them. The leaf pixel ledger is a flat table of `leaf_id → property → value → source` — every CSS value in the JSX must trace back to a ledger row. Responsive verifies the 12-width matrix: 320 / 375 / 414 / 600 / 768 / 900 / 1024 / 1100 / 1280 / 1366 / 1440 / 1920. Manually verify EN + AR + light + dark + all four states (pending/error/empty/success).
 - **Phase 5 — Tests.** Vitest + RTL + MSW + Playwright + `vitest-axe`.
 - **Phase 6 — Review against the 40-step new-screen-checklist.**
 
@@ -85,10 +86,14 @@ shared cannot import from features/ or app/
 When the user gives a Figma link, do **not** start coding. Instead:
 
 1. Confirm the Figma MCP server is connected (in Claude Code: `mcp__…__use_figma` tool). Without it you can only guess.
-2. Call `get_design_context`, `get_variable_defs`, `get_screenshot` on the frame.
-3. List every icon (kebab-case filenames), every animation (with Figma transition duration/easing metadata), every missing token.
-4. For complex motion not expressible as CSS/Framer, ask the designer for a Lottie export.
-5. Produce a Phase 0 plan and stop.
+2. **Phase 0 (cheap)**: call `get_metadata` on the top frame only — one call. Enumerate every section as a node ID with a **tentative** risk score (HIGH/MEDIUM/LOW) and a static/backend classification. The screenshot is BANNED as a code-derivation source. Produce the Phase 0 plan and STOP.
+3. **Phase 0.5 (skeleton scan)** — after the user says "go to phase 0.5": one `get_design_context` per section root + `get_variable_defs` on the top frame, **all fanned out in one parallel message**. Sections + variables resolved in a single round-trip. Confirm or promote each section's risk score from real depth-1 signal (truncation, ≥3 variant children, ≥5 background layers, state-variant suffixes → HIGH). Sub-sub-phase HIGH sections per component variant. Seed the background-layer registry. Cache every response in the session `visited_nodes` map — Phase 4's deep walks reuse these. Produce the file/endpoint/token/asset/parallel-dispatch lists. STOP.
+4. **Per Phase 4 sub-phase (one section at a time): deep recursive BFS layer walk to every leaf.** Every non-leaf node (FRAME/GROUP/INSTANCE/COMPONENT/SECTION/BOOLEAN_OPERATION) gets its own fresh `get_design_context` call. Section root is a cache hit from Phase 0.5 — never re-fetched. **Sibling fetches at the same depth are MANDATORY parallel** — one message, multiple tool calls. Sequential siblings are a defect. Maintain `pending_nodes` + `visited_nodes`. The completeness gate (`total_nodes_visited + leaf_count >= metadata.descendant_count`) must pass before any JSX. Treating an `INSTANCE` as a leaf is the most common defect — instances have overridden children; fetch fresh every time.
+5. **Produce the leaf pixel ledger** per section before any JSX: a flat per-leaf table of `leaf_id → property → value → source`. **Every CSS value in the JSX must trace back to a ledger row.** This is the pixel-perfect contract; the 5-axis gate's computed-styles check is verified against the ledger, not eyeballed.
+6. Pair every visited layer with kept / inlined / dropped — no silent skips; dropped layers listed in the gate report with a reason. **Background layers (section fill, gradients, blur blobs, decorative shapes, image fills) are first-class** — every one appended to the session background-layer registry; Phase 6 audits the registry against the rendered page.
+7. List every icon (kebab-case filenames), every animation (with Figma transition duration/easing metadata), every missing token (with both `:root` and `.dark` values).
+8. For complex motion not expressible as CSS/Framer, ask the designer for a Lottie export.
+9. Produce a Phase 0 plan and stop.
 
 ## What you can NOT do (common hallucinations)
 
@@ -105,9 +110,9 @@ When the user gives a Figma link, do **not** start coding. Instead:
 
 ## Acknowledge before starting
 
-Reply with: **"Acknowledged. I'll follow the 16 rules and run phased execution. What's the task?"**
+Reply with: **"Acknowledged. I'll follow the 16 rules and run phased execution (Phase 0 → 0.5 → 1 → 2 → 3 → 4 → 5 → 6) with the leaf pixel ledger as the pixel-perfect contract. What's the task?"**
 
-Then wait for the task. When the task arrives, produce a Phase 0 plan and stop.
+Then wait for the task. When the task arrives, produce a **Phase 0 (cheap, metadata-only) plan and stop**.
 
 # END COPY-PASTE ABOVE THIS LINE
 

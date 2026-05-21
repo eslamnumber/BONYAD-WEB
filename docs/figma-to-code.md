@@ -38,7 +38,7 @@ If you wrote a line of JSX whose values trace back to a screenshot rather than a
 
 ### Per section, one round-trip — never batch
 
-Phase 5 ([task-workflow.md](task-workflow.md) §Section sub-phasing) explicitly bans building more than one section in a sub-phase. The layer walk described below MUST happen fresh for each section: do not reuse a top-frame `get_design_context` response across sections, do not "continue with the next section while we're at it", do not infer the next section's structure from the current one. One `get_design_context` round-trip → one section → one gate report → stop.
+Phase 5 ([task-workflow.md](task-workflow.md) §Section sub-phasing) explicitly bans building more than one section in a sub-phase. The deep recursive layer walk described below MUST happen fresh for each section's descendants: do not reuse a top-frame `get_design_context` response across sections, do not "continue with the next section while we're at it", do not infer the next section's structure from the current one. **The one exception is the section root itself** — Phase 0.5's skeleton scan already walked it at depth 1 and cached the response in the session `visited_nodes` map; Phase 5 reuses that cache hit and only fetches descendants. One section → one deep walk → one leaf pixel ledger → one gate report → stop.
 
 ## What Claude can read from a Figma link
 
@@ -161,7 +161,7 @@ Paste the link in the chat. Claude must then, **in this order**:
 2. **Call `get_metadata` on the top frame** to retrieve the full node tree. The output is the canonical section list — every named child frame is a section. Save the node IDs.
 3. **Call `get_variable_defs`** to reconcile design tokens with `tokens.css`. Flag any missing tokens; they must be added (with both `:root` and `.dark` values) in phase 3 before any section is built.
 4. **Open `get_screenshot` on the top frame at most ONCE** as a sanity reference. It may NOT be used to count sections, derive measurements, infer structure, pick a color, read a gradient, or decide which layers exist — `get_metadata` and `get_design_context` are the only authoritative inputs. If you find yourself looking at the screenshot to decide what to write, close it and call the layer-tree API instead.
-5. **Enumerate every section as a node ID** and write them down. Each section becomes its own solo phase-5 sub-phase per [task-workflow.md](task-workflow.md) §Section sub-phasing — bundling is the rare exception, not the default. Each section node will, in its sub-phase, be expanded into its own complete layer list via a fresh `get_design_context` call.
+5. **Enumerate every section as a node ID** and write them down. Each section becomes its own solo phase-5 sub-phase per [task-workflow.md](task-workflow.md) §Section sub-phasing — bundling is the rare exception, not the default. **Phase 0 stops here with tentative risk scores; Phase 0.5 then runs the depth-1 skeleton scan (one `get_design_context` per section root, in parallel) to confirm scores, surface variants, build the initial background-layer registry, and cache section roots for Phase 5.** The full recursive BFS to leaves runs only in each Phase 5 sub-phase, on demand.
    5a. **Classify every section as static or backend-driven** ([section-data-classification.md](section-data-classification.md)). For each backend-driven section, name the endpoint (`API_ENDPOINTS.<NAMESPACE>.<KEY>`) and the RN call site (grep `website-bonyad/src/screens/`); if the endpoint is missing on the web side, add the mirror to `src/config/endpoints.ts` from `website-bonyad/src/config/api.ts` in Phase 1. Phases 1 + 2 (schema + fetcher + sibling test) must complete BEFORE that section's Phase 5 sub-phase begins — the section consumes a fetched array, never a hardcoded one.
 6. **List every icon and asset that needs exporting**, with exact filenames matching the [icon naming rules](#asset-folder-structure). Filenames must mirror Figma node names in kebab-case so the mapping is auditable.
 7. **For each prototype interaction in the frame**, list transition metadata and propose the implementation tier (CSS / Framer / Lottie).
@@ -169,16 +169,20 @@ Paste the link in the chat. Claude must then, **in this order**:
 
 Only after this is code written. See [task-workflow.md](task-workflow.md) for the phase structure.
 
-### Per-section: walk the layer tree, not the picture
+### Per-section: walk the layer tree, not the picture — recursive BFS to leaves
 
-When a section's sub-phase starts (phase 5a, 5b, …), Claude must:
+**See [figma-layer-walk.md](figma-layer-walk.md) — it defines the two walks (shallow in Phase 0.5, deep in Phase 5), the mandatory recursive BFS that visits every non-leaf node, the completeness gate (`total_nodes_visited + leaf_count >= metadata.descendant_count`), the kept/inlined/dropped pairing, and the leaf pixel ledger.**
 
-1. **Call `get_design_context` on that exact section node.** The response is the layer tree rooted at the section. Do not reuse a previous response from the top frame — call fresh on the section node.
-2. **Walk every layer in the response and record:** node ID, node name, type (`FRAME`/`TEXT`/`VECTOR`/`INSTANCE`/`RECTANGLE`/`ELLIPSE`/etc.), dimensions (`width`/`height`/`x`/`y`), auto-layout (`layoutMode`, `padding`, `itemSpacing`, `primaryAxisAlignItems`, `counterAxisAlignItems`), fills (with token references — solid, linear gradient, radial gradient, image), strokes, corner radii, text content + text style, opacity, blend mode, effects (drop shadows, inner shadows, layer blurs, background blurs).
-3. **Background layers count.** The section root's fill, any sibling decorative shapes positioned behind the content (blur blobs, glow ellipses, pattern rectangles, image fills), and any gradient overlays must each appear in the enumerated list. A section background is never "implied" — if Figma has it, it gets a row in your walk and a planned DOM element.
-4. **Pair every Figma layer with a planned DOM element** before writing any JSX. For each layer choose one: **keep** (as `<div>`/`<span>`/`<img>`/`<svg>`), **inline** into a parent style (e.g., a layer that becomes a `bg-*` / `shadow-*` class on its parent), or **drop** as purely decorative. **Never silently skip a layer.** Every dropped layer must appear in the gate report as `dropped: <node id> <node name> — <reason>` so a reviewer can challenge the decision.
-5. **If `get_design_context` returns truncated**, recurse: call `get_design_context` on each non-leaf child node individually. Truncation is the cause of "this section never got built" — always re-call rather than infer the missing tail.
-6. **Only after every layer is enumerated and paired** do you write JSX for that section. If you catch yourself writing a class whose value you can't trace back to a specific Figma layer property or token, stop — you're hallucinating; go back to step 1.
+Headline rules (the full algorithm + gate format live in the dedicated doc):
+
+1. **Recursion is always-on for the Phase 5 deep walk**, not "only on truncation." Every `FRAME` / `GROUP` / `INSTANCE` / `COMPONENT` / `SECTION` / `BOOLEAN_OPERATION` child gets its own `get_design_context` call. Sibling fetches at the same depth run in **parallel in one message** ([parallel-execution.md](parallel-execution.md)) — sequential siblings are a defect.
+2. **Treating `INSTANCE` as a leaf is the most common defect.** Component instances frequently have overridden text, colour, or hidden children — always fetch fresh.
+3. **Background layers are first-class** and live in the session **background-layer registry** — every decorative blur / gradient / image / pattern is appended to the registry when discovered. Phase 0.5 seeds it with depth-1 backgrounds; Phase 5 sub-phases append deeper backgrounds. The registry is the audit log that catches silently-dropped backgrounds.
+4. **Pair every visited layer with kept / inlined / dropped** before writing JSX. Dropped layers must be listed in the gate report with a reason.
+5. **Produce the leaf pixel ledger** ([figma-layer-walk.md](figma-layer-walk.md) §Leaf pixel ledger) — a flat per-leaf table of `leaf_id → property → value → source`. **Every CSS value in the JSX must trace back to a ledger row.** This is the pixel-perfect contract — the 5-axis gate's computed-styles check is verified against the ledger, not eyeballed against Figma.
+6. **The completeness gate is a hard check** — `total_nodes_visited + leaf_count` ≥ `metadata.descendant_count_for(section_root)`. If it fails, the walk isn't done; recurse the missing branches before any JSX.
+7. **Session cache rule** — Phase 0.5 walked every section root and cached the response in `visited_nodes`. Phase 5's deep walk MUST consult the cache before fetching; cache hits are reused, re-fetching is a defect.
+8. **Sub-sub-phase HIGH-risk sections per [section-risk-scoring.md](section-risk-scoring.md).** A section with ≥3 variant cards or nested complex components gets sub-sub-phases (5a.1, 5a.2 …), each with its own deep walk + leaf ledger + 5-axis gate.
 
 ## Pixel-perfect verification (per section, before declaring done)
 
@@ -197,7 +201,9 @@ Reconcile the enumerated layer list (from the §"Per-section: walk the layer tre
 
 This axis runs first because it catches "section incompletely built" — including silent-invisible exports and theme-token gaps — before the pixel-level comparison even matters.
 
-### 1. Computed styles vs Figma (light mode, `en`)
+### 1. Computed styles vs the leaf pixel ledger (light mode, `en`)
+
+**Verified against the leaf pixel ledger** produced in this sub-phase ([figma-layer-walk.md](figma-layer-walk.md) §Leaf pixel ledger), not eyeballed against Figma. Every CSS value in the JSX has a ledger row; this axis confirms the rendered DOM's computed style matches the ledger's value for that leaf × property. A computed style with no matching ledger row OR a ledger row whose value differs from the computed style — both are defects.
 
 | Property                                         | How to compare                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
 | ------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -222,9 +228,9 @@ Toggle the `bonyad-lang` cookie to `ar` and reload. `<html dir>` must be `rtl`; 
 
 Open the theme toggle and switch to dark. Inspect every surface in the section — backgrounds, text, borders, icons, hover states. **Every color must come from a token that has a `.dark` value defined in [src/styles/tokens.css](../src/styles/tokens.css)**. If you see a washed-out card, a black-on-black icon, or text that disappears, the token is missing its `.dark` override — add it before moving on. **No new token may ship without both `:root` and `.dark` values** ([theming.md](theming.md) §Rules).
 
-### 4. Responsive matrix
+### 4. Responsive matrix — 12 widths, not 3
 
-Resize the viewport to 320 / 768 / 1280 px (the floor, tablet, and desktop checkpoints). The section must render cleanly at each, with no horizontal scroll, no clipped content, and touch targets ≥ 44 px on the 320 floor. Hardcoded pixel widths like `w-[1200px]` are forbidden on layout containers — see [responsive-design.md](responsive-design.md) §Hard rules. If the Figma frame only shows one breakpoint, ask the designer for the others before approximating.
+**The per-section gate runs the full 12-width matrix from [responsive-verification.md](responsive-verification.md): 320, 375, 414, 600, 768, 900, 1024, 1100, 1280, 1366, 1440, 1920.** No clipped content, no horizontal scroll, no overlap, touch targets ≥ 44 px on widths ≤ 768. The old 320/768/1280 trio missed between-breakpoint bugs at 900 (md→lg gap), 1100 (lg→xl gap), and 1366 (Windows laptop standard) — all real regressions seen on this project. Hardcoded pixel widths like `w-[1200px]` are forbidden on layout containers — see [responsive-design.md](responsive-design.md) §Hard rules. If the Figma frame only shows one breakpoint, ask the designer for the others before approximating.
 
 **Structural columns may never disappear via `hidden` at a lower breakpoint.** A two-column Figma frame is a structural choice, not a decoration. Below the desktop checkpoint the columns **stack** (`flex-col xl:flex-row`) — they do not vanish. `hidden xl:flex` / `hidden xl:block` is reserved for _individual_ decorative layers (a blur blob, an ornament badge), never for an entire column of the design. Catching this is part of axis 0 (layer fidelity) as well: a column tagged `hidden` below `xl:` shows up in the DOM only above 1280px, so a 1024 / 1366 laptop viewer sees a layer the plan said would render. See [responsive-design.md](responsive-design.md) §Anti-pattern catalogue (`<DecorativePanel className="hidden xl:flex" />`).
 

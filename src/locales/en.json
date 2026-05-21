@@ -412,19 +412,43 @@
         "body": "Discover how to use Bonyad step by step to offer your services and grow your business with ease.",
         "1": {
           "title": "Create Your Professional Profile",
-          "body": "Showcase your skills, add your portfolio, and set your service rates."
+          "body": "Showcase your skills, add your portfolio, and set your service rates.",
+          "bullets": [
+            "Add a professional bio",
+            "Showcase previous projects",
+            "Define specialties and services",
+            "Add contact information"
+          ]
         },
         "2": {
           "title": "Browse Projects",
-          "body": "Explore posted projects that match your expertise and availability."
+          "body": "Explore posted projects that match your expertise and availability.",
+          "bullets": [
+            "Browse available projects",
+            "Filter projects by specialty",
+            "Access serious clients",
+            "Follow new opportunities"
+          ]
         },
         "3": {
           "title": "Submit Your Offer",
-          "body": "Send a competitive proposal with your timeline, pricing, and past work."
+          "body": "Send a competitive proposal with your timeline, pricing, and past work.",
+          "bullets": [
+            "Specify service details",
+            "Clarify the execution timeline",
+            "Send your price offer",
+            "Add notes or suggestions"
+          ]
         },
         "4": {
           "title": "Deliver and Receive",
-          "body": "Complete the work, get client approval, and receive your payment securely."
+          "body": "Complete the work, get client approval, and receive your payment securely.",
+          "bullets": [
+            "Manage communication with the client",
+            "Track project phases",
+            "Organize work details",
+            "Opportunities for new projects"
+          ]
         }
       },
       "customer": {
@@ -432,19 +456,43 @@
         "body": "Discover how to use Bonyad step by step to reach the right experts and manage your project with greater ease.",
         "1": {
           "title": "Post Your Project",
-          "body": "Describe the work required. Add photos, location, and budget range."
+          "body": "Describe the work required. Add photos, location, and budget range.",
+          "bullets": [
+            "Describe the project and requirements",
+            "Set the expected budget",
+            "Upload photos or blueprints",
+            "Choose the required service type"
+          ]
         },
         "2": {
           "title": "Review Offers",
-          "body": "Receive competitive quotes. Compare prices, timelines, and previous projects."
+          "body": "Receive competitive quotes. Compare prices, timelines, and previous projects.",
+          "bullets": [
+            "Review each offer in detail",
+            "Compare prices and expertise",
+            "Contact service providers",
+            "Explore previous work"
+          ]
         },
         "3": {
           "title": "Hire and Sign",
-          "body": "Choose your expert, sign a digital contract, and deposit funds into escrow."
+          "body": "Choose your expert, sign a digital contract, and deposit funds into escrow.",
+          "bullets": [
+            "Check the level of expertise",
+            "View client reviews",
+            "Compare quality of past projects",
+            "Choose the right service provider"
+          ]
         },
         "4": {
           "title": "Track and Pay",
-          "body": "Approve each project milestone and release payment upon completion."
+          "body": "Approve each project milestone and release payment upon completion.",
+          "bullets": [
+            "Track project details",
+            "Easily communicate with the service provider",
+            "Organize notes and requests",
+            "Follow completion milestones"
+          ]
         }
       }
     },

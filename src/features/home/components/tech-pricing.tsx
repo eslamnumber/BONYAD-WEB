@@ -115,6 +115,17 @@ function BillingToggle({ labels }: { labels: string[] }) {
   );
 }
 
+function PricingHeader({ headline, subheadline }: { headline: string; subheadline: string }) {
+  return (
+    <div className="mb-10 flex flex-col items-center gap-3 text-center sm:mb-12">
+      <h2 className="text-foreground text-3xl font-medium tracking-tight sm:text-4xl md:text-5xl">
+        {headline}
+      </h2>
+      <p className="text-foreground/80 max-w-lg text-base sm:text-lg">{subheadline}</p>
+    </div>
+  );
+}
+
 export function TechPricing({ locale, plans }: TechPricingProps) {
   const { t } = getTranslations(locale);
   const sorted = [...plans].sort(
@@ -132,14 +143,10 @@ export function TechPricing({ locale, plans }: TechPricingProps) {
         className="bg-deco-blob-blue-light pointer-events-none absolute start-0 bottom-0 h-[350px] w-[350px] rounded-full opacity-30 blur-[120px]"
       />
       <div className="relative mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="mb-10 flex flex-col items-center gap-3 text-center sm:mb-12">
-          <h2 className="text-foreground text-3xl font-medium tracking-tight sm:text-4xl md:text-5xl">
-            {t('tech.pricing.headline')}
-          </h2>
-          <p className="text-foreground/80 max-w-lg text-base sm:text-lg">
-            {t('tech.pricing.subheadline')}
-          </p>
-        </div>
+        <PricingHeader
+          headline={t('tech.pricing.headline')}
+          subheadline={t('tech.pricing.subheadline')}
+        />
         <BillingToggle
           labels={[
             t('tech.pricing.billingMonthly'),

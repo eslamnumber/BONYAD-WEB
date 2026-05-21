@@ -11,6 +11,7 @@ const dictionaries = { en, ar } as const;
 export type Dict = typeof en;
 
 export type TFunction = (key: string) => string;
+export type TArrayFunction = (key: string) => string[];
 
 /**
  * Synchronous server-side translation helper.
@@ -25,10 +26,15 @@ export type TFunction = (key: string) => string;
  *
  * Client components: use `useTranslation()` from react-i18next instead.
  */
-export function getTranslations(locale: Locale): { t: TFunction; dict: Dict } {
+export function getTranslations(locale: Locale): {
+  t: TFunction;
+  tArray: TArrayFunction;
+  dict: Dict;
+} {
   const dict = (dictionaries[locale] ?? dictionaries.en) as Dict;
   const t: TFunction = (key) => resolvePath(dict, key) ?? key;
-  return { t, dict };
+  const tArray: TArrayFunction = (key) => resolveArrayPath(dict, key) ?? [];
+  return { t, tArray, dict };
 }
 
 function resolvePath(obj: unknown, path: string): string | undefined {
@@ -41,4 +47,18 @@ function resolvePath(obj: unknown, path: string): string | undefined {
     cursor = (cursor as Record<string, unknown>)[part];
   }
   return typeof cursor === 'string' ? cursor : undefined;
+}
+
+function resolveArrayPath(obj: unknown, path: string): string[] | undefined {
+  const parts = path.split('.');
+  let cursor: unknown = obj;
+  for (const part of parts) {
+    if (typeof cursor !== 'object' || cursor === null || !(part in (cursor as object))) {
+      return undefined;
+    }
+    cursor = (cursor as Record<string, unknown>)[part];
+  }
+  return Array.isArray(cursor) && cursor.every((v) => typeof v === 'string')
+    ? (cursor as string[])
+    : undefined;
 }

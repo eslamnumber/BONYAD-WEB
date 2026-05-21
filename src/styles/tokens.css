@@ -120,8 +120,12 @@
   --color-brand-dark-navy: var(--brand-dark-navy);
   --color-login-bg: var(--login-bg);
 
-  /* How-it-works steps section — white veil over page bg (Figma rgba(255,255,255,0.05)) */
-  --color-step-section-veil: var(--step-section-veil);
+  /* How-it-works steps section — gradient from/to stops */
+  --color-step-section-from: var(--step-section-from);
+  --color-step-section-to: var(--step-section-to);
+  /* How-it-works step cards — glassmorphism surface + border */
+  --color-step-card-bg: var(--step-card-bg);
+  --color-step-card-border: var(--step-card-border);
 }
 
 :root {
@@ -225,8 +229,12 @@
   --brand-dark-navy: oklch(0.26 0.09 242); /* Figma #003867 — "Bonyad" brand name in heading */
   --login-bg: oklch(1 0 0); /* white form panel */
 
-  /* How-it-works steps section background — light blue-gray panel in light mode */
-  --step-section-veil: oklch(0.97 0.01 262);
+  /* How-it-works steps section gradient — bottom-left soft blue → top-right white */
+  --step-section-from: oklch(0.91 0.045 240);
+  --step-section-to: oklch(1 0 0);
+  /* How-it-works step cards — glassmorphism (Figma rgba(255,255,255,0.6) / #eaeaea) */
+  --step-card-bg: oklch(1 0 0 / 0.6);
+  --step-card-border: oklch(0.93 0 0);
 
   /* Gradient blends toward the form panel — flips with page direction */
   --blend-to-form: to right; /* ltr (ar): form on LEFT, blend left edge of image */
@@ -312,8 +320,12 @@
   --brand-dark-navy: oklch(0.7 0.12 242);
   --login-bg: oklch(0.18 0 0);
 
-  /* How-it-works steps section veil — same white veil in dark mode (Figma value) */
-  --step-section-veil: oklch(1 0 0 / 0.05);
+  /* How-it-works steps section gradient — dark mode: deep navy → page bg */
+  --step-section-from: oklch(0.2 0.06 240);
+  --step-section-to: oklch(0.14 0.01 240);
+  /* How-it-works step cards — dark mode glassmorphism */
+  --step-card-bg: oklch(0.2 0 0 / 0.6);
+  --step-card-border: oklch(0.25 0 0);
 }
 
 html[dir='rtl'] {
