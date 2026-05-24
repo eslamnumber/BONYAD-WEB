@@ -24,4 +24,11 @@ export const API_ENDPOINTS = {
   FAQS: {
     LIST: '/faqs',
   },
+  CONTACT: {
+    SUBMIT: '/contact',
+  },
+  BLOGS: {
+    LIST: '/blogs',
+    DETAILS: '/blogs/:id',
+  },
 } as const;

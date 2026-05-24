@@ -1,0 +1,12 @@
+<svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" viewBox="0 0 1639 1226" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g opacity="0.4" filter="url(#contact-blob-blur)">
+    <ellipse cx="819.5" cy="613" rx="419.5" ry="213" fill="#2F61A1"/>
+  </g>
+  <defs>
+    <filter id="contact-blob-blur" x="0" y="0" width="1639" height="1226" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+      <feFlood flood-opacity="0" result="BackgroundImageFix"/>
+      <feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+      <feGaussianBlur stdDeviation="200" result="effect1_foregroundBlur"/>
+    </filter>
+  </defs>
+</svg>

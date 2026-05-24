@@ -27,6 +27,7 @@ web/
 │   │
 │   ├── features/                # Business features — see below
 │   │   ├── auth/                # Login, register, forgot-password flows
+│   │   ├── blog/                # /blog index — public articles via GET /blogs
 │   │   ├── projects/
 │   │   ├── bids/
 │   │   ├── chat/

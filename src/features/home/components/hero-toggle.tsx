@@ -20,6 +20,31 @@ type HeroToggleProps = {
 // layout mirrors automatically between LTR and RTL.
 const PILL_TRAVEL = 121;
 
+type TabLinkProps = {
+  href: string;
+  label: string;
+  isActive: boolean;
+  onSelect: () => void;
+};
+
+function TabLink({ href, label, isActive, onSelect }: TabLinkProps) {
+  return (
+    <Link
+      href={href}
+      onClick={(e) => {
+        e.preventDefault();
+        onSelect();
+      }}
+      role="tab"
+      aria-selected={isActive}
+      aria-current={isActive ? 'page' : undefined}
+      className={`relative z-10 flex h-[48px] w-[122px] items-center justify-center text-[12px] font-semibold transition-colors ${isActive ? 'text-foreground' : 'text-toggle-inactive'}`}
+    >
+      {label}
+    </Link>
+  );
+}
+
 export function HeroToggle({
   postLabel,
   proLabel,
@@ -47,32 +72,18 @@ export function HeroToggle({
         animate={{ x: offset }}
         transition={{ type: 'spring', stiffness: 260, damping: 28 }}
       />
-      <Link
+      <TabLink
         href={ROUTES.HOME}
-        onClick={(e) => {
-          e.preventDefault();
-          onTabChange('user');
-        }}
-        role="tab"
-        aria-selected={activeTab === 'user'}
-        aria-current={activeTab === 'user' ? 'page' : undefined}
-        className={`relative z-10 flex h-[48px] w-[122px] items-center justify-center text-[12px] font-semibold transition-colors ${activeTab === 'user' ? 'text-foreground' : 'text-toggle-inactive'}`}
-      >
-        {postLabel}
-      </Link>
-      <Link
+        label={postLabel}
+        isActive={activeTab === 'user'}
+        onSelect={() => onTabChange('user')}
+      />
+      <TabLink
         href={ROUTES.FOR_PROS}
-        onClick={(e) => {
-          e.preventDefault();
-          onTabChange('pro');
-        }}
-        role="tab"
-        aria-selected={activeTab === 'pro'}
-        aria-current={activeTab === 'pro' ? 'page' : undefined}
-        className={`relative z-10 flex h-[48px] w-[122px] items-center justify-center text-[12px] font-semibold transition-colors ${activeTab === 'pro' ? 'text-foreground' : 'text-toggle-inactive'}`}
-      >
-        {proLabel}
-      </Link>
+        label={proLabel}
+        isActive={activeTab === 'pro'}
+        onSelect={() => onTabChange('pro')}
+      />
     </div>
   );
 }

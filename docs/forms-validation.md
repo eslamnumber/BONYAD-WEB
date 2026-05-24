@@ -29,7 +29,7 @@
 
 ## Field validation rules (auth)
 
-Shared validators live in [`src/features/auth/utils/`](../src/features/auth/utils/) and are re-exported from the barrel. Mirror these in any new auth-adjacent screen (reset-password, change-phone, …) so the policy can't drift.
+Shared validators live in [`src/features/auth/utils/`](../src/features/auth/utils/) and are re-exported from the barrel. Mirror these in any new auth-adjacent screen (reset-password, change-phone, …) so the policy can't drift. Saudi-phone primitives (`normalizePhoneInput`, `normalizePhoneForApi`, `saudiPhoneSchema`) are also exported from [`src/lib/saudi-phone.ts`](../src/lib/saudi-phone.ts) so non-auth features (e.g. `features/contact`) can reuse the same validator without violating the cross-feature import rule.
 
 | Field                         | Validator                                         | Rule                                                                                                           | i18n key on failure                                     |
 | ----------------------------- | ------------------------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------- |

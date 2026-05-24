@@ -48,3 +48,9 @@ export { default as SaudiRiyalIcon } from './saudi-riyal.svg';
 /* How It Works page — contact section icons */
 export { default as ContactEmailIcon } from './contact-email.svg';
 export { default as ContactChatIcon } from './contact-chat.svg';
+
+/* Contact form field icons */
+export { default as FieldPhoneIcon } from './field-phone.svg';
+export { default as FieldMailIcon } from './field-mail.svg';
+export { default as FieldSubjectIcon } from './field-subject.svg';
+export { default as FieldMessageIcon } from './field-message.svg';

@@ -504,5 +504,71 @@
     "faq": {
       "heading": "Frequently Asked Questions"
     }
+  },
+  "contact": {
+    "meta": {
+      "title": "Contact Us — Bonyad",
+      "description": "Have a question or need help? Contact the Bonyad team and we'll get back to you."
+    },
+    "hero": {
+      "eyebrow": "We Hear You",
+      "title": "Facing an issue?",
+      "subtitle": "We're here to help you find the solution."
+    },
+    "form": {
+      "phonePlaceholder": "Phone number",
+      "emailPlaceholder": "Email address",
+      "titlePlaceholder": "Short title for your request",
+      "descriptionPlaceholder": "Describe your inquiry in detail",
+      "submit": "Send",
+      "submitting": "Sending…",
+      "successTitle": "Request received",
+      "successBody": "Your ticket number is {{ticketNumber}}. We'll reach out shortly.",
+      "submitAnother": "Send another request"
+    },
+    "errors": {
+      "emailRequired": "Email is required",
+      "emailInvalid": "Enter a valid email address",
+      "emailTooLong": "Email is too long",
+      "titleTooShort": "Title must be at least 3 characters",
+      "titleTooLong": "Title is too long",
+      "descriptionTooShort": "Description must be at least 10 characters",
+      "descriptionTooLong": "Description is too long",
+      "submitFailed": "Failed to send. Please try again.",
+      "networkError": "Network error. Please try again."
+    },
+    "aria": {
+      "phone": "Phone number",
+      "email": "Email address",
+      "title": "Request title",
+      "description": "Request description"
+    }
+  },
+  "blog": {
+    "meta": {
+      "title": "Bonyad Blog — Construction and finishing insights",
+      "description": "Tips, guides, and expert articles on construction and home-finishing in Saudi Arabia, from the Bonyad team and verified professionals."
+    },
+    "intro": {
+      "headline": "Bonyad Blog",
+      "subheadline": "Tips and expert articles on construction and finishing in Saudi Arabia."
+    },
+    "readMore": "Read more",
+    "uncategorized": "Article",
+    "empty": {
+      "title": "No articles yet",
+      "body": "We're putting together fresh guides and insights. Check back soon."
+    },
+    "coverAlt": "Cover image for {{title}}",
+    "detail": {
+      "metaTitleFallback": "Article — Bonyad Blog",
+      "metaDescriptionFallback": "An article from the Bonyad construction and finishing blog.",
+      "imageAlt": "Illustration for {{title}}",
+      "avatarFallback": "Author photo",
+      "byAuthor": "By {{name}}",
+      "backToBlog": "Back to all articles",
+      "notFoundTitle": "Article not found",
+      "notFoundBody": "We couldn't find the article you were looking for. It may have been removed."
+    }
   }
 }

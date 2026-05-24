@@ -126,6 +126,19 @@
   /* How-it-works step cards — glassmorphism surface + border */
   --color-step-card-bg: var(--step-card-bg);
   --color-step-card-border: var(--step-card-border);
+
+  /* Contact form — placeholder text + card border */
+  --color-input-placeholder: var(--input-placeholder);
+  --color-contact-card-border: var(--contact-card-border);
+
+  /* Blog post category badges — foreground (text) + soft pill background.
+     Three semantic categories mirroring the Figma frame 408:5106. */
+  --color-badge-finish: var(--badge-finish);
+  --color-badge-finish-soft: var(--badge-finish-soft);
+  --color-badge-legal: var(--badge-legal);
+  --color-badge-legal-soft: var(--badge-legal-soft);
+  --color-badge-ac: var(--badge-ac);
+  --color-badge-ac-soft: var(--badge-ac-soft);
 }
 
 :root {
@@ -238,6 +251,20 @@
 
   /* Gradient blends toward the form panel — flips with page direction */
   --blend-to-form: to right; /* ltr (ar): form on LEFT, blend left edge of image */
+
+  /* Contact form — Figma rgba(0,0,0,0.4) placeholder + #eaeaea card border */
+  --input-placeholder: oklch(0 0 0 / 0.4);
+  --contact-card-border: oklch(0.93 0 0);
+
+  /* Blog post category badges — light mode.
+     Finish: Figma #00bc7d, Legal: Figma #003867, AC: Figma #e17100.
+     -soft variants are the 10% alpha pill backgrounds shown in Figma. */
+  --badge-finish: oklch(0.7 0.16 158);
+  --badge-finish-soft: oklch(0.7 0.16 158 / 0.1);
+  --badge-legal: oklch(0.26 0.09 242);
+  --badge-legal-soft: oklch(0.26 0.09 242 / 0.1);
+  --badge-ac: oklch(0.66 0.18 50);
+  --badge-ac-soft: oklch(0.66 0.18 50 / 0.1);
 }
 
 .dark {
@@ -326,6 +353,18 @@
   /* How-it-works step cards — dark mode glassmorphism */
   --step-card-bg: oklch(0.2 0 0 / 0.6);
   --step-card-border: oklch(0.25 0 0);
+
+  /* Contact form — dark overrides */
+  --input-placeholder: oklch(1 0 0 / 0.4);
+  --contact-card-border: oklch(0.28 0 0);
+
+  /* Blog post category badges — dark overrides (lighter fg, higher-alpha pill bg). */
+  --badge-finish: oklch(0.78 0.17 158);
+  --badge-finish-soft: oklch(0.78 0.17 158 / 0.18);
+  --badge-legal: oklch(0.72 0.12 242);
+  --badge-legal-soft: oklch(0.72 0.12 242 / 0.18);
+  --badge-ac: oklch(0.76 0.17 50);
+  --badge-ac-soft: oklch(0.76 0.17 50 / 0.18);
 }
 
 html[dir='rtl'] {
