@@ -108,10 +108,12 @@ function UserCta({
 function ProCtaDecoration({ badge }: { badge: string }) {
   return (
     <>
-      {/* Wave — Figma 1:4870; visible from md up since it uses % positioning */}
+      {/* Wave — Figma 1:4870; visible from md up since it uses % positioning.
+       * Flip only in `ar` (html dir=ltr per inverted LOCALE_DIRECTION). In `en`
+       * (html dir=rtl) the wave renders in its native orientation. */}
       <div
         aria-hidden
-        className="pointer-events-none absolute hidden -scale-x-100 md:block"
+        className="pointer-events-none absolute hidden md:block [[dir=ltr]_&]:-scale-x-100"
         style={{
           top: '15.26%',
           bottom: '-15.26%',

@@ -78,10 +78,13 @@ export function HomeHowItWorks({ locale, variant = 'user' }: HomeHowItWorksProps
           {/* Content */}
           <div className="relative flex flex-col items-center gap-10">
             <div className="flex max-w-[509px] flex-col items-center gap-4 text-center">
-              <h2 className="text-foreground text-3xl font-medium tracking-tight sm:text-4xl lg:text-[50px]">
+              <h2
+                dir="auto"
+                className="text-foreground text-3xl font-medium tracking-tight sm:text-4xl lg:text-[50px]"
+              >
                 {t(`${ns}.howItWorks.headline`)}
               </h2>
-              <p className="text-foreground/80 text-base sm:text-lg lg:text-xl">
+              <p dir="auto" className="text-foreground/80 text-base sm:text-lg lg:text-xl">
                 {t(`${ns}.howItWorks.subheadline`)}
               </p>
             </div>
@@ -96,7 +99,7 @@ export function HomeHowItWorks({ locale, variant = 'user' }: HomeHowItWorksProps
               href={ROUTES.SERVICES}
               className="text-foreground/80 flex items-center gap-2 rounded-full border border-black/80 px-4 py-2.5 text-sm font-bold tracking-[0.1px] transition-colors hover:bg-black/5"
             >
-              <ChevronRight className="size-5 ltr:-scale-x-100" aria-hidden />
+              <ChevronRight className="size-5 [[dir=ltr]_&]:-scale-x-100" aria-hidden />
               {t(`${ns}.howItWorks.learnMore`)}
             </Link>
           </div>

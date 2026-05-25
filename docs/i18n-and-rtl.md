@@ -66,6 +66,8 @@ In `en` locale (`<html dir="rtl">`), a translated heading like `"Facing an issue
 
 **Hard line:** `dir="auto"` belongs on **leaf text nodes only** — never on layout containers (`<form>`, `<section>`, `<div>`). On a container that holds form inputs with English placeholders, `dir="auto"` sniffs the placeholder content and silently flips the entire container to `dir="ltr"`, breaking every `text-end` / `end-*` / `ps-*` / `pe-*` utility inside it. The contact form had this bug — `<form dir="auto">` made the form render LTR in `en` regardless of `<html dir="rtl">`, putting icons on the wrong physical side. Remove and let the form inherit `<html dir>`.
 
+**Verification — apply per section, not "I'll catch them later".** When you build a section that renders translated copy, before the per-section gate run this check: for every `<h1>`, `<h2>`, `<h3>`, `<h4>`, `<p>`, `<li>`, `<dt>`, `<dd>` (or any leaf that holds a `t(...)` call), grep the `en.json` value at that key for a leading or trailing `?`, `.`, `!`, `:`, `،`, `؟`. If any match, `dir="auto"` is REQUIRED on that element. **Real regression:** `home-how-it-works.tsx` shipped with `<h2>{t('home.howItWorks.headline')}</h2>` and `<p>{t('home.howItWorks.subheadline')}</p>` — both translated copy ends in `?` / `.`, both rendered with the punctuation floating to the visual start in `en` (the headline showed `?work` on its second line, the subheadline showed `.executing easily`). The Phase-5 verification gate must screenshot the section in `en` and flag any line where terminal punctuation appears on the leading edge.
+
 ## Common mistake — `text-start` vs `text-end` (read this before writing JSX)
 
 Because the mapping is **inverted** (`ar → ltr`, `en → rtl`), the visual side each utility resolves to is _not_ the side you'd guess from the locale name. Memorize this table:
@@ -106,22 +108,33 @@ After building any section, **toggle the `bonyad-lang` cookie between `en` and `
 
 ## Directional icons — flipping chevrons / arrows
 
-Arrows must flip with the reading direction: in Arabic the arrow on a "view more" link points **left** (←), in English it points **right** (→).
+Arrows must flip with the reading direction. Which **physical** direction the arrow points depends on the CTA's design intent — and there are two distinct patterns. Both use a single `ChevronRight` from `lucide-react` and a single flip class; the only difference is which variant (`ltr:` or `rtl:`) the class is gated on. Never conditionally pick `ChevronLeft` vs `ChevronRight` based on the locale.
 
-**Rule:** import one icon (`ChevronRight` from `lucide-react`) and add the class `ltr:-scale-x-100`. Never conditionally pick `ChevronLeft` vs `ChevronRight` based on the locale.
+**Pattern A — "forward" chevron (points in the reading direction, toward where the link goes).** This is the default for navigation chevrons, breadcrumb separators, and most "next page" affordances. Use `ltr:-scale-x-100`:
 
-Why `ltr:`? Because the mapping is inverted: `<html dir="ltr">` is the **Arabic** locale, so flipping in `ltr` mode turns the right-pointing chevron into a left-pointing one — correct for Arabic reading direction. In English, `<html dir="rtl">`, the class doesn't trigger, so the chevron stays right-pointing — correct for English.
+- `en` (`<html dir="rtl">`) → class doesn't fire → chevron stays `>` → points **right** (LTR forward).
+- `ar` (`<html dir="ltr">`) → class fires → chevron flips to `<` → points **left** (RTL forward).
+
+**Pattern B — "inward" chevron (points back toward the link text, away from the reading direction).** This is the design intent for "Learn more" / "View more" style CTAs in the Bonyad Figma where the chevron decorates the **start** edge of the pill — visually a "tail" trailing off the label, not a "next" indicator. Use `rtl:-scale-x-100`:
+
+- `en` (`<html dir="rtl">`) → class fires → chevron flips to `<` → points **left**, back toward the label on the text's right side.
+- `ar` (`<html dir="ltr">`) → class doesn't fire → chevron stays `>` → points **right**, back toward the label on the text's left side.
+
+**How to pick:** look at the Figma frame for the CTA in both `en` and `ar` mode. If the arrowhead points away from the text (outward), it's Pattern A. If the arrowhead points toward the text (inward), it's Pattern B. Do not default — verify per CTA. **Real regression:** the home "Learn how it works" pill on the How-It-Works section shipped with Pattern A (`ltr:-scale-x-100`) and rendered a right-pointing chevron in `en`; the Figma frame shows an inward-pointing chevron, so Pattern B (`rtl:-scale-x-100`) is correct. See [src/features/home/components/home-how-it-works.tsx](../src/features/home/components/home-how-it-works.tsx).
 
 ```tsx
 // ❌ Conditional icon picking — locale-name check, breaks the single-source rule
 const Chevron = LOCALE_DIRECTION[locale] === 'rtl' ? ChevronLeft : ChevronRight;
 <Chevron className="size-5" aria-hidden />
 
-// ✓ One icon, one class — flips automatically with html dir
+// ✓ Pattern A — forward chevron (default for "next" / breadcrumb / pagination)
 <ChevronRight className="size-5 ltr:-scale-x-100" aria-hidden />
+
+// ✓ Pattern B — inward chevron (Learn more / View more pill where the arrow trails the label)
+<ChevronRight className="size-5 rtl:-scale-x-100" aria-hidden />
 ```
 
-Non-directional icons (search, settings, user avatar, check marks) **do not flip**. Only icons whose meaning is tied to reading direction — back/forward arrows, chevrons, breadcrumb separators — need the `ltr:-scale-x-100` class.
+Non-directional icons (search, settings, user avatar, check marks) **do not flip**. Only icons whose meaning is tied to reading direction — back/forward arrows, chevrons, breadcrumb separators — need a flip class.
 
 ## ESLint enforcement
 
