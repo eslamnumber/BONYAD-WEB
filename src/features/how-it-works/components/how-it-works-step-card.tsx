@@ -104,12 +104,12 @@ function StepContent({ title, body, bullets, hovered }: ContentProps) {
     <div className="relative flex w-full flex-col gap-3 text-end">
       <p className="text-primary text-2xl leading-tight font-semibold">{title}</p>
       <p
-        className={`text-base leading-[1.5] transition-colors duration-300 ${hovered ? 'text-foreground/60' : 'text-foreground/80'}`}
+        className={`text-base leading-[1.5] transition-colors duration-300 ${hovered ? 'text-foreground/70 dark:text-foreground/80' : 'text-foreground/80 dark:text-foreground/95'}`}
       >
         {body}
       </p>
       <ul
-        className="text-foreground/80 overflow-hidden text-base"
+        className="text-foreground/80 dark:text-foreground/95 overflow-hidden text-base"
         style={{
           maxHeight: hovered ? '200px' : '0',
           opacity: hovered ? 1 : 0,

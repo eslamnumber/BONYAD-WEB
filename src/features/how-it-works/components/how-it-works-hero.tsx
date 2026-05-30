@@ -14,7 +14,7 @@ function HeroBgBlob() {
       aria-hidden
       className="pointer-events-none absolute end-0 -top-[42px] hidden lg:block lg:h-[600px] lg:w-[425px] xl:h-[800px] xl:w-[566px]"
     >
-      <div className="relative h-full w-full -scale-y-100 rotate-180">
+      <div className="relative h-full w-full -scale-y-100 rotate-180 dark:[filter:invert(1)_hue-rotate(180deg)]">
         <Image src="/images/bg/how-it-works-hero.png" alt="" fill className="object-cover" />
       </div>
     </div>

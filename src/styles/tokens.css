@@ -350,9 +350,10 @@
   /* How-it-works steps section gradient — dark mode: deep navy → page bg */
   --step-section-from: oklch(0.2 0.06 240);
   --step-section-to: oklch(0.14 0.01 240);
-  /* How-it-works step cards — dark mode glassmorphism */
-  --step-card-bg: oklch(0.2 0 0 / 0.6);
-  --step-card-border: oklch(0.25 0 0);
+  /* How-it-works step cards — dark mode glassmorphism (higher opacity + bluish tint
+     so body copy reads against the dark gradient and the card surface stays visible). */
+  --step-card-bg: oklch(0.24 0.02 240 / 0.9);
+  --step-card-border: oklch(0.38 0.025 240);
 
   /* Contact form — dark overrides */
   --input-placeholder: oklch(1 0 0 / 0.4);

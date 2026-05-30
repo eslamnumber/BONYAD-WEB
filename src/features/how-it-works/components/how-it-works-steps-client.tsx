@@ -136,9 +136,11 @@ export function HowItWorksStepsClient({
           </CrossfadeLayer>
         </div>
       </div>
-      <div className="grid grid-cols-1 gap-4 px-4 sm:grid-cols-2 sm:px-6 xl:grid-cols-4 xl:px-24">
+      <div className="flex [scrollbar-width:none] gap-4 overflow-x-auto px-4 pb-2 sm:px-6 xl:grid xl:grid-cols-4 xl:overflow-visible xl:px-24 [&::-webkit-scrollbar]:hidden">
         {steps.map((step) => (
-          <StepCard key={`${activeTab}-${step.number}`} {...step} />
+          <div key={`${activeTab}-${step.number}`} className="w-[306px] shrink-0 xl:w-auto">
+            <StepCard {...step} />
+          </div>
         ))}
       </div>
     </div>
