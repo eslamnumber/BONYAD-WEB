@@ -43,7 +43,7 @@ type StepCardProps = {
 
 function StepCard({ Icon, title, body }: StepCardProps) {
   return (
-    <div className="border-service-border flex h-[221px] w-[318px] shrink-0 flex-col gap-8 rounded-[16px] border bg-white/60 ps-5 pe-[41px] pt-[31px] pb-8 backdrop-blur-[4px]">
+    <div className="border-step-card-border bg-step-card-bg flex h-[221px] w-[318px] shrink-0 flex-col gap-8 rounded-[16px] border ps-5 pe-[41px] pt-[31px] pb-8 backdrop-blur-[4px]">
       <div aria-hidden className="text-primary flex justify-end">
         <span className="block size-9">
           <Icon width={36} height={36} />
@@ -97,7 +97,7 @@ export function HomeHowItWorks({ locale, variant = 'user' }: HomeHowItWorksProps
 
             <Link
               href={ROUTES.SERVICES}
-              className="text-foreground/80 flex items-center gap-2 rounded-full border border-black/80 px-4 py-2.5 text-sm font-bold tracking-[0.1px] transition-colors hover:bg-black/5"
+              className="text-foreground/80 border-foreground/80 hover:bg-foreground/5 flex items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-bold tracking-[0.1px] transition-colors"
             >
               <ChevronRight className="size-5 [[dir=ltr]_&]:-scale-x-100" aria-hidden />
               {t(`${ns}.howItWorks.learnMore`)}
