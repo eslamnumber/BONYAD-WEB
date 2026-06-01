@@ -95,20 +95,16 @@ export function HomeBrowse({ locale }: HomeBrowseProps) {
           </Link>
         </div>
 
-        <div className="-mx-4 flex flex-row gap-4 overflow-x-auto px-4 pb-2 sm:-mx-6 sm:px-6">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
           {cards.map((card) => (
-            <div
+            <ServiceCard
               key={card.key}
-              className="w-[260px] shrink-0 sm:w-[300px] lg:w-[280px] xl:w-auto xl:min-w-[220px] xl:flex-1"
-            >
-              <ServiceCard
-                title={card.title}
-                body={card.body}
-                viewMoreLabel={viewMore}
-                href={ROUTES.SERVICES}
-                Icon={card.Icon}
-              />
-            </div>
+              title={card.title}
+              body={card.body}
+              viewMoreLabel={viewMore}
+              href={ROUTES.SERVICES}
+              Icon={card.Icon}
+            />
           ))}
         </div>
       </div>

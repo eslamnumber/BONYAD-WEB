@@ -43,7 +43,7 @@ type StepCardProps = {
 
 function StepCard({ Icon, title, body }: StepCardProps) {
   return (
-    <div className="border-step-card-border bg-step-card-bg flex h-[221px] w-[318px] shrink-0 flex-col gap-8 rounded-[16px] border ps-5 pe-[41px] pt-[31px] pb-8 backdrop-blur-[4px]">
+    <div className="border-step-card-border bg-step-card-bg flex min-h-[200px] w-full flex-col gap-8 rounded-[16px] border ps-5 pe-[41px] pt-[31px] pb-8 backdrop-blur-[4px]">
       <div aria-hidden className="text-primary flex justify-end">
         <span className="block size-9">
           <Icon width={36} height={36} />
@@ -89,7 +89,7 @@ export function HomeHowItWorks({ locale, variant = 'user' }: HomeHowItWorksProps
               </p>
             </div>
 
-            <div className="flex w-full [scrollbar-width:none] gap-2 overflow-x-auto pb-2">
+            <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
               {steps.map((step) => (
                 <StepCard key={step.title} Icon={step.Icon} title={step.title} body={step.body} />
               ))}
