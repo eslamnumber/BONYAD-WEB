@@ -54,3 +54,9 @@ export { default as FieldPhoneIcon } from './field-phone.svg';
 export { default as FieldMailIcon } from './field-mail.svg';
 export { default as FieldSubjectIcon } from './field-subject.svg';
 export { default as FieldMessageIcon } from './field-message.svg';
+
+/* About page — pillar icons (Value / Mission / Vision) + timeline dot */
+export { default as AboutPillarValueIcon } from './about-pillar-value.svg';
+export { default as AboutPillarMissionIcon } from './about-pillar-mission.svg';
+export { default as AboutPillarVisionIcon } from './about-pillar-vision.svg';
+export { default as AboutTimelineDotIcon } from './about-timeline-dot.svg';

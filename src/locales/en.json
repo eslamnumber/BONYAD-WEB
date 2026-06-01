@@ -570,5 +570,79 @@
       "notFoundTitle": "Article not found",
       "notFoundBody": "We couldn't find the article you were looking for. It may have been removed."
     }
+  },
+  "about": {
+    "meta": {
+      "title": "About Bonyad — Building trust for Saudi Arabia's construction sector",
+      "description": "Learn about Bonyad — our story, our team, and our journey building Saudi Arabia's first construction platform verified through Nafath."
+    },
+    "hero": {
+      "title": "Building the foundation of trust for the Kingdom's construction sector",
+      "body": "Bonyad wasn't built to be just another platform — it was built to solve a real problem millions of Saudis face every day"
+    },
+    "pillars": {
+      "sectionTitle": "Designed around clarity and trust",
+      "sectionBody": "Through a design that balances simplicity, efficiency, and reliability — delivering a more refined experience for projects and services.",
+      "value": {
+        "title": "Clarity, trust, and simplicity",
+        "body": "We believe the best platforms are built on trust, clarity, and ease of use — so we work to deliver an experience that helps clients and service providers connect and operate with greater efficiency and professionalism."
+      },
+      "mission": {
+        "title": "An experience that unites trust and simplicity",
+        "body": "We're building a platform that helps individuals and service providers manage projects and communicate more efficiently — an experience designed to simplify every step, from the first idea to final execution."
+      },
+      "vision": {
+        "title": "Building a more efficient future for projects",
+        "body": "We aim to reimagine the building and development experience through a platform that connects clients with professionals in a clearer, more reliable, and easier way."
+      }
+    },
+    "timeline": {
+      "sectionTitle": "Milestones that shaped Bonyad's journey",
+      "sectionBody": "From an idea to simplify the experience of projects and services, to a platform building a clearer, more professional experience for users and service providers.",
+      "items": {
+        "founding": {
+          "year": "2023",
+          "title": "Bonyad was founded",
+          "body": "The idea for Bonyad was born from a painful personal experience — a delayed project, lost money, and no protection."
+        },
+        "research": {
+          "year": "2024",
+          "title": "Research",
+          "body": "We conducted more than 200 interviews with project owners and technicians in Riyadh, Jeddah, and Dammam."
+        },
+        "building": {
+          "year": "2025",
+          "title": "Building",
+          "body": "We began building the platform with Nafath integration and financial escrow from day one."
+        },
+        "launch": {
+          "year": "2026",
+          "title": "Launch",
+          "body": "The official launch of Bonyad — the Kingdom's first construction platform verified through Nafath."
+        }
+      }
+    },
+    "team": {
+      "title": "Our Team",
+      "body": "We believe success starts with people, and our team is the heart of everything we do.",
+      "members": {
+        "m1": { "name": "Fatima Al-Qasimi", "role": "UX Designer" },
+        "m2": { "name": "Ali Al-Hashimi", "role": "Mobile App Developer" },
+        "m3": { "name": "Sara Al-Zaabi", "role": "IT Project Planner" },
+        "m4": { "name": "Aziz Assaoui", "role": "Full-Stack Web Developer" },
+        "m5": { "name": "Hassan Al-Abdullah", "role": "Data Analyst" },
+        "m6": { "name": "Maryam Al-Shamsi", "role": "Digital Marketing Manager" }
+      }
+    },
+    "stats": {
+      "tagline": "Bonyad's Impact",
+      "title": "We measure our success by the success of our clients",
+      "body": "We strive to build a platform that simplifies access to expertise, strengthens opportunities for collaboration, and helps execute projects with greater efficiency and trust.",
+      "items": {
+        "s1": { "label": "Year founded", "value": "2023" },
+        "s2": { "label": "Completed projects", "value": "50,000+" },
+        "s3": { "label": "Verified professionals", "value": "12,400+" }
+      }
+    }
   }
 }

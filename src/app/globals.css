@@ -64,3 +64,16 @@
     }
   }
 }
+
+/* Pillar (Mission) card — the dot on the wave expands when its card is hovered.
+   Plain CSS, not a Tailwind utility, because SVG files aren't scanned for utility
+   classes (@source is *.{ts,tsx,mdx} only). The class is on a <g> inside
+   pillar-mission-illustration.svg; `.group` is the card <article>. */
+.pillar-mission-dot {
+  transform-box: fill-box;
+  transform-origin: center;
+  transition: transform 400ms ease-out;
+}
+.group:hover .pillar-mission-dot {
+  transform: scale(1.35);
+}

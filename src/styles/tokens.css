@@ -139,6 +139,18 @@
   --color-badge-legal-soft: var(--badge-legal-soft);
   --color-badge-ac: var(--badge-ac);
   --color-badge-ac-soft: var(--badge-ac-soft);
+
+  /* About page — soft panel surface (Timeline + Stats sections, Figma #f0f5fa / #f2f6fa)
+     + vivid blue accent for the timeline divider / dot (Figma #005DAC).
+     Navy foreground reuses the existing --color-brand-dark-navy (#003867).
+     pillar-frost is the V/M/V card's frosted-glass overlay (Figma rgba(255,255,255,0.4)
+     in light; nearly-clear in dark so the dark card surface reads through). */
+  --color-about-panel-soft: var(--about-panel-soft);
+  --color-about-accent: var(--about-accent);
+  --color-pillar-frost: var(--pillar-frost);
+  /* pillar-blob is the soft decorative cloud at the top of the Value/Mission cards —
+     a very light blue (was navy). */
+  --color-pillar-blob: var(--pillar-blob);
 }
 
 :root {
@@ -265,6 +277,16 @@
   --badge-legal-soft: oklch(0.26 0.09 242 / 0.1);
   --badge-ac: oklch(0.66 0.18 50);
   --badge-ac-soft: oklch(0.66 0.18 50 / 0.1);
+
+  /* About page — Figma #f0f5fa (Timeline bg) / #f2f6fa (Stats bg) collapsed
+     to one perceptually-identical token; Figma #005DAC (timeline accent). */
+  --about-panel-soft: oklch(0.97 0.012 245);
+  --about-accent: oklch(0.46 0.18 251);
+  /* Pillar card frosted overlay — light tint so the resting state shows the artwork BLURRED
+     (through the backdrop-blur) rather than as a solid white veil. */
+  --pillar-frost: oklch(1 0 0 / 0.18);
+  /* Soft cloud blob at the top of the Value/Mission cards — very light blue. */
+  --pillar-blob: oklch(0.9 0.05 240);
 }
 
 .dark {
@@ -366,6 +388,16 @@
   --badge-legal-soft: oklch(0.72 0.12 242 / 0.18);
   --badge-ac: oklch(0.76 0.17 50);
   --badge-ac-soft: oklch(0.76 0.17 50 / 0.18);
+
+  /* About page — dark overrides: deep blue-tinted panel + brighter accent so the
+     timeline divider and stats numbers stay legible against the dark surface. */
+  --about-panel-soft: oklch(0.22 0.025 245);
+  --about-accent: oklch(0.7 0.16 250);
+  /* Pillar frost — barely-there white veil over the dark card surface so the
+     overlay still tinges the artwork lighter without washing it out. */
+  --pillar-frost: oklch(1 0 0 / 0.06);
+  /* Top cloud blob — light blue, a touch more saturated to read on the dark surface. */
+  --pillar-blob: oklch(0.8 0.08 245);
 }
 
 html[dir='rtl'] {
