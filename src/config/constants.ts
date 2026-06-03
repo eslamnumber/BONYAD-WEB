@@ -21,12 +21,22 @@ export const THEME_COOKIE_NAME = 'bonyad-theme';
 // Social
 // ---------------------------------------------------------------------------
 
-/** Official social profile URLs — update when marketing confirms handles. */
+/** Official Bonyad social profile URLs — mirrors the RN app's OverviewFooter. */
 export const SOCIAL_LINKS = {
-  x: 'https://x.com',
-  linkedin: 'https://www.linkedin.com',
-  instagram: 'https://www.instagram.com',
-  tiktok: 'https://www.tiktok.com',
+  x: 'https://x.com/BonyadSocial',
+  linkedin: 'https://www.linkedin.com/company/bonyad-%D8%A8%D9%8F%D9%86%D9%8A%D8%A7%D8%AF/',
+  instagram: 'https://www.instagram.com/bonyadsocial/',
+  tiktok: 'https://www.tiktok.com/@bonyadsocial',
+} as const;
+
+// ---------------------------------------------------------------------------
+// App stores
+// ---------------------------------------------------------------------------
+
+/** Native app store listings — mirrors the RN app's MobileAppDownloadBanner. */
+export const APP_STORE_LINKS = {
+  ios: 'https://apps.apple.com/app/id6752626102',
+  android: 'https://play.google.com/store/apps/details?id=com.bonyad.app',
 } as const;
 
 // ---------------------------------------------------------------------------

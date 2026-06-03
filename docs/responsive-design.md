@@ -30,8 +30,19 @@ Bonyad supports every screen from 320 px (small phone) to 4K monitors. **Mobile-
    - Fixed heights on text-bearing containers (e.g. `h-[48px]` on a `<p>` that holds a translated string) are banned because Arabic text wraps differently and will clip — use `line-clamp-N` or no height at all.
    - The Figma desktop frame is ONE breakpoint; you must build for the others. If the Figma file only ships desktop, ask the designer for mobile + tablet frames before writing JSX — never approximate.
 10. **No `overflow-x-auto` carousel hack for "make it fit."** Horizontal scrolling rows of fixed-width cards (`flex gap-4 overflow-x-auto` + `w-[Npx]` children) are banned for the marketing site — they hide content and produce truncated copy. Use responsive grids (`grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5`) so every card is visible at every breakpoint. `overflow-x-auto` is only allowed for genuinely scrollable surfaces like a chat thread or a table — never as a substitute for a real responsive grid.
-11. **Decorative absolutely-positioned elements (`absolute start-[Npx] top-[Npx]`) must be hidden below their design breakpoint.** Earnings pills, ellipse markers, hero shapes — these are desktop garnish; on mobile they overflow or clip. Wrap them in `hidden lg:block` (or whichever breakpoint owns them). Functional content is never absolute-positioned with hardcoded coordinates; it lives in the normal flow.
-12. **Section padding scales with the viewport.** `py-12 sm:py-16 lg:py-20` (or equivalent) — not a flat `py-20` everywhere. The Figma desktop frame's 80 px section padding is suffocating on a 320 px phone.
+
+    **Exception — mobile-only scroll-snap on a designated section.** A section MAY present its card row as a horizontal scroll-snap carousel on the **base breakpoint only**, provided it reverts to a responsive grid at `sm:`+ and is built with CSS grid, not a fixed-width flex row:
+
+```tsx
+// base = horizontal scroll-snap (next card peeks); sm+ = responsive grid
+<div className="grid snap-x snap-mandatory auto-cols-[78%] grid-flow-col gap-4 overflow-x-auto sm:snap-none sm:auto-cols-auto sm:grid-flow-row sm:grid-cols-2 sm:overflow-visible lg:grid-cols-3 xl:grid-cols-5">
+  {cards.map((c) => (
+    <Card key={c.key} className="snap-start" {...c} />
+  ))}
+</div>
+```
+
+Why this is allowed where the flex-carousel hack is not: cards stay `w-full` (they fill an `auto-cols-[~78%]` grid track, so copy is never truncated), the next card peeks to signal scrollability, and every card is fully visible/legible — the row just scrolls instead of stacking. At `sm:`+ it becomes the normal grid, so no content is ever hidden on tablet/desktop. The **Find-a-service (Browse)** section on the home page uses this pattern (`src/features/home/components/home-browse.tsx`). 11. **Decorative absolutely-positioned elements (`absolute start-[Npx] top-[Npx]`) must be hidden below their design breakpoint.** Earnings pills, ellipse markers, hero shapes — these are desktop garnish; on mobile they overflow or clip. Wrap them in `hidden lg:block` (or whichever breakpoint owns them). Functional content is never absolute-positioned with hardcoded coordinates; it lives in the normal flow. 12. **Section padding scales with the viewport.** `py-12 sm:py-16 lg:py-20` (or equivalent) — not a flat `py-20` everywhere. The Figma desktop frame's 80 px section padding is suffocating on a 320 px phone.
 
 ### Sub-rule: hero / panel-shaped sections
 

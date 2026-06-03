@@ -43,7 +43,7 @@ type StepCardProps = {
 
 function StepCard({ Icon, title, body }: StepCardProps) {
   return (
-    <div className="border-step-card-border bg-step-card-bg flex min-h-[200px] w-full flex-col gap-8 rounded-[16px] border ps-5 pe-[41px] pt-[31px] pb-8 backdrop-blur-[4px]">
+    <div className="border-step-card-border bg-step-card-bg flex min-h-[200px] w-full snap-start flex-col gap-8 rounded-[16px] border ps-5 pe-[41px] pt-[31px] pb-8 backdrop-blur-[4px]">
       <div aria-hidden className="text-primary flex justify-end">
         <span className="block size-9">
           <Icon width={36} height={36} />
@@ -64,45 +64,41 @@ export function HomeHowItWorks({ locale, variant = 'user' }: HomeHowItWorksProps
 
   return (
     <section className="bg-background py-12 sm:py-16 lg:py-20">
-      <div className="mx-auto max-w-7xl px-4 sm:px-6">
-        <div className="bg-card relative rounded-[12px] px-4 py-10 sm:px-8 sm:py-12">
-          {/* Blob layer has its own overflow-hidden so it doesn't clip the scroll row */}
-          <div
-            aria-hidden
-            className="pointer-events-none absolute inset-0 overflow-hidden rounded-[12px]"
-          >
-            <div className="bg-deco-blob-blue-light absolute end-0 top-16 hidden h-[310px] w-[608px] rounded-full opacity-50 blur-[100px] sm:block" />
-            <div className="bg-deco-blob-blue-light absolute start-0 top-24 hidden h-[230px] w-[453px] rounded-full opacity-50 blur-[100px] sm:block" />
-          </div>
+      {/* Full-bleed colored band — background spans the viewport while content stays capped */}
+      <div className="bg-card relative overflow-hidden py-10 sm:py-12">
+        <div aria-hidden className="pointer-events-none absolute inset-0">
+          <div className="bg-deco-blob-blue-light absolute end-0 top-16 hidden h-[55%] w-[48%] rounded-full opacity-50 blur-[100px] sm:block" />
+          <div className="bg-deco-blob-blue-light absolute start-0 top-24 hidden h-[42%] w-[36%] rounded-full opacity-50 blur-[100px] sm:block" />
+        </div>
 
-          {/* Content */}
-          <div className="relative flex flex-col items-center gap-10">
-            <div className="flex max-w-[509px] flex-col items-center gap-4 text-center">
-              <h2
-                dir="auto"
-                className="text-foreground text-3xl font-medium tracking-tight sm:text-4xl lg:text-[50px]"
-              >
-                {t(`${ns}.howItWorks.headline`)}
-              </h2>
-              <p dir="auto" className="text-foreground/80 text-base sm:text-lg lg:text-xl">
-                {t(`${ns}.howItWorks.subheadline`)}
-              </p>
-            </div>
-
-            <div className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
-              {steps.map((step) => (
-                <StepCard key={step.title} Icon={step.Icon} title={step.title} body={step.body} />
-              ))}
-            </div>
-
-            <Link
-              href={ROUTES.SERVICES}
-              className="text-foreground/80 border-foreground/80 hover:bg-foreground/5 flex items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-bold tracking-[0.1px] transition-colors"
+        {/* Content (centered + capped) */}
+        <div className="relative mx-auto flex max-w-7xl flex-col items-center gap-10 px-4 sm:px-6">
+          <div className="flex max-w-[509px] flex-col items-center gap-4 text-center">
+            <h2
+              dir="auto"
+              className="text-foreground text-3xl font-medium tracking-tight sm:text-4xl lg:text-[50px]"
             >
-              <ChevronRight className="size-5 [[dir=ltr]_&]:-scale-x-100" aria-hidden />
-              {t(`${ns}.howItWorks.learnMore`)}
-            </Link>
+              {t(`${ns}.howItWorks.headline`)}
+            </h2>
+            <p dir="auto" className="text-foreground/80 text-base sm:text-lg lg:text-xl">
+              {t(`${ns}.howItWorks.subheadline`)}
+            </p>
           </div>
+
+          {/* Mobile-only horizontal scroll-snap (docs rule 10/20 exception); responsive grid at sm+ */}
+          <div className="grid w-full snap-x snap-mandatory [scrollbar-width:none] auto-cols-[78%] grid-flow-col gap-4 overflow-x-auto pb-2 [-ms-overflow-style:none] sm:snap-none sm:auto-cols-auto sm:grid-flow-row sm:grid-cols-2 sm:overflow-visible sm:pb-0 lg:grid-cols-4 [&::-webkit-scrollbar]:hidden">
+            {steps.map((step) => (
+              <StepCard key={step.title} Icon={step.Icon} title={step.title} body={step.body} />
+            ))}
+          </div>
+
+          <Link
+            href={ROUTES.SERVICES}
+            className="text-foreground/80 border-foreground/80 hover:bg-foreground/5 flex items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-bold tracking-[0.1px] transition-colors"
+          >
+            <ChevronRight className="size-5 [[dir=ltr]_&]:-scale-x-100" aria-hidden />
+            {t(`${ns}.howItWorks.learnMore`)}
+          </Link>
         </div>
       </div>
     </section>

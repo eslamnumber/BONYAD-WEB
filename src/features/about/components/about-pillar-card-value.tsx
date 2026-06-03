@@ -25,9 +25,9 @@ export function AboutPillarCardValue({ locale }: { locale: Locale }) {
       bodyKey="about.pillars.value.body"
       decoration={
         <>
-          <PillarBlobTop className="text-pillar-blob absolute start-[-18px] -top-[84px] h-[278px] w-[477px]" />
-          <PillarValueIllustration className="absolute start-[-55px] -top-4 h-[690px] w-[514px]" />
-          <PillarBlobBottom className="absolute start-[-17px] -top-[83px] h-[203px] w-[477px] mix-blend-overlay" />
+          <PillarBlobTop className="text-pillar-blob absolute start-[-18px] -top-[84px] h-[278px] w-[477px] rtl:-scale-x-100" />
+          <PillarValueIllustration className="absolute start-[-55px] -top-4 h-[690px] w-[514px] rtl:-scale-x-100" />
+          <PillarBlobBottom className="absolute start-[-17px] -top-[83px] h-[203px] w-[477px] mix-blend-overlay rtl:-scale-x-100" />
         </>
       }
     />

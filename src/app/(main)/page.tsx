@@ -1,6 +1,8 @@
 import { JsonLd } from '@/components/seo';
 import { env } from '@/config/env';
 import {
+  HomeAppDownload,
+  HomeAppDownloadBar,
   HomeBlog,
   HomeBrowse,
   HomeHero,
@@ -48,6 +50,7 @@ export default async function HomePage() {
   return (
     <>
       <JsonLd data={jsonLd} nonce={nonce} />
+      <HomeAppDownloadBar locale={locale} />
       <HomeHero locale={locale} activeTab="user" />
       <HomeServices locale={locale} />
       <HomeBrowse locale={locale} />
@@ -56,6 +59,7 @@ export default async function HomePage() {
       <HomeProfessionals locale={locale} />
       <HomeBlog locale={locale} />
       <HomeStartCta locale={locale} />
+      <HomeAppDownload locale={locale} />
     </>
   );
 }

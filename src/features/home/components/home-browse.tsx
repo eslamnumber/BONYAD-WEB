@@ -45,7 +45,7 @@ type ServiceCardProps = {
 
 function ServiceCard({ title, body, viewMoreLabel, href, Icon }: ServiceCardProps) {
   return (
-    <div className="group border-border bg-card relative flex min-h-[376px] w-full flex-col overflow-hidden rounded-[4px] border p-5 shadow-[0px_10px_21px_0px_rgba(117,117,117,0.03)] backdrop-blur-[5px] transition-shadow duration-200 motion-safe:hover:shadow-md">
+    <div className="group border-border bg-card relative flex min-h-[376px] w-full snap-start flex-col overflow-hidden rounded-[4px] border p-5 shadow-[0px_10px_21px_0px_rgba(117,117,117,0.03)] backdrop-blur-[5px] transition-shadow duration-200 motion-safe:hover:shadow-md">
       <div aria-hidden className="absolute end-[17px] top-[39px]">
         <Icon className="size-[45px]" />
       </div>
@@ -95,7 +95,8 @@ export function HomeBrowse({ locale }: HomeBrowseProps) {
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5">
+        {/* Mobile-only horizontal scroll-snap (docs rule 10/20 exception); responsive grid at sm+ */}
+        <div className="grid snap-x snap-mandatory [scrollbar-width:none] auto-cols-[78%] grid-flow-col gap-4 overflow-x-auto pb-2 [-ms-overflow-style:none] sm:snap-none sm:auto-cols-auto sm:grid-flow-row sm:grid-cols-2 sm:overflow-visible sm:pb-0 lg:grid-cols-3 xl:grid-cols-5 [&::-webkit-scrollbar]:hidden">
           {cards.map((card) => (
             <ServiceCard
               key={card.key}

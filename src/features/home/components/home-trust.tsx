@@ -10,7 +10,7 @@ type WorkerColumnProps = { stat: string; body: string };
 
 function WorkerColumn({ stat, body }: WorkerColumnProps) {
   return (
-    <div className="relative h-[420px] w-full overflow-hidden rounded-[8px] sm:h-[559px] lg:w-[301px] lg:shrink-0">
+    <div className="relative h-[420px] w-full overflow-hidden rounded-[8px] sm:h-[559px] lg:w-[280px] lg:shrink-0 xl:w-[301px]">
       <Image
         src="/images/trust/worker.webp"
         alt=""
@@ -70,13 +70,17 @@ function BentoLeft({
   transparentBody,
 }: BentoLeftProps) {
   return (
-    <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-6 lg:w-[847px] lg:shrink-0">
+    <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-6 lg:min-w-0 lg:flex-1 xl:w-[847px] xl:flex-none">
       <StatTopCell stat={stat120} body={stat120Body} />
 
       <div className="bg-trust-bg-light relative min-h-[200px] overflow-hidden rounded-[8px] sm:col-span-4 sm:min-h-[228px]">
+        {/* Decorative contract photo — hidden until xl, where the col-span-4 cell
+            is wide enough (~560px) to hold the 260px image and the text without
+            overlap. Below xl the cell is too narrow and the photo would sit on
+            top of the body copy. */}
         <div
           aria-hidden
-          className="absolute -start-4 top-4 h-full w-[260px] -rotate-12 overflow-hidden"
+          className="absolute -start-4 top-4 hidden h-full w-[260px] -rotate-12 overflow-hidden xl:block"
         >
           <Image
             src="/images/trust/contract.webp"

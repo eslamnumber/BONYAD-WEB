@@ -26,7 +26,7 @@ export function HowItWorksFaq({ locale, faqs }: Props) {
           <HowItWorksFaqClient items={items} />
         </div>
         <div className="flex items-center justify-center lg:flex-1">
-          <h2 className="text-primary text-4xl font-medium xl:text-[64px]">
+          <h2 className="text-primary text-[clamp(1.125rem,2.8vw,2.5rem)] font-medium whitespace-nowrap">
             {t('howItWorks.faq.heading')}
           </h2>
         </div>

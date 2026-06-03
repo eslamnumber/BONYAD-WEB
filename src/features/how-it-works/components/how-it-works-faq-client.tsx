@@ -23,7 +23,8 @@ function FaqItem({ question, answer, isOpen, onToggle }: ItemProps) {
           className={`mt-0.5 size-6 shrink-0 ${isOpen ? 'text-primary' : 'text-primary/60'}`}
         />
         <span
-          className={`flex-1 text-end text-lg leading-snug ${
+          dir="auto"
+          className={`flex-1 text-start text-lg leading-snug ${
             isOpen ? 'text-primary font-semibold' : 'text-foreground/80 font-medium'
           }`}
         >
@@ -31,7 +32,9 @@ function FaqItem({ question, answer, isOpen, onToggle }: ItemProps) {
         </span>
       </button>
       {isOpen && (
-        <p className="text-foreground/60 pb-6 text-end text-base leading-relaxed">{answer}</p>
+        <p dir="auto" className="text-foreground/60 pb-6 text-start text-base leading-relaxed">
+          {answer}
+        </p>
       )}
     </div>
   );

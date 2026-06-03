@@ -169,6 +169,14 @@
       "body": "Join thousands of customers who found their right professional through Bonyad. Reliable, transparent, and fully accountable from start to finish.",
       "cta": "Get started now",
       "ctaSecondary": "How the platform works"
+    },
+    "appDownload": {
+      "headline": "Take Bonyad with you",
+      "body": "Manage your projects, message professionals, and track every milestone from anywhere. Download the Bonyad app for iOS and Android.",
+      "barTitle": "Get the Bonyad app",
+      "appStoreAlt": "Download Bonyad on the App Store",
+      "googlePlayAlt": "Get Bonyad on Google Play",
+      "dismiss": "Dismiss app download banner"
     }
   },
   "tech": {

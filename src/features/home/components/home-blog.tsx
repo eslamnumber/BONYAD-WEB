@@ -89,14 +89,16 @@ export function HomeBlog({ locale }: HomeBlogProps) {
           <p className="text-muted-foreground max-w-lg text-base">{t('home.blog.subheadline')}</p>
         </div>
 
-        <div className="flex flex-col gap-[20px] md:flex-row">
+        <div className="flex flex-col gap-[20px] lg:flex-row">
           <FeaturedPost
             category={t('home.blog.featuredCategory')}
             title={t('home.blog.featuredTitle')}
             body={t('home.blog.featuredBody')}
             readMoreLabel={readMore}
           />
-          <div className="flex w-full flex-col gap-3 md:w-[522px] md:shrink-0">
+          {/* Side column is proportional at lg so the featured post keeps the
+              larger share; the Figma 522px width pins only at xl (frame width). */}
+          <div className="flex w-full flex-col gap-3 lg:w-[40%] lg:shrink-0 xl:w-[522px]">
             <OtherPost
               category={t('home.blog.post1Category')}
               title={t('home.blog.post1Title')}

@@ -31,10 +31,10 @@ export function AboutPillarCardVision({ locale }: { locale: Locale }) {
             alt=""
             fill
             sizes="(min-width: 640px) 414px, 100vw"
-            className="object-cover"
+            className="object-cover rtl:-scale-x-100"
           />
-          <PillarVisionBlobWhite className="absolute start-[-21px] top-[260px] h-[371px] w-[477px] mix-blend-overlay" />
-          <PillarVisionBlobNavy className="text-deco-blob-blue-light absolute start-[-21px] -top-[73px] h-[265px] w-[477px] mix-blend-overlay" />
+          <PillarVisionBlobWhite className="absolute start-[-21px] top-[260px] h-[371px] w-[477px] mix-blend-overlay rtl:-scale-x-100" />
+          <PillarVisionBlobNavy className="text-deco-blob-blue-light absolute start-[-21px] -top-[73px] h-[265px] w-[477px] mix-blend-overlay rtl:-scale-x-100" />
           <div aria-hidden className="bg-card absolute inset-0 hidden opacity-[0.88] dark:block" />
         </>
       }

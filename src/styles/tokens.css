@@ -17,6 +17,17 @@
 /* Restrict Tailwind v4 auto-detection to the src tree only. */
 @source '../../src/**/*.{ts,tsx,mdx}';
 
+/* Direction variants keyed on <html dir> ONLY — not language.
+   This project's locale→dir mapping is INVERTED (en→rtl, ar→ltr; see
+   src/types/locale.ts) and ar renders as lang="ar-SA" (an RTL language).
+   Tailwind's stock rtl/ltr variants ALSO match RTL languages via :lang(),
+   so `rtl:`/`ltr:` would fire in BOTH locales (ar via :lang(ar), en via
+   [dir=rtl]) — making every direction flip a no-op between locales. Keying
+   on [dir] alone makes `rtl:` fire only in en and `ltr:` only in ar, exactly
+   as docs/i18n-and-rtl.md describes. */
+@custom-variant rtl (&:where([dir=rtl], [dir=rtl] *));
+@custom-variant ltr (&:where([dir=ltr], [dir=ltr] *));
+
 @theme inline {
   /* Surfaces */
   --color-background: var(--background);
