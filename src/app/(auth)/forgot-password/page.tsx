@@ -1,6 +1,9 @@
 import { type Metadata } from 'next';
 
-import { ForgotPasswordPage as ForgotPasswordPageComponent } from '@/features/auth';
+import {
+  ForgotPasswordPage as ForgotPasswordPageComponent,
+  getAuthHeaderLabels,
+} from '@/features/auth';
 import { getTranslations } from '@/lib/get-translations';
 import { getServerLocale } from '@/lib/locale';
 
@@ -31,8 +34,6 @@ export default async function ForgotPasswordRoutePage({
     phoneAriaLabel: t('auth.forgotPassword.phoneAriaLabel'),
     phoneHint: t('auth.hints.phoneFormat'),
     submitButton: t('auth.forgotPassword.submitButton'),
-    backButton: t('auth.forgotPassword.backButton'),
-    backButtonAriaLabel: t('auth.forgotPassword.backButton'),
     backToLogin: t('auth.forgotPassword.backToLogin'),
     headingBrand: t('site.name'),
     errors: {
@@ -40,5 +41,12 @@ export default async function ForgotPasswordRoutePage({
     },
   };
 
-  return <ForgotPasswordPageComponent labels={labels} accountRole={role} />;
+  return (
+    <ForgotPasswordPageComponent
+      labels={labels}
+      accountRole={role}
+      locale={locale}
+      headerLabels={getAuthHeaderLabels(t, locale)}
+    />
+  );
 }

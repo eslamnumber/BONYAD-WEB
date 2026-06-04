@@ -1,7 +1,7 @@
 import { type Metadata } from 'next';
 
-import { RegisterPage as RegisterPageComponent } from '@/features/auth';
-import { getTranslations } from '@/lib/get-translations';
+import { getAuthHeaderLabels, RegisterPage as RegisterPageComponent } from '@/features/auth';
+import { getTranslations, type TFunction } from '@/lib/get-translations';
 import { getServerLocale } from '@/lib/locale';
 
 export async function generateMetadata(): Promise<Metadata> {
@@ -14,11 +14,8 @@ export async function generateMetadata(): Promise<Metadata> {
   };
 }
 
-export default async function RegisterPage() {
-  const locale = await getServerLocale();
-  const { t } = getTranslations(locale);
-
-  const labels = {
+function getRegisterLabels(t: TFunction) {
+  return {
     brandName: t('site.name'),
     heading: t('auth.register.heading'),
     subheading: t('auth.register.subheading'),
@@ -61,6 +58,17 @@ export default async function RegisterPage() {
       genericError: t('auth.errors.genericError'),
     },
   };
+}
 
-  return <RegisterPageComponent labels={labels} />;
+export default async function RegisterPage() {
+  const locale = await getServerLocale();
+  const { t } = getTranslations(locale);
+
+  return (
+    <RegisterPageComponent
+      labels={getRegisterLabels(t)}
+      locale={locale}
+      headerLabels={getAuthHeaderLabels(t, locale)}
+    />
+  );
 }

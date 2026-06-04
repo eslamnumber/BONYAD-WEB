@@ -1,46 +1,33 @@
-import { ChevronRight } from 'lucide-react';
 import Image from 'next/image';
 import Link from 'next/link';
 
 import { LogoIcon } from '@/components/icons';
 import { ROUTES } from '@/config/routes';
+import { type Locale } from '@/types/locale';
 
+import { AuthHeader, type AuthHeaderLabels } from './auth-header';
 import { ForgotPasswordForm, type ForgotPasswordFormLabels } from './forgot-password-form';
 
 export type ForgotPasswordPageLabels = ForgotPasswordFormLabels & {
   heading: string;
   subheading: string;
-  backButton: string;
-  backButtonAriaLabel: string;
   backToLogin: string;
   headingBrand: string;
 };
 
-type FormPanelProps = { labels: ForgotPasswordPageLabels; accountRole: 'USER' | 'TECHNICIAN' };
+type FormPanelProps = {
+  labels: ForgotPasswordPageLabels;
+  accountRole: 'USER' | 'TECHNICIAN';
+  locale: Locale;
+  headerLabels: AuthHeaderLabels;
+};
 
-function FormPanel({ labels, accountRole }: FormPanelProps) {
+function FormPanel({ labels, accountRole, locale, headerLabels }: FormPanelProps) {
   return (
     <div className="flex flex-1 flex-col lg:max-w-[549px]">
-      <header className="flex h-[78px] shrink-0 items-center justify-end px-6 lg:hidden">
-        <Link
-          href={ROUTES.HOME}
-          aria-label={labels.headingBrand}
-          className="focus-visible:outline-ring rounded focus-visible:outline-2 focus-visible:outline-offset-4"
-        >
-          <LogoIcon className="h-10 w-auto" aria-hidden />
-          <span className="sr-only">{labels.headingBrand}</span>
-        </Link>
-      </header>
+      <AuthHeader locale={locale} labels={headerLabels} />
       <div className="flex flex-1 items-center justify-center px-6 py-10">
         <div className="flex w-full max-w-[364px] flex-col gap-8">
-          <Link
-            href={ROUTES.LOGIN}
-            aria-label={labels.backButtonAriaLabel}
-            className="text-primary focus-visible:outline-ring flex items-center gap-1 self-end text-base font-bold transition-opacity hover:opacity-80 focus-visible:outline-2"
-          >
-            <ChevronRight className="size-6 ltr:-scale-x-100" aria-hidden />
-            <bdi>{labels.backButton}</bdi>
-          </Link>
           <div className="flex flex-col gap-8 text-end">
             <h1 className="text-foreground text-[32px] leading-normal font-medium">
               {labels.heading}
@@ -100,13 +87,22 @@ function ImagePanel({ headingBrand }: { headingBrand: string }) {
 export function ForgotPasswordPage({
   labels,
   accountRole,
+  locale,
+  headerLabels,
 }: {
   labels: ForgotPasswordPageLabels;
   accountRole: 'USER' | 'TECHNICIAN';
+  locale: Locale;
+  headerLabels: AuthHeaderLabels;
 }) {
   return (
     <div className="bg-login-bg flex min-h-dvh flex-col lg:flex-row">
-      <FormPanel labels={labels} accountRole={accountRole} />
+      <FormPanel
+        labels={labels}
+        accountRole={accountRole}
+        locale={locale}
+        headerLabels={headerLabels}
+      />
       <ImagePanel headingBrand={labels.headingBrand} />
     </div>
   );

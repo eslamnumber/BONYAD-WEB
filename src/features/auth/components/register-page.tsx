@@ -3,7 +3,9 @@ import Link from 'next/link';
 
 import { LogoIcon } from '@/components/icons';
 import { ROUTES } from '@/config/routes';
+import { type Locale } from '@/types/locale';
 
+import { AuthHeader, type AuthHeaderLabels } from './auth-header';
 import { RegisterClient, type RegisterClientLabels } from './register-client';
 
 export type RegisterPageLabels = RegisterClientLabels & {
@@ -14,19 +16,16 @@ export type RegisterPageLabels = RegisterClientLabels & {
   loginLink: string;
 };
 
-function FormPanel({ labels }: { labels: RegisterPageLabels }) {
+type FormPanelProps = {
+  labels: RegisterPageLabels;
+  locale: Locale;
+  headerLabels: AuthHeaderLabels;
+};
+
+function FormPanel({ labels, locale, headerLabels }: FormPanelProps) {
   return (
     <div className="flex flex-1 flex-col lg:max-w-[549px]">
-      <header className="flex h-[78px] shrink-0 items-center justify-end px-6 lg:hidden">
-        <Link
-          href={ROUTES.HOME}
-          aria-label={labels.brandName}
-          className="focus-visible:outline-ring rounded focus-visible:outline-2 focus-visible:outline-offset-4"
-        >
-          <LogoIcon className="h-10 w-auto" aria-hidden />
-          <span className="sr-only">{labels.brandName}</span>
-        </Link>
-      </header>
+      <AuthHeader locale={locale} labels={headerLabels} />
       <div className="flex flex-1 items-center justify-center px-6 py-10">
         <div className="flex w-full max-w-[364px] flex-col gap-8">
           <div className="flex flex-col gap-2">
@@ -86,10 +85,18 @@ function ImagePanel({ brandName }: { brandName: string }) {
   );
 }
 
-export function RegisterPage({ labels }: { labels: RegisterPageLabels }) {
+export function RegisterPage({
+  labels,
+  locale,
+  headerLabels,
+}: {
+  labels: RegisterPageLabels;
+  locale: Locale;
+  headerLabels: AuthHeaderLabels;
+}) {
   return (
     <div className="bg-login-bg flex min-h-dvh flex-col lg:flex-row">
-      <FormPanel labels={labels} />
+      <FormPanel labels={labels} locale={locale} headerLabels={headerLabels} />
       <ImagePanel brandName={labels.brandName} />
     </div>
   );

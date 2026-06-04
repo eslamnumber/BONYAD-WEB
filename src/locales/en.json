@@ -263,6 +263,8 @@
     "globalCrashDescription": "The application encountered an unexpected error. Please refresh, or try again later."
   },
   "auth": {
+    "backButton": "Back",
+    "backButtonAriaLabel": "Go back to the previous page",
     "login": {
       "pageTitle": "Log in to Bonyad",
       "metaDescription": "Log in to your Bonyad account to manage your construction projects.",

@@ -1,6 +1,6 @@
 import { type Metadata } from 'next';
 
-import { LoginPage as LoginPageComponent } from '@/features/auth';
+import { getAuthHeaderLabels, LoginPage as LoginPageComponent } from '@/features/auth';
 import { getTranslations } from '@/lib/get-translations';
 import { getServerLocale } from '@/lib/locale';
 
@@ -43,5 +43,11 @@ export default async function LoginPage() {
     },
   };
 
-  return <LoginPageComponent labels={labels} />;
+  return (
+    <LoginPageComponent
+      labels={labels}
+      locale={locale}
+      headerLabels={getAuthHeaderLabels(t, locale)}
+    />
+  );
 }

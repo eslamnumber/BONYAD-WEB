@@ -1,7 +1,6 @@
 import { type Metadata } from 'next';
 
-import { ROUTES } from '@/config/routes';
-import { VerifyOtpPage as VerifyOtpPageComponent } from '@/features/auth';
+import { getAuthHeaderLabels, VerifyOtpPage as VerifyOtpPageComponent } from '@/features/auth';
 import { getTranslations } from '@/lib/get-translations';
 import { getServerLocale } from '@/lib/locale';
 
@@ -24,15 +23,12 @@ export default async function VerifyOtpRoutePage({
   const { t } = getTranslations(locale);
   const phone = params.phone ?? '';
   const role = params.role === 'TECHNICIAN' ? 'TECHNICIAN' : 'USER';
-  const backHref = params.source === 'forgot-password' ? ROUTES.FORGOT_PASSWORD : undefined;
 
   const labels = {
     heading: t('auth.verifyOtp.heading'),
     subheading: t('auth.verifyOtp.subheading'),
     otpAriaLabel: t('auth.verifyOtp.otpAriaLabel'),
     submitButton: t('auth.verifyOtp.submitButton'),
-    backButton: t('auth.verifyOtp.backButton'),
-    backButtonAriaLabel: t('auth.verifyOtp.backButtonAriaLabel'),
     resendCode: t('auth.verifyOtp.resendCode'),
     resendAriaLabel: t('auth.verifyOtp.resendAriaLabel'),
     didNotReceiveCode: t('auth.verifyOtp.didNotReceiveCode'),
@@ -45,6 +41,12 @@ export default async function VerifyOtpRoutePage({
   };
 
   return (
-    <VerifyOtpPageComponent labels={labels} phone={phone} backHref={backHref} accountRole={role} />
+    <VerifyOtpPageComponent
+      labels={labels}
+      phone={phone}
+      accountRole={role}
+      locale={locale}
+      headerLabels={getAuthHeaderLabels(t, locale)}
+    />
   );
 }
