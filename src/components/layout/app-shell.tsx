@@ -8,6 +8,8 @@ import type { Locale } from '@/types/locale';
 type AppShellProps = {
   locale: Locale;
   children: ReactNode;
+  /** Optional banner rendered above the header (e.g. the mobile app-download bar). */
+  topBanner?: ReactNode;
   labels: {
     skipToMain: string;
     header: React.ComponentProps<typeof Header>['labels'];
@@ -16,13 +18,14 @@ type AppShellProps = {
 };
 
 /**
- * Public site shell: skip link → header → main → footer.
+ * Public site shell: skip link → top banner → header → main → footer.
  * Server Component — locale + label tree come from the layout that mounts it.
  */
-export function AppShell({ locale, labels, children }: AppShellProps) {
+export function AppShell({ locale, labels, children, topBanner }: AppShellProps) {
   return (
     <>
       <SkipLink label={labels.skipToMain} />
+      {topBanner}
       <Header locale={locale} labels={labels.header} />
       <main id="main" tabIndex={-1} className="flex-1 focus:outline-none">
         {children}

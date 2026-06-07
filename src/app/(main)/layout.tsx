@@ -1,4 +1,5 @@
 import { AppShell, getAppShellLabels } from '@/components/layout';
+import { HomeAppDownloadBar } from '@/features/home';
 import { getTranslations } from '@/lib/get-translations';
 import { getServerLocale } from '@/lib/locale';
 import { type Locale } from '@/types/locale';
@@ -11,7 +12,11 @@ export default async function MainLayout({ children }: MainLayoutProps) {
   const labels = getAppShellLabels(t, locale as Locale);
 
   return (
-    <AppShell locale={locale as Locale} labels={labels}>
+    <AppShell
+      locale={locale as Locale}
+      labels={labels}
+      topBanner={<HomeAppDownloadBar locale={locale as Locale} />}
+    >
       {children}
     </AppShell>
   );

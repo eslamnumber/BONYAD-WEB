@@ -7,9 +7,9 @@ import { StoreBadges } from './store-badges';
 type HomeAppDownloadProps = { locale: Locale };
 
 /**
- * Sticky-below-header app-download bar for small screens (md:hidden). Render this at the
- * TOP of the page so it pins under the header as the user scrolls. Pairs with
- * {@link HomeAppDownload} (the md+ in-page section).
+ * App-download bar for small screens (md:hidden), rendered via the (main) layout's
+ * `topBanner` slot so it sits above the header at the top of the page on the home
+ * route. Pairs with {@link HomeAppDownload} (the md+ in-page section).
  */
 export function HomeAppDownloadBar({ locale }: HomeAppDownloadProps) {
   const { t } = getTranslations(locale);

@@ -23,7 +23,6 @@ type SearchFormPanelProps = {
 
 type ActionPanelProps = {
   isPro: boolean;
-  btnW: number;
   searchCta: string;
   joinCta: string;
   onSearchClick: () => void;
@@ -46,7 +45,7 @@ function SearchFormPanel({ isPro, formRef, searchLabel, placeholder }: SearchFor
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
           transition={FADE}
-          className="absolute inset-0 flex items-center ps-6 pe-[140px]"
+          className="absolute inset-0 flex items-center ps-4 pe-[104px] sm:ps-6 sm:pe-[140px]"
         >
           <label htmlFor="hero-q" className="sr-only">
             {searchLabel}
@@ -64,11 +63,12 @@ function SearchFormPanel({ isPro, formRef, searchLabel, placeholder }: SearchFor
   );
 }
 
-function ActionPanel({ isPro, btnW, searchCta, joinCta, onSearchClick }: ActionPanelProps) {
+function ActionPanel({ isPro, searchCta, joinCta, onSearchClick }: ActionPanelProps) {
   return (
     <div
-      className="bg-brand-navy absolute end-[5px] top-[4px] h-[55px] overflow-hidden rounded-full"
-      style={{ width: btnW, transition: CSS_TRANSITION }}
+      className={`bg-brand-navy absolute end-[5px] top-[4px] h-[55px] overflow-hidden rounded-full transition-[width] duration-[450ms] ease-in-out ${
+        isPro ? 'w-[183px]' : 'w-[96px] sm:w-[130px]'
+      }`}
     >
       <AnimatePresence initial={false}>
         {isPro ? (
@@ -121,7 +121,6 @@ export function HeroSearchBar({
 
   // CSS-driven width transition — applied via style so SSR sets the correct initial size
   const barW = isPro ? 193 : 438;
-  const btnW = isPro ? 183 : 130;
 
   return (
     <div
@@ -136,7 +135,6 @@ export function HeroSearchBar({
       />
       <ActionPanel
         isPro={isPro}
-        btnW={btnW}
         searchCta={searchCta}
         joinCta={joinCta}
         onSearchClick={() => formRef.current?.requestSubmit()}

@@ -1,7 +1,10 @@
 'use client';
 
 import { X } from 'lucide-react';
+import { usePathname } from 'next/navigation';
 import { useSyncExternalStore } from 'react';
+
+import { ROUTES } from '@/config/routes';
 
 import { StoreBadges } from './store-badges';
 
@@ -35,8 +38,9 @@ type AppDownloadMobileBarProps = {
 };
 
 /**
- * App-download bar shown on small screens only (md:hidden), sticky directly below the
- * top header (which is `sticky top-0` and 72px tall — hence `top-[72px]`).
+ * App-download bar shown on small screens only (md:hidden), rendered above the top
+ * header so it sits at the very top of the page (home route only) and scrolls away
+ * to reveal the sticky header beneath it.
  * Dismissal persists in localStorage so it doesn't nag on repeat visits. The server
  * snapshot is "dismissed" so SSR + hydration render nothing, then the client reveals it.
  */
@@ -46,12 +50,13 @@ export function AppDownloadMobileBar({
   googlePlayAlt,
   dismissLabel,
 }: AppDownloadMobileBarProps) {
+  const pathname = usePathname();
   const dismissed = useSyncExternalStore(subscribe, isDismissed, () => true);
 
-  if (dismissed) return null;
+  if (pathname !== ROUTES.HOME || dismissed) return null;
 
   return (
-    <div className="border-border bg-card/95 sticky top-[72px] z-40 border-b backdrop-blur md:hidden">
+    <div className="border-border bg-card/95 border-b backdrop-blur md:hidden">
       <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-3 gap-y-2 px-4 py-2">
         <p dir="auto" className="text-foreground text-start text-sm font-semibold">
           {title}

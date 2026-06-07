@@ -1,15 +1,14 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { ApiEnvironmentTrigger } from '@/components/dev';
 import { LogoIcon } from '@/components/icons';
-import { type ApiEnvironmentKey } from '@/config/api-environments';
 import { ROUTES } from '@/config/routes';
 import { getActiveEnvironment } from '@/lib/api-environment.server';
 import { type Locale } from '@/types/locale';
 
 import { AuthHeader, type AuthHeaderLabels } from './auth-header';
 import { LoginClient, type LoginClientLabels } from './login-client';
+import { LoginEnvHeading } from './login-env-heading';
 
 export type LoginPageLabels = LoginClientLabels & {
   heading: string;
@@ -18,25 +17,6 @@ export type LoginPageLabels = LoginClientLabels & {
   noAccount: string;
   createAccount: string;
 };
-
-function LoginHeading({
-  heading,
-  brand,
-  envKey,
-}: {
-  heading: string;
-  brand: string;
-  envKey: ApiEnvironmentKey;
-}) {
-  return (
-    <h1 className="text-foreground text-end text-[32px] leading-normal font-medium">
-      {heading}{' '}
-      <ApiEnvironmentTrigger currentKey={envKey}>
-        <span className="text-brand-dark-navy">{brand}</span>
-      </ApiEnvironmentTrigger>
-    </h1>
-  );
-}
 
 function LoginImagePanel({ logoLabel }: { logoLabel: string }) {
   return (
@@ -88,7 +68,7 @@ export async function LoginPage({
         <AuthHeader locale={locale} labels={headerLabels} />
         <div className="flex flex-1 items-center justify-center px-6 py-10">
           <div className="flex w-full max-w-[364px] flex-col gap-8">
-            <LoginHeading heading={labels.heading} brand={labels.headingBrand} envKey={envKey} />
+            <LoginEnvHeading heading={labels.heading} brand={labels.headingBrand} envKey={envKey} />
             <p className="text-muted-foreground text-end text-base leading-normal">
               <bdi>{labels.subheading}</bdi>
             </p>
