@@ -17,6 +17,24 @@ export const LOCALE_COOKIE_NAME = 'bonyad-lang';
 /** Cookie name used by next-themes for light/dark/system preference. */
 export const THEME_COOKIE_NAME = 'bonyad-theme';
 
+/**
+ * Cookie holding the httpOnly session JWT. Set server-side by the login route
+ * handler, read by middleware (route protection) and the proxy / RSC layer
+ * (Bearer attach). Never readable from browser JS.
+ */
+export const AUTH_COOKIE_NAME = 'bonyad-token';
+
+/**
+ * Persists the selected backend (production/dev) for the runtime API switcher.
+ * NOT httpOnly: client components read it to render the env badge. The proxy and
+ * RSC layer read it to pick the backend host per request. See
+ * `docs/api-environment-switcher.md`.
+ */
+export const API_ENV_COOKIE_NAME = 'bonyad-api-env';
+
+/** Path prefixes that require authentication. Middleware redirects to /login. */
+export const PROTECTED_PATH_PREFIXES = ['/dashboard', '/app'] as const;
+
 // ---------------------------------------------------------------------------
 // Social
 // ---------------------------------------------------------------------------

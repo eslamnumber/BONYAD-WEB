@@ -31,4 +31,30 @@ export const API_ENDPOINTS = {
     LIST: '/blogs',
     DETAILS: '/blogs/:id',
   },
+  PROJECTS: {
+    LIST: '/projects',
+    DETAILS: '/projects/:id',
+    /** Technician's assigned projects (bidding + direct). Optional `?type=`. */
+    MY_ASSIGNED: '/projects/my-assigned',
+  },
+  PHASES: {
+    LIST: '/phases/project/:projectId',
+  },
+  BIDS: {
+    CREATE: '/bids/create',
+  },
+  CHAT: {
+    MY_CHATS: '/chat/my-chats',
+    MESSAGES: '/chat/room/:roomId/messages',
+    SEND: '/chat/send',
+    SEND_WITH_FILE: '/chat/send-with-file',
+    MARK_READ: '/chat/messages/:messageId/mark-read',
+    MARK_ALL_READ: '/chat/rooms/:roomId/mark-all-read',
+  },
+  NOTIFICATIONS: {
+    MY_NOTIFICATIONS: '/notifications/my-notifications',
+    UNREAD_COUNT: '/notifications/unread-count',
+    MARK_READ: '/notifications/:id/read',
+    MARK_ALL_READ: '/notifications/mark-all-read',
+  },
 } as const;

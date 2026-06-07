@@ -1,26 +1,42 @@
 import { http, HttpResponse } from 'msw';
 
-const BASE = 'https://bonyad-app-nyayeditqq-ww.a.run.app/api';
-
+/**
+ * Wildcard suffix patterns so handlers match whether the request goes direct to
+ * the backend (server-side) or through the same-origin proxy / internal route
+ * (browser). Login hits the internal route handler `/api/auth/login`, which
+ * returns an interpreted `LoginResult` (not the raw backend body).
+ */
 export const authHandlers = [
-  http.post(`${BASE}/auth/login`, async ({ request }) => {
-    const body = (await request.json()) as { phoneNumber?: string; password?: string };
+  http.post('*/api/auth/login', async ({ request }) => {
+    const body = (await request.json()) as {
+      phoneNumber?: string;
+      password?: string;
+      role?: string;
+    };
 
     if (!body.phoneNumber || !body.password) {
-      return HttpResponse.json({ message: 'Missing credentials' }, { status: 400 });
+      return HttpResponse.json(
+        { messageEn: 'Missing credentials', errorCode: 'BAD_REQUEST' },
+        { status: 400 },
+      );
     }
 
     if (body.password === 'wrong') {
-      return HttpResponse.json({ message: 'Invalid credentials' }, { status: 401 });
+      return HttpResponse.json(
+        { messageEn: 'Invalid credentials', errorCode: 'INVALID_CREDENTIALS' },
+        { status: 401 },
+      );
     }
 
     return HttpResponse.json({
-      token: 'mock-access-token',
-      user: { id: 1, role: 'USER' },
+      kind: 'success',
+      userId: 1,
+      role: body.role ?? 'USER',
+      requiresPasswordChange: false,
     });
   }),
 
-  http.post(`${BASE}/users/register`, async ({ request }) => {
+  http.post('*/users/register', async ({ request }) => {
     const body = (await request.json()) as {
       name?: string;
       phoneNumber?: string;
@@ -42,17 +58,7 @@ export const authHandlers = [
     });
   }),
 
-  http.post(`${BASE}/auth/forgot-password`, async ({ request }) => {
-    const body = (await request.json()) as { phoneNumber?: string; role?: string };
-
-    if (!body.phoneNumber || !body.role) {
-      return HttpResponse.json({ message: 'Phone number and role required' }, { status: 400 });
-    }
-
-    return HttpResponse.json({ message: 'OTP sent successfully' });
-  }),
-
-  http.post(`${BASE}/auth/forgot-password/resend`, async ({ request }) => {
+  http.post('*/auth/forgot-password/resend', async ({ request }) => {
     const body = (await request.json()) as { phoneNumber?: string; role?: string };
 
     if (!body.phoneNumber || !body.role) {
@@ -62,7 +68,17 @@ export const authHandlers = [
     return HttpResponse.json({ message: 'OTP resent successfully' });
   }),
 
-  http.post(`${BASE}/auth/verify-otp`, async ({ request }) => {
+  http.post('*/auth/forgot-password', async ({ request }) => {
+    const body = (await request.json()) as { phoneNumber?: string; role?: string };
+
+    if (!body.phoneNumber || !body.role) {
+      return HttpResponse.json({ message: 'Phone number and role required' }, { status: 400 });
+    }
+
+    return HttpResponse.json({ message: 'OTP sent successfully' });
+  }),
+
+  http.post('*/auth/verify-otp', async ({ request }) => {
     const body = (await request.json()) as {
       phoneNumber?: string;
       otpCode?: string;
@@ -80,7 +96,7 @@ export const authHandlers = [
     return HttpResponse.json({ token: 'mock-reset-token', message: 'OTP verified' });
   }),
 
-  http.post(`${BASE}/auth/resend-otp`, async ({ request }) => {
+  http.post('*/auth/resend-otp', async ({ request }) => {
     const body = (await request.json()) as { phoneNumber?: string; role?: string };
 
     if (!body.phoneNumber || !body.role) {

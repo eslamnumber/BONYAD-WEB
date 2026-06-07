@@ -107,18 +107,11 @@ describe('LoginForm', () => {
     });
   });
 
-  it('routes to verify-otp when backend returns USER_ALREADY_EXISTS_PENDING (400)', async () => {
+  it('routes to verify-otp when the login route returns a pending result', async () => {
     routerPush.mockClear();
     server.use(
-      http.post('*/auth/login', () =>
-        HttpResponse.json(
-          {
-            messageEn: 'Account pending verification.',
-            messageAr: 'الحساب في انتظار التحقق.',
-            errorCode: 'USER_ALREADY_EXISTS_PENDING',
-          },
-          { status: 400 },
-        ),
+      http.post('*/api/auth/login', () =>
+        HttpResponse.json({ kind: 'pending', phoneNumber: '500000000', role: 'USER' }),
       ),
     );
     renderWithProviders(<LoginForm labels={labels} userRole="USER" />);
@@ -136,11 +129,11 @@ describe('LoginForm', () => {
     });
   });
 
-  it('routes to verify-otp on a 200 pending-verification message', async () => {
+  it('routes to verify-otp on a pending result (technician)', async () => {
     routerPush.mockClear();
     server.use(
-      http.post('*/auth/login', () =>
-        HttpResponse.json({ message: 'Account pending verification — OTP sent.' }, { status: 200 }),
+      http.post('*/api/auth/login', () =>
+        HttpResponse.json({ kind: 'pending', phoneNumber: '501234567', role: 'TECHNICIAN' }),
       ),
     );
     renderWithProviders(<LoginForm labels={labels} userRole="TECHNICIAN" />);

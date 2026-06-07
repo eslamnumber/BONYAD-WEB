@@ -1,0 +1,65 @@
+/**
+ * Mirrors `Project` from website-bonyad/src/services/ProjectService.ts.
+ *
+ * Permissive — every field except `id` is optional so a future backend addition
+ * doesn't surface as a misleading "Something went wrong". `description` and
+ * `address` are single non-localised strings; the service name, however, is a
+ * localized split (`serviceNameEn` / `serviceNameAr`, returned by both the list
+ * and detail endpoints) — resolve it via `localizedServiceName` (LOCALE_DIRECTION),
+ * never render one side directly. Duration is `timeRequiredDays` (whole days).
+ */
+export type Project = {
+  id: number;
+  userId?: number;
+  userName?: string;
+  serviceId?: number;
+  serviceNameEn?: string;
+  serviceNameAr?: string;
+  /** Optional explicit title; the card falls back to the localized service name. */
+  title?: string;
+  description?: string;
+  budget?: number | null;
+  address?: string;
+  latitude?: number;
+  longitude?: number;
+  status?: string;
+  projectType?: string;
+  assignedTechnicianId?: number | null;
+  files?: string[];
+  timeRequiredDays?: number;
+  bidsCloseAt?: string;
+  createdAt?: string;
+  regionId?: number;
+};
+
+/**
+ * Single-project detail (GET /projects/:id). Mirrors the extra fields the RN
+ * detail screen reads (website-bonyad/src/screens/projects/general/ProjectDetailScreen.tsx)
+ * on top of {@link Project}. Permissive — every detail-only field is optional so
+ * a backend that omits one never surfaces as "Something went wrong". The summary
+ * card falls back gracefully (e.g. `budget` when `budgetMin/Max` are absent, and
+ * hides the offers stat when no count is returned).
+ */
+export type ProjectDetail = Project & {
+  /** Free-text category chips shown under the description. */
+  requirements?: string[];
+  /** Expected start date (ISO-8601) shown in the summary stat row. */
+  expectedStartDate?: string;
+  /** Budget range when the backend splits it; otherwise read the single `budget`. */
+  budgetMin?: number | null;
+  budgetMax?: number | null;
+  /** Offers received — RN derives this from the bids list; surfaced here when the detail includes it. */
+  offersCount?: number;
+  bidsCount?: number;
+  /** Client display location when distinct from the project `address`. */
+  clientLocation?: string;
+};
+
+/** Spring-style page envelope the list endpoint may return instead of a bare array. */
+export type PaginatedProjectsResponse = {
+  content?: Project[];
+  totalElements?: number;
+  totalPages?: number;
+  currentPage?: number;
+  size?: number;
+};

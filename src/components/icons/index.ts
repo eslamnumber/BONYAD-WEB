@@ -60,3 +60,31 @@ export { default as AboutPillarValueIcon } from './about-pillar-value.svg';
 export { default as AboutPillarMissionIcon } from './about-pillar-mission.svg';
 export { default as AboutPillarVisionIcon } from './about-pillar-vision.svg';
 export { default as AboutTimelineDotIcon } from './about-timeline-dot.svg';
+
+/* Dashboard (app) — sidebar nav + search + project-card icons */
+export { default as DashboardJobOffersIcon } from './dashboard-job-offers.svg';
+export { default as DashboardProjectsIcon } from './dashboard-projects.svg';
+export { default as DashboardPaymentsIcon } from './dashboard-payments.svg';
+export { default as DashboardMessagesIcon } from './dashboard-messages.svg';
+export { default as DashboardNotificationsIcon } from './dashboard-notifications.svg';
+export { default as DashboardSettingsIcon } from './dashboard-settings.svg';
+export { default as DashboardSearchIcon } from './dashboard-search.svg';
+export { default as ProjectArrowIcon } from './project-arrow.svg';
+
+/* Notifications drawer — in-card type glyph (bell) */
+export { default as NotificationBellIcon } from './notification-bell.svg';
+
+/* Job-offer / project detail — summary, breadcrumb, attachments */
+export { default as BookmarkIcon } from './bookmark.svg';
+export { default as FileIcon } from './file.svg';
+export { default as ChevronLeftIcon } from './chevron-left.svg';
+
+/* Projects table — toolbar filter glyph (Figma node 1046:7127) */
+export { default as FilterIcon } from './filter.svg';
+
+/* Messages / chat — header menu, composer + search controls */
+export { default as MoreHorizontalIcon } from './more-horizontal.svg';
+export { default as SendIcon } from './send.svg';
+export { default as PaperclipIcon } from './paperclip.svg';
+export { default as SmileIcon } from './smile.svg';
+export { default as ChatSearchIcon } from './chat-search.svg';

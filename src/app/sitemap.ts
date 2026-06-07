@@ -6,8 +6,12 @@ import { ROUTES } from '@/config/routes';
 /**
  * Dynamic sitemap.
  *
- * Currently lists static public routes. Will be extended with dynamic entries
- * (every technician profile, blog post, help article) once those features land.
+ * Lists ONLY routes that currently resolve to a real page — advertising a URL
+ * that 404s causes "Submitted URL not found" errors in Search Console and wastes
+ * crawl budget. Re-add SERVICES / TECHNICIANS / HELP / FAQ / PRIVACY / TERMS here
+ * the moment each page ships (their links already live in nav/footer as
+ * intentional placeholders). Dynamic entries (blog posts, technician profiles)
+ * get appended once those features fetch real data.
  * Multilingual EN/AR is served from the same URL via cookie — no per-locale URLs.
  */
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -17,26 +21,18 @@ export default function sitemap(): MetadataRoute.Sitemap {
   return [
     { url: `${base}${ROUTES.HOME}`, lastModified: now, changeFrequency: 'weekly', priority: 1.0 },
     {
-      url: `${base}${ROUTES.SERVICES}`,
+      url: `${base}${ROUTES.FOR_PROS}`,
       lastModified: now,
-      changeFrequency: 'weekly',
-      priority: 0.9,
+      changeFrequency: 'monthly',
+      priority: 0.8,
     },
-    {
-      url: `${base}${ROUTES.TECHNICIANS}`,
-      lastModified: now,
-      changeFrequency: 'daily',
-      priority: 0.9,
-    },
-    { url: `${base}${ROUTES.BLOG}`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
-    { url: `${base}${ROUTES.HELP}`, lastModified: now, changeFrequency: 'weekly', priority: 0.6 },
     {
       url: `${base}${ROUTES.HOW_IT_WORKS}`,
       lastModified: now,
       changeFrequency: 'monthly',
       priority: 0.7,
     },
-    { url: `${base}${ROUTES.FAQ}`, lastModified: now, changeFrequency: 'monthly', priority: 0.5 },
+    { url: `${base}${ROUTES.BLOG}`, lastModified: now, changeFrequency: 'weekly', priority: 0.7 },
     {
       url: `${base}${ROUTES.CONTACT}`,
       lastModified: now,
@@ -44,12 +40,5 @@ export default function sitemap(): MetadataRoute.Sitemap {
       priority: 0.5,
     },
     { url: `${base}${ROUTES.ABOUT}`, lastModified: now, changeFrequency: 'monthly', priority: 0.4 },
-    {
-      url: `${base}${ROUTES.PRIVACY}`,
-      lastModified: now,
-      changeFrequency: 'yearly',
-      priority: 0.3,
-    },
-    { url: `${base}${ROUTES.TERMS}`, lastModified: now, changeFrequency: 'yearly', priority: 0.3 },
   ];
 }

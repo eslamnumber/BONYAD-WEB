@@ -15,10 +15,10 @@ describe('JsonLd', () => {
     expect(script).not.toBeNull();
   });
 
-  it('forwards the CSP nonce attribute', () => {
+  it('does not render a nonce (JSON-LD data blocks are not subject to CSP script-src)', () => {
     const { container } = renderWithProviders(<JsonLd data={{}} nonce="test-nonce-abc" />);
     const script = container.querySelector('script[type="application/ld+json"]');
-    expect(script?.getAttribute('nonce')).toBe('test-nonce-abc');
+    expect(script?.getAttribute('nonce')).toBeNull();
   });
 
   it('HTML-escapes a </script> sequence inside string content (XSS guard)', () => {

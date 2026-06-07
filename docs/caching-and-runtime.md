@@ -69,7 +69,7 @@ Backend calls this whenever a technician profile, blog post, or help article is 
 
 | Concern                                      | Pick                                                                   |
 | -------------------------------------------- | ---------------------------------------------------------------------- |
-| `middleware.ts`                              | **Edge (forced)** — keep it tiny, no DB calls.                         |
+| `src/middleware.ts`                          | **Edge (forced)** — keep it tiny, no DB calls. Must live in `src/`.    |
 | Route handlers with crypto/DB/SDK use        | **Node** — set `export const runtime = 'nodejs'`.                      |
 | Route handlers doing only header/cookie work | **Edge** — lower latency, cheaper.                                     |
 | Public pages                                 | **Node** by default — Sentry, image loader, and most SDKs target Node. |

@@ -36,12 +36,14 @@ const config: NextConfig = {
 export default config;
 ```
 
-## CSP with per-request nonce — `middleware.ts`
+## CSP with per-request nonce — `src/middleware.ts`
 
-The nonce is generated per request, passed through a header, and consumed by the root layout. This is the only safe pattern for inline JSON-LD.
+The nonce is generated per request, passed through a header, and consumed by the root layout. Use it for **executable** inline scripts (`next/script`, analytics snippets). **JSON-LD does NOT need a nonce** — `<script type="application/ld+json">` is a non-executable data block, so CSP `script-src` does not govern it; emitting a nonce there only causes a server/client hydration mismatch (the browser strips the attribute after parse), so `<JsonLd>` deliberately omits it.
+
+**Location matters:** with a `src/` directory, Next only runs middleware at `src/middleware.ts`. A root-level `middleware.ts` is silently ignored (no error) — the entire CSP/nonce/locale/auth-protection layer stays dormant. Keep this file in `src/`.
 
 ```ts
-// middleware.ts
+// src/middleware.ts
 import { NextResponse, type NextRequest } from 'next/server';
 
 export function middleware(req: NextRequest) {
@@ -52,7 +54,11 @@ export function middleware(req: NextRequest) {
     `style-src 'self' 'unsafe-inline'`, // Tailwind generates inline styles in dev; tighten in prod via hash list
     `img-src 'self' data: https:`,
     `font-src 'self' data:`,
-    `connect-src 'self' https://bonyad-app-nyayeditqq-ww.a.run.app https://*.sentry.io`,
+    `connect-src 'self' https://bonyad-app-nyayeditqq-ww.a.run.app https://*.sentry.io wss://admin.bonyad-hub.com`,
+    // ^ The `wss://admin.bonyad-hub.com` origin is the realtime-chat MQTT broker.
+    //   The browser connects to it directly (src/lib/mqtt-chat.ts), so it must be
+    //   allow-listed here or the WebSocket handshake is blocked. Keep in sync with
+    //   NEXT_PUBLIC_MQTT_BROKER_URL.
     `frame-ancestors 'none'`,
     `base-uri 'self'`,
     `form-action 'self'`,

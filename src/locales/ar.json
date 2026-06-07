@@ -26,6 +26,18 @@
     "switchToArabic": "العربية",
     "switchToEnglish": "English"
   },
+  "env": {
+    "production": "الإنتاج",
+    "development": "التطوير",
+    "pickerTitle": "بيئة الـ API",
+    "pickerWarning": "أداة مخصّصة للمختبرين. التبديل يسجّل خروجك ويمسح البيانات المخزّنة مؤقتًا. لا تغيّرها ما لم تكن متأكدًا.",
+    "current": "الحالية",
+    "switch": "تبديل",
+    "cancel": "إلغاء",
+    "close": "إغلاق",
+    "confirmTitle": "التبديل إلى {{name}}؟",
+    "confirmMessage": "سيتم تسجيل خروجك. سجّل الدخول مجددًا ببيانات موجودة على خادم {{name}}."
+  },
   "nav": {
     "services": "خدماتنا",
     "howItWorks": "كيف تعمل المنصة",
@@ -36,6 +48,156 @@
     "getStarted": "ابدأ الآن",
     "openMenu": "فتح القائمة",
     "closeMenu": "إغلاق القائمة"
+  },
+  "dashboard": {
+    "title": "لوحة التحكم",
+    "sidebarAriaLabel": "التنقل في لوحة التحكم",
+    "nav": {
+      "jobOffers": "عروض العمل",
+      "projects": "المشاريع",
+      "payments": "المدفوعات",
+      "saved": "المحفوظات",
+      "messages": "الرسائل",
+      "notifications": "الإشعارات",
+      "settings": "الإعدادات"
+    },
+    "role": {
+      "technician": "فني",
+      "customer": "عميل"
+    },
+    "search": {
+      "placeholder": "ما نوع العرض الذي تبحث عنه؟",
+      "label": "ابحث في عروض العمل"
+    },
+    "hero": {
+      "headline": "العثور على فرصتك القادمة",
+      "description": "استكشف المشاريع المتاحة وتواصل مع أصحاب الأعمال الباحثين عن خبرات مثلك."
+    },
+    "carousel": {
+      "headline": "مشاريع تناسبك",
+      "empty": "لا توجد مشاريع متاحة حالياً.",
+      "error": "تعذّر تحميل المشاريع."
+    },
+    "card": {
+      "durationLabel": "مدة المشروع",
+      "locationLabel": "الموقع",
+      "budgetLabel": "الميزانية",
+      "weeksUnit": "أسبوعًا",
+      "untitled": "مشروع"
+    },
+    "projects": {
+      "title": "المشاريع",
+      "empty": {
+        "title": "لا توجد مشاريع حتى الآن",
+        "description": "لم تبدأ العمل على أي مشروع بعد. استعرض الفرص المتاحة وقدّم عروضك لزيادة فرصك في الحصول على مشاريع جديدة.",
+        "cta": "تصفح المشاريع"
+      },
+      "stats": {
+        "acceptanceRate": { "title": "معدل قبول العروض", "caption": "مقارنة بالشهر الماضي" },
+        "inProgress": { "title": "مشروع قيد التنفيذ", "caption": "مشاريع تم تحديثها هذا الأسبوع" },
+        "total": { "title": "إجمالي المشاريع", "caption": "مشاريع خلال هذا الشهر" }
+      },
+      "filter": "تصفية",
+      "toggle": {
+        "all": "الكل",
+        "available": "متاح",
+        "directAssignment": "معيّن مباشرة",
+        "bidding": "مزايدة",
+        "approved": "موافق عليه",
+        "contract": "العقد",
+        "inProgress": "قيد التنفيذ",
+        "completed": "مكتمل"
+      },
+      "status": {
+        "approved": "مقبول",
+        "offerSent": "تم إرسال العرض",
+        "inProgress": "قيد التنفيذ",
+        "rejected": "مرفوض",
+        "pending": "قيد الانتظار",
+        "completed": "مكتمل"
+      },
+      "table": {
+        "details": "التفاصيل",
+        "value": "القيمة",
+        "phase": "المرحلة الحالية",
+        "status": "الحالة",
+        "client": "العميل",
+        "project": "المشروع",
+        "error": "تعذّر تحميل مشاريعك.",
+        "filterEmpty": "لا توجد مشاريع مطابقة لهذه التصفية.",
+        "loading": "جارٍ تحميل المشاريع…"
+      }
+    },
+    "pageTitle": "اكتشف المشاريع",
+    "tabs": {
+      "saved": "العروض المحفوظة",
+      "newest": "الأحدث",
+      "bestForYou": "الأفضل لك"
+    },
+    "offer": {
+      "daysLeft": "باقي {{count}} يوم",
+      "service": "خدمة",
+      "duration": "مدة المشروع: {{value}}",
+      "location": "الموقع: {{value}}",
+      "budget": "الميزانية: {{value}}",
+      "empty": "لا توجد عروض متاحة حالياً.",
+      "savedEmpty": "لا توجد عروض محفوظة.",
+      "error": "تعذّر تحميل العروض."
+    },
+    "jobOffer": {
+      "title": "تفاصيل المشروع",
+      "loading": "جارٍ تحميل المشروع…",
+      "error": "تعذّر تحميل هذا المشروع.",
+      "empty": "لا توجد عروض متاحة حالياً.",
+      "notBidPhase": "لم يعد هذا المشروع متاحاً لتقديم العروض، لذا تفاصيله غير متاحة هنا.",
+      "breadcrumbAria": "مسار التنقل",
+      "summary": {
+        "save": "حفظ المشروع",
+        "postedAgo": "نُشر منذ {{count}} يوم",
+        "offersLabel": "عدد العروض",
+        "offersValue": "{{count}} عروض",
+        "durationLabel": "مدة التنفيذ",
+        "monthsValue": "{{count}} شهراً",
+        "startDateLabel": "تاريخ البدء المتوقع",
+        "budgetLabel": "الميزانية المقدرة",
+        "locationLabel": "الموقع",
+        "currency": "ريال"
+      },
+      "description": {
+        "heading": "وصف المشروع",
+        "empty": "لا يوجد وصف للمشروع."
+      },
+      "phases": {
+        "heading": "مراحل المشروع",
+        "expectedDate": "تاريخ متوقع: {{value}}",
+        "loading": "جارٍ تحميل المراحل…",
+        "empty": "لم يتم تحديد مراحل بعد.",
+        "error": "تعذّر تحميل المراحل."
+      },
+      "attachments": {
+        "heading": "المرفقات",
+        "empty": "لا توجد مرفقات."
+      },
+      "form": {
+        "heading": "تقديم عرضك",
+        "priceLabel": "سعر العرض (بالريال)",
+        "pricePlaceholder": "0.00",
+        "durationLabel": "مدة التنفيذ",
+        "durationPlaceholder": "مثلاً: 12 شهراً",
+        "messageLabel": "رسالة التقديم",
+        "messagePlaceholder": "اكتب تفاصيل عرضك هنا...",
+        "submit": "تقديم العرض",
+        "save": "حفظ",
+        "success": "تم تقديم عرضك.",
+        "errorGeneric": "تعذّر تقديم عرضك. حاول مرة أخرى.",
+        "errors": {
+          "priceInvalid": "أدخل سعراً صحيحاً.",
+          "durationInvalid": "أدخل مدة صحيحة.",
+          "messageRequired": "اكتب رسالة التقديم."
+        }
+      }
+    },
+    "signOut": "تسجيل الخروج"
   },
   "footer": {
     "platform": "المنصة",
@@ -654,5 +816,60 @@
         "s3": { "label": "محترف موثّق", "value": "12,400+" }
       }
     }
+  },
+  "messages": {
+    "meta": { "title": "الرسائل" },
+    "title": "إدارة الرسائل",
+    "subtitle": "استعرض محادثاتك النشطة وتابع التواصل مع العملاء بكفاءة أكبر.",
+    "listAriaLabel": "المحادثات",
+    "threadAriaLabel": "المحادثة",
+    "searchPlaceholder": "ابحث في المحادثات",
+    "noResults": "لا توجد محادثات مطابقة",
+    "openConversation": "محادثة مع {{name}}",
+    "filter": {
+      "all": "الكل",
+      "unread": "غير مقروء",
+      "read": "مقروء"
+    },
+    "time": {
+      "now": "الآن",
+      "yesterday": "يوم أمس"
+    },
+    "selectConversation": "اختر محادثة لعرضها.",
+    "threadEmpty": "لا توجد رسائل بعد. اكتب رسالة لبدء المحادثة.",
+    "inputPlaceholder": "...اكتب رسالة",
+    "send": "إرسال",
+    "attachFile": "إرفاق ملف",
+    "emoji": "إضافة رمز تعبيري",
+    "imageAttachment": "صورة مرفقة",
+    "openAttachment": "فتح المرفق",
+    "attachInvalidType": "يمكن إرفاق ملفات الصور فقط.",
+    "attachTooLarge": "حجم الصورة كبير جدًا (الحد الأقصى 10 ميجابايت).",
+    "attachError": "تعذّر إرسال الصورة. يرجى المحاولة مرة أخرى.",
+    "conversationMenu": "خيارات المحادثة",
+    "back": "رجوع",
+    "empty": {
+      "title": "لا توجد رسائل حتى الآن",
+      "description": "عندما تبدأ بالتواصل مع العملاء أو تتلقى استفسارات جديدة، ستظهر جميع محادثاتك هنا."
+    }
+  },
+  "notifications": {
+    "title": "إشعارات",
+    "open": "فتح الإشعارات",
+    "openWithCount": "الإشعارات، {{count}} غير مقروء",
+    "close": "إغلاق الإشعارات",
+    "tabs": {
+      "all": "الكل ({{count}})",
+      "unread": "غير مقروء ({{count}})",
+      "read": "مقروء ({{count}})"
+    },
+    "new": "جديد",
+    "unreadStatus": "غير مقروء",
+    "empty": {
+      "title": "لا توجد إشعارات بعد",
+      "description": "أنت على اطّلاع بكل جديد. ستظهر الإشعارات الجديدة هنا."
+    },
+    "error": "تعذّر تحميل الإشعارات. حاول مرة أخرى.",
+    "loading": "جارٍ تحميل الإشعارات"
   }
 }

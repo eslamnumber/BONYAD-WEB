@@ -5,3 +5,4 @@ export { Input, type InputProps } from './input';
 export { Label, type LabelProps } from './label';
 export { Separator, type SeparatorProps } from './separator';
 export { Skeleton, type SkeletonProps } from './skeleton';
+export { Textarea, type TextareaProps } from './textarea';

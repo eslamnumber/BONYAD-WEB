@@ -1,7 +1,13 @@
 export type JsonLdProps = {
   /** schema.org JSON object (e.g. `{ '@context': 'https://schema.org', '@type': 'Organization', ... }`). */
   data: Record<string, unknown> | Record<string, unknown>[];
-  /** CSP nonce — pass `await getRequestNonce()` from a Server Component. */
+  /**
+   * @deprecated Not applied. A `<script type="application/ld+json">` is a data
+   * block, not executable JS, so CSP `script-src` does not govern it and it needs
+   * no nonce. Rendering one caused a hydration mismatch once the CSP middleware
+   * went live (browsers strip the `nonce` attribute after parse). Kept optional
+   * so existing call sites compile; safe to drop from callers later.
+   */
   nonce?: string;
 };
 
@@ -16,12 +22,13 @@ export type JsonLdProps = {
  *
  * See docs/security-headers.md + docs/seo-and-ai-readability.md.
  */
-export function JsonLd({ data, nonce }: JsonLdProps) {
+export function JsonLd({ data }: JsonLdProps) {
   const json = JSON.stringify(data);
   const safe = escape(json);
-  return (
-    <script type="application/ld+json" nonce={nonce} dangerouslySetInnerHTML={{ __html: safe }} />
-  );
+  // No `nonce`: a JSON-LD data block is not executable JS, so CSP `script-src`
+  // does not apply. Emitting a nonce here only created a server/client hydration
+  // mismatch (the browser strips the attribute after parse).
+  return <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: safe }} />;
 }
 
 // Unicode line + paragraph separators are constructed via `new RegExp` so the

@@ -48,7 +48,7 @@ When walking a Figma frame in Phase 0 ([task-workflow.md](task-workflow.md)), ev
 5d) Trust strip — static
 ```
 
-Backend-driven sections require Phase 1 (schema) + Phase 2 (hook + test) **completed before** that section's Phase 5 sub-phase starts. The sub-phase consumes a fetched array, never a hardcoded one.
+Backend-driven sections require their **endpoint slice** (Phase 1 — schema + fetcher + hook + sibling test + MSW handler shipped together; see [task-workflow.md](task-workflow.md) §Backend integration) **green before** that section's Phase 5 sub-phase starts. A section's Phase 5 sub-phase may begin the moment ITS slice passes — it does not wait for every endpoint. The sub-phase consumes a fetched array, never a hardcoded one.
 
 ## The build pattern for a backend-driven section
 

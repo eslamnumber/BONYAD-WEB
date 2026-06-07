@@ -48,6 +48,9 @@ const clientSchema = z.object({
   NEXT_PUBLIC_API_BASE_URL: z.string().url(),
   NEXT_PUBLIC_SENTRY_DSN: z.string().url(),
   NEXT_PUBLIC_ANALYTICS_KEY: z.string().optional(),
+  // Realtime chat broker (MQTT-over-WSS). Defaults to the production broker;
+  // its origin must also be in the CSP connect-src (src/middleware.ts).
+  NEXT_PUBLIC_MQTT_BROKER_URL: z.string().url(),
 });
 
 const isServer = typeof window === 'undefined';

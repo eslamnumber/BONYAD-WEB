@@ -13,7 +13,7 @@ web/
 │   │   ├── (main)/              # Route group: public pages with AppShell
 │   │   │   ├── layout.tsx       #   Wraps children in AppShell (header + footer)
 │   │   │   └── page.tsx         #   / — home page
-│   │   ├── api/                 # Next.js route handlers (only if needed)
+│   │   ├── api/                 # Route handlers: auth/{login,logout} (cookie), proxy/[...path]
 │   │   ├── layout.tsx           # Root layout — html/body/Providers ONLY
 │   │   ├── error.tsx            # Root error boundary
 │   │   ├── not-found.tsx
@@ -27,6 +27,7 @@ web/
 │   │
 │   ├── features/                # Business features — see below
 │   │   ├── auth/                # Login, register, forgot-password flows
+│   │   ├── dashboard/           # (app) SP dashboard — search, hero, project carousel, job-offer tabs/list (PROJECTS.LIST) + job-offer detail (components/job-offer-detail/: summary/form/description/phases/attachments via PROJECTS.DETAILS, PHASES.LIST, BIDS.CREATE)
 │   │   ├── blog/                # /blog index — public articles via GET /blogs
 │   │   ├── projects/
 │   │   ├── bids/
@@ -37,11 +38,12 @@ web/
 │   │   ├── notifications/
 │   │   └── …
 │   │
-│   ├── lib/                     # Preconfigured third-party clients
-│   │   ├── api-client.ts        # Typed fetch wrapper
-│   │   ├── query-client.ts      # TanStack Query client config
+│   ├── lib/                     # Preconfigured clients + shared infra
+│   │   ├── api-client.ts        # Typed fetch wrapper (browser→proxy, server→backend)
+│   │   ├── backend.ts           # BACKEND_BASE_URL + proxy prefix
+│   │   ├── session.ts           # validate-token contract + toAuthUser normaliser
+│   │   ├── server-auth.ts       # getServerToken / getServerUser (reads httpOnly cookie)
 │   │   ├── i18n.ts              # i18next config — initialized once
-│   │   ├── auth-storage.ts      # Token persistence (cookies)
 │   │   ├── sentry.ts            # Sentry init
 │   │   └── analytics.ts
 │   │

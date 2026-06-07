@@ -1,7 +1,13 @@
 import { NextResponse, type NextRequest } from 'next/server';
 
-import { DEFAULT_LOCALE, LOCALE_COOKIE_NAME } from '@/config/constants';
+import {
+  AUTH_COOKIE_NAME,
+  DEFAULT_LOCALE,
+  LOCALE_COOKIE_NAME,
+  PROTECTED_PATH_PREFIXES,
+} from '@/config/constants';
 import { isDevelopment } from '@/config/env';
+import { ROUTES } from '@/config/routes';
 import { isLocale } from '@/types/locale';
 
 /**
@@ -14,11 +20,21 @@ import { isLocale } from '@/types/locale';
  *   2. Set a Content-Security-Policy response header.
  *   3. Ensure the `bonyad-lang` cookie has a value — default to DEFAULT_LOCALE if missing.
  *
- * NOT yet handled (added when auth lands):
- *   - Redirect unauthenticated requests away from `/app/*`.
+ *   4. Redirect unauthenticated requests away from protected prefixes
+ *      (`/dashboard`, `/app/*`) to `/login?next=<path>`.
+ *
+ * NOT yet handled:
  *   - CSRF token rotation.
  */
 export function middleware(request: NextRequest) {
+  const { pathname } = request.nextUrl;
+
+  if (isProtected(pathname) && !request.cookies.get(AUTH_COOKIE_NAME)?.value) {
+    const loginUrl = new URL(ROUTES.LOGIN, request.url);
+    loginUrl.searchParams.set('next', pathname);
+    return NextResponse.redirect(loginUrl);
+  }
+
   const nonce = generateNonce();
   const csp = buildCsp(nonce);
 
@@ -42,6 +58,12 @@ export function middleware(request: NextRequest) {
   return response;
 }
 
+function isProtected(pathname: string): boolean {
+  return PROTECTED_PATH_PREFIXES.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
+  );
+}
+
 function generateNonce(): string {
   const bytes = new Uint8Array(16);
   crypto.getRandomValues(bytes);
@@ -62,7 +84,7 @@ function buildCsp(nonce: string): string {
     `style-src 'self' 'unsafe-inline'`,
     `img-src 'self' data: blob: https:`,
     `font-src 'self' data:`,
-    `connect-src 'self' https://*.sentry.io`,
+    `connect-src 'self' https://*.sentry.io wss://admin.bonyad-hub.com`,
     `frame-ancestors 'none'`,
     `base-uri 'self'`,
     `form-action 'self'`,

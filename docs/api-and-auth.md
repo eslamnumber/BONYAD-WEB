@@ -2,21 +2,23 @@
 
 ## The `apiClient`
 
-Lives in `src/lib/api-client.ts`. **Single instance.** Wraps `fetch`. Responsibilities:
+Lives in `src/lib/api-client.ts`. **Single instance.** Wraps `fetch` (the only file allowed to). Responsibilities:
 
-- Resolve base URL from `env.NEXT_PUBLIC_API_BASE_URL` (validated at boot via `config/env.ts`).
-- Attach `Authorization: Bearer <token>` from `auth-storage` on every request.
-- Attach `ngrok-skip-browser-warning: true` when the base URL is an ngrok host (parity with RN app).
-- Attach `Accept-Language: <currentLocale>` from `useLocaleStore`.
-- Throw `ApiError` on non-2xx with parsed body (`message`, `code`, `fieldErrors`).
-- Handle 401 by calling `/auth/refresh-token` once, retrying the original request, then logging out on second failure.
+- Resolve the base URL by runtime (see `src/lib/backend.ts` for `BACKEND_BASE_URL`): **server** (RSC / route handler) calls the backend directly; **browser** routes through the same-origin proxy `/api/proxy/*` (CSP `connect-src 'self'` forbids the browser hitting the backend directly). The `internal: true` option targets a same-origin Next route handler (e.g. `/api/auth/login`) instead.
+- **Auth attach:** server-side, attach `Authorization: Bearer <token>` from the httpOnly cookie (caller passes `token`, typically via `getServerToken()`); browser calls leave `token` unset — the proxy reads the cookie and attaches the Bearer server-side, so the JWT never reaches browser JS.
+- Throw `ApiError` on non-2xx with parsed body (`messageEn`, `messageAr`, `errorCode`, `fieldErrors`).
+- **File uploads (multipart):** pass a `FormData` as `body` and `apiClient` skips JSON-encoding + omits the hand-set `Content-Type` so `fetch`/undici writes the `multipart/form-data` boundary itself. The proxy detects `multipart/form-data` on the incoming request, re-reads it via `req.formData()`, and re-streams it to the backend with the Bearer attached — same auth path as JSON. Used by `POST /chat/send-with-file` (chat image attachments); mirror this for any future upload rather than hitting the backend with a raw `fetch`.
+- **401 handling:** the proxy (`src/app/api/proxy/[...path]/route.ts`) clears the session cookie on a 401 so the next navigation redirects to `/login`. _Automatic `/auth/refresh-token` retry is deferred — the RN app re-validates instead, so there is no verified refresh contract to mirror yet._
 - Optionally validate the response body with a zod schema when callers pass one.
+
+> Not yet implemented (parity bullets kept for the roadmap): `ngrok-skip-browser-warning`, `Accept-Language` from `useLocaleStore`.
 
 ## Endpoints and types
 
 - `src/config/endpoints.ts` re-creates the RN app's `API_ENDPOINTS` constant from `website-bonyad/src/config/api.ts` **exactly**. Keep in sync — never drift.
 - Per-endpoint **request** schemas are strict zod (we control what we send); **response** shapes are TS types or permissive zod (backend can extend). See §Schema strategy.
 - Fetchers in `features/X/api/` use `apiClient.get/post/put/delete` + the endpoint constant.
+- **List and detail endpoints can have different shapes.** `GET /projects` (`PROJECTS.LIST`) returns a **flat** DTO (`serviceNameEn`, `userName`, `timeRequiredDays` top-level), but `GET /projects/:id` (`PROJECTS.DETAILS`) returns the **full entity wrapped** in `{ project, phases, regionId, regionName* }` with **nested** `project.user.name` and `project.service.name{En,Ar}`, a single `budget` (no min/max), and `projectType` as an enum (e.g. `"ALL"`). The detail fetcher (`features/dashboard/api/get-project.ts`) normalizes this back into the flat `ProjectDetail` the cards expect. When wiring any new detail endpoint, **curl it (or read the live response) before trusting the list shape** — they often diverge.
 
 ```ts
 // features/projects/api/get-projects.ts — typed response, no runtime schema parse
@@ -45,7 +47,7 @@ The backend is shared with the RN app. It may add fields, return enum values we 
 2. **Token validation on boot** — `POST /auth/validate-token` with the cookie token. On success, hydrate `useAuthStore` with the user.
 3. **Refresh** — `apiClient` calls `POST /auth/refresh-token` once on 401, retries original request.
 4. **Logout** — clear cookie + `useAuthStore.logout()` + `queryClient.clear()` + redirect to `/login`.
-5. **Protected routes** — a middleware in `middleware.ts` checks the auth cookie for any path under `(app)/`. Unauthenticated requests redirect to `/login?next=<path>`.
+5. **Protected routes** — a middleware in `src/middleware.ts` (must be in `src/`, not the repo root — see [security-headers.md](security-headers.md)) checks the auth cookie for the protected prefixes (`/dashboard`, `/app`). Unauthenticated requests redirect to `/login?next=<path>`.
 6. **Role gating at the component level** — use `<RoleGate roles={['TECHNICIAN']}>` from `features/auth/`. Don't sprinkle role checks inside random child components.
 
 ## Backend response contract (mirrored from the RN app)
@@ -123,6 +125,8 @@ The same contract applies to `register`, `forgot-password`, `verify-otp`, `resen
 
 The backend is **shared with the RN app** and shouldn't change for the web app's sake unless absolutely necessary.
 
+These steps are **one vertical endpoint slice** — schema + fetcher + hook + test + MSW shipped and gated together, one endpoint per sub-phase ([task-workflow.md](task-workflow.md) §Backend integration). Do not split them across separate "all schemas" / "all hooks" passes.
+
 1. **Find the RN call site.** Grep `website-bonyad/src/screens/` for the endpoint constant — every backend interaction we'd need already exists there. Copy the **request body field names** and the **response field reads** (e.g. `data.user?.id ?? data.userId`). Do not guess names.
 2. **Curl the endpoint** for at least three responses (success, common 4xx, edge case). Confirm the actual JSON shape before writing any code. This is the only reliable way to learn which fields are top-level vs nested and which enum values can appear.
 3. **Confirm the endpoint exists in `website-bonyad/src/config/api.ts`.** If you need to add a new one, discuss with the backend team and add it to **both** `src/config/endpoints.ts` and `website-bonyad/src/config/api.ts` so the RN app inherits it.
@@ -130,3 +134,22 @@ The backend is **shared with the RN app** and shouldn't change for the web app's
 5. **Write a permissive response TS type** in the same schemas file (no `z.enum` on backend-controlled fields; mark everything optional that isn't guaranteed by the curl evidence).
 6. **Handle the error envelope at the form layer** — `ApiError#localizedMessage` for display, `err.errorCode` for branch decisions. Don't swallow the message into a generic fallback unless `localizedMessage` returns undefined.
 7. **Ship a sibling `*.test.ts` for the fetcher in the same PR.** Per CLAUDE.md hard rule 1, every new `features/X/api/<endpoint>.ts` requires `<endpoint>.test.ts` covering: (a) happy path with captured request body matching the RN call site, (b) one representative 4xx that surfaces as `ApiError` with `messageEn` / `messageAr` / `errorCode` populated, (c) every special-state branch the fetcher carries (pending / `errorCode`-driven redirect / unfamiliar enum values / phone-normalisation). Form tests don't satisfy this — they're integration, not branching. See [testing.md](testing.md) §Per-endpoint tests for the MSW capture pattern.
+
+## Realtime chat (MQTT)
+
+The chat feature is **REST source-of-truth + an MQTT live layer**. The REST endpoints mirror `website-bonyad/src/config/api.ts` and live under `API_ENDPOINTS.CHAT`:
+
+| Constant              | Path                                  | Use                                                              |
+| --------------------- | ------------------------------------- | ---------------------------------------------------------------- |
+| `CHAT.MY_CHATS`       | `/chat/my-chats`                      | conversation list (`ChatRoom[]`, possibly wrapped in `{ data }`) |
+| `CHAT.MESSAGES`       | `/chat/room/:roomId/messages`         | message history for a room                                       |
+| `CHAT.SEND`           | `/chat/send`                          | send a text message                                              |
+| `CHAT.SEND_WITH_FILE` | `/chat/send-with-file`                | send with an attachment                                          |
+| `CHAT.MARK_READ`      | `/chat/messages/:messageId/mark-read` | mark one message read                                            |
+| `CHAT.MARK_ALL_READ`  | `/chat/rooms/:roomId/mark-all-read`   | mark a room read                                                 |
+
+**Live transport** — `src/lib/mqtt-chat.ts` is a browser MQTT-over-WebSocket singleton (`mqtt.js`, lazy-imported). Broker URL is `NEXT_PUBLIC_MQTT_BROKER_URL` (default `wss://admin.bonyad-hub.com/mqtt`); the broker origin is allow-listed in the CSP `connect-src` ([security-headers.md](security-headers.md)). Topics mirror RN: `chat/user/{userId}` (cross-room notifications), `chat/room/{roomId}` (messages), `chat/room/{roomId}/read` (receipts), `chat/room/{roomId}/typing`. The lib is **payload-agnostic transport** — it dispatches parsed JSON to per-topic handlers; the messages feature owns `ChatMessage` and the topic strings.
+
+**Broker credential** — the broker authenticates a connection with the **session JWT as its username**, but that JWT lives in an httpOnly cookie the browser can't read. The same-origin route handler `GET /api/chat/mqtt-credentials` (`INTERNAL_API.CHAT_MQTT_CREDENTIALS`) reads the cookie server-side and mints the token for the client (`Cache-Control: no-store`). This is a deliberate, scoped widening of the httpOnly boundary — accepted so realtime chat can run client-side.
+
+**Graceful fallback** — every MQTT failure path (load error, broker down, credential denied) resolves to "not connected"; the chat still loads/sends over REST and falls back to refetch/polling. MQTT is an enhancement, never a hard dependency.

@@ -26,6 +26,18 @@
     "switchToArabic": "العربية",
     "switchToEnglish": "English"
   },
+  "env": {
+    "production": "Production",
+    "development": "Development",
+    "pickerTitle": "API Environment",
+    "pickerWarning": "Beta-tester tool. Switching logs you out and clears cached data. Don't change this unless you know what you're doing.",
+    "current": "Current",
+    "switch": "Switch",
+    "cancel": "Cancel",
+    "close": "Close",
+    "confirmTitle": "Switch to {{name}}?",
+    "confirmMessage": "You'll be logged out. Log in again with credentials that exist on the {{name}} backend."
+  },
   "nav": {
     "services": "Services",
     "howItWorks": "How it works",
@@ -36,6 +48,156 @@
     "getStarted": "Get started",
     "openMenu": "Open menu",
     "closeMenu": "Close menu"
+  },
+  "dashboard": {
+    "title": "Dashboard",
+    "sidebarAriaLabel": "Dashboard navigation",
+    "nav": {
+      "jobOffers": "Job offers",
+      "projects": "Projects",
+      "payments": "Payments",
+      "saved": "Saved",
+      "messages": "Messages",
+      "notifications": "Notifications",
+      "settings": "Settings"
+    },
+    "role": {
+      "technician": "Technician",
+      "customer": "Customer"
+    },
+    "search": {
+      "placeholder": "What kind of offer are you looking for?",
+      "label": "Search job offers"
+    },
+    "hero": {
+      "headline": "Find your next opportunity",
+      "description": "Explore available projects and connect with business owners looking for expertise like yours."
+    },
+    "carousel": {
+      "headline": "Projects that suit you",
+      "empty": "No available projects right now.",
+      "error": "Couldn't load projects."
+    },
+    "card": {
+      "durationLabel": "Project duration",
+      "locationLabel": "Location",
+      "budgetLabel": "Budget",
+      "weeksUnit": "weeks",
+      "untitled": "Project"
+    },
+    "projects": {
+      "title": "Projects",
+      "empty": {
+        "title": "No projects yet",
+        "description": "You haven't started working on any project yet. Explore the available opportunities and submit your offers to increase your chances of landing new projects.",
+        "cta": "Browse projects"
+      },
+      "stats": {
+        "acceptanceRate": { "title": "Offer acceptance rate", "caption": "Compared to last month" },
+        "inProgress": { "title": "Projects in progress", "caption": "Projects updated this week" },
+        "total": { "title": "Total projects", "caption": "Projects this month" }
+      },
+      "filter": "Filter",
+      "toggle": {
+        "all": "All",
+        "available": "Available",
+        "directAssignment": "Directly assigned",
+        "bidding": "Bidding",
+        "approved": "Approved",
+        "contract": "Contract",
+        "inProgress": "In progress",
+        "completed": "Completed"
+      },
+      "status": {
+        "approved": "Approved",
+        "offerSent": "Offer sent",
+        "inProgress": "In progress",
+        "rejected": "Rejected",
+        "pending": "Pending",
+        "completed": "Completed"
+      },
+      "table": {
+        "details": "Details",
+        "value": "Value",
+        "phase": "Current phase",
+        "status": "Status",
+        "client": "Client",
+        "project": "Project",
+        "error": "Couldn't load your projects.",
+        "filterEmpty": "No projects match this filter.",
+        "loading": "Loading projects…"
+      }
+    },
+    "pageTitle": "Discover projects",
+    "tabs": {
+      "saved": "Saved offers",
+      "newest": "Newest",
+      "bestForYou": "Best for you"
+    },
+    "offer": {
+      "daysLeft": "{{count}} days left",
+      "service": "Service",
+      "duration": "Project duration: {{value}}",
+      "location": "Location: {{value}}",
+      "budget": "Budget: {{value}}",
+      "empty": "No offers available right now.",
+      "savedEmpty": "No saved offers.",
+      "error": "Couldn't load offers."
+    },
+    "jobOffer": {
+      "title": "Project details",
+      "loading": "Loading project…",
+      "error": "Couldn't load this project.",
+      "empty": "No available offers right now.",
+      "notBidPhase": "This project is no longer open for offers, so its details aren't available here.",
+      "breadcrumbAria": "Breadcrumb",
+      "summary": {
+        "save": "Save project",
+        "postedAgo": "Posted {{count}} days ago",
+        "offersLabel": "Offers",
+        "offersValue": "{{count}} offers",
+        "durationLabel": "Implementation duration",
+        "monthsValue": "{{count}} months",
+        "startDateLabel": "Expected start date",
+        "budgetLabel": "Estimated budget",
+        "locationLabel": "Location",
+        "currency": "SAR"
+      },
+      "description": {
+        "heading": "Project description",
+        "empty": "No description provided."
+      },
+      "phases": {
+        "heading": "Project phases",
+        "expectedDate": "Expected date: {{value}}",
+        "loading": "Loading phases…",
+        "empty": "No phases defined yet.",
+        "error": "Couldn't load phases."
+      },
+      "attachments": {
+        "heading": "Attachments",
+        "empty": "No attachments."
+      },
+      "form": {
+        "heading": "Submit your offer",
+        "priceLabel": "Offer price (SAR)",
+        "pricePlaceholder": "0.00",
+        "durationLabel": "Implementation duration",
+        "durationPlaceholder": "e.g. 12 months",
+        "messageLabel": "Application message",
+        "messagePlaceholder": "Write your offer details here...",
+        "submit": "Submit offer",
+        "save": "Save",
+        "success": "Your offer has been submitted.",
+        "errorGeneric": "Couldn't submit your offer. Please try again.",
+        "errors": {
+          "priceInvalid": "Enter a valid price.",
+          "durationInvalid": "Enter a valid duration.",
+          "messageRequired": "Write your application message."
+        }
+      }
+    },
+    "signOut": "Sign out"
   },
   "footer": {
     "platform": "Platform",
@@ -654,5 +816,60 @@
         "s3": { "label": "Verified professionals", "value": "12,400+" }
       }
     }
+  },
+  "messages": {
+    "meta": { "title": "Messages" },
+    "title": "Manage messages",
+    "subtitle": "Browse your active conversations and stay in touch with clients more efficiently.",
+    "listAriaLabel": "Conversations",
+    "threadAriaLabel": "Conversation",
+    "searchPlaceholder": "Search conversations",
+    "noResults": "No matching conversations",
+    "openConversation": "Conversation with {{name}}",
+    "filter": {
+      "all": "All",
+      "unread": "Unread",
+      "read": "Read"
+    },
+    "time": {
+      "now": "Now",
+      "yesterday": "Yesterday"
+    },
+    "selectConversation": "Select a conversation to view it.",
+    "threadEmpty": "No messages yet. Type a message to start the conversation.",
+    "inputPlaceholder": "Type a message...",
+    "send": "Send",
+    "attachFile": "Attach file",
+    "emoji": "Add emoji",
+    "imageAttachment": "Image attachment",
+    "openAttachment": "Open attachment",
+    "attachInvalidType": "Only image files can be attached.",
+    "attachTooLarge": "Image is too large (max 10 MB).",
+    "attachError": "Couldn't send the image. Please try again.",
+    "conversationMenu": "Conversation options",
+    "back": "Back",
+    "empty": {
+      "title": "No messages yet",
+      "description": "When you start connecting with customers or receiving new inquiries, all your conversations will appear here."
+    }
+  },
+  "notifications": {
+    "title": "Notifications",
+    "open": "Open notifications",
+    "openWithCount": "Notifications, {{count}} unread",
+    "close": "Close notifications",
+    "tabs": {
+      "all": "All ({{count}})",
+      "unread": "Unread ({{count}})",
+      "read": "Read ({{count}})"
+    },
+    "new": "New",
+    "unreadStatus": "Unread",
+    "empty": {
+      "title": "No notifications yet",
+      "description": "You're all caught up. New notifications will appear here."
+    },
+    "error": "We couldn't load your notifications. Please try again.",
+    "loading": "Loading notifications"
   }
 }

@@ -18,6 +18,12 @@ const clientSchema = z.object({
   NEXT_PUBLIC_API_BASE_URL: z.url().optional(),
   NEXT_PUBLIC_SENTRY_DSN: z.url().optional(),
   NEXT_PUBLIC_ANALYTICS_KEY: z.string().optional(),
+  /**
+   * MQTT-over-WebSocket broker URL for realtime chat. The browser connects here
+   * directly; the broker origin must also be allow-listed in the CSP
+   * `connect-src` (see `src/middleware.ts`). Defaults to the production broker.
+   */
+  NEXT_PUBLIC_MQTT_BROKER_URL: z.url().default('wss://admin.bonyad-hub.com/mqtt'),
 });
 
 const serverSchema = z.object({
@@ -38,6 +44,7 @@ const clientRaw = {
   NEXT_PUBLIC_API_BASE_URL: raw.NEXT_PUBLIC_API_BASE_URL,
   NEXT_PUBLIC_SENTRY_DSN: raw.NEXT_PUBLIC_SENTRY_DSN,
   NEXT_PUBLIC_ANALYTICS_KEY: raw.NEXT_PUBLIC_ANALYTICS_KEY,
+  NEXT_PUBLIC_MQTT_BROKER_URL: raw.NEXT_PUBLIC_MQTT_BROKER_URL,
 };
 
 const parsed = isServer

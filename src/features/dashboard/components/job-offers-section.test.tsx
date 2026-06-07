@@ -1,0 +1,70 @@
+import { http, HttpResponse } from 'msw';
+import { beforeAll, describe, expect, it } from 'vitest';
+
+import { i18n } from '@/lib/i18n';
+import { server } from '@/testing/handlers/server';
+import { fireEvent, renderWithProviders, screen } from '@/testing/render';
+
+import { JobOffersSection } from './job-offers-section';
+
+beforeAll(async () => {
+  await i18n.changeLanguage('en');
+});
+
+const OPEN_PROJECTS = [
+  {
+    id: 1,
+    serviceNameEn: 'Renovation',
+    title: 'Older offer',
+    description: 'd1',
+    status: 'PENDING',
+    assignedTechnicianId: null,
+    createdAt: '2026-01-01T00:00:00Z',
+    budget: 100000,
+    address: 'Riyadh',
+    timeRequiredDays: 70,
+  },
+  {
+    id: 2,
+    serviceNameEn: 'Building',
+    title: 'Newer offer',
+    description: 'd2',
+    status: 'BIDDING',
+    assignedTechnicianId: null,
+    createdAt: '2026-06-01T00:00:00Z',
+    budget: 500000,
+    address: 'Dammam',
+    timeRequiredDays: 140,
+  },
+];
+
+describe('JobOffersSection', () => {
+  it('renders the heading + tabs and lists available offers on the default tab', async () => {
+    server.use(http.get('*/projects', () => HttpResponse.json(OPEN_PROJECTS)));
+    renderWithProviders(<JobOffersSection />);
+
+    expect(screen.getByRole('heading', { name: /discover projects/i })).toBeInTheDocument();
+    expect(screen.getAllByRole('tab')).toHaveLength(3);
+    expect(await screen.findByRole('heading', { name: /older offer/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: /newer offer/i })).toBeInTheDocument();
+  });
+
+  it('switches to the Saved tab and shows its empty state', async () => {
+    server.use(http.get('*/projects', () => HttpResponse.json(OPEN_PROJECTS)));
+    renderWithProviders(<JobOffersSection />);
+    await screen.findByRole('heading', { name: /older offer/i });
+
+    fireEvent.click(screen.getByRole('tab', { name: /saved offers/i }));
+    expect(screen.getByRole('tab', { name: /saved offers/i })).toHaveAttribute(
+      'aria-selected',
+      'true',
+    );
+    expect(screen.getByText(/no saved offers/i)).toBeInTheDocument();
+  });
+
+  it('shows the empty state when no offers are available', async () => {
+    server.use(http.get('*/projects', () => HttpResponse.json([])));
+    renderWithProviders(<JobOffersSection />);
+    expect(await screen.findByText(/no offers available/i)).toBeInTheDocument();
+  });
+});

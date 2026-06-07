@@ -162,6 +162,71 @@
   /* pillar-blob is the soft decorative cloud at the top of the Value/Mission cards —
      a very light blue (was navy). */
   --color-pillar-blob: var(--pillar-blob);
+
+  /* Dashboard (app) — sidebar panel surface, glass search pill, job-offer accent
+     (badge + deadline), job-card divider, project-image scrim + on-media text. */
+  --color-dashboard-panel: var(--dashboard-panel);
+  --color-dashboard-search-bg: var(--dashboard-search-bg);
+  --color-job-accent: var(--job-accent);
+  --color-job-divider: var(--job-divider);
+  --color-card-scrim: var(--card-scrim);
+  --color-on-media: var(--on-media);
+  --color-card-media-fallback: var(--card-media-fallback);
+
+  /* Notifications drawer — tab pills, type-icon circle + glyph, unread dot,
+     header divider, muted meta text, backdrop scrim. */
+  --color-notif-tab-bg: var(--notif-tab-bg);
+  --color-notif-tab-fg: var(--notif-tab-fg);
+  --color-notif-tab-active-bg: var(--notif-tab-active-bg);
+  --color-notif-muted: var(--notif-muted);
+  --color-notif-divider: var(--notif-divider);
+  --color-notif-unread: var(--notif-unread);
+  --color-notif-icon-bg: var(--notif-icon-bg);
+  --color-notif-icon-fg: var(--notif-icon-fg);
+  --color-notif-scrim: var(--notif-scrim);
+
+  /* Messages / chat — incoming-bubble + selected-row surfaces, panel border,
+     input field, muted text/icon. Sent bubble + send button reuse --color-job-accent. */
+  --color-chat-bubble-received: var(--chat-bubble-received);
+  --color-chat-item-active: var(--chat-item-active);
+  --color-chat-border: var(--chat-border);
+  --color-chat-field: var(--chat-field);
+  --color-chat-muted: var(--chat-muted);
+
+  /* Sidebar (app) — inactive nav link label (Figma #44403c). Active link uses
+     --color-primary gradient + --color-primary-foreground text. */
+  --color-sidebar-link: var(--sidebar-link);
+
+  /* Job-offer / project detail — soft field + tile + badge surface (Figma #f8fafc).
+     Used for the bid form inputs, category chips, attachment tiles, and the
+     bookmark icon square. Card borders/dividers reuse --color-border. */
+  --color-field-surface: var(--field-surface);
+
+  /* SP Projects screen (Figma 1046:7112) — status badges (fg + soft pill bg),
+     KPI stat-card delta chips (up/down), table header surface + muted text,
+     filter-pill border. Details link reuses --color-job-accent (#005DAC),
+     action pill reuses --color-field-surface, toggle reuses the role-toggle
+     tokens, card/divider borders reuse --color-border, row text uses --foreground. */
+  --color-status-approved: var(--status-approved);
+  --color-status-approved-soft: var(--status-approved-soft);
+  --color-status-progress: var(--status-progress);
+  --color-status-progress-soft: var(--status-progress-soft);
+  --color-status-offer: var(--status-offer);
+  --color-status-offer-soft: var(--status-offer-soft);
+  --color-status-rejected: var(--status-rejected);
+  --color-status-rejected-soft: var(--status-rejected-soft);
+  --color-status-pending: var(--status-pending);
+  --color-status-pending-soft: var(--status-pending-soft);
+  --color-status-done: var(--status-done);
+  --color-status-done-bg: var(--status-done-bg);
+  --color-stat-up: var(--stat-up);
+  --color-stat-up-soft: var(--stat-up-soft);
+  --color-stat-down: var(--stat-down);
+  --color-stat-down-soft: var(--stat-down-soft);
+  --color-table-head-bg: var(--table-head-bg);
+  --color-table-head-fg: var(--table-head-fg);
+  --color-stat-caption: var(--stat-caption);
+  --color-filter-border: var(--filter-border);
 }
 
 :root {
@@ -298,6 +363,78 @@
   --pillar-frost: oklch(1 0 0 / 0.18);
   /* Soft cloud blob at the top of the Value/Mission cards — very light blue. */
   --pillar-blob: oklch(0.9 0.05 240);
+
+  /* Dashboard (app) surface tokens — light.
+     panel: Figma #f2f4f5 sidebar. search-bg: rgba(255,255,255,0.6) glass pill.
+     job-accent: Figma #005DAC (badge + deadline, == about-accent value).
+     job-divider: Figma #cdcdcd. card-scrim: rgba(0,0,0,0.6) over project images.
+     on-media: white text/icons sitting on the scrimmed image (theme-independent). */
+  --dashboard-panel: oklch(0.96 0.003 230);
+  --dashboard-search-bg: oklch(1 0 0 / 0.6);
+  --job-accent: oklch(0.46 0.18 251);
+  --job-divider: oklch(0.84 0 0);
+  --card-scrim: oklch(0 0 0 / 0.6);
+  --on-media: oklch(1 0 0);
+  /* Dark navy backdrop for cards with no cover image — theme-independent (the card
+     is always a dark media surface, like --card-scrim and --on-media). */
+  --card-media-fallback: oklch(0.26 0.09 242);
+
+  /* Notifications drawer (Figma 1046:7822) — light.
+     tab inactive #f0f1f3 / #333; tab active #003867 (== brand-dark-navy) + white;
+     time + "New" badge + separator line #9b9b9b; header divider #d9d9d9;
+     unread dot #ea4335; type-icon circle #1a6db4 + white bell; scrim rgba(0,0,0,.25). */
+  --notif-tab-bg: oklch(0.96 0.003 255);
+  --notif-tab-fg: oklch(0.32 0 0);
+  --notif-tab-active-bg: oklch(0.26 0.09 242);
+  --notif-muted: oklch(0.67 0 0);
+  --notif-divider: oklch(0.89 0 0);
+  --notif-unread: oklch(0.62 0.23 27);
+  --notif-icon-bg: oklch(0.52 0.13 252);
+  --notif-icon-fg: oklch(1 0 0);
+  --notif-scrim: oklch(0 0 0 / 0.25);
+
+  /* Messages / chat (Figma 1046:7379) — light.
+     bubble-received #f9fbfc (incoming; sent bubble reuses --job-accent #005DAC);
+     item-active #eaf0f7 selected conversation row; border #eaeaea panel/header/input;
+     field #f2f5f7 search + composer input; muted #898989 secondary text + placeholder + idle icons. */
+  --chat-bubble-received: oklch(0.99 0.004 230);
+  --chat-item-active: oklch(0.95 0.015 245);
+  --chat-border: oklch(0.93 0 0);
+  --chat-field: oklch(0.965 0.004 235);
+  --chat-muted: oklch(0.62 0 0);
+
+  /* Sidebar inactive nav link — Figma #44403c (warm dark grey). */
+  --sidebar-link: oklch(0.37 0.007 67);
+
+  /* Job-offer / project detail — soft field/tile/badge surface (Figma #f8fafc). */
+  --field-surface: oklch(0.98 0.004 236);
+
+  /* SP Projects screen — light.
+     Status badge fg + 10%-alpha soft pill bg: approved #22c55e, in-progress
+     #da8a00, offer-sent #4d8ec5, rejected #ea4335, pending #8a38f5; completed is
+     a solid #1a6db4 chip with white text. Stat deltas: up #00bc7d, down #ea4335
+     on 15%-alpha bg. table-head-bg #eaf0f7, table-head-fg #78716c (stone-500),
+     stat-caption #898989, filter-border #959595. */
+  --status-approved: oklch(0.72 0.19 150);
+  --status-approved-soft: oklch(0.72 0.19 150 / 0.1);
+  --status-progress: oklch(0.66 0.14 73);
+  --status-progress-soft: oklch(0.66 0.14 73 / 0.1);
+  --status-offer: oklch(0.59 0.1 216);
+  --status-offer-soft: oklch(0.59 0.1 216 / 0.1);
+  --status-rejected: oklch(0.62 0.23 27);
+  --status-rejected-soft: oklch(0.62 0.23 27 / 0.1);
+  --status-pending: oklch(0.56 0.25 300);
+  --status-pending-soft: oklch(0.56 0.25 300 / 0.1);
+  --status-done: oklch(1 0 0);
+  --status-done-bg: oklch(0.52 0.13 252);
+  --stat-up: oklch(0.7 0.16 158);
+  --stat-up-soft: oklch(0.7 0.16 158 / 0.15);
+  --stat-down: oklch(0.62 0.23 27);
+  --stat-down-soft: oklch(0.62 0.23 27 / 0.15);
+  --table-head-bg: oklch(0.95 0.015 245);
+  --table-head-fg: oklch(0.55 0.013 58);
+  --stat-caption: oklch(0.62 0 0);
+  --filter-border: oklch(0.66 0 0);
 }
 
 .dark {
@@ -409,9 +546,94 @@
   --pillar-frost: oklch(1 0 0 / 0.06);
   /* Top cloud blob — light blue, a touch more saturated to read on the dark surface. */
   --pillar-blob: oklch(0.8 0.08 245);
+
+  /* Dashboard (app) surface tokens — dark overrides.
+     panel raised above page bg; glass pill darkened; accent brightened to read on
+     dark; divider matches dark border. scrim + on-media stay (image overlay is
+     theme-independent — text over a dark photo is always light). */
+  --dashboard-panel: oklch(0.18 0.004 230);
+  --dashboard-search-bg: oklch(0.22 0 0 / 0.6);
+  --job-accent: oklch(0.7 0.16 250);
+  --job-divider: oklch(0.3 0 0);
+  --card-scrim: oklch(0 0 0 / 0.6);
+  --on-media: oklch(1 0 0);
+  /* Same as light — the card stays a dark media surface in both themes. */
+  --card-media-fallback: oklch(0.26 0.09 242);
+
+  /* Notifications drawer — dark overrides. Drawer surface uses --card.
+     tab inactive raised gray; active stays a deep readable blue (white text);
+     muted/divider lifted for contrast; unread + icon circle brightened; scrim deeper. */
+  --notif-tab-bg: oklch(0.27 0.004 255);
+  --notif-tab-fg: oklch(0.9 0 0);
+  --notif-tab-active-bg: oklch(0.42 0.12 250);
+  --notif-muted: oklch(0.6 0 0);
+  --notif-divider: oklch(0.32 0 0);
+  --notif-unread: oklch(0.68 0.2 27);
+  --notif-icon-bg: oklch(0.58 0.13 252);
+  --notif-icon-fg: oklch(1 0 0);
+  --notif-scrim: oklch(0 0 0 / 0.5);
+
+  /* Messages / chat — dark overrides. Incoming bubble + selected row raised above
+     the page bg with a faint blue tint; border + field track the dark input tokens;
+     muted text lightened for contrast. Sent bubble reuses --job-accent (brightened). */
+  --chat-bubble-received: oklch(0.24 0.005 230);
+  --chat-item-active: oklch(0.27 0.02 245);
+  --chat-border: oklch(0.28 0 0);
+  --chat-field: oklch(0.26 0.004 235);
+  --chat-muted: oklch(0.64 0 0);
+
+  /* Sidebar inactive nav link — lifted for contrast on the dark panel. */
+  --sidebar-link: oklch(0.74 0.005 67);
+
+  /* Job-offer / project detail — dark: subtle raised field surface on the card. */
+  --field-surface: oklch(0.24 0.005 240);
+
+  /* SP Projects screen — dark overrides. Status/delta fg lifted for contrast,
+     soft pill bg raised to ~20% alpha (blog-badge precedent); solid completed
+     chip lightened; table header surface raised above the dark card; muted text
+     + filter border lifted. */
+  --status-approved: oklch(0.78 0.18 150);
+  --status-approved-soft: oklch(0.78 0.18 150 / 0.2);
+  --status-progress: oklch(0.76 0.14 73);
+  --status-progress-soft: oklch(0.76 0.14 73 / 0.2);
+  --status-offer: oklch(0.68 0.1 216);
+  --status-offer-soft: oklch(0.68 0.1 216 / 0.2);
+  --status-rejected: oklch(0.68 0.2 27);
+  --status-rejected-soft: oklch(0.68 0.2 27 / 0.2);
+  --status-pending: oklch(0.66 0.22 300);
+  --status-pending-soft: oklch(0.66 0.22 300 / 0.2);
+  --status-done: oklch(1 0 0);
+  --status-done-bg: oklch(0.58 0.13 252);
+  --stat-up: oklch(0.76 0.16 158);
+  --stat-up-soft: oklch(0.76 0.16 158 / 0.22);
+  --stat-down: oklch(0.68 0.2 27);
+  --stat-down-soft: oklch(0.68 0.2 27 / 0.22);
+  --table-head-bg: oklch(0.27 0.02 245);
+  --table-head-fg: oklch(0.7 0.013 58);
+  --stat-caption: oklch(0.64 0 0);
+  --filter-border: oklch(0.5 0 0);
 }
 
 html[dir='rtl'] {
   /* en locale maps to rtl — form is on RIGHT, blend the right edge of the image */
   --blend-to-form: to left;
+}
+
+/* Notifications drawer entrance — slides in from the inline-end edge (physical
+   side follows <html dir>). Resting state is on-screen, so the panel stays fully
+   visible when motion is disabled (the animation is applied only under motion-safe). */
+@keyframes notif-slide-in-end {
+  from {
+    transform: translateX(100%);
+  }
+}
+@keyframes notif-slide-in-end-rtl {
+  from {
+    transform: translateX(-100%);
+  }
+}
+@keyframes notif-fade-in {
+  from {
+    opacity: 0;
+  }
 }

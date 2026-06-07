@@ -17,13 +17,13 @@ The legacy app at `website-bonyad/src/` is **reference only — used to understa
 
 ## Port these (clean rewrite)
 
-| Legacy path                                                        | New path                                               | Notes                                                                          |
-| ------------------------------------------------------------------ | ------------------------------------------------------ | ------------------------------------------------------------------------------ |
-| `website-bonyad/src/config/api.ts` (the `API_ENDPOINTS` constant)  | `src/config/endpoints.ts`                              | Endpoints only. The fetch interceptor stays in the new `apiClient`.            |
-| `website-bonyad/src/localization/i18n.ts` (the init pattern)       | `src/lib/i18n.ts`                                      | Same "init once" idea, but reads from cookie instead of AsyncStorage.          |
-| `website-bonyad/src/localization/translations/en.json` + `ar.json` | `src/locales/en.json` + `ar.json`                      | Copy keys, restructure into feature namespaces (`auth.*`, `projects.*`, etc.). |
-| `website-bonyad/src/utils/authGuard.ts`                            | Split into `src/lib/auth-storage.ts` + `middleware.ts` | The boot-time validate-token check moves to the root layout's auth provider.   |
-| Figma designs referenced from legacy screens                       | Used as visual reference only                          | Do not copy the JSX.                                                           |
+| Legacy path                                                        | New path                                                                         | Notes                                                                                                                              |
+| ------------------------------------------------------------------ | -------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------- |
+| `website-bonyad/src/config/api.ts` (the `API_ENDPOINTS` constant)  | `src/config/endpoints.ts`                                                        | Endpoints only. The fetch interceptor stays in the new `apiClient`.                                                                |
+| `website-bonyad/src/localization/i18n.ts` (the init pattern)       | `src/lib/i18n.ts`                                                                | Same "init once" idea, but reads from cookie instead of AsyncStorage.                                                              |
+| `website-bonyad/src/localization/translations/en.json` + `ar.json` | `src/locales/en.json` + `ar.json`                                                | Copy keys, restructure into feature namespaces (`auth.*`, `projects.*`, etc.).                                                     |
+| `website-bonyad/src/utils/authGuard.ts`                            | Split into `src/lib/session.ts` + `src/lib/server-auth.ts` + `src/middleware.ts` | `getServerUser()` runs the boot validate-token in the `(app)` layout → `AuthProvider`; `src/middleware.ts` gates protected routes. |
+| Figma designs referenced from legacy screens                       | Used as visual reference only                                                    | Do not copy the JSX.                                                                                                               |
 
 ## Do NOT copy
 

@@ -5,3 +5,13 @@ export { ForgotPasswordPage } from './components/forgot-password-page';
 export { VerifyOtpPage } from './components/verify-otp-page';
 export { RegisterPage } from './components/register-page';
 export { getAuthHeaderLabels } from './get-auth-header-labels';
+
+// Session foundation
+export { AuthProvider } from './components/auth-provider';
+export { useLogout, logoutUser } from './api/logout';
+export {
+  loginRequestSchema,
+  toLoginResult,
+  PENDING_VERIFICATION_CODE,
+} from './schemas/login.schema';
+export type { LoginResult, LoginResponse } from './schemas/login.schema';
