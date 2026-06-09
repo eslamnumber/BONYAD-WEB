@@ -8,6 +8,7 @@ import { type Locale, LOCALE_DIRECTION } from '@/types/locale';
 
 import type { SubscriptionPlan } from '../schemas/subscription-plan';
 
+type TFn = ReturnType<typeof getTranslations>['t'];
 type PlanVariant = 'light' | 'dark-navy' | 'dark-green';
 type TechPricingProps = { locale: Locale; plans: SubscriptionPlan[] };
 type PlanCardProps = {
@@ -126,6 +127,28 @@ function PricingHeader({ headline, subheadline }: { headline: string; subheadlin
   );
 }
 
+function PlanGrid({ plans, locale, t }: { plans: SubscriptionPlan[]; locale: Locale; t: TFn }) {
+  if (plans.length === 0) {
+    return <p className="text-muted-foreground text-center">{t('tech.pricing.noPlans')}</p>;
+  }
+  return (
+    <div className="flex flex-wrap justify-center gap-4">
+      {plans.map((plan, i) => (
+        <PlanCard
+          key={plan.id}
+          plan={plan}
+          variant={getVariant(i, plans.length)}
+          name={getPlanName(plan, locale)}
+          features={getPlanFeatures(plan, locale)}
+          currency={t('tech.pricing.currency')}
+          perMonth={t('tech.pricing.perMonth')}
+          cta={t('tech.pricing.cta')}
+        />
+      ))}
+    </div>
+  );
+}
+
 export function TechPricing({ locale, plans }: TechPricingProps) {
   const { t } = getTranslations(locale);
   const sorted = [...plans].sort(
@@ -133,7 +156,10 @@ export function TechPricing({ locale, plans }: TechPricingProps) {
   );
 
   return (
-    <section className="bg-background relative overflow-hidden py-12 sm:py-16 lg:py-20">
+    <section
+      id="packages"
+      className="bg-background relative scroll-mt-24 overflow-hidden py-12 sm:py-16 lg:py-20"
+    >
       <div
         aria-hidden
         className="bg-deco-blob-green pointer-events-none absolute end-0 top-0 h-[400px] w-[400px] rounded-full opacity-30 blur-[120px]"
@@ -154,24 +180,7 @@ export function TechPricing({ locale, plans }: TechPricingProps) {
             t('tech.pricing.billingYearly'),
           ]}
         />
-        {sorted.length > 0 ? (
-          <div className="flex flex-wrap justify-center gap-4">
-            {sorted.map((plan, i) => (
-              <PlanCard
-                key={plan.id}
-                plan={plan}
-                variant={getVariant(i, sorted.length)}
-                name={getPlanName(plan, locale)}
-                features={getPlanFeatures(plan, locale)}
-                currency={t('tech.pricing.currency')}
-                perMonth={t('tech.pricing.perMonth')}
-                cta={t('tech.pricing.cta')}
-              />
-            ))}
-          </div>
-        ) : (
-          <p className="text-muted-foreground text-center">{t('tech.pricing.noPlans')}</p>
-        )}
+        <PlanGrid plans={sorted} locale={locale} t={t} />
       </div>
     </section>
   );

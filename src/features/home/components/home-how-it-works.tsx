@@ -93,7 +93,7 @@ export function HomeHowItWorks({ locale, variant = 'user' }: HomeHowItWorksProps
           </div>
 
           <Link
-            href={ROUTES.SERVICES}
+            href={ROUTES.HOW_IT_WORKS}
             className="text-foreground/80 border-foreground/80 hover:bg-foreground/5 flex items-center gap-2 rounded-full border px-4 py-2.5 text-sm font-bold tracking-[0.1px] transition-colors"
           >
             <ChevronRight className="size-5 [[dir=ltr]_&]:-scale-x-100" aria-hidden />

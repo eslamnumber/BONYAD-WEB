@@ -12,6 +12,7 @@ function getHeaderLabels(t: TFunction, locale: Locale): AppShellLabels['header']
     nav: {
       services: t('nav.services'),
       howItWorks: t('nav.howItWorks'),
+      faq: t('nav.faq'),
       about: t('nav.about'),
       blog: t('nav.blog'),
       contact: t('nav.contact'),

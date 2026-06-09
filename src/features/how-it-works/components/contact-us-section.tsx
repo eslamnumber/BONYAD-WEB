@@ -16,10 +16,16 @@ function SectionHeader({ t }: { t: TFn }) {
       <p className="text-primary text-base font-semibold tracking-[0.5px] uppercase">
         {t('howItWorks.contact.subtitle')}
       </p>
-      <h2 className="text-foreground w-full text-4xl font-medium tracking-[-0.96px] sm:text-5xl xl:text-[48px]">
+      <h2
+        dir="auto"
+        className="text-foreground w-full text-4xl font-medium tracking-[-0.96px] sm:text-5xl xl:text-[48px]"
+      >
         {t('howItWorks.contact.headline')}
       </h2>
-      <p className="text-foreground/60 w-full max-w-[536px] text-base tracking-[-0.32px]">
+      <p
+        dir="auto"
+        className="text-foreground/60 w-full max-w-[536px] text-base tracking-[-0.32px]"
+      >
         {t('howItWorks.contact.body')}
       </p>
     </div>
@@ -40,7 +46,7 @@ function EmailCard({ t }: { t: TFn }) {
           {t('howItWorks.contact.email.body')}
         </p>
         <a
-          href="mailto:support@bonyad.com"
+          href="mailto:support@bonyad-hub.com"
           className="text-foreground flex items-center gap-2 py-1 text-base font-medium tracking-[-0.32px]"
         >
           <ChevronRight className="size-3 ltr:-scale-x-100" aria-hidden />

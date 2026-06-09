@@ -47,7 +47,8 @@
     "login": "Log in",
     "getStarted": "Get started",
     "openMenu": "Open menu",
-    "closeMenu": "Close menu"
+    "closeMenu": "Close menu",
+    "faq": "FAQ"
   },
   "dashboard": {
     "title": "Dashboard",
@@ -345,7 +346,10 @@
       "searchPlaceholder": "Search for an engineer, designer, electrician...",
       "searchLabel": "Search for a professional",
       "searchCta": "Search",
-      "trustBadge": "Contracts verified using Absher and Nafath"
+      "trustBadgePrefix": "Contracts verified using",
+      "trustBadgeAnd": "and",
+      "trustBadgeAbsher": "Absher",
+      "trustBadgeNafath": "Nafath"
     },
     "services": {
       "headline": "One platform. Every stage of your project.",
@@ -390,8 +394,7 @@
     "trust": {
       "headline": "No risks. No surprises.",
       "subheadline": "Hire with confidence, track with clarity, pay with security.",
-      "stat120": "+120",
-      "stat120Body": "Verified professional via Nafath. Every professional on Bonyad has their identity verified through the Nafath platform.",
+      "stat120Body": "Professionals verified via Nafath. Every professional on Bonyad has their identity verified through the Nafath platform.",
       "contractTitle": "Digital contract for every project.",
       "contractBody": "Bonyad automatically creates a structured contract including scope, price, and milestones.",
       "supportTitle": "24/7 Customer Service",
@@ -425,16 +428,7 @@
     "blog": {
       "headline": "Build smart. Start informed.",
       "subheadline": "Guides, tips, and expert insights to help you plan your next construction project with confidence.",
-      "readMore": "Read more",
-      "featuredCategory": "Featured",
-      "featuredTitle": "The complete guide to construction permits in Saudi Arabia",
-      "featuredBody": "Everything you need to know about permits, approvals, and legal requirements for construction projects in the Kingdom.",
-      "post1Category": "Legal — 2026",
-      "post1Title": "Requirements for obtaining a building permit in Saudi Arabia",
-      "post1Body": "Learn about the requirements and procedures needed to obtain a building permit in Saudi Arabia.",
-      "post2Category": "Finishing — 2026",
-      "post2Title": "Types of paints in Saudi Arabia",
-      "post2Body": "A comprehensive guide to paint types and finishes used in Saudi Arabian construction projects."
+      "readMore": "Read more"
     },
     "startCta": {
       "headline": "Start your project with confidence",
@@ -455,9 +449,7 @@
     "hero": {
       "proHeadline": "Grow your business with continuous projects",
       "proSubheadline": "Join 12,400 verified professionals on Bonyad. Submit bids on projects matching your skills and receive payments securely through escrow — with no commission.",
-      "proCta": "Join as a professional",
-      "proStat1": "350+ completed projects",
-      "proStat2": "150+ active professionals"
+      "proCta": "Join as a professional"
     },
     "services": {
       "headline": "A platform connecting expertise with opportunities",
@@ -505,19 +497,7 @@
     "blog": {
       "headline": "Grow your expertise. Grow your business.",
       "subheadline": "Tips, guides, and insights to help professionals build stronger careers on Bonyad.",
-      "readMore": "Read more",
-      "featuredCategory": "Featured",
-      "featuredTitle": "How top professionals on Bonyad win more projects",
-      "featuredBody": "Proven strategies from Bonyad's highest-rated professionals on building a compelling profile and winning competitive bids.",
-      "post1Category": "Career — 2026",
-      "post1Title": "How to write a winning project proposal",
-      "post1Body": "Learn what clients look for in proposals and how to stand out from the competition.",
-      "post2Category": "Finance — 2026",
-      "post2Title": "Managing cash flow as a freelance professional",
-      "post2Body": "Practical tips for keeping your finances stable between projects.",
-      "post3Category": "Growth — 2026",
-      "post3Title": "Building long-term client relationships on Bonyad",
-      "post3Body": "How to turn one-time projects into lasting partnerships that fuel steady income."
+      "readMore": "Read more"
     },
     "cta": {
       "headline": "Grow your business and multiply your revenue",
@@ -672,7 +652,7 @@
       "email": {
         "title": "Email Us",
         "body": "Don't hesitate to reach out to us at",
-        "address": "support@bonyad.com"
+        "address": "support@bonyad-hub.com"
       },
       "chat": {
         "title": "Talk to Us",
@@ -683,7 +663,7 @@
         "subtitle": "Call Us",
         "title": "Saudi Arabia",
         "body": "We serve customers and service providers with a more professional and seamless experience across the Kingdom.",
-        "phone": "Phone: 99550000"
+        "phone": "Phone: 0550752121"
       }
     },
     "steps": {
@@ -784,7 +764,12 @@
       "button": "Browse Packages"
     },
     "faq": {
-      "heading": "Frequently Asked Questions"
+      "heading": "Frequently Asked Questions",
+      "showMore": "Show more",
+      "meta": {
+        "title": "Frequently Asked Questions",
+        "description": "Find answers to common questions about Bonyad — how to find verified technicians, post projects, pricing, and more."
+      }
     }
   },
   "contact": {
@@ -849,8 +834,14 @@
       "avatarFallback": "Author photo",
       "byAuthor": "By {{name}}",
       "backToBlog": "Back to all articles",
+      "backToHome": "Back to home",
       "notFoundTitle": "Article not found",
       "notFoundBody": "We couldn't find the article you were looking for. It may have been removed."
+    },
+    "cta": {
+      "title": "Start your project with Bonyad",
+      "body": "Connect with the best contractors and specialists in Saudi Arabia.",
+      "action": "Get started"
     }
   },
   "about": {
@@ -904,27 +895,10 @@
         }
       }
     },
-    "team": {
-      "title": "Our Team",
-      "body": "We believe success starts with people, and our team is the heart of everything we do.",
-      "members": {
-        "m1": { "name": "Fatima Al-Qasimi", "role": "UX Designer" },
-        "m2": { "name": "Ali Al-Hashimi", "role": "Mobile App Developer" },
-        "m3": { "name": "Sara Al-Zaabi", "role": "IT Project Planner" },
-        "m4": { "name": "Aziz Assaoui", "role": "Full-Stack Web Developer" },
-        "m5": { "name": "Hassan Al-Abdullah", "role": "Data Analyst" },
-        "m6": { "name": "Maryam Al-Shamsi", "role": "Digital Marketing Manager" }
-      }
-    },
     "stats": {
       "tagline": "Bonyad's Impact",
       "title": "We measure our success by the success of our clients",
-      "body": "We strive to build a platform that simplifies access to expertise, strengthens opportunities for collaboration, and helps execute projects with greater efficiency and trust.",
-      "items": {
-        "s1": { "label": "Year founded", "value": "2023" },
-        "s2": { "label": "Completed projects", "value": "50,000+" },
-        "s3": { "label": "Verified professionals", "value": "12,400+" }
-      }
+      "body": "We strive to build a platform that simplifies access to expertise, strengthens opportunities for collaboration, and helps execute projects with greater efficiency and trust."
     }
   },
   "messages": {

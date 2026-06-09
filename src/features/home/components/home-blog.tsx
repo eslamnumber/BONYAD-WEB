@@ -5,79 +5,62 @@ import { ROUTES } from '@/config/routes';
 import { getTranslations } from '@/lib/get-translations';
 import { type Locale } from '@/types/locale';
 
-type HomeBlogProps = { locale: Locale };
-
-type FeaturedPostProps = { category: string; title: string; body: string; readMoreLabel: string };
-
-function FeaturedPost({ category, title, body, readMoreLabel }: FeaturedPostProps) {
-  return (
-    <Link
-      href={ROUTES.BLOG}
-      className="group bg-background relative flex-1 overflow-hidden rounded-[4px] transition-shadow duration-200 motion-safe:hover:shadow-md"
-    >
-      <div className="relative aspect-[16/10] w-full sm:aspect-auto sm:h-[340px]">
-        <Image
-          src="/images/blog/featured-1.webp"
-          alt={title}
-          fill
-          className="object-cover"
-          sizes="(max-width: 768px) 100vw, 50vw"
-        />
-      </div>
-      <div className="flex flex-col gap-2 p-5 text-end sm:p-6">
-        <p className="text-brand-navy text-sm font-medium tracking-wide uppercase sm:text-[16px]">
-          {category}
-        </p>
-        <h3 className="text-foreground text-lg font-semibold sm:text-[20px]">{title}</h3>
-        <p className="text-foreground/60 overflow-hidden text-sm sm:text-[14px]">{body}</p>
-        <p className="text-brand-navy mt-2 text-sm font-bold group-hover:underline">
-          {readMoreLabel}
-        </p>
-      </div>
-    </Link>
-  );
-}
-
-type OtherPostProps = {
-  category: string;
+export type HomeBlogPost = {
+  slug: string;
   title: string;
-  body: string;
-  imgSrc: string;
-  readMoreLabel: string;
+  summary: string;
+  category: string;
+  imageSrc: string;
 };
 
-function OtherPost({ category, title, body, imgSrc, readMoreLabel }: OtherPostProps) {
+type HomeBlogProps = { locale: Locale; posts: HomeBlogPost[] };
+
+const FALLBACK_IMAGE = '/images/blog/featured-1.webp';
+
+type ArticleCardProps = { post: HomeBlogPost; readMoreLabel: string; featured?: boolean };
+
+export function ArticleCard({ post, readMoreLabel, featured = false }: ArticleCardProps) {
   return (
     <Link
-      href={ROUTES.BLOG}
-      className="group border-border bg-background flex items-center gap-6 overflow-hidden rounded-[4px] border transition-shadow duration-200 motion-safe:hover:shadow-sm"
+      href={ROUTES.BLOG_POST(post.slug)}
+      className="group bg-background border-border flex h-full flex-col overflow-hidden rounded-[4px] border transition-shadow duration-200 motion-safe:hover:shadow-md"
     >
-      <div className="flex flex-1 flex-col gap-1 px-4 py-3 text-end sm:px-6 sm:py-4">
-        <p className="text-brand-navy text-xs font-medium tracking-wide uppercase sm:text-[16px]">
-          {category}
-        </p>
-        <p className="text-foreground text-base font-semibold sm:text-[20px]">{title}</p>
-        <p className="text-foreground/60 overflow-hidden text-sm sm:text-[14px]">{body}</p>
-        <p className="text-brand-navy mt-1 text-xs font-bold group-hover:underline">
-          {readMoreLabel}
-        </p>
-      </div>
-      <div className="relative h-[120px] w-[120px] shrink-0 sm:h-[170px] sm:w-[182px]">
+      <div
+        className={`relative w-full ${featured ? 'aspect-[2732/800] lg:aspect-auto lg:min-h-[260px] lg:flex-1' : 'aspect-[2732/800] shrink-0'}`}
+      >
         <Image
-          src={imgSrc}
-          alt={title}
+          src={post.imageSrc || FALLBACK_IMAGE}
+          alt={post.title}
           fill
           className="object-cover"
-          sizes="(max-width: 640px) 120px, 182px"
+          sizes={featured ? '(max-width: 1024px) 100vw, 60vw' : '(max-width: 1024px) 100vw, 522px'}
         />
+      </div>
+      <div dir="rtl" className="flex flex-col gap-2 p-5 text-start sm:p-6">
+        <p className="text-brand-navy text-sm font-medium tracking-wide sm:text-[16px]">
+          {post.category}
+        </p>
+        <h3
+          className={`text-foreground font-semibold ${featured ? 'text-lg sm:text-[20px]' : 'text-base sm:text-[18px]'}`}
+        >
+          {post.title}
+        </h3>
+        {post.summary ? (
+          <p className="text-foreground/60 text-sm sm:text-[14px]">{post.summary}</p>
+        ) : null}
+        <p className="text-brand-navy pt-2 text-sm font-bold group-hover:underline">
+          {readMoreLabel}
+        </p>
       </div>
     </Link>
   );
 }
 
-export function HomeBlog({ locale }: HomeBlogProps) {
+export function HomeBlog({ locale, posts }: HomeBlogProps) {
   const { t } = getTranslations(locale);
   const readMore = t('home.blog.readMore');
+  const featured = posts[0];
+  const others = posts.slice(1, 3);
 
   return (
     <section className="bg-blog-section py-12 sm:py-16 lg:py-20">
@@ -89,32 +72,25 @@ export function HomeBlog({ locale }: HomeBlogProps) {
           <p className="text-muted-foreground max-w-lg text-base">{t('home.blog.subheadline')}</p>
         </div>
 
-        <div className="flex flex-col gap-[20px] lg:flex-row">
-          <FeaturedPost
-            category={t('home.blog.featuredCategory')}
-            title={t('home.blog.featuredTitle')}
-            body={t('home.blog.featuredBody')}
-            readMoreLabel={readMore}
-          />
-          {/* Side column is proportional at lg so the featured post keeps the
-              larger share; the Figma 522px width pins only at xl (frame width). */}
-          <div className="flex w-full flex-col gap-3 lg:w-[40%] lg:shrink-0 xl:w-[522px]">
-            <OtherPost
-              category={t('home.blog.post1Category')}
-              title={t('home.blog.post1Title')}
-              body={t('home.blog.post1Body')}
-              imgSrc="/images/blog/other-1.webp"
-              readMoreLabel={readMore}
-            />
-            <OtherPost
-              category={t('home.blog.post2Category')}
-              title={t('home.blog.post2Title')}
-              body={t('home.blog.post2Body')}
-              imgSrc="/images/blog/other-2.webp"
-              readMoreLabel={readMore}
-            />
+        {featured ? (
+          <div className="flex flex-col gap-[20px] lg:flex-row">
+            <div className="lg:flex-1">
+              <ArticleCard post={featured} readMoreLabel={readMore} featured />
+            </div>
+            {others.length > 0 ? (
+              <div className="flex w-full flex-col gap-3 lg:w-[40%] lg:shrink-0 xl:w-[522px]">
+                {others.map((post) => (
+                  <ArticleCard key={post.slug} post={post} readMoreLabel={readMore} />
+                ))}
+              </div>
+            ) : null}
           </div>
-        </div>
+        ) : (
+          <div className="text-center">
+            <p className="text-foreground text-xl font-semibold">{t('blog.empty.title')}</p>
+            <p className="text-muted-foreground mt-2">{t('blog.empty.body')}</p>
+          </div>
+        )}
       </div>
     </section>
   );

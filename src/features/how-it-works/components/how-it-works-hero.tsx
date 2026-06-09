@@ -31,7 +31,7 @@ export function HowItWorksHero({ locale }: Props) {
         <p className="text-primary text-base font-semibold tracking-[0.5px]">
           {t('howItWorks.hero.tag')}
         </p>
-        <h1 className="text-foreground w-full max-w-[463px] text-4xl font-semibold tracking-[-0.25px] sm:text-5xl xl:text-[80px]">
+        <h1 className="text-foreground w-full max-w-[463px] text-4xl leading-snug font-semibold tracking-[-0.25px] sm:text-5xl sm:leading-snug xl:text-[80px]">
           {t('howItWorks.hero.headline')}
         </h1>
         <p className="text-hero-subtext w-full max-w-[545px] text-base tracking-[0.5px]">

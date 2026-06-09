@@ -3,13 +3,10 @@ import { type Locale } from '@/types/locale';
 
 type Props = { locale: Locale };
 
-const STATS = ['s1', 's2', 's3'] as const;
-
 /**
  * Figma 654:4860 — Stats ("Bonyad's Impact") panel.
- * Inset soft panel (--color-about-panel-soft, rounded) with an eyebrow tagline, heading, body,
- * and a 3-up row of stat items (label + value) in navy at 80% opacity. max-w-7xl centering
- * reproduces the Figma 80px page gutter at 1440.
+ * Inset soft panel (--color-about-panel-soft, rounded) with an eyebrow tagline, heading, and body.
+ * max-w-7xl centering reproduces the Figma 80px page gutter at 1440.
  */
 export function AboutStats({ locale }: Props) {
   const { t } = getTranslations(locale);
@@ -32,18 +29,6 @@ export function AboutStats({ locale }: Props) {
         >
           {t('about.stats.body')}
         </p>
-        <dl className="text-brand-dark-navy/80 grid w-full max-w-[595px] grid-cols-3 gap-4">
-          {STATS.map((s) => (
-            <div key={s} className="flex flex-col items-center gap-2">
-              <dt dir="auto" className="text-sm leading-normal sm:text-base xl:text-xl">
-                {t(`about.stats.items.${s}.label`)}
-              </dt>
-              <dd dir="auto" className="text-2xl leading-normal font-medium xl:text-[32px]">
-                {t(`about.stats.items.${s}.value`)}
-              </dd>
-            </div>
-          ))}
-        </dl>
       </div>
     </section>
   );

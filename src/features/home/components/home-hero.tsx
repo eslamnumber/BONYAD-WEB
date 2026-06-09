@@ -50,9 +50,10 @@ export function HomeHero({ locale, activeTab = 'user' }: HomeHeroProps) {
                 placeholder: t('home.hero.searchPlaceholder'),
                 searchCta: t('home.hero.searchCta'),
                 joinCta: t('tech.hero.proCta'),
-                trustBadge: t('home.hero.trustBadge'),
-                proStat1: t('tech.hero.proStat1'),
-                proStat2: t('tech.hero.proStat2'),
+                trustBadgePrefix: t('home.hero.trustBadgePrefix'),
+                trustBadgeAnd: t('home.hero.trustBadgeAnd'),
+                trustBadgeAbsher: t('home.hero.trustBadgeAbsher'),
+                trustBadgeNafath: t('home.hero.trustBadgeNafath'),
               }}
             />
           </div>

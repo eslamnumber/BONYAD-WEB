@@ -2,6 +2,7 @@ import { type Metadata } from 'next';
 
 import { JsonLd } from '@/components/seo';
 import { env } from '@/config/env';
+import { STATIC_ARTICLES } from '@/features/blog';
 import {
   getSubscriptionPlans,
   HomeHero,
@@ -12,11 +13,20 @@ import {
   TechBlog,
   TechPricing,
   TechSuccessStories,
+  type HomeBlogPost,
 } from '@/features/home';
 import { getTranslations } from '@/lib/get-translations';
 import { getRequestNonce, getServerLocale } from '@/lib/locale';
 
 export const revalidate = 3600;
+
+const techBlogPosts: HomeBlogPost[] = STATIC_ARTICLES.slice(0, 4).map((article) => ({
+  slug: article.slug,
+  title: article.title,
+  summary: article.summary,
+  category: article.category,
+  imageSrc: article.image,
+}));
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getServerLocale();
@@ -60,7 +70,7 @@ export default async function ForProsPage() {
       <HomeTrust locale={locale} />
       <TechPricing locale={locale} plans={plans} />
       <TechSuccessStories locale={locale} />
-      <TechBlog locale={locale} />
+      <TechBlog locale={locale} posts={techBlogPosts} />
       <HomeStartCta locale={locale} variant="pro" />
     </>
   );

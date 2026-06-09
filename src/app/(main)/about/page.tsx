@@ -2,7 +2,7 @@ import { type Metadata } from 'next';
 
 import { JsonLd } from '@/components/seo';
 import { env } from '@/config/env';
-import { AboutHero, AboutPillars, AboutStats, AboutTeam, AboutTimeline } from '@/features/about';
+import { AboutHero, AboutPillars, AboutStats, AboutTimeline } from '@/features/about';
 import { getTranslations } from '@/lib/get-translations';
 import { getRequestNonce, getServerLocale } from '@/lib/locale';
 
@@ -55,7 +55,6 @@ export default async function AboutPage() {
       <AboutHero locale={locale} />
       <AboutPillars locale={locale} />
       <AboutTimeline locale={locale} />
-      <AboutTeam locale={locale} />
       <AboutStats locale={locale} />
     </>
   );

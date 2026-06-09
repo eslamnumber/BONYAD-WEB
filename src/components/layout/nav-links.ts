@@ -5,5 +5,6 @@ export const NAV_LINKS = [
   { route: ROUTES.BLOG, key: 'blog' as const },
   { route: ROUTES.ABOUT, key: 'about' as const },
   { route: ROUTES.HOW_IT_WORKS, key: 'howItWorks' as const },
+  { route: ROUTES.FAQ, key: 'faq' as const },
   { route: ROUTES.SERVICES, key: 'services' as const, hasDropdown: true },
 ];

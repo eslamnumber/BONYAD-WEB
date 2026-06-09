@@ -14,6 +14,7 @@ export type MobileMenuLabels = {
   closeMenu: string;
   services: string;
   howItWorks: string;
+  faq: string;
   about: string;
   blog: string;
   contact: string;

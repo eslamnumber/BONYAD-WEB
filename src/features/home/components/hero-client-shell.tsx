@@ -22,9 +22,10 @@ export type HeroI18n = {
   placeholder: string;
   searchCta: string;
   joinCta: string;
-  trustBadge: string;
-  proStat1: string;
-  proStat2: string;
+  trustBadgePrefix: string;
+  trustBadgeAnd: string;
+  trustBadgeAbsher: string;
+  trustBadgeNafath: string;
 };
 
 type HeroClientShellProps = {
@@ -78,21 +79,25 @@ function BadgeBlock({ isPro, i18n }: TabBlockProps) {
   return (
     <div className="grid [&>*]:[grid-area:1/1]">
       <CrossfadeLayer active={!isPro}>
-        <div className="text-muted-foreground/70 flex items-center gap-2 text-[12px]">
+        <div
+          dir="auto"
+          className="text-muted-foreground/70 flex flex-wrap items-center justify-center gap-x-2 gap-y-1 text-[12px]"
+        >
           <TrustBadgeIcon className="size-4 shrink-0" aria-hidden />
-          <span>{i18n.trustBadge}</span>
-        </div>
-      </CrossfadeLayer>
-      <CrossfadeLayer active={isPro}>
-        <div className="text-muted-foreground flex flex-wrap items-center justify-center gap-x-8 gap-y-3 text-sm">
-          <div className="flex items-center gap-2">
-            <TrustBadgeIcon className="size-4 shrink-0" aria-hidden />
-            <span>{i18n.proStat1}</span>
-          </div>
-          <div className="flex items-center gap-2">
-            <TrustBadgeIcon className="size-4 shrink-0" aria-hidden />
-            <span>{i18n.proStat2}</span>
-          </div>
+          <span>{i18n.trustBadgePrefix}</span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/hero/absher.svg"
+            alt={i18n.trustBadgeAbsher}
+            className="h-[18px] w-auto"
+          />
+          <span>{i18n.trustBadgeAnd}</span>
+          {/* eslint-disable-next-line @next/next/no-img-element */}
+          <img
+            src="/images/hero/nafath.svg"
+            alt={i18n.trustBadgeNafath}
+            className="h-[18px] w-auto"
+          />
         </div>
       </CrossfadeLayer>
     </div>

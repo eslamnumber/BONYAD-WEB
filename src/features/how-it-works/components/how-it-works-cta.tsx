@@ -28,7 +28,7 @@ export function HowItWorksCta({ locale }: Props) {
               {t('howItWorks.cta.body')}
             </p>
             <Link
-              href={ROUTES.FOR_PROS}
+              href={`${ROUTES.FOR_PROS}#packages`}
               className="bg-primary flex items-center justify-center rounded-full px-4 py-2.5 text-base font-bold tracking-[0.1px] text-white"
             >
               {t('howItWorks.cta.button')}

@@ -1,13 +1,15 @@
-import Image from 'next/image';
-
-import { DetailLocationIcon, DetailProjectsIcon, DetailRateIcon } from '@/components/icons';
+import {
+  DetailLocationIcon,
+  DetailProjectsIcon,
+  DetailRateIcon,
+  PersonIcon,
+} from '@/components/icons';
 import { getTranslations } from '@/lib/get-translations';
 import { type Locale } from '@/types/locale';
 
 type HomeProfessionalsProps = { locale: Locale };
 
 type ProfessionalData = {
-  imgSrc: string;
   nameKey: string;
   titleKey: string;
   rateKey: string;
@@ -17,7 +19,6 @@ type ProfessionalData = {
 
 const PROFESSIONALS: ProfessionalData[] = [
   {
-    imgSrc: '/images/technicians/card-1.webp',
     nameKey: 'home.professionals.pro1Name',
     titleKey: 'home.professionals.pro1Title',
     rateKey: 'home.professionals.pro1Rate',
@@ -25,7 +26,6 @@ const PROFESSIONALS: ProfessionalData[] = [
     locationKey: 'home.professionals.pro1Location',
   },
   {
-    imgSrc: '/images/technicians/card-2.webp',
     nameKey: 'home.professionals.pro2Name',
     titleKey: 'home.professionals.pro2Title',
     rateKey: 'home.professionals.pro2Rate',
@@ -33,7 +33,6 @@ const PROFESSIONALS: ProfessionalData[] = [
     locationKey: 'home.professionals.pro2Location',
   },
   {
-    imgSrc: '/images/technicians/card-3.webp',
     nameKey: 'home.professionals.pro3Name',
     titleKey: 'home.professionals.pro3Title',
     rateKey: 'home.professionals.pro3Rate',
@@ -43,7 +42,6 @@ const PROFESSIONALS: ProfessionalData[] = [
 ];
 
 type ProfCardProps = {
-  imgSrc: string;
   name: string;
   title: string;
   rate: string;
@@ -52,16 +50,12 @@ type ProfCardProps = {
   verifiedLabel: string;
 };
 
-function ProfCard({ imgSrc, name, title, rate, projects, location, verifiedLabel }: ProfCardProps) {
+function ProfCard({ name, title, rate, projects, location, verifiedLabel }: ProfCardProps) {
   return (
-    <div className="group relative h-[420px] w-full overflow-hidden rounded sm:h-[460px]">
-      <Image
-        src={imgSrc}
-        alt={name}
-        fill
-        className="object-cover transition-transform duration-300 motion-safe:group-hover:scale-105"
-        sizes="(max-width: 640px) 100vw, 378px"
-      />
+    <div className="group bg-muted relative flex h-[420px] w-full items-center justify-center overflow-hidden rounded sm:h-[460px]">
+      <div className="bg-muted-foreground/15 flex size-28 items-center justify-center overflow-hidden rounded-full transition-transform duration-300 motion-safe:group-hover:scale-105 sm:size-32">
+        <PersonIcon aria-hidden className="text-muted-foreground/70 size-16 sm:size-20" />
+      </div>
       <div className="bg-success absolute end-0 top-[22px] px-4 py-2">
         <span className="text-sm leading-none font-medium text-white">{verifiedLabel}</span>
       </div>
@@ -110,8 +104,7 @@ export function HomeProfessionals({ locale }: HomeProfessionalsProps) {
         <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
           {PROFESSIONALS.map((pro) => (
             <ProfCard
-              key={pro.imgSrc}
-              imgSrc={pro.imgSrc}
+              key={pro.nameKey}
               name={t(pro.nameKey)}
               title={t(pro.titleKey)}
               rate={t(pro.rateKey)}

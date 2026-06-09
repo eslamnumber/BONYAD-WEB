@@ -30,11 +30,10 @@ function WorkerColumn({ stat, body }: WorkerColumnProps) {
   );
 }
 
-function StatTopCell({ stat, body }: { stat: string; body: string }) {
+function StatTopCell({ body }: { body: string }) {
   return (
     <div className="bg-brand-navy flex min-h-[180px] flex-col items-center justify-center gap-4 rounded-[8px] p-6 text-center sm:col-span-2 sm:min-h-[228px]">
-      <p className="text-5xl font-medium text-white sm:text-6xl">{stat}</p>
-      <p className="text-sm leading-relaxed text-white/90">{body}</p>
+      <p className="text-base leading-relaxed font-medium text-white sm:text-xl">{body}</p>
     </div>
   );
 }
@@ -49,7 +48,6 @@ function TransparentCell({ title, body }: { title: string; body: string }) {
 }
 
 type BentoLeftProps = {
-  stat120: string;
   stat120Body: string;
   contractTitle: string;
   contractBody: string;
@@ -60,7 +58,6 @@ type BentoLeftProps = {
 };
 
 function BentoLeft({
-  stat120,
   stat120Body,
   contractTitle,
   contractBody,
@@ -71,7 +68,7 @@ function BentoLeft({
 }: BentoLeftProps) {
   return (
     <div className="grid w-full grid-cols-1 gap-3 sm:grid-cols-6 lg:min-w-0 lg:flex-1 xl:w-[847px] xl:flex-none">
-      <StatTopCell stat={stat120} body={stat120Body} />
+      <StatTopCell body={stat120Body} />
 
       <div className="bg-trust-bg-light relative min-h-[200px] overflow-hidden rounded-[8px] sm:col-span-4 sm:min-h-[228px]">
         {/* Decorative contract photo — hidden until xl, where the col-span-4 cell
@@ -130,7 +127,6 @@ export function HomeTrust({ locale }: HomeTrustProps) {
         <div className="flex justify-center">
           <div className="flex w-full flex-col gap-[14px] lg:flex-row">
             <BentoLeft
-              stat120={t('home.trust.stat120')}
               stat120Body={t('home.trust.stat120Body')}
               contractTitle={t('home.trust.contractTitle')}
               contractBody={t('home.trust.contractBody')}

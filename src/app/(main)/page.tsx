@@ -1,5 +1,6 @@
 import { JsonLd } from '@/components/seo';
 import { env } from '@/config/env';
+import { STATIC_ARTICLES } from '@/features/blog';
 import {
   HomeAppDownload,
   HomeBlog,
@@ -10,12 +11,21 @@ import {
   HomeServices,
   HomeStartCta,
   HomeTrust,
+  type HomeBlogPost,
 } from '@/features/home';
 import { getTranslations } from '@/lib/get-translations';
 import { getRequestNonce, getServerLocale } from '@/lib/locale';
 
 // Next.js requires literal revalidate values — keep in sync with ISR_DEFAULT_SECONDS.
 export const revalidate = 3600;
+
+const blogPosts: HomeBlogPost[] = STATIC_ARTICLES.slice(0, 3).map((article) => ({
+  slug: article.slug,
+  title: article.title,
+  summary: article.summary,
+  category: article.category,
+  imageSrc: article.image,
+}));
 
 export default async function HomePage() {
   const [locale, nonce] = await Promise.all([getServerLocale(), getRequestNonce()]);
@@ -55,7 +65,7 @@ export default async function HomePage() {
       <HomeHowItWorks locale={locale} />
       <HomeTrust locale={locale} />
       <HomeProfessionals locale={locale} />
-      <HomeBlog locale={locale} />
+      <HomeBlog locale={locale} posts={blogPosts} />
       <HomeStartCta locale={locale} />
       <HomeAppDownload locale={locale} />
     </>

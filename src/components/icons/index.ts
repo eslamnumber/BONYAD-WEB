@@ -7,6 +7,7 @@ export { default as SocialXIcon } from './social-x.svg';
 export { default as SocialLinkedinIcon } from './social-linkedin.svg';
 export { default as SocialInstagramIcon } from './social-instagram.svg';
 export { default as SocialTiktokIcon } from './social-tiktok.svg';
+export { default as PersonIcon } from './person.svg';
 export { default as NavGlobeIcon } from './nav-globe.svg';
 
 /* Browse section icons */

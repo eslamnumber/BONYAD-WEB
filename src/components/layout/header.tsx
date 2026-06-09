@@ -17,6 +17,7 @@ type HeaderProps = {
     nav: {
       services: string;
       howItWorks: string;
+      faq: string;
       about: string;
       blog: string;
       contact: string;

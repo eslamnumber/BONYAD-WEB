@@ -56,21 +56,25 @@ export function AppDownloadMobileBar({
   if (pathname !== ROUTES.HOME || dismissed) return null;
 
   return (
-    <div className="border-border bg-card/95 border-b backdrop-blur md:hidden">
-      <div className="mx-auto flex max-w-7xl flex-wrap items-center justify-between gap-x-3 gap-y-2 px-4 py-2">
-        <p dir="auto" className="text-foreground text-start text-sm font-semibold">
-          {title}
-        </p>
-        <div className="flex items-center gap-2">
-          <StoreBadges size="sm" appStoreAlt={appStoreAlt} googlePlayAlt={googlePlayAlt} />
-          <button
-            type="button"
-            onClick={dismiss}
-            aria-label={dismissLabel}
-            className="text-muted-foreground hover:text-foreground focus-visible:outline-ring rounded-full p-1.5 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
-          >
-            <X className="size-5" aria-hidden />
-          </button>
+    <div className="border-border bg-card/80 border-b backdrop-blur-md md:hidden">
+      <div className="mx-auto flex max-w-7xl items-center gap-3 px-4 py-2.5">
+        <button
+          type="button"
+          onClick={dismiss}
+          aria-label={dismissLabel}
+          className="text-muted-foreground hover:text-foreground focus-visible:outline-ring shrink-0 rounded-full p-1 transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+        >
+          <X className="size-4" aria-hidden />
+        </button>
+        <div className="flex min-w-0 flex-1 items-center justify-end gap-3">
+          <StoreBadges
+            size="xs"
+            interactive
+            className="shrink-0 flex-nowrap gap-2"
+            appStoreAlt={appStoreAlt}
+            googlePlayAlt={googlePlayAlt}
+          />
+          <p className="text-foreground min-w-0 truncate text-end text-sm font-semibold">{title}</p>
         </div>
       </div>
     </div>
