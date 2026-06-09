@@ -9,7 +9,9 @@ import {
   type CreateBidResponse,
 } from '../schemas/bid';
 
+import { deleteBid } from './delete-bid';
 import { projectQueryKey } from './get-project';
+import { projectBidsQueryKey } from './get-project-bids';
 
 /**
  * Submit a bid/offer on a project. Mirrors the RN call site
@@ -23,12 +25,25 @@ export async function createBid(input: CreateBidRequest): Promise<CreateBidRespo
   return apiClient.post<CreateBidResponse>(API_ENDPOINTS.BIDS.CREATE, { body });
 }
 
-export function useCreateBid() {
+/** A submit (create), optionally replacing an existing bid first (the "edit" path). */
+export type SubmitBidVars = { request: CreateBidRequest; replaceBidId?: number };
+
+/**
+ * Submit (or re-submit) a bid. The backend allows one bid per project and has no
+ * update verb, so editing is delete-then-create: when `replaceBidId` is set the
+ * old bid is withdrawn before the new one is posted (mirrors the RN
+ * withdraw→re-bid path). Invalidates both the project and its bids list.
+ */
+export function useSubmitBid() {
   const queryClient = useQueryClient();
-  return useMutation<CreateBidResponse, Error, CreateBidRequest>({
-    mutationFn: createBid,
-    onSuccess: (_data, variables) => {
-      queryClient.invalidateQueries({ queryKey: projectQueryKey(variables.projectId) });
+  return useMutation<CreateBidResponse, Error, SubmitBidVars>({
+    mutationFn: async ({ request, replaceBidId }) => {
+      if (replaceBidId !== undefined) await deleteBid(replaceBidId);
+      return createBid(request);
+    },
+    onSuccess: (_data, { request }) => {
+      queryClient.invalidateQueries({ queryKey: projectQueryKey(request.projectId) });
+      queryClient.invalidateQueries({ queryKey: projectBidsQueryKey(request.projectId) });
     },
   });
 }

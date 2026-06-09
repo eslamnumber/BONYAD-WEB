@@ -64,55 +64,92 @@ const SAMPLE_PHASES = [
   },
 ];
 
-/** Assigned-projects rows — one per status so the table shows every badge variant. */
+/**
+ * Assigned-projects rows — at least one per toolbar filter so every filter is
+ * demonstrable. `projectType` is the backend assignment enum (BIDDING /
+ * DIRECT_ASSIGNMENT), NOT a service category; the localized service name comes
+ * from serviceNameEn/serviceNameAr.
+ */
 const SAMPLE_ASSIGNED = [
   {
     id: 11,
     title: 'فيلا سكنية بالرياض',
     userName: 'أحمد العتيبي',
-    projectType: 'البناء',
+    serviceNameEn: 'Construction',
+    serviceNameAr: 'البناء',
+    projectType: 'BIDDING',
     budget: 180000,
     status: 'APPROVED',
   },
   {
     id: 12,
-    title: 'شركة تصميم في جدة',
+    title: 'مجمع سكني في جدة',
     userName: 'سارة الحمادي',
-    projectType: 'التصميم الداخلي',
+    serviceNameEn: 'Interior design',
+    serviceNameAr: 'التصميم الداخلي',
+    projectType: 'BIDDING',
     budget: 250000,
-    status: 'OFFER_SENT',
+    status: 'PHASE_PLANNING',
   },
   {
     id: 13,
     title: 'مشروع تجاري في الدمام',
     userName: 'محمد السعيد',
-    projectType: 'البناء',
+    serviceNameEn: 'Construction',
+    serviceNameAr: 'البناء',
+    projectType: 'BIDDING',
     budget: 2700,
     status: 'IN_PROGRESS',
   },
   {
     id: 14,
-    title: 'شقة سكنية في الخبر',
+    title: 'توقيع عقد فيلا في الخبر',
     userName: 'ليلى القحطاني',
-    projectType: 'الديكور',
+    serviceNameEn: 'Decor',
+    serviceNameAr: 'الديكور',
+    projectType: 'BIDDING',
     budget: 300000,
-    status: 'REJECTED',
+    status: 'CONTRACT_SIGNING',
   },
   {
     id: 15,
     title: 'مركز تجاري في جدة',
     userName: 'سارة العتيبي',
-    projectType: 'التصميمات',
+    serviceNameEn: 'Designs',
+    serviceNameAr: 'التصميمات',
+    projectType: 'BIDDING',
     budget: 850000,
-    status: 'PENDING',
+    status: 'BIDDING',
   },
   {
     id: 16,
     title: 'طريق سريع في الدمام',
     userName: 'منصور القحطاني',
-    projectType: 'البنية التحتية',
+    serviceNameEn: 'Infrastructure',
+    serviceNameAr: 'البنية التحتية',
+    projectType: 'BIDDING',
     budget: 300000,
     status: 'COMPLETED',
+  },
+  {
+    id: 17,
+    title: 'صيانة مبنى إداري',
+    userName: 'نورة الزهراني',
+    serviceNameEn: 'Maintenance',
+    serviceNameAr: 'الصيانة',
+    projectType: 'DIRECT_ASSIGNMENT',
+    budget: 120000,
+    status: 'PENDING',
+  },
+  {
+    id: 18,
+    title: 'تشطيب شقة في الرياض',
+    userName: 'خالد المطيري',
+    serviceNameEn: 'Finishing',
+    serviceNameAr: 'التشطيبات',
+    projectType: 'BIDDING',
+    budget: 90000,
+    status: 'PENDING',
   },
 ];
 

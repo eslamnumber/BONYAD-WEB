@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { beforeAll, describe, expect, it } from 'vitest';
+import { beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { i18n } from '@/lib/i18n';
 import { server } from '@/testing/handlers/server';
@@ -29,7 +29,7 @@ describe('SubmitOfferForm', () => {
     expect(called).toBe(false);
   });
 
-  it('posts the bid with months converted to days and shows success', async () => {
+  it('posts the bid with weeks converted to days and reports the submitted offer', async () => {
     let body: unknown;
     server.use(
       http.post('*/bids/create', async ({ request }) => {
@@ -37,7 +37,8 @@ describe('SubmitOfferForm', () => {
         return HttpResponse.json({ id: 7, status: 'PENDING' }, { status: 201 });
       }),
     );
-    renderWithProviders(<SubmitOfferForm projectId={42} />);
+    const onSubmitted = vi.fn();
+    renderWithProviders(<SubmitOfferForm projectId={42} onSubmitted={onSubmitted} />);
 
     fireEvent.change(screen.getByLabelText('Offer price (SAR)'), { target: { value: '75000' } });
     fireEvent.change(screen.getByLabelText('Implementation duration'), { target: { value: '12' } });
@@ -46,13 +47,18 @@ describe('SubmitOfferForm', () => {
     });
     fireEvent.click(screen.getByRole('button', { name: 'Submit offer' }));
 
-    await waitFor(() => expect(body).toBeDefined());
-    expect(body).toEqual({
+    const request = {
       projectId: 42,
       proposedBudget: 75000,
-      estimatedDurationDays: 360,
+      estimatedDurationDays: 84,
       comment: 'Detailed plan.',
-    });
-    expect(await screen.findByText('Your offer has been submitted.')).toBeInTheDocument();
+    };
+    await waitFor(() => expect(body).toBeDefined());
+    expect(body).toEqual(request);
+    await waitFor(() =>
+      expect(onSubmitted).toHaveBeenCalledWith(
+        expect.objectContaining({ request, status: 'PENDING' }),
+      ),
+    );
   });
 });

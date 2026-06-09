@@ -3,9 +3,11 @@
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
+import { SaudiRiyalIcon } from '@/components/icons';
 import { ROUTES } from '@/config/routes';
 
 import { localizedServiceName } from '../lib/project-format';
+import { isPendingOrBidPhase } from '../lib/project-status';
 import type { Project } from '../schemas/project';
 
 import { ProjectStatusBadge } from './project-status-badge';
@@ -67,20 +69,36 @@ function ProjectRow({ project }: { project: Project }) {
   const locale = i18n.language.startsWith('ar') ? 'ar' : 'en';
   const service = localizedServiceName(project, locale);
   const name = project.title || service || t('dashboard.card.untitled');
-  const phase = project.projectType || service || '—';
+  // `projectType` is the assignment enum (DIRECT_ASSIGNMENT / BIDDING), not a
+  // phase label — show the localized service for the "Current phase" column.
+  const phase = service || '—';
+  // Bid/pending projects open the offer-submission screen; an assigned project
+  // (approved · contract · in-progress · completed) opens the shared detail route,
+  // which dispatches the in-progress vs completed view by status.
+  const detailHref = isPendingOrBidPhase(project.status)
+    ? ROUTES.DASHBOARD_JOB_OFFER(String(project.id))
+    : ROUTES.DASHBOARD_PROJECT(String(project.id));
 
   return (
     <tr className="border-border border-b last:border-b-0">
       <td className="px-3 py-4">
         <Link
-          href={ROUTES.DASHBOARD_JOB_OFFER(String(project.id))}
+          href={detailHref}
           className="bg-field-surface text-job-accent focus-visible:outline-ring inline-flex items-center justify-center rounded-full px-4 py-1.5 text-xs font-semibold whitespace-nowrap focus-visible:outline-2"
         >
           {t('dashboard.projects.table.details')}
         </Link>
       </td>
       <td className={BODY_CELL}>
-        <bdi>{groupedBudget(project.budget)}</bdi>
+        {typeof project.budget === 'number' ? (
+          <span className="inline-flex items-center gap-1">
+            <bdi>{groupedBudget(project.budget)}</bdi>
+            <SaudiRiyalIcon className="h-3.5 w-auto shrink-0" aria-hidden />
+            <span className="sr-only">{t('dashboard.jobOffer.summary.currency')}</span>
+          </span>
+        ) : (
+          '—'
+        )}
       </td>
       <td className={BODY_CELL}>
         <bdi>{phase}</bdi>

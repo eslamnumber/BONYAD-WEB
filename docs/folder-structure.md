@@ -27,7 +27,7 @@ web/
 │   │
 │   ├── features/                # Business features — see below
 │   │   ├── auth/                # Login, register, forgot-password flows
-│   │   ├── dashboard/           # (app) SP dashboard — search, hero, project carousel, job-offer tabs/list (PROJECTS.LIST) + job-offer detail (components/job-offer-detail/: summary/form/description/phases/attachments via PROJECTS.DETAILS, PHASES.LIST, BIDS.CREATE)
+│   │   ├── dashboard/           # (app) SP dashboard — search, hero, project carousel, job-offer tabs/list (PROJECTS.LIST) + job-offer detail (components/job-offer-detail/: summary/offer-panel[form↔bid-status card]/description/phases/attachments via PROJECTS.DETAILS, PHASES.LIST, BIDS.CREATE/LIST/DELETE — offer-panel resolves the SP's own bid (useMyBid: BIDS.LIST filtered by auth-store user id) and shows the bid-status card; Edit = delete-then-create, Withdraw = BIDS.DELETE; one bid per project, no update verb) + assigned-project detail at /dashboard/projects/[id] (assigned-project-detail.tsx dispatches by lifecycle status → approved-project-detail/ for APPROVED/PHASE_PLANNING ("offer accepted" view: summary + offer-accepted card via useAcceptedBid/BIDS.LIST + reused description/phases/attachments cards; PHASE_PLANNING maps to approved in the UI), else completed-project-detail/ or in-progress-project-detail/)
 │   │   ├── blog/                # /blog index — public articles via GET /blogs
 │   │   ├── projects/
 │   │   ├── bids/

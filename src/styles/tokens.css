@@ -116,6 +116,7 @@
   /* Tech screen decoration blobs */
   --color-deco-blob-blue-light: var(--deco-blob-blue-light);
   --color-deco-blob-green: var(--deco-blob-green);
+  --color-deco-blob-purple: var(--deco-blob-purple);
 
   /* Tech services right panel background */
   --color-tech-services-panel: var(--tech-services-panel-bg);
@@ -227,6 +228,27 @@
   --color-table-head-fg: var(--table-head-fg);
   --color-stat-caption: var(--stat-caption);
   --color-filter-border: var(--filter-border);
+
+  /* Completed project detail (Figma 1103:6757) — paid badge/dot/phase-check
+     (green), progress card (purple value + gradient over a slate track), and the
+     filled message/contact action button (blue). */
+  --color-paid: var(--paid);
+  --color-paid-soft: var(--paid-soft);
+  --color-progress-value: var(--progress-value);
+  --color-progress-from: var(--progress-from);
+  --color-progress-to: var(--progress-to);
+  --color-progress-track: var(--progress-track);
+  --color-detail-action: var(--detail-action);
+
+  /* In-progress project detail (Figma 1103:6593) — extends the completed-detail
+     palette with the not-yet-paid phase states (awaiting approval / upcoming: fg
+     + soft pill bg, also used for the status dot) and the slate-400 stat labels
+     in the header summary row. Reuses --paid, --progress-*, --detail-action. */
+  --color-awaiting: var(--awaiting);
+  --color-awaiting-soft: var(--awaiting-soft);
+  --color-upcoming: var(--upcoming);
+  --color-upcoming-soft: var(--upcoming-soft);
+  --color-detail-label: var(--detail-label);
 }
 
 :root {
@@ -315,6 +337,9 @@
   /* Tech screen decoration blobs */
   --deco-blob-blue-light: oklch(0.79 0.08 225);
   --deco-blob-green: oklch(0.79 0.12 145);
+  --deco-blob-purple: oklch(
+    0.72 0.16 300
+  ); /* Figma "Ellipse 27" violet top glow on the project-detail page */
 
   /* Tech services right panel */
   --tech-services-panel-bg: oklch(0.86 0.016 294);
@@ -435,6 +460,28 @@
   --table-head-fg: oklch(0.55 0.013 58);
   --stat-caption: oklch(0.62 0 0);
   --filter-border: oklch(0.66 0 0);
+
+  /* Completed project detail — light.
+     paid: #16a34a (green-600) + 10%-alpha soft pill (Figma rgba(22,163,74,0.1));
+     progress: #3c076d value + gradient #3c076d → #7c4fa6 over a #e2e8f0 track;
+     detail-action: #1a6db4 message button (shares the status-done-bg value but
+     kept as its own semantic token — it's an action surface, not a status pill). */
+  --paid: oklch(0.63 0.19 149);
+  --paid-soft: oklch(0.63 0.19 149 / 0.1);
+  --progress-value: oklch(0.28 0.18 308);
+  --progress-from: oklch(0.28 0.18 308);
+  --progress-to: oklch(0.5 0.13 306);
+  --progress-track: oklch(0.93 0.013 256);
+  --detail-action: oklch(0.52 0.13 252);
+
+  /* In-progress project detail — light. Phase payment states beyond "paid":
+     awaiting #d97706 (amber-600), upcoming #64748b (slate-500); both fg + 10%
+     soft pill/dot bg. detail-label #90a1b9 (slate-400 header stat labels). */
+  --awaiting: oklch(0.67 0.16 60);
+  --awaiting-soft: oklch(0.67 0.16 60 / 0.1);
+  --upcoming: oklch(0.55 0.04 257);
+  --upcoming-soft: oklch(0.55 0.04 257 / 0.1);
+  --detail-label: oklch(0.7 0.03 257);
 }
 
 .dark {
@@ -502,6 +549,7 @@
   /* Tech screen decoration blobs — dark overrides */
   --deco-blob-blue-light: oklch(0.4 0.08 225);
   --deco-blob-green: oklch(0.4 0.12 145);
+  --deco-blob-purple: oklch(0.45 0.14 300);
 
   /* Tech services right panel — dark override */
   --tech-services-panel-bg: oklch(0.22 0.016 294);
@@ -612,6 +660,26 @@
   --table-head-fg: oklch(0.7 0.013 58);
   --stat-caption: oklch(0.64 0 0);
   --filter-border: oklch(0.5 0 0);
+
+  /* Completed project detail — dark overrides. paid fg lifted + soft bg ~20%
+     (blog-badge precedent); progress value/gradient brightened so the bar + the
+     "100%" read against the dark card; track darkened to the dark border; action
+     button brightened (== notif-icon-bg dark). */
+  --paid: oklch(0.72 0.18 149);
+  --paid-soft: oklch(0.72 0.18 149 / 0.2);
+  --progress-value: oklch(0.72 0.16 308);
+  --progress-from: oklch(0.45 0.18 308);
+  --progress-to: oklch(0.62 0.13 306);
+  --progress-track: oklch(0.3 0 0);
+  --detail-action: oklch(0.58 0.13 252);
+
+  /* In-progress project detail — dark overrides. awaiting/upcoming fg lifted +
+     soft bg ~20% (blog-badge precedent); stat label lifted for contrast. */
+  --awaiting: oklch(0.76 0.15 60);
+  --awaiting-soft: oklch(0.76 0.15 60 / 0.2);
+  --upcoming: oklch(0.7 0.03 257);
+  --upcoming-soft: oklch(0.7 0.03 257 / 0.2);
+  --detail-label: oklch(0.6 0.03 257);
 }
 
 html[dir='rtl'] {

@@ -5,36 +5,59 @@ import { type UseFormReturn, useForm } from 'react-hook-form';
 
 import { ApiError } from '@/lib/api-client';
 
-import { useCreateBid } from '../../api/create-bid';
+import { useSubmitBid } from '../../api/create-bid';
 import {
   submitOfferFormSchema,
   toCreateBidRequest,
+  type SubmittedOffer,
   type SubmitOfferFormValues,
 } from '../../schemas/submit-offer.schema';
+
+const EMPTY_VALUES: SubmitOfferFormValues = { proposedBudget: '', durationWeeks: '', comment: '' };
 
 /** Maps backend bid field names to the form's field names for inline error display. */
 const SERVER_FIELD_MAP: Record<string, keyof SubmitOfferFormValues> = {
   proposedBudget: 'proposedBudget',
-  estimatedDurationDays: 'durationMonths',
+  estimatedDurationDays: 'durationWeeks',
   comment: 'comment',
 };
 
-/** Form state + submit handler for the submit-offer card; posts via `useCreateBid`. */
-export function useSubmitOffer(projectId: number) {
+type Options = {
+  /** Pre-fills the form (e.g. when re-opened via "Edit offer"). */
+  defaultValues?: SubmitOfferFormValues;
+  /** When editing, the bid to withdraw before posting the new one (delete-then-create). */
+  replaceBidId?: number;
+  /** Called once the bid POSTs successfully, so the panel can show the status card. */
+  onSubmitted?: (offer: SubmittedOffer) => void;
+};
+
+/** Form state + submit handler for the submit-offer card; posts via `useSubmitBid`. */
+export function useSubmitOffer(projectId: number, options: Options = {}) {
   const form = useForm<SubmitOfferFormValues>({
     resolver: zodResolver(submitOfferFormSchema),
-    defaultValues: { proposedBudget: '', durationMonths: '', comment: '' },
+    defaultValues: options.defaultValues ?? EMPTY_VALUES,
   });
-  const mutation = useCreateBid();
+  const mutation = useSubmitBid();
 
-  const onSubmit = form.handleSubmit((values) =>
-    mutation.mutate(toCreateBidRequest(values, projectId), {
-      onSuccess: () => form.reset(),
-      onError: (err) => applyServerError(form, err),
-    }),
-  );
+  const onSubmit = form.handleSubmit((values) => {
+    const request = toCreateBidRequest(values, projectId);
+    mutation.mutate(
+      { request, replaceBidId: options.replaceBidId },
+      {
+        onSuccess: (data) =>
+          options.onSubmitted?.({
+            id: data.id,
+            values,
+            request,
+            status: data.status,
+            createdAt: data.createdAt,
+          }),
+        onError: (err) => applyServerError(form, err),
+      },
+    );
+  });
 
-  return { form, onSubmit, isPending: mutation.isPending, isSuccess: mutation.isSuccess };
+  return { form, onSubmit, isPending: mutation.isPending };
 }
 
 function applyServerError(form: UseFormReturn<SubmitOfferFormValues>, err: unknown): void {

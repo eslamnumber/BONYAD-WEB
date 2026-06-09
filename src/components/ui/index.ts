@@ -3,6 +3,7 @@ export { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle }
 export { FieldHint } from './field-hint';
 export { Input, type InputProps } from './input';
 export { Label, type LabelProps } from './label';
+export { Modal, ModalHeader, ModalFooter } from './modal';
 export { Separator, type SeparatorProps } from './separator';
 export { Skeleton, type SkeletonProps } from './skeleton';
 export { Textarea, type TextareaProps } from './textarea';

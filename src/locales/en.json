@@ -183,7 +183,7 @@
         "priceLabel": "Offer price (SAR)",
         "pricePlaceholder": "0.00",
         "durationLabel": "Implementation duration",
-        "durationPlaceholder": "e.g. 12 months",
+        "durationPlaceholder": "e.g. 8 weeks",
         "messageLabel": "Application message",
         "messagePlaceholder": "Write your offer details here...",
         "submit": "Submit offer",
@@ -195,6 +195,116 @@
           "durationInvalid": "Enter a valid duration.",
           "messageRequired": "Write your application message."
         }
+      },
+      "status": {
+        "title": "Your submitted offer",
+        "valueLabel": "Offer value",
+        "valueCurrency": "SAR",
+        "durationLabel": "Delivery time",
+        "durationWeeks": "{{count}} weeks",
+        "timeline": {
+          "sent": "Offer sent",
+          "review": "Under review",
+          "awaiting": "Awaiting the client's response"
+        },
+        "note": "We'll notify you as soon as the client responds to or accepts your offer.",
+        "edit": "Edit offer",
+        "withdraw": "Withdraw offer",
+        "cancel": "Cancel",
+        "accepted": "Your offer was accepted — it can no longer be edited or withdrawn.",
+        "closed": "This offer can no longer be edited or withdrawn."
+      },
+      "editModal": {
+        "title": "Edit offer",
+        "close": "Close",
+        "durationUnit": "weeks",
+        "detailsLabel": "Offer details",
+        "note": "Note: you can edit your offer as long as the project is still receiving offers.",
+        "save": "Save changes"
+      },
+      "withdrawModal": {
+        "title": "Withdraw offer",
+        "close": "Close",
+        "body1": "Are you sure you want to withdraw your offer?",
+        "body2": "You won't be able to undo this action.",
+        "confirm": "Yes, withdraw offer"
+      }
+    },
+    "approvedProject": {
+      "back": "Back",
+      "accepted": {
+        "title": "Your offer was accepted",
+        "description": "The client selected your offer to start executing the project. You can now review the agreement details.",
+        "valueLabel": "Accepted offer value",
+        "durationLabel": "Implementation duration",
+        "dateLabel": "Acceptance date",
+        "days": "{{count}} days",
+        "reviewContract": "Review & sign the contract",
+        "contactClient": "Contact the client"
+      }
+    },
+    "completedProject": {
+      "title": "Completed project",
+      "loading": "Loading project…",
+      "error": "Couldn't load this project.",
+      "notCompleted": "This project isn't completed yet, so the completion view isn't available.",
+      "empty": "No phases recorded for this project.",
+      "back": "Back",
+      "contactClient": "Message the client",
+      "viewFiles": "Project files",
+      "payments": {
+        "heading": "Payment status",
+        "paid": "Paid",
+        "pending": "Pending",
+        "phasePayment": "Phase {{number}} payment"
+      },
+      "progress": {
+        "heading": "Project progress"
+      },
+      "steps": {
+        "phaseBadge": "Phase {{number}}"
+      }
+    },
+    "projectDetail": {
+      "title": "Project details",
+      "loading": "Loading project…",
+      "error": "Couldn't load this project.",
+      "back": "Back",
+      "header": {
+        "message": "Message the client",
+        "files": "Project files"
+      },
+      "summary": {
+        "heading": "Project summary",
+        "totalBudget": "Total budget",
+        "paid": "Paid so far",
+        "remaining": "Remaining",
+        "phasesLabel": "Number of phases",
+        "phasesValue": "{{count}} phases"
+      },
+      "payments": {
+        "heading": "Payment status",
+        "phasePayment": "Phase {{number}} payment",
+        "empty": "No payments yet.",
+        "state": {
+          "paid": "Paid",
+          "awaiting": "Awaiting approval",
+          "upcoming": "Upcoming"
+        }
+      },
+      "progress": {
+        "heading": "Project progress"
+      },
+      "phases": {
+        "heading": "Project phases",
+        "phaseLabel": "Phase {{number}}",
+        "loading": "Loading phases…",
+        "empty": "No phases defined yet.",
+        "attachments": "Attachments & photos",
+        "attachmentsEmpty": "No attachments yet.",
+        "addUpdate": "Add update",
+        "uploadImages": "Upload images",
+        "requestApproval": "Request phase approval"
       }
     },
     "signOut": "Sign out"

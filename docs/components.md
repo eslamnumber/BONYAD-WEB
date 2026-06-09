@@ -10,6 +10,8 @@
 
 **`FieldHint` is the canonical helper-text / inline-error primitive.** Use it wherever a form field carries a static format hint (`"9 digits, starts with 5"`) or an inline validation error. Toggle the `tone` prop between `"neutral"` and `"error"`. Do not roll a one-off `<p className="text-destructive text-sm" role="alert">…</p>` inside a feature file — that pattern is now a defect; it bypasses the shared error-text style and the `role="alert"` wiring. See [forms-validation.md](forms-validation.md) §Field validation rules.
 
+**`Modal` (+ `ModalHeader` / `ModalFooter`) is the canonical centered-dialog shell** (`components/ui/modal.tsx`). It portals a scrim + 440px card and owns the dialog a11y (focus trap, `Esc`, body-scroll lock, focus restore, `role="dialog"` + `aria-labelledby`). Compose content between the header and footer; pass a stable `labelledBy` id matching the `ModalHeader` title. Do not hand-roll `role="dialog"` + scrim markup in a feature file. Used by the SP edit-offer / withdraw-offer modals.
+
 ## Hard rules
 
 1. **One component per file.** Filename = kebab-case of the component (`project-card.tsx` exports `ProjectCard`).

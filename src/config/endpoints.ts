@@ -42,6 +42,10 @@ export const API_ENDPOINTS = {
   },
   BIDS: {
     CREATE: '/bids/create',
+    /** All bids on a project; the approved screen reads the ACCEPTED one. */
+    LIST: '/bids/project/:projectId',
+    /** Withdraw a bid (DELETE only — the backend has no update verb on this path). */
+    DELETE: '/bids/:id',
   },
   CHAT: {
     MY_CHATS: '/chat/my-chats',

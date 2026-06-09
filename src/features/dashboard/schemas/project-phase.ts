@@ -14,6 +14,10 @@ export type ProjectPhase = {
   timeSpentDays?: number;
   moneySpent?: number;
   paymentStatus?: string;
+  /** Set once a phase payment clears (ISO-8601). Mirrors PhaseService.Phase.paidAt;
+   *  with `paymentStatus === 'PAID'` it drives the "paid" derivation on the
+   *  completed-project screen (see lib/project-finance.ts). */
+  paidAt?: string;
   approved?: boolean;
   completed?: boolean;
   /** Scheduled date shown in the timeline (ISO-8601) when the backend provides it. */

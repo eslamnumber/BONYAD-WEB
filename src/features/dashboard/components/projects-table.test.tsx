@@ -84,7 +84,14 @@ describe('ProjectsTable', () => {
     expect(screen.getByText('180,000')).toBeInTheDocument();
     const detailLinks = screen.getAllByRole('link', { name: /details/i });
     expect(detailLinks).toHaveLength(PROJECTS.length);
-    expect(detailLinks[0]).toHaveAttribute('href', '/dashboard/job-offers/11');
+    // APPROVED (id 11) is an assigned project → shared detail route (dispatched by status).
+    expect(detailLinks[0]).toHaveAttribute('href', '/dashboard/projects/11');
+    // IN_PROGRESS (id 13) → same assigned-project detail route.
+    expect(detailLinks[2]).toHaveAttribute('href', '/dashboard/projects/13');
+    // PENDING (id 15) is still in the bid phase → offer-submission screen.
+    expect(detailLinks[4]).toHaveAttribute('href', '/dashboard/job-offers/15');
+    // COMPLETED (id 16) → assigned-project detail route.
+    expect(detailLinks[5]).toHaveAttribute('href', '/dashboard/projects/16');
   });
 
   it('has column headers and no a11y violations', async () => {

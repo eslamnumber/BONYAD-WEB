@@ -39,9 +39,18 @@ export const ROUTES = {
   DASHBOARD_JOB_OFFERS: '/dashboard/job-offers',
   DASHBOARD_JOB_OFFER: (id: string) => `/dashboard/job-offers/${id}`,
   DASHBOARD_PROJECTS: '/dashboard/projects',
+  /** Assigned-project detail — dispatches approved / completed (Figma 1103:6757) / in-progress by status. */
+  DASHBOARD_PROJECT: (id: string) => `/dashboard/projects/${id}`,
   DASHBOARD_PAYMENTS: '/dashboard/payments',
   DASHBOARD_SAVED: '/dashboard/saved',
   DASHBOARD_MESSAGES: '/dashboard/messages',
+  /** Messages screen with a specific user's conversation pre-selected (deep-link). */
+  DASHBOARD_MESSAGE_FOR: (userId: number, opts?: { name?: string; projectId?: number }) => {
+    const params = new URLSearchParams({ user: String(userId) });
+    if (opts?.name) params.set('name', opts.name);
+    if (opts?.projectId !== undefined) params.set('project', String(opts.projectId));
+    return `/dashboard/messages?${params.toString()}`;
+  },
   DASHBOARD_NOTIFICATIONS: '/dashboard/notifications',
   DASHBOARD_SETTINGS: '/dashboard/settings',
 } as const;

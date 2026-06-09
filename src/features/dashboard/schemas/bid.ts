@@ -29,3 +29,22 @@ export type CreateBidResponse = {
   status?: string;
   createdAt?: string;
 };
+
+/**
+ * A bid as returned by GET /bids/project/:projectId. Mirrors the RN `BidResponse`
+ * read in website-bonyad/src/screens/projects/approved/hooks/useApprovedProject.ts.
+ * Permissive — only the fields the approved-project "offer accepted" card reads
+ * are typed. NOTE: the backend Bid has no `acceptedAt`; `createdAt` (when the bid
+ * was submitted) is the only timestamp, so the acceptance date falls back to it.
+ */
+export type ProjectBid = {
+  id?: number;
+  projectId?: number;
+  technicianId?: number;
+  technicianName?: string;
+  proposedBudget?: number;
+  estimatedDurationDays?: number;
+  comment?: string;
+  status?: string;
+  createdAt?: string;
+};

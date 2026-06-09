@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { beforeAll, describe, expect, it } from 'vitest';
+import { beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
 import { i18n } from '@/lib/i18n';
 import { server } from '@/testing/handlers/server';
@@ -9,6 +9,13 @@ import { JobOfferDetail } from './job-offer-detail';
 
 beforeAll(async () => {
   await i18n.changeLanguage('en');
+});
+
+beforeEach(() => {
+  server.use(
+    http.get('*/bids/project/:projectId', () => HttpResponse.json([])),
+    http.get('*/phases/project/:projectId', () => HttpResponse.json([])),
+  );
 });
 
 const detailResponse = (status: string) => ({

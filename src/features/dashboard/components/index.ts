@@ -1,4 +1,8 @@
+export { ApprovedProjectDetail } from './approved-project-detail';
+export { AssignedProjectDetail } from './assigned-project-detail';
+export { CompletedProjectDetail } from './completed-project-detail';
 export { DashboardHero } from './dashboard-hero';
+export { InProgressProjectDetail } from './in-progress-project-detail';
 export { DashboardSearch } from './dashboard-search';
 export { JobOfferDetail } from './job-offer-detail';
 export { JobOffersSection } from './job-offers-section';

@@ -8,6 +8,8 @@ import { Button, FieldHint, Input } from '@/components/ui';
 import { Label } from '@/components/ui/label';
 import { Textarea } from '@/components/ui/textarea';
 
+import { type SubmittedOffer, type SubmitOfferFormValues } from '../../schemas/submit-offer.schema';
+
 import { useSubmitOffer } from './use-submit-offer';
 
 const FIELD =
@@ -17,9 +19,20 @@ const ACTION = 'h-12 w-full rounded-lg text-[15px] font-semibold';
 const digitsOnly = (v: string) => v.replace(/[^\d]/g, '');
 const decimal = (v: string) => v.replace(/[^\d.]/g, '').replace(/(\..*)\./g, '$1');
 
-export function SubmitOfferForm({ projectId }: { projectId: number }) {
+type Props = {
+  projectId: number;
+  defaultValues?: SubmitOfferFormValues;
+  replaceBidId?: number;
+  onSubmitted?: (offer: SubmittedOffer) => void;
+};
+
+export function SubmitOfferForm({ projectId, defaultValues, replaceBidId, onSubmitted }: Props) {
   const { t } = useTranslation();
-  const { form, onSubmit, isPending, isSuccess } = useSubmitOffer(projectId);
+  const { form, onSubmit, isPending } = useSubmitOffer(projectId, {
+    defaultValues,
+    replaceBidId,
+    onSubmitted,
+  });
   const { errors, isSubmitting } = form.formState;
 
   return (
@@ -46,15 +59,11 @@ export function SubmitOfferForm({ projectId }: { projectId: number }) {
           placeholder={t('dashboard.jobOffer.form.durationPlaceholder')}
           inputMode="numeric"
           filter={digitsOnly}
-          field={form.register('durationMonths')}
-          error={errors.durationMonths?.message}
+          field={form.register('durationWeeks')}
+          error={errors.durationWeeks?.message}
         />
         <OfferMessageField field={form.register('comment')} error={errors.comment?.message} />
-        <OfferActions
-          rootError={errors.root?.message}
-          isSuccess={isSuccess}
-          pending={isPending || isSubmitting}
-        />
+        <OfferActions rootError={errors.root?.message} pending={isPending || isSubmitting} />
       </form>
     </section>
   );
@@ -113,26 +122,13 @@ function OfferMessageField({ field, error }: { field: UseFormRegisterReturn; err
   );
 }
 
-function OfferActions({
-  rootError,
-  isSuccess,
-  pending,
-}: {
-  rootError?: string;
-  isSuccess: boolean;
-  pending: boolean;
-}) {
+function OfferActions({ rootError, pending }: { rootError?: string; pending: boolean }) {
   const { t } = useTranslation();
   return (
     <>
       {rootError ? (
         <p role="alert" className="text-destructive text-end text-sm">
           {t(rootError)}
-        </p>
-      ) : null}
-      {isSuccess ? (
-        <p role="status" className="text-success text-end text-sm">
-          {t('dashboard.jobOffer.form.success')}
         </p>
       ) : null}
       <div className="flex w-full flex-col gap-3">

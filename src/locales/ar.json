@@ -183,7 +183,7 @@
         "priceLabel": "سعر العرض (بالريال)",
         "pricePlaceholder": "0.00",
         "durationLabel": "مدة التنفيذ",
-        "durationPlaceholder": "مثلاً: 12 شهراً",
+        "durationPlaceholder": "مثلاً: 8 أسابيع",
         "messageLabel": "رسالة التقديم",
         "messagePlaceholder": "اكتب تفاصيل عرضك هنا...",
         "submit": "تقديم العرض",
@@ -195,6 +195,116 @@
           "durationInvalid": "أدخل مدة صحيحة.",
           "messageRequired": "اكتب رسالة التقديم."
         }
+      },
+      "status": {
+        "title": "عرضك المُقدم",
+        "valueLabel": "قيمة العرض",
+        "valueCurrency": "ريال",
+        "durationLabel": "مدة التسليم",
+        "durationWeeks": "{{count}} أسبوع",
+        "timeline": {
+          "sent": "تم إرسال العرض",
+          "review": "قيد المراجعة",
+          "awaiting": "بانتظار رد صاحب المشروع"
+        },
+        "note": "سيتم إشعارك فور قيام صاحب المشروع بالرد على عرضك أو قبوله.",
+        "edit": "تعديل العرض",
+        "withdraw": "سحب العرض",
+        "cancel": "إلغاء",
+        "accepted": "تم قبول عرضك — لم يعد بالإمكان تعديله أو سحبه.",
+        "closed": "لم يعد بالإمكان تعديل هذا العرض أو سحبه."
+      },
+      "editModal": {
+        "title": "تعديل العرض",
+        "close": "إغلاق",
+        "durationUnit": "أسبوع",
+        "detailsLabel": "تفاصيل العرض",
+        "note": "ملاحظة: يمكنك تعديل عرضك طالما أن المشروع لا يزال في مرحلة استقبال العروض.",
+        "save": "حفظ التعديلات"
+      },
+      "withdrawModal": {
+        "title": "سحب العرض",
+        "close": "إغلاق",
+        "body1": "هل أنت متأكد من رغبتك في سحب عرضك؟",
+        "body2": "لن تتمكن من التراجع عن هذا الإجراء.",
+        "confirm": "نعم، سحب العرض"
+      }
+    },
+    "approvedProject": {
+      "back": "العودة",
+      "accepted": {
+        "title": "تم قبول عرضك",
+        "description": "تم اختيار عرضك من قبل العميل للبدء في تنفيذ المشروع. يمكنك الآن مراجعة تفاصيل الاتفاق.",
+        "valueLabel": "قيمة العرض المقبول",
+        "durationLabel": "مدة التنفيذ",
+        "dateLabel": "تاريخ القبول",
+        "days": "{{count}} يوم",
+        "reviewContract": "مراجعة العقد وتوقيعه",
+        "contactClient": "التواصل مع العميل"
+      }
+    },
+    "completedProject": {
+      "title": "مشروع مكتمل",
+      "loading": "جارٍ تحميل المشروع…",
+      "error": "تعذّر تحميل هذا المشروع.",
+      "notCompleted": "لم يكتمل هذا المشروع بعد، لذا لا تتوفر صفحة الاكتمال.",
+      "empty": "لا توجد مراحل مسجّلة لهذا المشروع.",
+      "back": "العودة",
+      "contactClient": "مراسلة العميل",
+      "viewFiles": "ملفات المشروع",
+      "payments": {
+        "heading": "حالة الدفعات",
+        "paid": "مدفوع",
+        "pending": "قيد الانتظار",
+        "phasePayment": "دفعة المرحلة {{number}}"
+      },
+      "progress": {
+        "heading": "تقدم المشروع"
+      },
+      "steps": {
+        "phaseBadge": "المرحلة {{number}}"
+      }
+    },
+    "projectDetail": {
+      "title": "تفاصيل المشروع",
+      "loading": "جارٍ تحميل المشروع…",
+      "error": "تعذّر تحميل هذا المشروع.",
+      "back": "العودة",
+      "header": {
+        "message": "مراسلة العميل",
+        "files": "ملفات المشروع"
+      },
+      "summary": {
+        "heading": "ملخص المشروع",
+        "totalBudget": "الميزانية الكلية",
+        "paid": "المدفوع حتى الآن",
+        "remaining": "المتبقي",
+        "phasesLabel": "عدد المراحل",
+        "phasesValue": "{{count}} مراحل"
+      },
+      "payments": {
+        "heading": "حالة الدفعات",
+        "phasePayment": "دفعة المرحلة {{number}}",
+        "empty": "لا توجد دفعات بعد.",
+        "state": {
+          "paid": "مدفوع",
+          "awaiting": "بانتظار الموافقة",
+          "upcoming": "قادم"
+        }
+      },
+      "progress": {
+        "heading": "تقدم المشروع"
+      },
+      "phases": {
+        "heading": "مراحل المشروع",
+        "phaseLabel": "المرحلة {{number}}",
+        "loading": "جارٍ تحميل المراحل…",
+        "empty": "لم يتم تحديد مراحل بعد.",
+        "attachments": "المرفقات والصور",
+        "attachmentsEmpty": "لا توجد مرفقات بعد.",
+        "addUpdate": "إضافة تحديث",
+        "uploadImages": "رفع صور",
+        "requestApproval": "طلب اعتماد المرحلة"
       }
     },
     "signOut": "تسجيل الخروج"

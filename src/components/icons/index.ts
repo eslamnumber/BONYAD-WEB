@@ -79,6 +79,16 @@ export { default as BookmarkIcon } from './bookmark.svg';
 export { default as FileIcon } from './file.svg';
 export { default as ChevronLeftIcon } from './chevron-left.svg';
 
+/* Completed project detail (Figma 1103:6757) — header contact action, phase
+   completion check, phase-row collapse chevron */
+export { default as MessageCircleIcon } from './message-circle.svg';
+export { default as PhaseCheckIcon } from './phase-check.svg';
+export { default as ChevronUpIcon } from './chevron-up.svg';
+
+/* In-progress project detail (Figma 1103:6593) — phase action buttons */
+export { default as PlusIcon } from './plus.svg';
+export { default as UploadIcon } from './upload.svg';
+
 /* Projects table — toolbar filter glyph (Figma node 1046:7127) */
 export { default as FilterIcon } from './filter.svg';
 

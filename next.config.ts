@@ -25,6 +25,22 @@ const config: NextConfig = {
   images: {
     formats: ['image/avif', 'image/webp'],
     remotePatterns: [
+      // Uploaded assets (certificates, service icons, portfolio photos) are
+      // served from Google Cloud Storage; the backend also returns full GCS URLs.
+      {
+        protocol: 'https',
+        hostname: 'storage.googleapis.com',
+      },
+      // Backend hosts — relative asset paths are resolved against these by
+      // `buildAssetUrl` (production / dev Cloud Run + the legacy MSW base).
+      {
+        protocol: 'https',
+        hostname: 'bonyad-app-1026710889441.me-central1.run.app',
+      },
+      {
+        protocol: 'https',
+        hostname: 'bonyad-app-dev-1026710889441.me-central1.run.app',
+      },
       {
         protocol: 'https',
         hostname: 'bonyad-app-nyayeditqq-ww.a.run.app',

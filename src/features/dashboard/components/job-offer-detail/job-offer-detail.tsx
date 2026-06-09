@@ -8,10 +8,10 @@ import { isPendingOrBidPhase } from '../../lib/project-status';
 import { AttachmentsCard } from './attachments-card';
 import { JobOfferBreadcrumb } from './job-offer-breadcrumb';
 import { JobOfferStatus } from './job-offer-status';
+import { OfferPanel } from './offer-panel';
 import { ProjectDescriptionCard } from './project-description-card';
 import { ProjectPhasesCard } from './project-phases-card';
 import { ProjectSummaryCard } from './project-summary-card';
-import { SubmitOfferForm } from './submit-offer-form';
 
 type Props = { projectId: number };
 
@@ -33,17 +33,26 @@ export function JobOfferDetail({ projectId }: Props) {
     return <JobOfferStatus>{t('dashboard.jobOffer.notBidPhase')}</JobOfferStatus>;
 
   return (
-    <div className="mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
-      <JobOfferBreadcrumb />
-      <ProjectSummaryCard project={project} />
-      <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
-        <div className="w-full lg:w-[400px] lg:shrink-0">
-          <SubmitOfferForm projectId={projectId} />
-        </div>
-        <div className="flex w-full flex-col gap-6 lg:min-w-0 lg:flex-1">
-          <ProjectDescriptionCard project={project} />
-          <ProjectPhasesCard projectId={projectId} />
-          <AttachmentsCard project={project} />
+    <div className="relative overflow-x-clip">
+      {/* Figma "Ellipse 27" (1103:6217): a soft violet glow anchored to the very top
+          of the page (brightest at the top edge, fading down). Absolute, so it
+          scrolls away with the page; height capped above the cards so it stays a top band. */}
+      <div
+        aria-hidden
+        className="pointer-events-none absolute inset-x-0 top-0 mx-auto hidden h-[280px] w-full max-w-[1085px] bg-[radial-gradient(75%_100%_at_50%_0%,var(--color-deco-blob-purple),transparent_70%)] opacity-50 blur-[24px] sm:block"
+      />
+      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
+        <JobOfferBreadcrumb />
+        <ProjectSummaryCard project={project} />
+        <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
+          <div className="w-full lg:w-[400px] lg:shrink-0">
+            <OfferPanel projectId={projectId} />
+          </div>
+          <div className="flex w-full flex-col gap-6 lg:min-w-0 lg:flex-1">
+            <ProjectDescriptionCard project={project} />
+            <ProjectPhasesCard projectId={projectId} />
+            <AttachmentsCard project={project} />
+          </div>
         </div>
       </div>
     </div>
