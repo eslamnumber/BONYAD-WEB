@@ -111,6 +111,7 @@
       },
       "status": {
         "approved": "مقبول",
+        "contractSigning": "توقيع العقد",
         "offerSent": "تم إرسال العرض",
         "inProgress": "قيد التنفيذ",
         "rejected": "مرفوض",
@@ -301,11 +302,13 @@
         "phaseLabel": "المرحلة {{number}}",
         "loading": "جارٍ تحميل المراحل…",
         "empty": "لم يتم تحديد مراحل بعد.",
-        "attachments": "المرفقات والصور",
-        "attachmentsEmpty": "لا توجد مرفقات بعد.",
         "addUpdate": "إضافة تحديث",
-        "uploadImages": "رفع صور",
         "requestApproval": "طلب اعتماد المرحلة"
+      },
+      "images": {
+        "heading": "صور المشروع",
+        "empty": "لا توجد صور بعد.",
+        "alt": "صورة المشروع {{number}}"
       }
     },
     "signOut": "تسجيل الخروج"
@@ -540,7 +543,7 @@
     },
     "forgotPassword": {
       "pageTitle": "نسيت كلمة المرور — بونياد",
-      "metaDescription": "أدخل رقم جوالك لتلقي رمز التحقق وإعادة تعيين كلمة المرور.",
+      "metaDescription": ".أدخل رقم جوالك لتلقي رمز التحقق وإعادة تعيين كلمة المرور",
       "heading": "نسيت كلمة المرور؟",
       "subheading": "أدخل رقم هاتفك لتلقي رمز التحقق",
       "phoneLabel": "رقم الجوال",

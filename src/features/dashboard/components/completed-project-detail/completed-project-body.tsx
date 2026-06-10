@@ -4,8 +4,11 @@ import { type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useProjectPhases } from '../../api/get-project-phases';
+import { partitionProjectFiles } from '../../lib/project-files';
 import { type ProjectDetail } from '../../schemas/project';
 import { BudgetSummaryCard } from '../in-progress-project-detail/budget-summary-card';
+import { AttachmentsCard } from '../job-offer-detail/attachments-card';
+import { ProjectImagesCard } from '../job-offer-detail/project-images-card';
 
 import { CompletedPhasesCard } from './completed-phases-card';
 import { PaymentStatusCard } from './payment-status-card';
@@ -32,15 +35,19 @@ export function CompletedProjectBody({ project, projectId }: Props) {
   if (!isPending && list.length === 0)
     return <BodyMessage>{t('dashboard.completedProject.empty')}</BodyMessage>;
 
+  const { images, documents } = partitionProjectFiles(project.files);
+
   return (
     <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
       <div className="flex w-full flex-col gap-6 lg:w-[400px] lg:shrink-0">
         <BudgetSummaryCard project={project} phases={list} pending={isPending} />
         <PaymentStatusCard phases={list} pending={isPending} />
+        <AttachmentsCard project={project} files={documents} />
       </div>
       <div className="flex w-full flex-col gap-6 lg:min-w-0 lg:flex-1">
         <ProjectProgressCard phases={list} pending={isPending} />
         <CompletedPhasesCard phases={list} pending={isPending} />
+        <ProjectImagesCard images={images} />
       </div>
     </div>
   );

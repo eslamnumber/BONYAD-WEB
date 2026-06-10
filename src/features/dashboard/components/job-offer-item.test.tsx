@@ -33,7 +33,7 @@ describe('JobOfferItem', () => {
     ).toBeInTheDocument();
     expect(screen.getByText(/a contractor is needed/i)).toBeInTheDocument();
     expect(screen.getByText(/project duration: 12 weeks/i)).toBeInTheDocument();
-    expect(screen.getByText(/budget: 200k/i)).toBeInTheDocument();
+    expect(screen.getByText(/budget: 200,000/i)).toBeInTheDocument();
     expect(screen.getByText(/10 days left/i)).toBeInTheDocument();
   });
 

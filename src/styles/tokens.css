@@ -210,6 +210,8 @@
      tokens, card/divider borders reuse --color-border, row text uses --foreground. */
   --color-status-approved: var(--status-approved);
   --color-status-approved-soft: var(--status-approved-soft);
+  --color-status-contract: var(--status-contract);
+  --color-status-contract-soft: var(--status-contract-soft);
   --color-status-progress: var(--status-progress);
   --color-status-progress-soft: var(--status-progress-soft);
   --color-status-offer: var(--status-offer);
@@ -442,6 +444,8 @@
      stat-caption #898989, filter-border #959595. */
   --status-approved: oklch(0.72 0.19 150);
   --status-approved-soft: oklch(0.72 0.19 150 / 0.1);
+  --status-contract: oklch(0.41 0.13 243);
+  --status-contract-soft: oklch(0.41 0.13 243 / 0.1);
   --status-progress: oklch(0.66 0.14 73);
   --status-progress-soft: oklch(0.66 0.14 73 / 0.1);
   --status-offer: oklch(0.59 0.1 216);
@@ -642,6 +646,8 @@
      + filter border lifted. */
   --status-approved: oklch(0.78 0.18 150);
   --status-approved-soft: oklch(0.78 0.18 150 / 0.2);
+  --status-contract: oklch(0.65 0.15 243);
+  --status-contract-soft: oklch(0.65 0.15 243 / 0.2);
   --status-progress: oklch(0.76 0.14 73);
   --status-progress-soft: oklch(0.76 0.14 73 / 0.2);
   --status-offer: oklch(0.68 0.1 216);

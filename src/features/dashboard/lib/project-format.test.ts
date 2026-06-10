@@ -1,23 +1,13 @@
 import { describe, expect, it } from 'vitest';
 
-import {
-  daysRemaining,
-  durationWeeks,
-  formatBudgetCompact,
-  localizedServiceName,
-} from './project-format';
+import { daysRemaining, durationWeeks, formatBudget, localizedServiceName } from './project-format';
 
-describe('formatBudgetCompact', () => {
-  it('formats to compact K / M figures', () => {
-    expect(formatBudgetCompact(200000)).toBe('200K');
-    expect(formatBudgetCompact(800000)).toBe('800K');
-    expect(formatBudgetCompact(3000000)).toBe('3M');
-    expect(formatBudgetCompact(1500000)).toBe('1.5M');
-  });
-
-  it('returns null when the budget is absent', () => {
-    expect(formatBudgetCompact(null)).toBeNull();
-    expect(formatBudgetCompact(undefined)).toBeNull();
+describe('formatBudget', () => {
+  it('formats the full figure with grouped Western digits (no K/M)', () => {
+    expect(formatBudget(200000)).toBe('200,000');
+    expect(formatBudget(800000)).toBe('800,000');
+    expect(formatBudget(3000000)).toBe('3,000,000');
+    expect(formatBudget(1500000)).toBe('1,500,000');
   });
 });
 

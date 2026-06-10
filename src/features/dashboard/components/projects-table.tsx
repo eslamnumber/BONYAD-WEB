@@ -7,7 +7,7 @@ import { SaudiRiyalIcon } from '@/components/icons';
 import { ROUTES } from '@/config/routes';
 
 import { localizedServiceName } from '../lib/project-format';
-import { isPendingOrBidPhase } from '../lib/project-status';
+import { isPendingOrBidPhase, statusVariant } from '../lib/project-status';
 import type { Project } from '../schemas/project';
 
 import { ProjectStatusBadge } from './project-status-badge';
@@ -73,8 +73,10 @@ function ProjectRow({ project }: { project: Project }) {
   // phase label — show the localized service for the "Current phase" column.
   const phase = service || '—';
   // Bid/pending projects open the offer-submission screen; an assigned project
-  // (approved · contract · in-progress · completed) opens the shared detail route,
-  // which dispatches the in-progress vs completed view by status.
+  // (approved · in-progress · completed) opens the shared detail route, which
+  // dispatches the in-progress vs completed view by status. CONTRACT_SIGNING has
+  // no detail screen yet, so it stays card-only — no Details link in its row.
+  const isContractSigning = statusVariant(project.status) === 'contractSigning';
   const detailHref = isPendingOrBidPhase(project.status)
     ? ROUTES.DASHBOARD_JOB_OFFER(String(project.id))
     : ROUTES.DASHBOARD_PROJECT(String(project.id));
@@ -82,12 +84,16 @@ function ProjectRow({ project }: { project: Project }) {
   return (
     <tr className="border-border border-b last:border-b-0">
       <td className="px-3 py-4">
-        <Link
-          href={detailHref}
-          className="bg-field-surface text-job-accent focus-visible:outline-ring inline-flex items-center justify-center rounded-full px-4 py-1.5 text-xs font-semibold whitespace-nowrap focus-visible:outline-2"
-        >
-          {t('dashboard.projects.table.details')}
-        </Link>
+        {isContractSigning ? (
+          <span className="text-foreground/40 inline-flex px-4 py-1.5 text-xs font-medium">—</span>
+        ) : (
+          <Link
+            href={detailHref}
+            className="bg-field-surface text-job-accent focus-visible:outline-ring inline-flex items-center justify-center rounded-full px-4 py-1.5 text-xs font-semibold whitespace-nowrap focus-visible:outline-2"
+          >
+            {t('dashboard.projects.table.details')}
+          </Link>
+        )}
       </td>
       <td className={BODY_CELL}>
         {typeof project.budget === 'number' ? (

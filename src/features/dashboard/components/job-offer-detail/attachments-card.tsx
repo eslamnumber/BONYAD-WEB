@@ -21,11 +21,13 @@ function fileName(path: string): string {
  * Attachments card (Figma node 1046:7039): a responsive grid of file tiles, each
  * a download link with a file glyph. Backend-driven from `PROJECTS.DETAILS.files`
  * (a list of paths/URLs — no size metadata, so only the name is shown); renders
- * an empty state when there are no files.
+ * an empty state when there are no files. Pass `files` to override the list (e.g.
+ * the in-progress screen passes documents-only, images going to ProjectImagesCard);
+ * omit it to render the project's full `files`.
  */
-export function AttachmentsCard({ project }: { project: ProjectDetail }) {
+export function AttachmentsCard({ project, files }: { project: ProjectDetail; files?: string[] }) {
   const { t } = useTranslation();
-  const files = project.files?.filter(Boolean) ?? [];
+  const items = (files ?? project.files)?.filter(Boolean) ?? [];
 
   return (
     <section className="bg-card border-border flex w-full flex-col gap-5 rounded-xl border p-6">
@@ -35,9 +37,9 @@ export function AttachmentsCard({ project }: { project: ProjectDetail }) {
         </h2>
         <div className="bg-border h-px w-full" />
       </div>
-      {files.length > 0 ? (
+      {items.length > 0 ? (
         <ul className="grid w-full grid-cols-1 gap-4 sm:grid-cols-2">
-          {files.map((path, i) => (
+          {items.map((path, i) => (
             <AttachmentItem key={`${path}-${i}`} path={path} />
           ))}
         </ul>

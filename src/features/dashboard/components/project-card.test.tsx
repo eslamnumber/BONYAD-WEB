@@ -25,10 +25,10 @@ const PROJECT: Project = {
 };
 
 describe('ProjectCard', () => {
-  it('renders the title, compact budget, duration and location', () => {
+  it('renders the title, full budget figure, duration and location', () => {
     renderWithProviders(<ProjectCard project={PROJECT} />);
     expect(screen.getByText('Public garden redesign')).toBeInTheDocument();
-    expect(screen.getByText('800K')).toBeInTheDocument();
+    expect(screen.getByText('800,000')).toBeInTheDocument();
     expect(screen.getByText('12 weeks')).toBeInTheDocument();
     expect(screen.getByText('Riyadh')).toBeInTheDocument();
   });

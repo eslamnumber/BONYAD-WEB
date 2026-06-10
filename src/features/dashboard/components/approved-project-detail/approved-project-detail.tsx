@@ -8,8 +8,10 @@ import { ChevronLeftIcon } from '@/components/icons';
 import { ROUTES } from '@/config/routes';
 
 import { useProject } from '../../api/get-project';
+import { partitionProjectFiles } from '../../lib/project-files';
 import { AttachmentsCard } from '../job-offer-detail/attachments-card';
 import { ProjectDescriptionCard } from '../job-offer-detail/project-description-card';
+import { ProjectImagesCard } from '../job-offer-detail/project-images-card';
 import { ProjectPhasesCard } from '../job-offer-detail/project-phases-card';
 
 import { ApprovedProjectSummaryCard } from './approved-project-summary-card';
@@ -37,6 +39,8 @@ export function ApprovedProjectDetail({ projectId }: Props) {
   if (isError || !project)
     return <DetailMessage>{t('dashboard.projectDetail.error')}</DetailMessage>;
 
+  const { images, documents } = partitionProjectFiles(project.files);
+
   return (
     <div className="relative isolate mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
       <TopGlow />
@@ -44,13 +48,14 @@ export function ApprovedProjectDetail({ projectId }: Props) {
         <BackLink />
         <ApprovedProjectSummaryCard project={project} />
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
-          <div className="w-full lg:w-[400px] lg:shrink-0">
+          <div className="flex w-full flex-col gap-6 lg:w-[400px] lg:shrink-0">
             <OfferAcceptedCard project={project} />
+            <AttachmentsCard project={project} files={documents} />
           </div>
           <div className="flex w-full flex-col gap-6 lg:min-w-0 lg:flex-1">
             <ProjectDescriptionCard project={project} />
             <ProjectPhasesCard projectId={projectId} />
-            <AttachmentsCard project={project} />
+            <ProjectImagesCard images={images} />
           </div>
         </div>
       </div>
@@ -59,30 +64,25 @@ export function ApprovedProjectDetail({ projectId }: Props) {
 }
 
 /**
- * Decorative top glow — Figma "Ellipse 27" (1103:6416): a #22C55E (approved green)
- * ellipse (1085×486) under a ~100px Gaussian blur. Reproduced as a token-driven
- * blur blob (dark-adaptive via --color-status-approved) and gated behind `xl:` per
- * responsive-design.md — its hardcoded size only applies at the Figma frame width;
- * smaller viewports omit it. `opacity-20` approximates the blur's attenuation. The
- * green (vs the completed screen's blue glow) ties the glow to the approved status.
+ * Decorative top glow — a soft violet radial gradient anchored to the top edge
+ * (brightest at the top, fading down), matching the job-offer detail screen
+ * (JobOfferDetail). Token-driven + dark-adaptive via --color-deco-blob-purple;
+ * pointer-events-none and aria-hidden, shown from `sm:` up.
  */
 function TopGlow() {
   return (
     <div
       aria-hidden
-      className="pointer-events-none absolute inset-x-0 top-0 -z-10 hidden justify-center xl:flex"
-    >
-      <span className="bg-status-approved h-[486px] w-[1085px] rounded-[50%] opacity-20 blur-[100px]" />
-    </div>
+      className="pointer-events-none absolute inset-x-0 top-0 -z-10 mx-auto hidden h-[280px] w-full max-w-[1085px] bg-[radial-gradient(75%_100%_at_50%_0%,var(--color-deco-blob-purple),transparent_70%)] opacity-50 blur-[24px] sm:block"
+    />
   );
 }
 
 /**
  * Back link to the projects list (Figma 1103:6535): label + chevron, packed to the
- * inline-end (mirrors the JobOfferBreadcrumb / CompletedProjectDetail convention).
- * The chevron is the single ChevronLeft export with the forward-flip
- * (`rtl:-scale-x-100`) so the arrowhead points along the reading direction in both
- * locales.
+ * inline-end. The single ChevronLeft export flipped via `ltr:-scale-x-100` (fires in
+ * Arabic under the inverted en→rtl / ar→ltr mapping) so the back arrow points toward
+ * the return edge in both locales — a back arrow, not a forward separator.
  */
 function BackLink() {
   const { t } = useTranslation();
@@ -93,7 +93,7 @@ function BackLink() {
         className="text-brand-dark-navy focus-visible:outline-ring inline-flex items-center gap-2 rounded text-sm font-semibold transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 motion-safe:hover:opacity-80"
       >
         {t('dashboard.approvedProject.back')}
-        <ChevronLeftIcon className="size-3 shrink-0 rtl:-scale-x-100" aria-hidden />
+        <ChevronLeftIcon className="size-3 shrink-0 ltr:-scale-x-100" aria-hidden />
       </Link>
     </nav>
   );

@@ -8,6 +8,7 @@ import { statusVariant, type ProjectStatusVariant } from '../lib/project-status'
  *  is a solid chip; the rest are a tinted background + matching foreground. */
 const VARIANT_CLASS: Record<ProjectStatusVariant, string> = {
   approved: 'bg-status-approved-soft text-status-approved',
+  contractSigning: 'bg-status-contract-soft text-status-contract',
   offerSent: 'bg-status-offer-soft text-status-offer',
   inProgress: 'bg-status-progress-soft text-status-progress',
   rejected: 'bg-status-rejected-soft text-status-rejected',

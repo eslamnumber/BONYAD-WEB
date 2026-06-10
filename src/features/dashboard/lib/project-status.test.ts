@@ -3,12 +3,16 @@ import { describe, expect, it } from 'vitest';
 import { isApprovedPhase, matchesFilter, statusVariant } from './project-status';
 
 describe('statusVariant', () => {
-  it('maps known backend statuses to the six badge variants', () => {
+  it('maps known backend statuses to their badge variants', () => {
     expect(statusVariant('APPROVED')).toBe('approved');
     expect(statusVariant('OFFER_SENT')).toBe('offerSent');
     expect(statusVariant('IN_PROGRESS')).toBe('inProgress');
     expect(statusVariant('REJECTED')).toBe('rejected');
     expect(statusVariant('COMPLETED')).toBe('completed');
+  });
+
+  it('maps CONTRACT_SIGNING to its own variant, not pending', () => {
+    expect(statusVariant('CONTRACT_SIGNING')).toBe('contractSigning');
   });
 
   it('matches on substrings, case-insensitively', () => {

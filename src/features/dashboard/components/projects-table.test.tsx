@@ -94,6 +94,14 @@ describe('ProjectsTable', () => {
     expect(detailLinks[5]).toHaveAttribute('href', '/dashboard/projects/16');
   });
 
+  it('shows the contract-signing badge and no details link (card-only, no detail screen)', () => {
+    renderWithProviders(
+      <ProjectsTable projects={[{ id: 185, title: 'Riyadh build', status: 'CONTRACT_SIGNING' }]} />,
+    );
+    expect(screen.getByText('Contract signing')).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: /details/i })).not.toBeInTheDocument();
+  });
+
   it('has column headers and no a11y violations', async () => {
     const { container } = renderWithProviders(<ProjectsTable projects={PROJECTS} />);
     expect(screen.getByRole('columnheader', { name: /project/i })).toBeInTheDocument();

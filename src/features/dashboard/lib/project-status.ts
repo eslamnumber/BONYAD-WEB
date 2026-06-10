@@ -1,8 +1,11 @@
 import type { Project } from '../schemas/project';
 
-/** The six status pills the Figma defines (1046:7193 `Status` component variants). */
+/** The status pills the Figma defines (1046:7193 `Status` component variants),
+ *  plus `contractSigning` for the CONTRACT_SIGNING phase (RN labels it "Contract",
+ *  primary brand colour) which has no detail screen yet — card-only in the list. */
 export const STATUS_VARIANTS = [
   'approved',
+  'contractSigning',
   'offerSent',
   'inProgress',
   'rejected',
@@ -32,6 +35,7 @@ export function isPendingOrBidPhase(status: string | undefined): boolean {
 export function statusVariant(status: string | undefined): ProjectStatusVariant {
   const s = (status ?? '').toLowerCase();
   if (/complet|done|finish|deliver/.test(s)) return 'completed';
+  if (/contract|signing/.test(s)) return 'contractSigning';
   if (/approv|accept|planning/.test(s)) return 'approved';
   if (/reject|declin|cancel/.test(s)) return 'rejected';
   if (/progress|ongoing|active|execut/.test(s)) return 'inProgress';

@@ -49,28 +49,25 @@ export function CompletedProjectDetail({ projectId }: Props) {
 }
 
 /**
- * Decorative top glow — Figma "Ellipse 27" (1103:6759): a #1A6DB4 ellipse
- * (1085×486) under a ~100px Gaussian blur. Reproduced as a token-driven blur blob
- * (dark-adaptive via --color-detail-action) and gated behind `xl:` per
- * responsive-design.md — its hardcoded size only applies at the Figma frame width;
- * smaller viewports omit it. `opacity-20` approximates the blur's attenuation.
+ * Decorative top glow — a soft violet radial gradient anchored to the top edge
+ * (brightest at the top, fading down), matching the job-offer detail screen
+ * (JobOfferDetail). Token-driven + dark-adaptive via --color-deco-blob-purple;
+ * pointer-events-none and aria-hidden, shown from `sm:` up.
  */
 function TopGlow() {
   return (
     <div
       aria-hidden
-      className="pointer-events-none absolute inset-x-0 top-0 -z-10 hidden justify-center xl:flex"
-    >
-      <span className="bg-detail-action h-[486px] w-[1085px] rounded-[50%] opacity-20 blur-[100px]" />
-    </div>
+      className="pointer-events-none absolute inset-x-0 top-0 -z-10 mx-auto hidden h-[280px] w-full max-w-[1085px] bg-[radial-gradient(75%_100%_at_50%_0%,var(--color-deco-blob-purple),transparent_70%)] opacity-50 blur-[24px] sm:block"
+    />
   );
 }
 
 /**
  * Back link to the projects list (Figma 1103:6829): label + chevron, packed to the
- * inline-end (mirrors the JobOfferBreadcrumb convention). The chevron is the single
- * ChevronLeft export with the forward-flip (`rtl:-scale-x-100`) so the arrowhead
- * points along the reading direction in both locales.
+ * inline-end. The single ChevronLeft export flipped via `ltr:-scale-x-100` (fires in
+ * Arabic under the inverted en→rtl / ar→ltr mapping) so the back arrow points toward
+ * the return edge in both locales — a back arrow, not a forward separator.
  */
 function BackLink() {
   const { t } = useTranslation();
@@ -81,7 +78,7 @@ function BackLink() {
         className="text-brand-dark-navy focus-visible:outline-ring inline-flex items-center gap-2 rounded text-sm font-semibold transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 motion-safe:hover:opacity-80"
       >
         {t('dashboard.completedProject.back')}
-        <ChevronLeftIcon className="size-3 shrink-0 rtl:-scale-x-100" aria-hidden />
+        <ChevronLeftIcon className="size-3 shrink-0 ltr:-scale-x-100" aria-hidden />
       </Link>
     </nav>
   );

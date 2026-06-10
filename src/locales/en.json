@@ -111,6 +111,7 @@
       },
       "status": {
         "approved": "Approved",
+        "contractSigning": "Contract signing",
         "offerSent": "Offer sent",
         "inProgress": "In progress",
         "rejected": "Rejected",
@@ -301,11 +302,13 @@
         "phaseLabel": "Phase {{number}}",
         "loading": "Loading phases…",
         "empty": "No phases defined yet.",
-        "attachments": "Attachments & photos",
-        "attachmentsEmpty": "No attachments yet.",
         "addUpdate": "Add update",
-        "uploadImages": "Upload images",
         "requestApproval": "Request phase approval"
+      },
+      "images": {
+        "heading": "Project images",
+        "empty": "No images yet.",
+        "alt": "Project image {{number}}"
       }
     },
     "signOut": "Sign out"

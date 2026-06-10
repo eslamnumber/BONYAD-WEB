@@ -3,12 +3,13 @@
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
+import { SaudiRiyalIcon } from '@/components/icons';
 import { ROUTES } from '@/config/routes';
 
 import {
   daysRemaining,
   durationWeeks,
-  formatBudgetCompact,
+  formatBudget,
   localizedServiceName,
 } from '../lib/project-format';
 import type { Project } from '../schemas/project';
@@ -29,8 +30,6 @@ function JobOfferItemBody({ project }: { project: Project }) {
   const { t, i18n } = useTranslation();
   const locale = i18n.language.startsWith('ar') ? 'ar' : 'en';
   const days = daysRemaining(project.bidsCloseAt);
-  const weeks = durationWeeks(project.timeRequiredDays);
-  const budget = formatBudgetCompact(project.budget);
   const service = localizedServiceName(project, locale);
 
   return (
@@ -38,7 +37,11 @@ function JobOfferItemBody({ project }: { project: Project }) {
       <div className="flex items-center gap-1.5">
         {days !== null ? (
           <ul className="text-job-accent text-sm font-semibold">
-            <li className="ms-5 list-disc">{t('dashboard.offer.daysLeft', { count: days })}</li>
+            {/* dir="auto" puts the disc marker at the text's reading-start (before the
+                label) under the inverted en→rtl / ar→ltr mapping. */}
+            <li className="ms-5 list-disc" dir="auto">
+              {t('dashboard.offer.daysLeft', { count: days })}
+            </li>
           </ul>
         ) : null}
         <span
@@ -58,22 +61,35 @@ function JobOfferItemBody({ project }: { project: Project }) {
             {project.description}
           </p>
         ) : null}
-        <div className="text-foreground/80 flex flex-wrap items-center gap-x-11 gap-y-2 text-base">
-          {weeks !== null ? (
-            <span dir="auto">
-              {t('dashboard.offer.duration', {
-                value: `${weeks} ${t('dashboard.card.weeksUnit')}`,
-              })}
-            </span>
-          ) : null}
-          {project.address ? (
-            <span dir="auto" className="max-w-[16rem] truncate">
-              {t('dashboard.offer.location', { value: project.address })}
-            </span>
-          ) : null}
-          {budget ? <span dir="auto">{t('dashboard.offer.budget', { value: budget })}</span> : null}
-        </div>
+        <JobOfferMeta project={project} />
       </div>
     </article>
+  );
+}
+
+/** Meta row: project duration, location and budget (SAR figure + Riyal glyph). */
+function JobOfferMeta({ project }: { project: Project }) {
+  const { t } = useTranslation();
+  const weeks = durationWeeks(project.timeRequiredDays);
+  return (
+    <div className="text-foreground/80 flex flex-wrap items-center gap-x-11 gap-y-2 text-base">
+      {weeks !== null ? (
+        <span dir="auto">
+          {t('dashboard.offer.duration', { value: `${weeks} ${t('dashboard.card.weeksUnit')}` })}
+        </span>
+      ) : null}
+      {project.address ? (
+        <span dir="auto" className="max-w-[16rem] truncate">
+          {t('dashboard.offer.location', { value: project.address })}
+        </span>
+      ) : null}
+      {typeof project.budget === 'number' ? (
+        <span dir="auto" className="inline-flex items-center gap-1">
+          {t('dashboard.offer.budget', { value: formatBudget(project.budget) })}
+          <SaudiRiyalIcon className="h-3.5 w-auto shrink-0" aria-hidden />
+          <span className="sr-only">{t('dashboard.jobOffer.summary.currency')}</span>
+        </span>
+      ) : null}
+    </div>
   );
 }

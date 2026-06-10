@@ -1,13 +1,16 @@
 'use client';
 
 import Image from 'next/image';
+import { type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ProjectArrowIcon } from '@/components/icons';
 import { buildAssetUrl } from '@/lib/backend';
 
-import { durationWeeks, formatBudgetCompact, localizedServiceName } from '../lib/project-format';
+import { durationWeeks, localizedServiceName } from '../lib/project-format';
 import type { Project } from '../schemas/project';
+
+import { MoneyAmount } from './money-amount';
 
 const CARD =
   'bg-card-media-fallback border-border relative flex flex-col overflow-hidden rounded-2xl border shadow-[0px_1px_3px_0px_rgba(161,161,161,0.1),0px_5px_5px_0px_rgba(161,161,161,0.09),0px_11px_7px_0px_rgba(161,161,161,0.05)]';
@@ -18,7 +21,6 @@ export function ProjectCard({ project }: { project: Project }) {
   const locale = i18n.language.startsWith('ar') ? 'ar' : 'en';
   const cover = buildAssetUrl(project.files?.[0]);
   const weeks = durationWeeks(project.timeRequiredDays);
-  const budget = formatBudgetCompact(project.budget);
   const service = localizedServiceName(project, locale);
 
   return (
@@ -53,14 +55,19 @@ export function ProjectCard({ project }: { project: Project }) {
             label={t('dashboard.card.durationLabel')}
           />
           <ProjectStat value={project.address || '—'} label={t('dashboard.card.locationLabel')} />
-          <ProjectStat value={budget ?? '—'} label={t('dashboard.card.budgetLabel')} />
+          <ProjectStat
+            value={
+              typeof project.budget === 'number' ? <MoneyAmount value={project.budget} /> : '—'
+            }
+            label={t('dashboard.card.budgetLabel')}
+          />
         </div>
       </div>
     </article>
   );
 }
 
-function ProjectStat({ value, label }: { value: string; label: string }) {
+function ProjectStat({ value, label }: { value: ReactNode; label: string }) {
   return (
     <div className="flex min-w-0 flex-col items-end gap-1">
       <p dir="auto" className="text-on-media max-w-28 truncate text-sm font-semibold">

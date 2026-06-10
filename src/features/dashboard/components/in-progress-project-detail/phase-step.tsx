@@ -2,7 +2,7 @@
 
 import { useTranslation } from 'react-i18next';
 
-import { ChevronUpIcon, PhaseCheckIcon, PlusIcon, UploadIcon } from '@/components/icons';
+import { ChevronUpIcon, PhaseCheckIcon, PlusIcon } from '@/components/icons';
 
 import { type PhaseProgress } from '../../lib/project-finance';
 import { type ProjectPhase } from '../../schemas/project-phase';
@@ -18,13 +18,13 @@ type Props = {
 /**
  * One phase row in the timeline (Figma `Step` component, node 1103:6694). A
  * clickable summary (chevron · phase badge + title · status icon) that toggles an
- * expandable body (attachments + phase actions). `upcoming` phases dim to 75%.
+ * expandable body of phase actions. `upcoming` phases dim to 75%.
  *
  * Notes vs Figma: the expanded body flows naturally (the Figma's absolute layout +
- * fixed h-310 is replaced so the row grows with content / stays responsive); the
- * attachment thumbnails have no backing field on `ProjectPhase`, so an empty state
- * is shown instead of hardcoded placeholder images; the three action buttons are
- * visual placeholders until their phase mutations are wired.
+ * fixed height is replaced so the row grows with content / stays responsive). The
+ * per-phase attachments/images moved out to project-level cards (ProjectImagesCard +
+ * AttachmentsCard); the remaining action buttons are visual placeholders until their
+ * phase mutations are wired.
  */
 export function PhaseStep({ phase, state, index, expanded, onToggle }: Props) {
   const { t } = useTranslation();
@@ -89,29 +89,16 @@ function StatusIcon({ state }: { state: PhaseProgress }) {
 function PhaseBody() {
   const { t } = useTranslation();
   return (
-    <div className="flex flex-col items-end gap-4 pb-4 text-end">
-      <div className="flex w-full flex-col items-end gap-2">
-        <p className="text-foreground text-xs font-medium">
-          {t('dashboard.projectDetail.phases.attachments')}
-        </p>
-        <p className="text-muted-foreground text-xs">
-          {t('dashboard.projectDetail.phases.attachmentsEmpty')}
-        </p>
-      </div>
-      <div className="flex flex-wrap justify-end gap-3">
-        <PlaceholderAction icon={<PlusIcon className="size-4" aria-hidden />}>
-          {t('dashboard.projectDetail.phases.addUpdate')}
-        </PlaceholderAction>
-        <PlaceholderAction icon={<UploadIcon className="size-4" aria-hidden />}>
-          {t('dashboard.projectDetail.phases.uploadImages')}
-        </PlaceholderAction>
-        <button
-          type="button"
-          className="bg-brand-dark-navy text-on-media rounded-lg px-4 py-2.5 text-sm font-medium"
-        >
-          {t('dashboard.projectDetail.phases.requestApproval')}
-        </button>
-      </div>
+    <div className="flex flex-wrap justify-end gap-3 pb-4">
+      <PlaceholderAction icon={<PlusIcon className="size-4" aria-hidden />}>
+        {t('dashboard.projectDetail.phases.addUpdate')}
+      </PlaceholderAction>
+      <button
+        type="button"
+        className="bg-brand-dark-navy text-on-media rounded-lg px-4 py-2.5 text-sm font-medium"
+      >
+        {t('dashboard.projectDetail.phases.requestApproval')}
+      </button>
     </div>
   );
 }

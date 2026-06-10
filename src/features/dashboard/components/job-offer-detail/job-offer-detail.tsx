@@ -3,6 +3,7 @@
 import { useTranslation } from 'react-i18next';
 
 import { useProject } from '../../api/get-project';
+import { partitionProjectFiles } from '../../lib/project-files';
 import { isPendingOrBidPhase } from '../../lib/project-status';
 
 import { AttachmentsCard } from './attachments-card';
@@ -10,6 +11,7 @@ import { JobOfferBreadcrumb } from './job-offer-breadcrumb';
 import { JobOfferStatus } from './job-offer-status';
 import { OfferPanel } from './offer-panel';
 import { ProjectDescriptionCard } from './project-description-card';
+import { ProjectImagesCard } from './project-images-card';
 import { ProjectPhasesCard } from './project-phases-card';
 import { ProjectSummaryCard } from './project-summary-card';
 
@@ -20,8 +22,9 @@ type Props = { projectId: number };
  * node 1046:6923 — the Page column only; the right sidebar is supplied by the
  * (app) layout). Client component: fetches the project via TanStack Query (the
  * proxy attaches the session token) and lays out the breadcrumb + summary card +
- * a two-column row (submit-offer form / description · phases · attachments).
- * Sections are filled one Phase-5 sub-phase at a time.
+ * a two-column row (submit-offer form · attachments / description · phases ·
+ * images). `project.files` is split by type — image files feed the images gallery,
+ * documents the attachments card. Sections are filled one Phase-5 sub-phase at a time.
  */
 export function JobOfferDetail({ projectId }: Props) {
   const { t } = useTranslation();
@@ -31,6 +34,8 @@ export function JobOfferDetail({ projectId }: Props) {
   if (isError || !project) return <JobOfferStatus>{t('dashboard.jobOffer.error')}</JobOfferStatus>;
   if (!isPendingOrBidPhase(project.status))
     return <JobOfferStatus>{t('dashboard.jobOffer.notBidPhase')}</JobOfferStatus>;
+
+  const { images, documents } = partitionProjectFiles(project.files);
 
   return (
     <div className="relative overflow-x-clip">
@@ -45,13 +50,14 @@ export function JobOfferDetail({ projectId }: Props) {
         <JobOfferBreadcrumb />
         <ProjectSummaryCard project={project} />
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
-          <div className="w-full lg:w-[400px] lg:shrink-0">
+          <div className="flex w-full flex-col gap-6 lg:w-[400px] lg:shrink-0">
             <OfferPanel projectId={projectId} />
+            <AttachmentsCard project={project} files={documents} />
           </div>
           <div className="flex w-full flex-col gap-6 lg:min-w-0 lg:flex-1">
             <ProjectDescriptionCard project={project} />
             <ProjectPhasesCard projectId={projectId} />
-            <AttachmentsCard project={project} />
+            <ProjectImagesCard images={images} />
           </div>
         </div>
       </div>

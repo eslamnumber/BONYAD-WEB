@@ -19,16 +19,12 @@ export function localizedServiceName(
 }
 
 /**
- * Compact budget for the project-card footer: 800000 → "800K", 3000000 → "3M".
- * Fixed `en-US` formatting to match the Figma's Western-numeral compact figures
- * (the rest of this screen renders Western digits, not Eastern-Arabic).
+ * Grouped SAR budget figure: 200000 → "200,000". Fixed `en-US` digits to match the
+ * Figma's Western numerals (these screens render Western digits, not Eastern-Arabic);
+ * the Saudi Riyal glyph is rendered separately as an icon, not a text suffix.
  */
-export function formatBudgetCompact(budget: number | null | undefined): string | null {
-  if (typeof budget !== 'number') return null;
-  return new Intl.NumberFormat('en-US', {
-    notation: 'compact',
-    maximumFractionDigits: 1,
-  }).format(budget);
+export function formatBudget(budget: number): string {
+  return new Intl.NumberFormat('en-US').format(budget);
 }
 
 /**

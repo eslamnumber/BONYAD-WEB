@@ -5,9 +5,9 @@ import { useTranslation } from 'react-i18next';
 
 import { paymentState, type PaymentState } from '../../lib/project-finance';
 import { type ProjectPhase } from '../../schemas/project-phase';
+import { MoneyAmount } from '../money-amount';
 
 import { DetailCard } from './detail-card';
-import { MoneyAmount } from './money-amount';
 
 type Props = { phases: ProjectPhase[]; pending?: boolean };
 

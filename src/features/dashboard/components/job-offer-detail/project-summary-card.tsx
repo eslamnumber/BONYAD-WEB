@@ -46,7 +46,11 @@ function SummaryHeader({ project }: { project: ProjectDetail }) {
         <div className="flex flex-wrap items-center justify-end gap-1.5">
           {days !== null ? (
             <ul className="text-job-accent text-sm font-semibold">
-              <li className="ms-5 list-disc">{t('dashboard.offer.daysLeft', { count: days })}</li>
+              {/* dir="auto" puts the disc marker at the text's reading-start (before the
+                  label) under the inverted en→rtl / ar→ltr mapping. */}
+              <li className="ms-5 list-disc" dir="auto">
+                {t('dashboard.offer.daysLeft', { count: days })}
+              </li>
             </ul>
           ) : null}
           {service ? (
