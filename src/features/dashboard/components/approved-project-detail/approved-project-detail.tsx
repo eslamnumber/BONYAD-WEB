@@ -64,16 +64,16 @@ export function ApprovedProjectDetail({ projectId }: Props) {
 }
 
 /**
- * Decorative top glow — a soft violet radial gradient anchored to the top edge
- * (brightest at the top, fading down), matching the job-offer detail screen
- * (JobOfferDetail). Token-driven + dark-adaptive via --color-deco-blob-purple;
- * pointer-events-none and aria-hidden, shown from `sm:` up.
+ * Decorative top glow — a soft radial gradient anchored to the top edge (brightest
+ * at the top, fading down) in the approved status colour (green), styled like the
+ * job-offer detail screen's top glow. Token-driven + dark-adaptive via
+ * --color-status-approved; pointer-events-none and aria-hidden, shown from `sm:` up.
  */
 function TopGlow() {
   return (
     <div
       aria-hidden
-      className="pointer-events-none absolute inset-x-0 top-0 -z-10 mx-auto hidden h-[280px] w-full max-w-[1085px] bg-[radial-gradient(75%_100%_at_50%_0%,var(--color-deco-blob-purple),transparent_70%)] opacity-50 blur-[24px] sm:block"
+      className="pointer-events-none absolute inset-x-0 top-0 -z-10 mx-auto hidden h-[280px] w-full max-w-[1085px] bg-[radial-gradient(75%_100%_at_50%_0%,var(--color-status-approved),transparent_70%)] opacity-50 blur-[24px] sm:block"
     />
   );
 }
