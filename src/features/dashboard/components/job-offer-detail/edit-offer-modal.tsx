@@ -168,7 +168,7 @@ function DetailsField({ field, error }: { field: UseFormRegisterReturn; error?: 
       <Textarea
         id="edit-offer-details"
         dir="auto"
-        className="bg-field-surface border-border text-foreground min-h-[120px] rounded-lg text-end text-[15px]"
+        className="bg-field-surface border-border text-foreground min-h-[120px] rounded-lg text-start text-[15px]"
         {...field}
       />
       <FieldHint tone="error">{error ? t(error) : undefined}</FieldHint>

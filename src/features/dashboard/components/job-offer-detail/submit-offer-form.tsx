@@ -114,7 +114,7 @@ function OfferMessageField({ field, error }: { field: UseFormRegisterReturn; err
         id="offer-message"
         dir="auto"
         placeholder={t('dashboard.jobOffer.form.messagePlaceholder')}
-        className="bg-field-surface border-border placeholder:text-foreground/60 min-h-[100px] rounded-lg text-end text-sm"
+        className="bg-field-surface border-border placeholder:text-foreground/60 min-h-[100px] rounded-lg text-start text-sm"
         {...field}
       />
       <FieldHint tone="error">{error ? t(error) : undefined}</FieldHint>
