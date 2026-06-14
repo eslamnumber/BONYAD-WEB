@@ -20,16 +20,30 @@ vi.mock('next/navigation', () => ({
 vi.mock('framer-motion', () => {
   function makeEl(tag: ElementType) {
     const Component = forwardRef(
-      ({ animate: _a, initial: _i, exit: _e, transition: _t, ...rest }: ComponentPropsWithRef<ElementType>, ref) =>
-        createElement(tag as string, { ...rest, ref }),
+      (
+        {
+          animate: _a,
+          initial: _i,
+          exit: _e,
+          transition: _t,
+          ...rest
+        }: ComponentPropsWithRef<ElementType>,
+        ref,
+      ) => createElement(tag as string, { ...rest, ref }),
     );
     Component.displayName = `motion.${String(tag)}`;
     return Component;
   }
-  function AnimatePresence({ children }: { children: React.ReactNode }) { return <>{children}</>; }
-  function MotionConfig({ children }: { children: React.ReactNode }) { return <>{children}</>; }
+  function AnimatePresence({ children }: { children: React.ReactNode }) {
+    return <>{children}</>;
+  }
+  function MotionConfig({ children }: { children: React.ReactNode }) {
+    return <>{children}</>;
+  }
   return {
-    motion: new Proxy({} as Record<string, ReturnType<typeof makeEl>>, { get: (_, tag: string) => makeEl(tag as ElementType) }),
+    motion: new Proxy({} as Record<string, ReturnType<typeof makeEl>>, {
+      get: (_, tag: string) => makeEl(tag as ElementType),
+    }),
     AnimatePresence,
     MotionConfig,
   };
@@ -39,7 +53,10 @@ describe('HomeHero', () => {
   it('renders the main heading with translated text', () => {
     renderWithProviders(<HomeHero locale="en" />);
     expect(
-      screen.getByRole('heading', { level: 1, name: /Find the right professional for your project/i }),
+      screen.getByRole('heading', {
+        level: 1,
+        name: /Build with confidence and manage your projects like a pro/i,
+      }),
     ).toBeInTheDocument();
   });
 

@@ -21,6 +21,7 @@ export { default as Browse5Icon } from './browse-5.svg';
 export { default as FeatureVerifiedIcon } from './feature-verified.svg';
 export { default as FeatureSmoothIcon } from './feature-smooth.svg';
 export { default as FeatureConnectIcon } from './feature-connect.svg';
+export { default as FeatureDisputeIcon } from './feature-dispute.svg';
 
 /* Professional card detail icons */
 export { default as DetailRateIcon } from './detail-rate.svg';

@@ -42,6 +42,7 @@ export function HomeHero({ locale, activeTab = 'user' }: HomeHeroProps) {
               i18n={{
                 postLabel: t('home.hero.togglePost'),
                 proLabel: t('home.hero.togglePro'),
+                eyebrow: t('home.hero.eyebrow'),
                 headline: t('home.hero.headline'),
                 proHeadline: t('tech.hero.proHeadline'),
                 subheadline: t('home.hero.subheadline'),

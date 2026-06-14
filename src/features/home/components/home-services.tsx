@@ -1,6 +1,11 @@
 import Image from 'next/image';
 
-import { FeatureConnectIcon, FeatureSmoothIcon, FeatureVerifiedIcon } from '@/components/icons';
+import {
+  FeatureConnectIcon,
+  FeatureDisputeIcon,
+  FeatureSmoothIcon,
+  FeatureVerifiedIcon,
+} from '@/components/icons';
 import { getTranslations } from '@/lib/get-translations';
 import { type Locale } from '@/types/locale';
 
@@ -26,12 +31,35 @@ function FeatureItem({ Icon, title, body }: FeatureItemProps) {
   );
 }
 
+const FEATURES = [
+  { Icon: FeatureVerifiedIcon, key: 'feature1' },
+  { Icon: FeatureSmoothIcon, key: 'feature2' },
+  { Icon: FeatureConnectIcon, key: 'feature3' },
+  { Icon: FeatureDisputeIcon, key: 'feature4' },
+] as const;
+
+function FeatureCard({ locale }: { locale: Locale }) {
+  const { t } = getTranslations(locale);
+  return (
+    <div className="border-border bg-card/40 flex h-auto flex-col justify-center gap-7 rounded-[8px] border p-6 backdrop-blur-[100px] sm:gap-8 sm:p-8 lg:min-h-[467px] lg:flex-1">
+      {FEATURES.map(({ Icon, key }) => (
+        <FeatureItem
+          key={key}
+          Icon={Icon}
+          title={t(`home.services.${key}Title`)}
+          body={t(`home.services.${key}Body`)}
+        />
+      ))}
+    </div>
+  );
+}
+
 type ServicesPanelProps = { title: string; body: string; panelClass: string };
 
 function ServicesPanel({ title, body, panelClass }: ServicesPanelProps) {
   return (
     <div
-      className={`relative min-h-[320px] w-full overflow-hidden rounded-[8px] backdrop-blur-[60px] sm:min-h-[400px] lg:h-[467px] lg:w-[518px] lg:shrink-0 ${panelClass}`}
+      className={`relative min-h-[320px] w-full overflow-hidden rounded-[8px] backdrop-blur-[60px] sm:min-h-[400px] lg:min-h-[467px] lg:w-[518px] lg:shrink-0 ${panelClass}`}
     >
       <Image
         src="/images/services/right-panel-bg.webp"
@@ -75,23 +103,7 @@ export function HomeServices({ locale, variant = 'user' }: HomeServicesProps) {
         </div>
 
         <div className="flex flex-col gap-4 lg:flex-row">
-          <div className="border-border bg-card/40 flex h-auto flex-col justify-center gap-8 rounded-[8px] border p-6 backdrop-blur-[100px] sm:gap-[45px] sm:p-8 lg:h-[467px] lg:flex-1">
-            <FeatureItem
-              Icon={FeatureVerifiedIcon}
-              title={t('home.services.feature1Title')}
-              body={t('home.services.feature1Body')}
-            />
-            <FeatureItem
-              Icon={FeatureSmoothIcon}
-              title={t('home.services.feature2Title')}
-              body={t('home.services.feature2Body')}
-            />
-            <FeatureItem
-              Icon={FeatureConnectIcon}
-              title={t('home.services.feature3Title')}
-              body={t('home.services.feature3Body')}
-            />
-          </div>
+          <FeatureCard locale={locale} />
           <ServicesPanel
             title={t(`${ns}.services.ctaCardTitle`)}
             body={t(`${ns}.services.ctaCardBody`)}

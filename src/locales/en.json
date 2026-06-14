@@ -1,7 +1,7 @@
 {
   "site": {
     "name": "Bonyad",
-    "tagline": "Verified construction and home-service technicians in Saudi Arabia.",
+    "tagline": "One platform for every construction service — from design to turnkey handover.",
     "description": "A marketplace connecting customers in Saudi Arabia with verified construction and home-service technicians.",
     "copyright": "Bonyad. All rights reserved."
   },
@@ -67,7 +67,7 @@
       "customer": "Customer"
     },
     "search": {
-      "placeholder": "What kind of offer are you looking for?",
+      "placeholder": "?What kind of offer are you looking for",
       "label": "Search job offers"
     },
     "hero": {
@@ -340,8 +340,9 @@
   },
   "home": {
     "hero": {
-      "headline": "Find the right professional for your project",
-      "subheadline": "Bonyad connects you with verified architects, civil engineers, and contractors across Saudi Arabia.",
+      "eyebrow": "The professional construction services platform",
+      "headline": "Build with confidence and manage your projects like a pro",
+      "subheadline": "From idea to turnkey handover.",
       "cta": "Get started",
       "ctaSecondary": "Browse services",
       "togglePost": "Post a project",
@@ -357,12 +358,14 @@
     "services": {
       "headline": "One platform. Every stage of your project.",
       "subheadline": "Connect customers with professionals in a clearer, smoother experience for executing projects and building reliable working relationships.",
-      "feature1Title": "Verified professionals",
-      "feature1Body": "Connect with engineers and service providers whose credentials have been verified for a safer, more professional experience.",
-      "feature2Title": "A smoother experience",
-      "feature2Body": "Simpler project management and communication, with clear steps to help you get more done efficiently.",
-      "feature3Title": "Better opportunities & connections",
-      "feature3Body": "A platform that connects you with the right people and helps you build reliable, long-term working relationships.",
+      "feature1Title": "E-contracting",
+      "feature1Body": "Authenticated digital contracts that define the scope of work, milestones, and cost — protecting both parties from the very start.",
+      "feature2Title": "Escrow account",
+      "feature2Body": "Your payments are held securely and released to the service provider only after you approve the completion of each milestone.",
+      "feature3Title": "Project management tools",
+      "feature3Body": "Track your project's milestones, schedules, and payments in one place, with full clarity from start to handover.",
+      "feature4Title": "Dispute resolution",
+      "feature4Body": "A fair mechanism to resolve disputes through arbitration or experts before any action on the funds held in escrow.",
       "ctaCardTitle": "Everything you need to execute your project — in one platform.",
       "ctaCardBody": "A comprehensive experience to find the right service providers, manage communication easily, and make clearer decisions."
     },
@@ -382,16 +385,16 @@
       "card5Body": "End-to-end delivery of large construction projects with full oversight and professional coordination."
     },
     "howItWorks": {
-      "headline": "How does it work?",
-      "subheadline": "Choose the right service, connect with experts, and start executing easily.",
+      "headline": "From posting to handover — with confidence",
+      "subheadline": "Your project is protected at every step: an authenticated digital contract, and funds held in escrow that aren't released without your approval.",
       "step1Title": "Post your project",
-      "step1Body": "Describe the work needed. Add photos, location, and budget range.",
+      "step1Body": "Describe the work needed, and add photos, location, and budget range.",
       "step2Title": "Review proposals",
-      "step2Body": "Receive competitive quotes. Compare prices, timelines, and past projects.",
+      "step2Body": "Compare competitive prices, timelines, and past projects for each provider.",
       "step3Title": "Hire & sign",
-      "step3Body": "Choose your expert. Sign a digital contract and deposit funds into escrow.",
+      "step3Body": "Choose the best expert, sign an authenticated contract, and deposit the amount securely.",
       "step4Title": "Track & pay",
-      "step4Body": "Monitor progress milestone by milestone. Funds released only after your approval.",
+      "step4Body": "Monitor progress milestone by milestone — funds are released only after you approve each milestone.",
       "learnMore": "Learn how it works"
     },
     "trust": {
@@ -434,8 +437,8 @@
       "readMore": "Read more"
     },
     "startCta": {
-      "headline": "Start your project with confidence",
-      "body": "Join thousands of customers who found their right professional through Bonyad. Reliable, transparent, and fully accountable from start to finish.",
+      "headline": "Ready to start your project?",
+      "body": "Join many customers and service providers, and manage your projects like a pro.",
       "cta": "Get started now",
       "ctaSecondary": "How the platform works"
     },
@@ -461,16 +464,16 @@
       "ctaCardBody": "A comprehensive experience to find the right projects, manage communication easily, and build your professional reputation."
     },
     "howItWorks": {
-      "headline": "How does it work for professionals?",
-      "subheadline": "Join the platform, submit competitive bids, and get paid securely.",
-      "step1Title": "Create your profile",
-      "step1Body": "Build a professional profile showcasing your skills, certifications, and past work.",
-      "step2Title": "Browse & bid",
-      "step2Body": "Find projects matching your expertise and submit competitive proposals.",
-      "step3Title": "Get hired & sign",
-      "step3Body": "Accept the contract digitally. Funds are held securely in escrow.",
+      "headline": "Work with confidence and get your dues",
+      "subheadline": "Serious projects that fit your specialty, with your dues held in escrow before you start — released to you as each milestone is approved.",
+      "step1Title": "Register & qualify",
+      "step1Body": "Create your profile, document your work and experience, and earn your rating within the quality tiers.",
+      "step2Title": "Receive opportunities",
+      "step2Body": "Browse projects matching your specialty and area, or receive invitations matched to your profile.",
+      "step3Title": "Submit your offer",
+      "step3Body": "Set your price, timeline, and scope of work, and sign an authenticated digital contract.",
       "step4Title": "Deliver & get paid",
-      "step4Body": "Complete milestones and receive payments automatically upon approval.",
+      "step4Body": "The amount is held in escrow before you start, and released to you as soon as the client approves each milestone.",
       "learnMore": "Learn how it works"
     },
     "pricing": {
@@ -503,7 +506,7 @@
       "readMore": "Read more"
     },
     "cta": {
-      "headline": "Grow your business and multiply your revenue",
+      "headline": "Ready to grow your business?",
       "body": "Unlock extra tools and features that give you an edge over competitors and fill your calendar with projects",
       "cta": "Discover Bonyad Pro",
       "badge": "+1200 earnings"

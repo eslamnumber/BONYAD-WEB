@@ -14,6 +14,7 @@ import { HeroToggle } from './hero-toggle';
 export type HeroI18n = {
   postLabel: string;
   proLabel: string;
+  eyebrow: string;
   headline: string;
   proHeadline: string;
   subheadline: string;
@@ -58,19 +59,23 @@ type TabBlockProps = { isPro: boolean; i18n: HeroI18n };
 const H1_CLASS =
   'text-foreground max-w-[787px] text-center text-3xl leading-tight font-semibold sm:text-4xl md:text-5xl lg:text-[56px]';
 const P_CLASS = 'text-hero-subtext max-w-[609px] text-center text-sm sm:text-base';
+const EYEBROW_CLASS = 'text-primary text-center text-sm font-semibold tracking-wide sm:text-base';
 const STACK_CLASS = 'flex w-full flex-col items-center gap-6';
 
 function HeadlineBlock({ isPro, i18n }: TabBlockProps) {
   return (
-    <div className="grid w-full [&>*]:[grid-area:1/1]">
-      <CrossfadeLayer active={!isPro} className={STACK_CLASS}>
-        <h1 className={H1_CLASS}>{i18n.headline}</h1>
-        <p className={P_CLASS}>{i18n.subheadline}</p>
-      </CrossfadeLayer>
-      <CrossfadeLayer active={isPro} className={STACK_CLASS}>
-        <h1 className={H1_CLASS}>{i18n.proHeadline}</h1>
-        <p className={P_CLASS}>{i18n.proSubheadline}</p>
-      </CrossfadeLayer>
+    <div className="flex w-full flex-col items-center gap-3">
+      <p className={EYEBROW_CLASS}>{i18n.eyebrow}</p>
+      <div className="grid w-full [&>*]:[grid-area:1/1]">
+        <CrossfadeLayer active={!isPro} className={STACK_CLASS}>
+          <h1 className={H1_CLASS}>{i18n.headline}</h1>
+          <p className={P_CLASS}>{i18n.subheadline}</p>
+        </CrossfadeLayer>
+        <CrossfadeLayer active={isPro} className={STACK_CLASS}>
+          <h1 className={H1_CLASS}>{i18n.proHeadline}</h1>
+          <p className={P_CLASS}>{i18n.proSubheadline}</p>
+        </CrossfadeLayer>
+      </div>
     </div>
   );
 }
