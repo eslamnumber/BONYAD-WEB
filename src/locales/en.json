@@ -63,7 +63,7 @@
       "settings": "Settings"
     },
     "role": {
-      "technician": "Technician",
+      "technician": "Service provider",
       "customer": "Customer"
     },
     "search": {
@@ -339,6 +339,20 @@
     "tiktokAriaLabel": "Follow Bonyad on TikTok"
   },
   "home": {
+    "about": {
+      "heading": "About Bonyad",
+      "tagline": "An integrated ecosystem for the construction sector",
+      "intro": "Bonyad is more than a digital marketplace — it's an integrated work ecosystem for the construction sector, built on two levels",
+      "level1Eyebrow": "Level one",
+      "level1Title": "A trusted digital marketplace",
+      "level1Body": "Connecting property owners with verified service providers through escrow and electronic contracting",
+      "level2Eyebrow": "Level two",
+      "level2Title": "A professional business-management system",
+      "level2Body": "Used by service providers to manage their contracts, projects, payments and invoices — including work won outside the platform",
+      "derivationLabel": "Behind the name",
+      "derivationFormula": "Bināʾ (build) + Imdād (supply) = Bonyad",
+      "derivationBody": "The name unites building with supply, reflecting Bonyad's role as the connecting link between demand and supply across construction"
+    },
     "hero": {
       "eyebrow": "The professional construction services platform",
       "headline": "Build with confidence and manage your projects like a pro",
@@ -395,7 +409,7 @@
       "step3Body": "Choose the best expert, sign an authenticated contract, and deposit the amount securely.",
       "step4Title": "Track & pay",
       "step4Body": "Monitor progress milestone by milestone — funds are released only after you approve each milestone.",
-      "learnMore": "Learn how it works"
+      "learnMore": "How it works"
     },
     "trust": {
       "headline": "No risks. No surprises.",
@@ -474,7 +488,7 @@
       "step3Body": "Set your price, timeline, and scope of work, and sign an authenticated digital contract.",
       "step4Title": "Deliver & get paid",
       "step4Body": "The amount is held in escrow before you start, and released to you as soon as the client approves each milestone.",
-      "learnMore": "Learn how it works"
+      "learnMore": "How it works"
     },
     "pricing": {
       "headline": "Simple, transparent pricing",

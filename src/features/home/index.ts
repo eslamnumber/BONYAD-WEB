@@ -1,3 +1,4 @@
+export { HomeAbout } from './components/home-about';
 export { HomeAppDownload, HomeAppDownloadBar } from './components/home-app-download';
 export { HomeBlog, type HomeBlogPost } from './components/home-blog';
 export { HomeBrowse } from './components/home-browse';

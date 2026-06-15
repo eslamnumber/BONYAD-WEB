@@ -5,6 +5,7 @@ import { env } from '@/config/env';
 import { STATIC_ARTICLES } from '@/features/blog';
 import {
   getSubscriptionPlans,
+  HomeAbout,
   HomeHero,
   HomeHowItWorks,
   HomeServices,
@@ -65,6 +66,7 @@ export default async function ForProsPage() {
     <>
       <JsonLd data={jsonLd} nonce={nonce} />
       <HomeHero locale={locale} activeTab="pro" />
+      <HomeAbout locale={locale} />
       <HomeServices locale={locale} variant="pro" />
       <HomeHowItWorks locale={locale} variant="pro" />
       <HomeTrust locale={locale} />

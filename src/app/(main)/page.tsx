@@ -2,6 +2,7 @@ import { JsonLd } from '@/components/seo';
 import { env } from '@/config/env';
 import { STATIC_ARTICLES } from '@/features/blog';
 import {
+  HomeAbout,
   HomeAppDownload,
   HomeBlog,
   HomeBrowse,
@@ -60,6 +61,7 @@ export default async function HomePage() {
     <>
       <JsonLd data={jsonLd} nonce={nonce} />
       <HomeHero locale={locale} activeTab="user" />
+      <HomeAbout locale={locale} />
       <HomeServices locale={locale} />
       <HomeBrowse locale={locale} />
       <HomeHowItWorks locale={locale} />
