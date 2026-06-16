@@ -10,6 +10,10 @@ export type ProjectPhase = {
   id: number;
   projectId?: number;
   phaseNumber?: number;
+  /** Phase heading (e.g. "Phase 1: Foundations"). The create payload (POST /phases)
+   *  sends `title` + `description` separately; older phases may carry only
+   *  `description` (which then doubles as the heading). */
+  title?: string;
   description?: string;
   timeSpentDays?: number;
   moneySpent?: number;

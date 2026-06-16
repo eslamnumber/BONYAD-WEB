@@ -7,6 +7,7 @@ export const STATUS_VARIANTS = [
   'approved',
   'contractSigning',
   'offerSent',
+  'bidReceived',
   'inProgress',
   'rejected',
   'pending',
@@ -39,6 +40,9 @@ export function statusVariant(status: string | undefined): ProjectStatusVariant 
   if (/approv|accept|planning/.test(s)) return 'approved';
   if (/reject|declin|cancel/.test(s)) return 'rejected';
   if (/progress|ongoing|active|execut/.test(s)) return 'inProgress';
+  // BID_RECEIVED / BIDDING render the customer-facing "bid received" pill; a
+  // technician's own OFFER_SENT / MY_BID stays "offer sent" (matched just below).
+  if (/bid[_\s]?received|bidding/.test(s)) return 'bidReceived';
   if (/offer|bid/.test(s)) return 'offerSent';
   return 'pending';
 }

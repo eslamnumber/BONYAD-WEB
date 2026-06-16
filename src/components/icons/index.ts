@@ -73,6 +73,21 @@ export { default as DashboardSettingsIcon } from './dashboard-settings.svg';
 export { default as DashboardSearchIcon } from './dashboard-search.svg';
 export { default as ProjectArrowIcon } from './project-arrow.svg';
 
+/* Customer dashboard — search typeahead dropdown (recent / suggested / result chip) */
+export { default as SearchRecentIcon } from './search-recent.svg';
+export { default as SearchSuggestedIcon } from './search-suggested.svg';
+export { default as SearchResultArrowIcon } from './search-result-arrow.svg';
+export { default as SearchClearIcon } from './search-clear.svg';
+
+/* Customer dashboard — sidebar nav (home landing + offers) */
+export { default as DashboardHomeIcon } from './dashboard-home.svg';
+export { default as DashboardOffersIcon } from './dashboard-offers.svg';
+
+/* Customer dashboard — sidebar settings menu (dark mode / language / logout) */
+export { default as SidebarDarkModeIcon } from './sidebar-dark-mode.svg';
+export { default as SidebarLanguageIcon } from './sidebar-language.svg';
+export { default as SidebarLogoutIcon } from './sidebar-logout.svg';
+
 /* Notifications drawer — in-card type glyph (bell) */
 export { default as NotificationBellIcon } from './notification-bell.svg';
 
@@ -100,3 +115,21 @@ export { default as SendIcon } from './send.svg';
 export { default as PaperclipIcon } from './paperclip.svg';
 export { default as SmileIcon } from './smile.svg';
 export { default as ChatSearchIcon } from './chat-search.svg';
+
+/* Customer pending-project — "no offers yet" awaiting glyph (Figma 1479:8080) */
+export { default as AwaitingOffersIcon } from './awaiting-offers.svg';
+
+/* Customer contract-signing — "contract sent to email" hero glyph (Figma 1501:15024) */
+export { default as ContractSentIcon } from './contract-sent.svg';
+
+/* Customer approved — signing-method picker "email" option glyph (Figma 1485:8824) */
+export { default as MailIcon } from './mail.svg';
+
+/* Create-project wizard (Figma 1394:7041…) — category-select chevron, technician
+   picker search/close, rating star, and the assignment-method option-card icons */
+export { default as ChevronDownIcon } from './chevron-down.svg';
+export { default as SearchIcon } from './search.svg';
+export { default as CloseIcon } from './close.svg';
+export { default as StarIcon } from './star.svg';
+export { default as AssignmentBiddingIcon } from './assignment-bidding.svg';
+export { default as AssignmentDirectIcon } from './assignment-direct.svg';

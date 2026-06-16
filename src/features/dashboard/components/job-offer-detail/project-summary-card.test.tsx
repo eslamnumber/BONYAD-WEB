@@ -42,6 +42,20 @@ describe('ProjectSummaryCard', () => {
     expect(screen.getAllByText('—').length).toBeGreaterThanOrEqual(3);
   });
 
+  it('hides the status badge by default and shows the bid-received pill when asked', () => {
+    const { rerender } = renderWithProviders(
+      <ProjectSummaryCard project={{ id: 3, userName: 'X', status: 'BID_RECEIVED' }} />,
+    );
+    expect(screen.queryByText('Bid received')).not.toBeInTheDocument();
+    rerender(
+      <ProjectSummaryCard
+        project={{ id: 3, userName: 'X', status: 'BID_RECEIVED' }}
+        showStatusBadge
+      />,
+    );
+    expect(screen.getByText('Bid received')).toBeInTheDocument();
+  });
+
   it('has no a11y violations', async () => {
     const { container } = renderWithProviders(<ProjectSummaryCard project={FULL} />);
     expect(await axe(container)).toHaveNoViolations();

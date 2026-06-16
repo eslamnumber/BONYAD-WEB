@@ -6,6 +6,7 @@ describe('statusVariant', () => {
   it('maps known backend statuses to their badge variants', () => {
     expect(statusVariant('APPROVED')).toBe('approved');
     expect(statusVariant('OFFER_SENT')).toBe('offerSent');
+    expect(statusVariant('BID_RECEIVED')).toBe('bidReceived');
     expect(statusVariant('IN_PROGRESS')).toBe('inProgress');
     expect(statusVariant('REJECTED')).toBe('rejected');
     expect(statusVariant('COMPLETED')).toBe('completed');
@@ -17,7 +18,7 @@ describe('statusVariant', () => {
 
   it('matches on substrings, case-insensitively', () => {
     expect(statusVariant('ProjectCompleted')).toBe('completed');
-    expect(statusVariant('bidding')).toBe('offerSent');
+    expect(statusVariant('bidding')).toBe('bidReceived');
   });
 
   it('maps APPROVED and PHASE_PLANNING (phase planning has no separate UI state) to approved', () => {

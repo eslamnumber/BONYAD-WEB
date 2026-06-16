@@ -39,9 +39,13 @@ export const ROUTES = {
   DASHBOARD_JOB_OFFERS: '/dashboard/job-offers',
   DASHBOARD_JOB_OFFER: (id: string) => `/dashboard/job-offers/${id}`,
   DASHBOARD_PROJECTS: '/dashboard/projects',
+  /** Customer create-project wizard (Figma 1394:7041…). */
+  DASHBOARD_PROJECTS_NEW: '/dashboard/projects/new',
   /** Assigned-project detail — dispatches approved / completed (Figma 1103:6757) / in-progress by status. */
   DASHBOARD_PROJECT: (id: string) => `/dashboard/projects/${id}`,
   DASHBOARD_PAYMENTS: '/dashboard/payments',
+  /** Customer "Offers" (العروض) — offers/bids received on the customer's projects. Placeholder; screen TBD. */
+  DASHBOARD_OFFERS: '/dashboard/offers',
   DASHBOARD_SAVED: '/dashboard/saved',
   DASHBOARD_MESSAGES: '/dashboard/messages',
   /** Messages screen with a specific user's conversation pre-selected (deep-link). */

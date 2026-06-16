@@ -50,6 +50,11 @@ Use this every time you add a screen. Treat it as a PR review checklist.
 18. **Wire field errors from `mutation.onError` to `form.setError`.**
 19. **Submit button disabled when `mutation.isPending`.**
 20. **Validation messages are i18n keys**, translated at render time.
+    20a. **Required/optional explicit** — required fields show a `*` (`aria-hidden`) + `aria-required` derived from the schema, with a `* required` legend; optional fields unmarked. See [forms-validation.md](forms-validation.md) rule 14.
+    20b. **Validation timing** `mode: 'onTouched'`, `reValidateMode: 'onChange'` (rule 15).
+    20c. **Failed submit** sets `aria-invalid`, moves focus to the first invalid field, and (if > ~6 fields) renders a `role="alert"` error summary (rule 16 / [accessibility.md](accessibility.md) §Form errors).
+    20d. **Cross-field / range rules** (start < end, min ≤ max, confirm-password) live in the schema via `.refine`/`.superRefine` with `path` set to the offending field (§Cross-field and range validation); date pickers also constrain `min`/`max`.
+    20e. **Success is confirmed** — `toast.success` / redirect / success view, never a silent reset (rule 17).
 
 ## G. Auth and authorization
 

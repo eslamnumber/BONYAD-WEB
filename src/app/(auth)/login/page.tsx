@@ -1,6 +1,7 @@
 import { type Metadata } from 'next';
 
 import { getAuthHeaderLabels, LoginPage as LoginPageComponent } from '@/features/auth';
+import { getActiveEnvironment } from '@/lib/api-environment.server';
 import { getTranslations } from '@/lib/get-translations';
 import { getServerLocale } from '@/lib/locale';
 
@@ -17,6 +18,7 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function LoginPage() {
   const locale = await getServerLocale();
   const { t } = getTranslations(locale);
+  const { key: envKey } = await getActiveEnvironment();
 
   const labels = {
     heading: t('auth.login.heading'),
@@ -48,6 +50,7 @@ export default async function LoginPage() {
       labels={labels}
       locale={locale}
       headerLabels={getAuthHeaderLabels(t, locale)}
+      envKey={envKey}
     />
   );
 }

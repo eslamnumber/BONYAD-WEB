@@ -20,6 +20,16 @@ export function durationMonths(days: number | null | undefined): number | null {
 }
 
 /**
+ * Execution duration in whole weeks — the bid card shows weeks ("4 أسابيع")
+ * while the backend stores `estimatedDurationDays`. Rounds to the nearest week,
+ * clamped to ≥1 for any positive duration.
+ */
+export function durationWeeks(days: number | null | undefined): number | null {
+  if (typeof days !== 'number' || days <= 0) return null;
+  return Math.max(1, Math.round(days / 7));
+}
+
+/**
  * Long localized date for the "expected start" stat ("1 أغسطس 2026" /
  * "1 August 2026"). Forces Latin digits in Arabic (`ar-u-nu-latn`) to match the
  * Figma, which renders Western numerals throughout this screen.

@@ -68,6 +68,10 @@ function resolveUrl(path: string, internal: boolean, baseUrl?: string): URL {
  */
 function serializeBody(body: unknown): { body: BodyInit | undefined; contentType?: string } {
   if (typeof FormData !== 'undefined' && body instanceof FormData) return { body };
+  // URLSearchParams → application/x-www-form-urlencoded (e.g. POST /signatures).
+  // fetch/undici writes the urlencoded Content-Type (with charset) itself, so we
+  // pass it through without a hand-set header, exactly like FormData above.
+  if (typeof URLSearchParams !== 'undefined' && body instanceof URLSearchParams) return { body };
   if (body === undefined) return { body: undefined, contentType: 'application/json' };
   return { body: JSON.stringify(body), contentType: 'application/json' };
 }

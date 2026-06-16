@@ -1,9 +1,18 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQueries, useQuery } from '@tanstack/react-query';
 
 import { API_ENDPOINTS } from '@/config/endpoints';
 import { apiClient } from '@/lib/api-client';
 
-import type { ProjectBid } from '../schemas/bid';
+import type { BidWithTechnician, ProjectBid } from '../schemas/bid';
+import type { UserProfile } from '../schemas/user-profile';
+
+import {
+  getUserProfile,
+  profileAvatar,
+  profileRating,
+  profileReviewCount,
+  userProfileQueryKey,
+} from './get-user-profile';
 
 export const projectBidsQueryKey = (projectId: number) => ['projects', 'bids', projectId] as const;
 
@@ -71,4 +80,70 @@ export function useAcceptedBid(projectId: number) {
     staleTime: 1000 * 60 * 5,
     select: findAcceptedBid,
   });
+}
+
+/** Unique, defined technician ids across a bids list (the profiles to fetch). */
+export function uniqueTechnicianIds(bids: ProjectBid[] | undefined): number[] {
+  const ids = (bids ?? [])
+    .map((bid) => bid.technicianId)
+    .filter((id): id is number => typeof id === 'number');
+  return [...new Set(ids)];
+}
+
+/** Merge a bid with its technician profile (rating / review-count / avatar). */
+export function enrichBid(bid: ProjectBid, profiles: Map<number, UserProfile>): BidWithTechnician {
+  const profile = bid.technicianId !== undefined ? profiles.get(bid.technicianId) : undefined;
+  return {
+    ...bid,
+    rating: profileRating(profile),
+    reviewCount: profileReviewCount(profile),
+    avatarUrl: profileAvatar(profile),
+  };
+}
+
+/** The id of the lowest-budget bid — the "best value" highlight — or undefined. */
+export function bestValueBidId(bids: ProjectBid[]): number | undefined {
+  let best: ProjectBid | undefined;
+  for (const bid of bids) {
+    if (typeof bid.proposedBudget !== 'number') continue;
+    if (!best || bid.proposedBudget < (best.proposedBudget ?? Number.POSITIVE_INFINITY)) best = bid;
+  }
+  return best?.id;
+}
+
+/**
+ * All bids on a project, enriched with each technician's rating + avatar, for the
+ * customer's bid-received list + accept modal. The bids array is fetched once
+ * (shared {@link projectBidsQueryKey} cache); the unique technician profiles are
+ * fetched in parallel via {@link useQueries} (each cached on its own key) and
+ * merged in. A failed profile fetch degrades that card to name-only — it never
+ * blocks the list. Returns a flat `{ bids, isPending, isError }` view.
+ */
+export function useProjectBids(projectId: number) {
+  const bidsQuery = useQuery({
+    queryKey: projectBidsQueryKey(projectId),
+    queryFn: () => getProjectBids(projectId),
+    staleTime: 1000 * 60 * 5,
+  });
+
+  const technicianIds = uniqueTechnicianIds(bidsQuery.data);
+  const profileQueries = useQueries({
+    queries: technicianIds.map((id) => ({
+      queryKey: userProfileQueryKey(id),
+      queryFn: () => getUserProfile(id),
+      staleTime: 1000 * 60 * 5,
+    })),
+  });
+
+  const profiles = new Map<number, UserProfile>();
+  technicianIds.forEach((id, i) => {
+    const data = profileQueries[i]?.data;
+    if (data) profiles.set(id, data);
+  });
+
+  return {
+    bids: (bidsQuery.data ?? []).map((bid) => enrichBid(bid, profiles)),
+    isPending: bidsQuery.isPending,
+    isError: bidsQuery.isError,
+  };
 }

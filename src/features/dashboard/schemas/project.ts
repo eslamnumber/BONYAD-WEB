@@ -1,3 +1,5 @@
+import type { ProjectPhase } from './project-phase';
+
 /**
  * Mirrors `Project` from website-bonyad/src/services/ProjectService.ts.
  *
@@ -30,6 +32,19 @@ export type Project = {
   bidsCloseAt?: string;
   createdAt?: string;
   regionId?: number;
+};
+
+/**
+ * The signed-in customer's own project (GET /projects/my). Mirrors RN `MyProject`
+ * (website-bonyad/src/services/ProjectService.ts) — {@link Project} plus the
+ * assigned technician's display name and the project's phase list. Permissive:
+ * both extras are optional so a row that omits them never surfaces as an error.
+ * The customer projects table derives its "current phase" column from `phases`
+ * (falling back to the localized service name).
+ */
+export type MyProject = Project & {
+  assignedTechnicianName?: string;
+  phases?: ProjectPhase[];
 };
 
 /**

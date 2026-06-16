@@ -8,6 +8,7 @@ import { BookmarkIcon, SaudiRiyalIcon } from '@/components/icons';
 
 import { daysRemaining, localizedServiceName } from '../../lib/project-format';
 import { type ProjectDetail } from '../../schemas/project';
+import { ProjectStatusBadge } from '../project-status-badge';
 
 import { daysSince, durationMonths, formatBudgetRange, formatLongDate } from './job-offer-format';
 
@@ -15,18 +16,33 @@ import { daysSince, durationMonths, formatBudgetRange, formatLongDate } from './
  * Project summary card (Figma node 1046:6930): bookmark + deadline/type badges +
  * title, then posted-date / client, then a 5-stat row. Backend-driven from
  * `PROJECTS.DETAILS`; every value falls back to "—" when the field is absent.
+ * `showStatusBadge` adds the lifecycle pill above the title (Figma "Approval
+ * Status") — set for the customer's bid-received view, off for the technician's
+ * detail screen so that screen is unchanged.
  */
-export function ProjectSummaryCard({ project }: { project: ProjectDetail }) {
+export function ProjectSummaryCard({
+  project,
+  showStatusBadge = false,
+}: {
+  project: ProjectDetail;
+  showStatusBadge?: boolean;
+}) {
   return (
     <section className="bg-card border-border flex w-full flex-col gap-6 rounded-lg border p-6">
-      <SummaryHeader project={project} />
+      <SummaryHeader project={project} showStatusBadge={showStatusBadge} />
       <SummaryClient project={project} />
       <SummaryStats project={project} />
     </section>
   );
 }
 
-function SummaryHeader({ project }: { project: ProjectDetail }) {
+function SummaryHeader({
+  project,
+  showStatusBadge,
+}: {
+  project: ProjectDetail;
+  showStatusBadge: boolean;
+}) {
   const { t, i18n } = useTranslation();
   const locale = i18n.language.startsWith('ar') ? 'ar' : 'en';
   const days = daysRemaining(project.bidsCloseAt);
@@ -43,6 +59,7 @@ function SummaryHeader({ project }: { project: ProjectDetail }) {
         <BookmarkIcon className="text-foreground/60 size-[18px]" aria-hidden />
       </button>
       <div className="flex min-w-0 flex-col items-end gap-3">
+        {showStatusBadge ? <ProjectStatusBadge status={project.status} /> : null}
         <div className="flex flex-wrap items-center justify-end gap-1.5">
           {days !== null ? (
             <ul className="text-job-accent text-sm font-semibold">

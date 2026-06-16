@@ -2,11 +2,14 @@
 
 import { useTranslation } from 'react-i18next';
 
+import { useAuthStore } from '@/stores/auth-store';
+
 import { useProject } from '../../api/get-project';
 import { partitionProjectFiles } from '../../lib/project-files';
 import { isPendingOrBidPhase } from '../../lib/project-status';
 
 import { AttachmentsCard } from './attachments-card';
+import { CustomerOfferStatus } from './customer-offer-status';
 import { JobOfferBreadcrumb } from './job-offer-breadcrumb';
 import { JobOfferStatus } from './job-offer-status';
 import { OfferPanel } from './offer-panel';
@@ -29,6 +32,9 @@ type Props = { projectId: number };
 export function JobOfferDetail({ projectId }: Props) {
   const { t } = useTranslation();
   const { data: project, isPending, isError } = useProject(projectId);
+  // Service providers see the submit-offer panel; the project owner (customer)
+  // sees the awaiting-offers card + Edit/Delete (RN `isTechnician` gate).
+  const isTechnician = (useAuthStore((s) => s.user?.role) ?? '').toUpperCase() === 'TECHNICIAN';
 
   if (isPending) return <JobOfferStatus>{t('dashboard.jobOffer.loading')}</JobOfferStatus>;
   if (isError || !project) return <JobOfferStatus>{t('dashboard.jobOffer.error')}</JobOfferStatus>;
@@ -48,11 +54,17 @@ export function JobOfferDetail({ projectId }: Props) {
       />
       <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
         <JobOfferBreadcrumb />
-        <ProjectSummaryCard project={project} />
+        <ProjectSummaryCard project={project} showStatusBadge={!isTechnician} />
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
           <div className="flex w-full flex-col gap-6 lg:w-[400px] lg:shrink-0">
-            <OfferPanel projectId={projectId} />
-            <AttachmentsCard project={project} files={documents} />
+            {isTechnician ? (
+              <>
+                <OfferPanel projectId={projectId} />
+                <AttachmentsCard project={project} files={documents} />
+              </>
+            ) : (
+              <CustomerOfferStatus projectId={projectId} />
+            )}
           </div>
           <div className="flex w-full flex-col gap-6 lg:min-w-0 lg:flex-1">
             <ProjectDescriptionCard project={project} />

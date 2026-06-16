@@ -1,13 +1,9 @@
 import type { Metadata } from 'next';
 
-import {
-  DashboardHero,
-  DashboardSearch,
-  JobOffersSection,
-  ProjectCarousel,
-} from '@/features/dashboard';
+import { CustomerDashboard, TechnicianDashboard } from '@/features/dashboard';
 import { getTranslations } from '@/lib/get-translations';
 import { getServerLocale } from '@/lib/locale';
+import { getServerUser } from '@/lib/server-auth';
 
 export async function generateMetadata(): Promise<Metadata> {
   const locale = await getServerLocale();
@@ -16,26 +12,21 @@ export async function generateMetadata(): Promise<Metadata> {
 }
 
 /**
- * Service-provider dashboard landing. The `(app)` layout supplies the right-hand
- * sidebar + the <main> landmark; this page fills the content column. Sections are
- * added one Phase-5 sub-phase at a time: search bar → hero + featured project
- * carousel → job-offer tabs + list. Backend-driven sections fetch available
- * projects via `useAvailableProjects` (from `@/features/dashboard`) in their own
- * 'use client' leaf — the page itself stays a Server Component.
+ * Dashboard landing — role-branched server-side from the validated session.
+ * Customers (role `USER`) get the welcome / start-a-project landing
+ * (Figma 1394:6486); technicians (and any other role) keep the job-offers +
+ * projects landing. `role` is a bare string (may be ADMIN etc.), so we narrow
+ * explicitly here rather than assume a union. The `getServerUser()` call is
+ * deduped with the `(app)` layout's via React `cache()`.
  */
-export default function DashboardPage() {
-  return (
-    <div className="relative isolate mx-auto flex w-full max-w-6xl flex-col gap-12 px-4 py-8 sm:px-6 lg:px-8">
-      {/* Decorative navy glow behind the search/hero/carousel (Figma "Ellipse 27",
-          a heavily-blurred #003867 ellipse — inlined as a soft radial). */}
-      <div
-        aria-hidden
-        className="pointer-events-none absolute inset-x-0 top-0 -z-10 h-[34rem] opacity-25 [background:radial-gradient(60%_55%_at_50%_6%,var(--color-brand-dark-navy),transparent_62%)]"
-      />
-      <DashboardSearch />
-      <DashboardHero />
-      <ProjectCarousel />
-      <JobOffersSection />
-    </div>
+export default async function DashboardPage() {
+  const user = await getServerUser();
+  // Role is a bare backend string with no case guarantee (RN compares it
+  // case-insensitively); normalise before narrowing or a `user` customer falls
+  // through to the technician app.
+  return (user?.role ?? '').toUpperCase() === 'USER' ? (
+    <CustomerDashboard />
+  ) : (
+    <TechnicianDashboard />
   );
 }

@@ -77,6 +77,7 @@ describe('getProject', () => {
             projectType: 'ALL',
             user: { name: 'أحمد الزهراني', profileImage: null },
             service: { nameEn: 'Construction', nameAr: 'البناء والتشطيب' },
+            assignedTechnician: { id: 444, name: 'م. أحمد القحطاني' },
           },
           phases: [],
           regionId: null,
@@ -89,5 +90,7 @@ describe('getProject', () => {
     expect(project.serviceNameAr).toBe('البناء والتشطيب');
     expect(project.budget).toBe(20000);
     expect(project.address).toBe('الرياض');
+    // The detail endpoint nests the technician — flattened for the provider card.
+    expect(project.assignedTechnicianId).toBe(444);
   });
 });

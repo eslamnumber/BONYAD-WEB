@@ -1,4 +1,5 @@
 import { cookies } from 'next/headers';
+import { cache } from 'react';
 
 import { AUTH_COOKIE_NAME } from '@/config/constants';
 import { API_ENDPOINTS } from '@/config/endpoints';
@@ -23,11 +24,15 @@ export async function getServerToken(): Promise<string | undefined> {
  * Resolve the current user by validating the cookie token against the backend.
  * Returns `null` when there is no cookie or the token is invalid/expired.
  *
+ * Wrapped in React `cache()` so multiple callers in the same request (e.g. the
+ * `(app)` layout AND the role-branched dashboard page) share a single
+ * validate-token round-trip instead of hitting the backend twice.
+ *
  * Does NOT clear the cookie on failure — an RSC cannot mutate cookies during
  * render. The proxy clears it on the next 401; middleware redirects unauthenticated
  * navigations.
  */
-export async function getServerUser(): Promise<AuthUser | null> {
+export const getServerUser = cache(async (): Promise<AuthUser | null> => {
   const token = await getServerToken();
   if (!token) return null;
   try {
@@ -41,4 +46,4 @@ export async function getServerUser(): Promise<AuthUser | null> {
   } catch {
     return null;
   }
-}
+});

@@ -15,6 +15,8 @@ The legacy app at `website-bonyad/src/` is **reference only — used to understa
 
 **Designs in the new app come from Figma, not RN.** When implementing a screen, the visual contract is the Figma frame. The RN equivalent is only consulted to confirm what API calls the screen makes and what data shape it expects.
 
+**Locate that call site through [`rn-call-site-index.md`](rn-call-site-index.md), not a blind grep.** It is a generated map of every endpoint constant → exact `file:line` (`services/` ranked first — where field names live). Read the map, open ONLY the mapped range. The map never drifts because `website-bonyad/` is frozen; regenerate with `pnpm gen:rn-index` if it ever changes. This is the token-saving discipline mandated by CLAUDE.md hard rule 2.
+
 ## Port these (clean rewrite)
 
 | Legacy path                                                        | New path                                                                         | Notes                                                                                                                              |

@@ -48,3 +48,17 @@ export type ProjectBid = {
   status?: string;
   createdAt?: string;
 };
+
+/**
+ * A bid enriched with the technician's profile data (rating / review-count /
+ * avatar) for the customer's bid-received list + accept modal. The bare
+ * {@link ProjectBid} carries only `technicianName`; the rest comes from
+ * `/users/:id/profile` (RN BidReceivedProjectScreen enriches every bid the same
+ * way). All enrichment fields are optional — a missing or failed profile fetch
+ * degrades the card to name-only and never blocks the list.
+ */
+export type BidWithTechnician = ProjectBid & {
+  rating?: number;
+  reviewCount?: number;
+  avatarUrl?: string;
+};

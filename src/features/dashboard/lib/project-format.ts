@@ -28,6 +28,20 @@ export function formatBudget(budget: number): string {
 }
 
 /**
+ * Short project date for the list table: ISO → "10 سبتمبر" / "10 September".
+ * Day + full month name, no year (matches the Figma cells). Forces Latin numerals
+ * in Arabic (`ar-u-nu-latn`) so the table reads Western digits like the rest of
+ * these screens (see {@link formatBudget}). Returns "—" for a missing/invalid date.
+ */
+export function formatProjectDate(iso: string | undefined, locale: Locale): string {
+  if (!iso) return '—';
+  const date = new Date(iso);
+  if (Number.isNaN(date.getTime())) return '—';
+  const intlLocale = locale === 'ar' ? 'ar-u-nu-latn' : 'en';
+  return new Intl.DateTimeFormat(intlLocale, { day: 'numeric', month: 'long' }).format(date);
+}
+
+/**
  * Bid duration in whole weeks. Mirrors the RN call site
  * (`Math.ceil(timeRequiredDays / 7)`) — `timeRequired` is stored in days.
  */

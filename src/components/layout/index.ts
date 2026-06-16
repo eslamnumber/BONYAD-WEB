@@ -1,5 +1,6 @@
 export { AppShell } from './app-shell';
 export { DashboardSidebar } from './dashboard-sidebar';
+export { DemoBanner } from './demo-banner';
 export { DirectionalIcon } from './directional-icon';
 export { Footer } from './footer';
 export { getAppShellLabels } from './get-app-shell-labels';

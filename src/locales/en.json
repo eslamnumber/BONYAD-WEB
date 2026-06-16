@@ -9,7 +9,8 @@
     "loading": "Loading…",
     "tryAgain": "Try again",
     "goToHome": "Go to homepage",
-    "comingSoon": "Coming soon"
+    "comingSoon": "Coming soon",
+    "demoBanner": "Demo platform"
   },
   "a11y": {
     "skipToMain": "Skip to main content",
@@ -55,12 +56,19 @@
     "sidebarAriaLabel": "Dashboard navigation",
     "nav": {
       "jobOffers": "Job offers",
+      "home": "Home",
+      "offers": "Offers",
       "projects": "Projects",
       "payments": "Payments",
       "saved": "Saved",
       "messages": "Messages",
       "notifications": "Notifications",
       "settings": "Settings"
+    },
+    "menu": {
+      "ariaLabel": "Account menu",
+      "darkMode": "Dark mode",
+      "lightMode": "Light mode"
     },
     "role": {
       "technician": "Service provider",
@@ -73,6 +81,119 @@
     "hero": {
       "headline": "Find your next opportunity",
       "description": "Explore available projects and connect with business owners looking for expertise like yours."
+    },
+    "customer": {
+      "hero": {
+        "greeting": "Welcome!",
+        "greetingNamed": "Welcome, {{name}}!",
+        "headline": "Let's start creating your first project.",
+        "description": "Describe your project's needs and requirements, and we'll help you reach the right service providers to deliver it efficiently and professionally."
+      },
+      "cta": {
+        "startProject": "Start your project now",
+        "howItWorks": "How does the platform work?"
+      },
+      "search": {
+        "placeholder": "…Search for an engineer, designer, electrician",
+        "label": "Search for a technician or service",
+        "recent": "Recently",
+        "suggested": "Suggestions",
+        "submit": "Search",
+        "clear": "Clear search",
+        "noResults": "No matching services"
+      }
+    },
+    "createProject": {
+      "metaTitle": "Create a new project",
+      "title": "Create a new project",
+      "subtitle": "Complete the following steps to post your project and receive offers",
+      "nav": {
+        "next": "Next",
+        "back": "Back",
+        "skip": "Skip",
+        "create": "Create project"
+      },
+      "steps": {
+        "info": {
+          "heading": "Project information",
+          "categoryLabel": "Service category",
+          "categoryPlaceholder": "Choose a category",
+          "categoryLoadError": "Couldn't load service categories.",
+          "nameLabel": "Project name",
+          "namePlaceholder": "Enter the project name",
+          "descriptionLabel": "Description",
+          "descriptionPlaceholder": "...Write a detailed description of the project"
+        },
+        "budget": {
+          "heading": "Budget & timeline",
+          "description": "A budget helps providers submit suitable offers",
+          "timelineLabel": "Timeline",
+          "timelinePlaceholder": "8",
+          "weeksUnit": "weeks :",
+          "budgetLabel": "Expected budget",
+          "budgetPlaceholder": "000,000",
+          "noBudget": "No specified budget"
+        },
+        "deliverables": {
+          "heading": "Deliverables (optional)",
+          "description": "Specify what should be delivered when the project is complete",
+          "label": "Deliverables",
+          "placeholder": "...Describe the deliverables expected when the project is complete"
+        },
+        "phases": {
+          "heading": "Project phases (optional)",
+          "description": "Break your project into trackable phases",
+          "phaseLabel": "Phase {{number}}",
+          "nameLabel": "Phase name",
+          "namePlaceholder": "Phase name",
+          "descriptionLabel": "Description",
+          "descriptionPlaceholder": "Description",
+          "amountLabel": "Amount (SAR)",
+          "amountPlaceholder": "000,000",
+          "durationLabel": "Duration (weeks)",
+          "durationPlaceholder": "8 weeks",
+          "addPhase": "Add phase",
+          "removePhase": "Remove phase"
+        },
+        "assignment": {
+          "heading": "Assignment method",
+          "description": "How would you like to find a professional?",
+          "biddingTitle": "Receive offers from providers",
+          "biddingDescription": "Wait for offers from professionals and pick the best",
+          "directTitle": "Direct assignment",
+          "directDescription": "Choose a specific service provider directly",
+          "chosenTechnician": "Selected: {{name}}"
+        },
+        "location": {
+          "heading": "Offer deadline (optional)",
+          "description": "When do the offers end?",
+          "cityLabel": "City/Region",
+          "cityPlaceholder": "Choose the city",
+          "cityLoadError": "Couldn't load regions.",
+          "deadlineLabel": "Choose a date",
+          "photosLabel": "Photos ({{count}}/{{max}}) (optional)",
+          "addPhoto": "Add",
+          "removePhoto": "Remove photo"
+        }
+      },
+      "technicianPicker": {
+        "title": "Choose a technician",
+        "searchPlaceholder": "...Search by name or phone",
+        "choose": "Choose",
+        "viewProfile": "View profile",
+        "close": "Close",
+        "loading": "Loading technicians...",
+        "error": "Couldn't load technicians.",
+        "empty": "No technicians found."
+      },
+      "errors": {
+        "categoryRequired": "Please choose a service category",
+        "nameRequired": "Please enter the project name",
+        "descriptionRequired": "Please enter a project description",
+        "budgetInvalid": "Enter a valid budget amount",
+        "technicianRequired": "Please select a technician for direct assignment",
+        "submitFailed": "Couldn't create the project. Please try again."
+      }
     },
     "carousel": {
       "headline": "Projects that suit you",
@@ -88,15 +209,63 @@
     },
     "projects": {
       "title": "Projects",
+      "customer": {
+        "stats": {
+          "total": {
+            "title": "Total projects",
+            "caption": "Projects this month"
+          },
+          "active": {
+            "title": "Active projects",
+            "caption": "Projects in progress"
+          },
+          "completed": {
+            "title": "Completed projects",
+            "caption": "Successfully delivered projects"
+          }
+        },
+        "toggle": {
+          "all": "All",
+          "pending": "Pending",
+          "bidding": "Bidding",
+          "approved": "Approved",
+          "contract": "Contract",
+          "inProgress": "In progress",
+          "completed": "Completed"
+        },
+        "sort": {
+          "highPrice": "Highest price",
+          "lowPrice": "Lowest price",
+          "oldest": "Oldest first",
+          "newest": "Newest first"
+        },
+        "table": {
+          "creationDate": "Creation date",
+          "phaseDone": "Done"
+        },
+        "empty": {
+          "title": "No projects yet",
+          "description": "You haven't created any projects yet. Start a new project to connect with verified professionals."
+        }
+      },
       "empty": {
         "title": "No projects yet",
         "description": "You haven't started working on any project yet. Explore the available opportunities and submit your offers to increase your chances of landing new projects.",
         "cta": "Browse projects"
       },
       "stats": {
-        "acceptanceRate": { "title": "Offer acceptance rate", "caption": "Compared to last month" },
-        "inProgress": { "title": "Projects in progress", "caption": "Projects updated this week" },
-        "total": { "title": "Total projects", "caption": "Projects this month" }
+        "acceptanceRate": {
+          "title": "Offer acceptance rate",
+          "caption": "Compared to last month"
+        },
+        "inProgress": {
+          "title": "Projects in progress",
+          "caption": "Projects updated this week"
+        },
+        "total": {
+          "title": "Total projects",
+          "caption": "Projects this month"
+        }
       },
       "filter": "Filter",
       "toggle": {
@@ -113,6 +282,7 @@
         "approved": "Approved",
         "contractSigning": "Contract signing",
         "offerSent": "Offer sent",
+        "bidReceived": "Bid received",
         "inProgress": "In progress",
         "rejected": "Rejected",
         "pending": "Pending",
@@ -230,6 +400,39 @@
         "body1": "Are you sure you want to withdraw your offer?",
         "body2": "You won't be able to undo this action.",
         "confirm": "Yes, withdraw offer"
+      },
+      "customer": {
+        "noOffers": {
+          "title": "No offers yet",
+          "subtitle": "Once you receive offers from service providers, they'll appear here for you to review and choose."
+        },
+        "editProject": "Edit project",
+        "deleteProject": "Delete project",
+        "deleteConfirm": {
+          "title": "Delete project",
+          "body1": "Are you sure you want to delete this project?",
+          "body2": "This action can't be undone.",
+          "confirm": "Yes, delete project",
+          "cancel": "Cancel"
+        },
+        "deleteError": "Couldn't delete this project. Please try again.",
+        "bids": {
+          "bestValue": "Best value",
+          "timeAgo": "{{count}} days ago",
+          "completedProjects": "{{count}} completed projects",
+          "durationLabel": "Execution duration:",
+          "weeksValue": "{{count}} weeks",
+          "valueLabel": "Bid value:",
+          "chat": "Chat",
+          "accept": "Accept"
+        },
+        "acceptModal": {
+          "title": "Offer details",
+          "messageLabel": "Offer message",
+          "accept": "Accept offer",
+          "close": "Close",
+          "error": "Couldn't accept this offer. Please try again."
+        }
       }
     },
     "approvedProject": {
@@ -311,7 +514,105 @@
         "alt": "Project image {{number}}"
       }
     },
-    "signOut": "Sign out"
+    "projectEdit": {
+      "title": "Edit project",
+      "subtitle": "Update your project details before offers arrive.",
+      "loading": "Loading project…",
+      "loadError": "Couldn't load this project.",
+      "retry": "Retry",
+      "fields": {
+        "nameLabel": "Project name",
+        "namePlaceholder": "e.g. Kitchen renovation",
+        "descriptionLabel": "Project description",
+        "descriptionPlaceholder": "Describe your project needs",
+        "budgetLabel": "Budget (SAR)",
+        "budgetUnspecified": "Unspecified",
+        "addressLabel": "Project address",
+        "addressPlaceholder": "Enter address"
+      },
+      "phases": {
+        "heading": "Project phases",
+        "add": "Add phase",
+        "phaseLabel": "Phase {{number}}",
+        "descriptionLabel": "Phase description",
+        "descriptionPlaceholder": "Describe this phase",
+        "durationLabel": "Duration (weeks)",
+        "costLabel": "Cost (SAR)",
+        "remove": "Remove phase",
+        "empty": "No phases planned yet. Add one to get started."
+      },
+      "actions": {
+        "save": "Save changes",
+        "cancel": "Cancel"
+      },
+      "success": "Project updated successfully.",
+      "errors": {
+        "nameRequired": "Please enter a project name.",
+        "descriptionRequired": "Please enter a project description.",
+        "budgetInvalid": "Please enter a valid budget amount.",
+        "phaseDescriptionRequired": "Please enter a phase description.",
+        "saveFailed": "Couldn't save your changes. Please try again."
+      }
+    },
+    "signOut": "Sign out",
+    "contractSigning": {
+      "back": "Back",
+      "summary": {
+        "weeksValue": "{{count}} weeks"
+      },
+      "provider": {
+        "heading": "Selected service provider",
+        "role": "Certified general contractor",
+        "messageLabel": "Message the service provider"
+      },
+      "phases": {
+        "days": "{{count}} days"
+      },
+      "sent": {
+        "title": "The contract was sent to your email",
+        "sentAgo": "Sent {{value}}",
+        "description": "A copy of the contract was sent to each party's registered email",
+        "preparing": "Preparing your contract…",
+        "signed": "I have signed",
+        "signedAck": "Thank you for signing",
+        "resend": "Resend",
+        "resending": "Resending…",
+        "resent": "Contract resent"
+      }
+    },
+    "customerApproved": {
+      "back": "Back",
+      "signing": {
+        "title": "Choose signing method",
+        "subtitle": "Please choose a suitable method to sign the contract",
+        "email": {
+          "title": "Email",
+          "desc": "Sign via a link sent to your email"
+        },
+        "nafath": {
+          "title": "Nafath",
+          "desc": "Certified e-signature via the Nafath platform"
+        },
+        "absher": {
+          "title": "Absher",
+          "desc": "Sign via the Absher platform"
+        },
+        "methodLabel": "Signing method",
+        "note": "A copy of the contract will be sent to each party's registered email",
+        "approve": "Approve phases",
+        "requestModification": "Request modification"
+      },
+      "review": {
+        "title": "Project phases",
+        "subtitle": "Review the project phases and approve them",
+        "total": "Total",
+        "approve": "Approve phases",
+        "approving": "Approving…",
+        "close": "Close",
+        "error": "Couldn't approve the phases. Please try again.",
+        "empty": "No phases defined yet."
+      }
+    }
   },
   "footer": {
     "platform": "Platform",
@@ -922,7 +1223,9 @@
     }
   },
   "messages": {
-    "meta": { "title": "Messages" },
+    "meta": {
+      "title": "Messages"
+    },
     "title": "Manage messages",
     "subtitle": "Browse your active conversations and stay in touch with clients more efficiently.",
     "listAriaLabel": "Conversations",

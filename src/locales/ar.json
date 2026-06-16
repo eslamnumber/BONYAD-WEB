@@ -9,7 +9,8 @@
     "loading": "جارٍ التحميل…",
     "tryAgain": "حاول مرة أخرى",
     "goToHome": "العودة إلى الصفحة الرئيسية",
-    "comingSoon": "قريباً"
+    "comingSoon": "قريباً",
+    "demoBanner": "منصة تجريبية"
   },
   "a11y": {
     "skipToMain": "تخطَّ إلى المحتوى الرئيسي",
@@ -55,12 +56,19 @@
     "sidebarAriaLabel": "التنقل في لوحة التحكم",
     "nav": {
       "jobOffers": "عروض العمل",
+      "home": "الرئيسية",
+      "offers": "العروض",
       "projects": "المشاريع",
       "payments": "المدفوعات",
       "saved": "المحفوظات",
       "messages": "الرسائل",
       "notifications": "الإشعارات",
       "settings": "الإعدادات"
+    },
+    "menu": {
+      "ariaLabel": "قائمة الحساب",
+      "darkMode": "الوضع الداكن",
+      "lightMode": "الوضع الفاتح"
     },
     "role": {
       "technician": "مزود خدمة",
@@ -73,6 +81,119 @@
     "hero": {
       "headline": "العثور على فرصتك القادمة",
       "description": "استكشف المشاريع المتاحة وتواصل مع أصحاب الأعمال الباحثين عن خبرات مثلك."
+    },
+    "customer": {
+      "hero": {
+        "greeting": "مرحباً!",
+        "greetingNamed": "مرحباً، {{name}}!",
+        "headline": "لنبدأ بإنشاء مشروعك الأول.",
+        "description": "صف احتياجاتك ومتطلبات مشروعك، وسنساعدك في الوصول إلى أفضل مقدمي الخدمات المناسبين لتنفيذه بكفاءة واحترافية."
+      },
+      "cta": {
+        "startProject": "أنشئ مشروعك الآن",
+        "howItWorks": "كيف تعمل المنصة؟"
+      },
+      "search": {
+        "placeholder": "ابحث عن مهندس، مصمم، كهربائي...",
+        "label": "ابحث عن فني أو خدمة",
+        "recent": "مؤخرًا",
+        "suggested": "اقتراحات",
+        "submit": "بحث",
+        "clear": "مسح البحث",
+        "noResults": "لا توجد خدمات مطابقة"
+      }
+    },
+    "createProject": {
+      "metaTitle": "إنشاء مشروع جديد",
+      "title": "إنشاء مشروع جديد",
+      "subtitle": "أكمل الخطوات التالية لنشر مشروعك وتلقي العروض",
+      "nav": {
+        "next": "التّالي",
+        "back": "العودة",
+        "skip": "تخطى",
+        "create": "إنشاء المشروع"
+      },
+      "steps": {
+        "info": {
+          "heading": "معلومات المشروع",
+          "categoryLabel": "فئة الخدمة",
+          "categoryPlaceholder": "اختر الفئة",
+          "categoryLoadError": "تعذّر تحميل فئات الخدمة.",
+          "nameLabel": "اسم المشروع",
+          "namePlaceholder": "أدخل اسم المشروع",
+          "descriptionLabel": "الوصف",
+          "descriptionPlaceholder": "...اكتب وصفًا تفصيليًا للمشروع"
+        },
+        "budget": {
+          "heading": "الميزانية والجدول الزمني",
+          "description": "الميزانية تساعد مقدمي الخدمات على تقديم عروض مناسبة",
+          "timelineLabel": "الجدول الزمني",
+          "timelinePlaceholder": "8",
+          "weeksUnit": "أسابيع :",
+          "budgetLabel": "الميزانية المتوقعة",
+          "budgetPlaceholder": "000,000",
+          "noBudget": "لا توجد ميزانية محددة"
+        },
+        "deliverables": {
+          "heading": "المخرجات (اختياري)",
+          "description": "حدد ما يجب تسليمه عند إكمال المشروع",
+          "label": "المخرجات",
+          "placeholder": "...اذكر المخرجات المتوقعة عند اكتمال المشروع"
+        },
+        "phases": {
+          "heading": "مراحل المشروع (اختياري)",
+          "description": "قسّم مشروعك إلى مراحل قابلة للمتابعة",
+          "phaseLabel": "المرحلة {{number}}",
+          "nameLabel": "اسم المرحلة",
+          "namePlaceholder": "اسم المرحلة",
+          "descriptionLabel": "الوصف",
+          "descriptionPlaceholder": "الوصف",
+          "amountLabel": "المبلغ (ر.س)",
+          "amountPlaceholder": "000,000",
+          "durationLabel": "المدة (أسابيع)",
+          "durationPlaceholder": "8 أسابيع",
+          "addPhase": "إضافة مرحلة",
+          "removePhase": "حذف المرحلة"
+        },
+        "assignment": {
+          "heading": "طريقة التعيين",
+          "description": "كيف تود إيجاد محترف؟",
+          "biddingTitle": "استقبال عروض من مقدمي الخدمات",
+          "biddingDescription": "انتظر عروض من المحترفين واختر الأنسب",
+          "directTitle": "تعيين مباشر",
+          "directDescription": "اختر مقدم خدمة محدد مباشرةً",
+          "chosenTechnician": "تم الاختيار: {{name}}"
+        },
+        "location": {
+          "heading": "موعد انتهاء العروض (اختياري)",
+          "description": "متى تنتهي العروض؟",
+          "cityLabel": "المدينة/المنطقة",
+          "cityPlaceholder": "اختر المدينة",
+          "cityLoadError": "تعذّر تحميل المناطق.",
+          "deadlineLabel": "اختر موعدًا",
+          "photosLabel": "صور ({{count}}/{{max}}) (اختياري)",
+          "addPhoto": "إضافة",
+          "removePhoto": "حذف الصورة"
+        }
+      },
+      "technicianPicker": {
+        "title": "اختر فنياً",
+        "searchPlaceholder": "...ابحث بالاسم أو رقم الهاتف",
+        "choose": "اختار",
+        "viewProfile": "عرض الملف",
+        "close": "إغلاق",
+        "loading": "جارٍ تحميل الفنيين...",
+        "error": "تعذّر تحميل الفنيين.",
+        "empty": "لا يوجد فنيون."
+      },
+      "errors": {
+        "categoryRequired": "اختر فئة الخدمة",
+        "nameRequired": "أدخل اسم المشروع",
+        "descriptionRequired": "أدخل وصف المشروع",
+        "budgetInvalid": "أدخل مبلغ ميزانية صحيح",
+        "technicianRequired": "اختر فنياً للتعيين المباشر",
+        "submitFailed": "تعذّر إنشاء المشروع. حاول مرة أخرى."
+      }
     },
     "carousel": {
       "headline": "مشاريع تناسبك",
@@ -88,15 +209,63 @@
     },
     "projects": {
       "title": "المشاريع",
+      "customer": {
+        "stats": {
+          "total": {
+            "title": "إجمالي المشاريع",
+            "caption": "مشاريع خلال هذا الشهر"
+          },
+          "active": {
+            "title": "المشاريع النشطة",
+            "caption": "مشاريع قيد التنفيذ"
+          },
+          "completed": {
+            "title": "المشاريع المكتملة",
+            "caption": "مشاريع تم إنجازها بنجاح"
+          }
+        },
+        "toggle": {
+          "all": "الكل",
+          "pending": "قيد الانتظار",
+          "bidding": "مزايدة",
+          "approved": "موافق عليه",
+          "contract": "العقد",
+          "inProgress": "قيد التنفيذ",
+          "completed": "مكتمل"
+        },
+        "sort": {
+          "highPrice": "الأعلى سعراً",
+          "lowPrice": "الأقل سعراً",
+          "oldest": "الأقدم أولاً",
+          "newest": "الأحدث أولاً"
+        },
+        "table": {
+          "creationDate": "تاريخ الإنشاء",
+          "phaseDone": "انتهى"
+        },
+        "empty": {
+          "title": "لا توجد مشاريع بعد",
+          "description": "لم تقم بإنشاء أي مشروع حتى الآن. ابدأ مشروعاً جديداً للتواصل مع مهنيين موثوقين."
+        }
+      },
       "empty": {
         "title": "لا توجد مشاريع حتى الآن",
         "description": "لم تبدأ العمل على أي مشروع بعد. استعرض الفرص المتاحة وقدّم عروضك لزيادة فرصك في الحصول على مشاريع جديدة.",
         "cta": "تصفح المشاريع"
       },
       "stats": {
-        "acceptanceRate": { "title": "معدل قبول العروض", "caption": "مقارنة بالشهر الماضي" },
-        "inProgress": { "title": "مشروع قيد التنفيذ", "caption": "مشاريع تم تحديثها هذا الأسبوع" },
-        "total": { "title": "إجمالي المشاريع", "caption": "مشاريع خلال هذا الشهر" }
+        "acceptanceRate": {
+          "title": "معدل قبول العروض",
+          "caption": "مقارنة بالشهر الماضي"
+        },
+        "inProgress": {
+          "title": "مشروع قيد التنفيذ",
+          "caption": "مشاريع تم تحديثها هذا الأسبوع"
+        },
+        "total": {
+          "title": "إجمالي المشاريع",
+          "caption": "مشاريع خلال هذا الشهر"
+        }
       },
       "filter": "تصفية",
       "toggle": {
@@ -113,6 +282,7 @@
         "approved": "مقبول",
         "contractSigning": "توقيع العقد",
         "offerSent": "تم إرسال العرض",
+        "bidReceived": "تم استلام عرض",
         "inProgress": "قيد التنفيذ",
         "rejected": "مرفوض",
         "pending": "قيد الانتظار",
@@ -230,6 +400,39 @@
         "body1": "هل أنت متأكد من رغبتك في سحب عرضك؟",
         "body2": "لن تتمكن من التراجع عن هذا الإجراء.",
         "confirm": "نعم، سحب العرض"
+      },
+      "customer": {
+        "noOffers": {
+          "title": "لا توجد عروض حتى الآن",
+          "subtitle": "بمجرد استلام العروض من مقدمي الخدمات ستظهر هنا للمراجعة والاختيار."
+        },
+        "editProject": "تعديل المشروع",
+        "deleteProject": "حذف المشروع",
+        "deleteConfirm": {
+          "title": "حذف المشروع",
+          "body1": "هل أنت متأكد من حذف هذا المشروع؟",
+          "body2": "لا يمكن التراجع عن هذا الإجراء.",
+          "confirm": "نعم، احذف المشروع",
+          "cancel": "إلغاء"
+        },
+        "deleteError": "تعذّر حذف هذا المشروع. يرجى المحاولة مرة أخرى.",
+        "bids": {
+          "bestValue": "أفضل قيمة",
+          "timeAgo": "منذ {{count}} يوم",
+          "completedProjects": "{{count}} مشاريع منجزة",
+          "durationLabel": "مدة التنفيذ:",
+          "weeksValue": "{{count}} أسابيع",
+          "valueLabel": "قيمة العرض:",
+          "chat": "محادثة",
+          "accept": "قبول"
+        },
+        "acceptModal": {
+          "title": "تفاصيل العرض",
+          "messageLabel": "رسالة العرض",
+          "accept": "قبول العرض",
+          "close": "إغلاق",
+          "error": "تعذّر قبول هذا العرض. يرجى المحاولة مرة أخرى."
+        }
       }
     },
     "approvedProject": {
@@ -311,7 +514,105 @@
         "alt": "صورة المشروع {{number}}"
       }
     },
-    "signOut": "تسجيل الخروج"
+    "projectEdit": {
+      "title": "تعديل المشروع",
+      "subtitle": "حدّث تفاصيل مشروعك قبل أن يبدأ مقدمو الخدمة بالرد.",
+      "loading": "جارٍ تحميل المشروع…",
+      "loadError": "تعذّر تحميل هذا المشروع.",
+      "retry": "إعادة المحاولة",
+      "fields": {
+        "nameLabel": "اسم المشروع",
+        "namePlaceholder": "على سبيل المثال، تجديد المطبخ",
+        "descriptionLabel": "وصف المشروع",
+        "descriptionPlaceholder": "صف احتياجات مشروعك",
+        "budgetLabel": "الميزانية (ريال)",
+        "budgetUnspecified": "غير محدد",
+        "addressLabel": "عنوان المشروع",
+        "addressPlaceholder": "أدخل العنوان"
+      },
+      "phases": {
+        "heading": "مراحل المشروع",
+        "add": "إضافة مرحلة",
+        "phaseLabel": "المرحلة {{number}}",
+        "descriptionLabel": "وصف المرحلة",
+        "descriptionPlaceholder": "صف هذه المرحلة",
+        "durationLabel": "المدة (أسابيع)",
+        "costLabel": "التكلفة (ريال سعودي)",
+        "remove": "إزالة المرحلة",
+        "empty": "لا توجد مراحل مخطط لها بعد. أضف مرحلة للبدء."
+      },
+      "actions": {
+        "save": "حفظ التعديلات",
+        "cancel": "إلغاء"
+      },
+      "success": "تم تحديث المشروع بنجاح.",
+      "errors": {
+        "nameRequired": "يرجى إدخال اسم المشروع.",
+        "descriptionRequired": "يرجى إدخال وصف المشروع.",
+        "budgetInvalid": "يرجى إدخال قيمة ميزانية صحيحة.",
+        "phaseDescriptionRequired": "يرجى إدخال وصف المرحلة.",
+        "saveFailed": "تعذّر حفظ التغييرات. يرجى المحاولة مرة أخرى."
+      }
+    },
+    "signOut": "تسجيل الخروج",
+    "contractSigning": {
+      "back": "العودة",
+      "summary": {
+        "weeksValue": "{{count}} أسبوعًا"
+      },
+      "provider": {
+        "heading": "مزود الخدمة المختار",
+        "role": "مقاول عام معتمد",
+        "messageLabel": "مراسلة مزود الخدمة"
+      },
+      "phases": {
+        "days": "{{count}} أيام"
+      },
+      "sent": {
+        "title": "تم إرسال العقد إلى بريدك",
+        "sentAgo": "تم الإرسال {{value}}",
+        "description": "تم إرسال نسخة من العقد إلى البريد الإلكتروني المسجل لكل طرف",
+        "preparing": "جارٍ تجهيز العقد…",
+        "signed": "لقد قمت بالتوقيع",
+        "signedAck": "شكرًا لتوقيعك",
+        "resend": "إعادة الإرسال",
+        "resending": "جارٍ إعادة الإرسال…",
+        "resent": "تمت إعادة إرسال العقد"
+      }
+    },
+    "customerApproved": {
+      "back": "العودة",
+      "signing": {
+        "title": "اختر طريقة التوقيع",
+        "subtitle": "يرجى اختيار الطريقة المناسبة لتوقيع العقد",
+        "email": {
+          "title": "البريد الإلكتروني",
+          "desc": "توقيع عبر رابط يُرسل إلى بريدك الإلكتروني"
+        },
+        "nafath": {
+          "title": "نفاذ",
+          "desc": "توقيع إلكتروني معتمد عبر منصة نفاذ"
+        },
+        "absher": {
+          "title": "أبشر",
+          "desc": "توقيع عبر منصة أبشر الإلكترونية"
+        },
+        "methodLabel": "طريقة التوقيع",
+        "note": "سيتم إرسال نسخة من العقد إلى البريد الإلكتروني المسجل لكل طرف",
+        "approve": "موافقة المراحل",
+        "requestModification": "طلب تعديل"
+      },
+      "review": {
+        "title": "مراحل المشروع",
+        "subtitle": "مراجعة مراحل المشروع والموافقة عليها",
+        "total": "الإجمالي",
+        "approve": "موافقة المراحل",
+        "approving": "جارٍ الموافقة…",
+        "close": "إغلاق",
+        "error": "تعذرت الموافقة على المراحل. حاول مرة أخرى.",
+        "empty": "لا توجد مراحل محددة بعد."
+      }
+    }
   },
   "footer": {
     "platform": "المنصة",
@@ -922,7 +1223,9 @@
     }
   },
   "messages": {
-    "meta": { "title": "الرسائل" },
+    "meta": {
+      "title": "الرسائل"
+    },
     "title": "إدارة الرسائل",
     "subtitle": "استعرض محادثاتك النشطة وتابع التواصل مع العملاء بكفاءة أكبر.",
     "listAriaLabel": "المحادثات",

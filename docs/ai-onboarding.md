@@ -33,7 +33,7 @@ Before doing anything, you must follow these rules. They are binding.
 10. Every public page needs SSR + `generateMetadata` + JSON-LD with the right schema.org type.
 11. JSON-LD must be HTML-escaped before `dangerouslySetInnerHTML` (escape `<`, `>`, `&`) and carry a CSP nonce.
 12. No `process.env.X` outside `src/config/env.ts` (zod-validated).
-13. WCAG 2.2 AA: no `outline: none`, every icon-only button has `aria-label`, every form input has a real `<label>`, focus rings use the `--color-ring` token.
+13. WCAG 2.2 AA: no `outline: none`, every icon-only button has `aria-label`, every form input has a real `<label>`, focus rings use the `--color-ring` token. **Forms:** required fields show a decorative `*` + `aria-required` derived from the zod schema (optional unmarked); validation messages are i18n keys; `useForm({ mode: 'onTouched', reValidateMode: 'onChange' })`; on a failed submit set `aria-invalid` and focus the first invalid field; cross-field rules (start < end, min ≤ max, confirm-password) live in the schema via `.refine`/`.superRefine` with `path` set; confirm success with `toast.success` — never a silent reset. See `docs/forms-validation.md` + `docs/accessibility.md` §Form errors.
 14. Legacy RN app is backend-integration reference ONLY. Never copy UI/JSX/styling. Designs come from Figma.
 15. No invented icons. Every icon is an SVG exported from Figma to `src/components/icons/` with `currentColor` fills/strokes. `lucide-react` only for system glyphs whose default form matches the design.
 16. **Every non-trivial task runs as 6 phases with verification gates.** See below — this is the most important rule.

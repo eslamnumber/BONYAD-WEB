@@ -28,14 +28,33 @@ function normalizeProjectDetail(data: unknown): ProjectDetail {
     string,
     unknown
   >;
+  return { ...(raw as ProjectDetail), ...flattenRelations(raw) };
+}
+
+/**
+ * Flatten the nested relations the detail endpoint returns (`project.user.name`,
+ * `project.service.name{En,Ar}`, `project.assignedTechnician.id`) onto the flat
+ * fields the cards read. Each falls back to an already-flat value, so a flat body
+ * (tests / other shapes) passes through unchanged.
+ */
+function flattenRelations(raw: Record<string, unknown>): Partial<ProjectDetail> {
   const user = raw.user as { name?: string } | undefined;
   const service = raw.service as { nameEn?: string; nameAr?: string } | undefined;
-  return {
-    ...(raw as ProjectDetail),
+  const flat: Partial<ProjectDetail> = {
     userName: (raw.userName as string | undefined) ?? user?.name,
     serviceNameEn: (raw.serviceNameEn as string | undefined) ?? service?.nameEn,
     serviceNameAr: (raw.serviceNameAr as string | undefined) ?? service?.nameAr,
   };
+  const technicianId = resolveTechnicianId(raw);
+  if (technicianId !== undefined) flat.assignedTechnicianId = technicianId;
+  return flat;
+}
+
+/** Flat `assignedTechnicianId` if present, else the nested `assignedTechnician.id`. */
+function resolveTechnicianId(raw: Record<string, unknown>): number | undefined {
+  if (typeof raw.assignedTechnicianId === 'number') return raw.assignedTechnicianId;
+  const nested = (raw.assignedTechnician as { id?: number } | undefined)?.id;
+  return typeof nested === 'number' ? nested : undefined;
 }
 
 export function useProject(id: number) {

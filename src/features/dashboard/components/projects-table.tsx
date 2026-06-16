@@ -5,6 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { SaudiRiyalIcon } from '@/components/icons';
 import { ROUTES } from '@/config/routes';
+import { useAuthStore } from '@/stores/auth-store';
 
 import { localizedServiceName } from '../lib/project-format';
 import { isPendingOrBidPhase, statusVariant } from '../lib/project-status';
@@ -74,9 +75,11 @@ function ProjectRow({ project }: { project: Project }) {
   const phase = service || '—';
   // Bid/pending projects open the offer-submission screen; an assigned project
   // (approved · in-progress · completed) opens the shared detail route, which
-  // dispatches the in-progress vs completed view by status. CONTRACT_SIGNING has
-  // no detail screen yet, so it stays card-only — no Details link in its row.
-  const isContractSigning = statusVariant(project.status) === 'contractSigning';
+  // dispatches the right view by status. CONTRACT_SIGNING opens the customer's
+  // contract-signing screen, but stays card-only for technicians (no detail view
+  // for them yet) — so the dash gates on the technician role, not the status alone.
+  const isTechnician = (useAuthStore((s) => s.user?.role) ?? '').toUpperCase() === 'TECHNICIAN';
+  const cardOnly = statusVariant(project.status) === 'contractSigning' && isTechnician;
   const detailHref = isPendingOrBidPhase(project.status)
     ? ROUTES.DASHBOARD_JOB_OFFER(String(project.id))
     : ROUTES.DASHBOARD_PROJECT(String(project.id));
@@ -84,16 +87,7 @@ function ProjectRow({ project }: { project: Project }) {
   return (
     <tr className="border-border border-b last:border-b-0">
       <td className="px-3 py-4">
-        {isContractSigning ? (
-          <span className="text-foreground/40 inline-flex px-4 py-1.5 text-xs font-medium">—</span>
-        ) : (
-          <Link
-            href={detailHref}
-            className="bg-field-surface text-job-accent focus-visible:outline-ring inline-flex items-center justify-center rounded-full px-4 py-1.5 text-xs font-semibold whitespace-nowrap focus-visible:outline-2"
-          >
-            {t('dashboard.projects.table.details')}
-          </Link>
-        )}
+        <DetailsCell cardOnly={cardOnly} href={detailHref} />
       </td>
       <td className={BODY_CELL}>
         {typeof project.budget === 'number' ? (
@@ -119,5 +113,22 @@ function ProjectRow({ project }: { project: Project }) {
         <bdi>{name}</bdi>
       </td>
     </tr>
+  );
+}
+
+/** Action cell: a Details link, or a disabled dash for technician CONTRACT_SIGNING. */
+function DetailsCell({ cardOnly, href }: { cardOnly: boolean; href: string }) {
+  const { t } = useTranslation();
+  if (cardOnly)
+    return (
+      <span className="text-foreground/40 inline-flex px-4 py-1.5 text-xs font-medium">—</span>
+    );
+  return (
+    <Link
+      href={href}
+      className="bg-field-surface text-job-accent focus-visible:outline-ring inline-flex items-center justify-center rounded-full px-4 py-1.5 text-xs font-semibold whitespace-nowrap focus-visible:outline-2"
+    >
+      {t('dashboard.projects.table.details')}
+    </Link>
   );
 }

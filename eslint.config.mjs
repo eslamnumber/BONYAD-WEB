@@ -253,6 +253,26 @@ export default tseslint.config(
     },
   },
 
+  // Dev/codegen scripts (Node ESM, run outside the app): Node globals + console allowed.
+  {
+    files: ['scripts/**/*.mjs'],
+    languageOptions: {
+      globals: {
+        process: 'readonly',
+        console: 'readonly',
+        __dirname: 'readonly',
+        __filename: 'readonly',
+        Buffer: 'readonly',
+      },
+    },
+    rules: {
+      'no-console': 'off',
+      'no-restricted-globals': 'off',
+      'max-lines': 'off',
+      'max-lines-per-function': 'off',
+    },
+  },
+
   // Generated / config-table files: no max-lines.
   // (CSS, JSON, MD already excluded from linting via top-level `ignores`.)
   {

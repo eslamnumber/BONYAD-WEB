@@ -2,8 +2,8 @@ import Image from 'next/image';
 import Link from 'next/link';
 
 import { LogoIcon } from '@/components/icons';
+import { type ApiEnvironmentKey } from '@/config/api-environments';
 import { ROUTES } from '@/config/routes';
-import { getActiveEnvironment } from '@/lib/api-environment.server';
 import { type Locale } from '@/types/locale';
 
 import { AuthHeader, type AuthHeaderLabels } from './auth-header';
@@ -51,17 +51,19 @@ function LoginImagePanel({ logoLabel }: { logoLabel: string }) {
   );
 }
 
-export async function LoginPage({
+export function LoginPage({
   labels,
   locale,
   headerLabels,
+  envKey,
 }: {
   labels: LoginPageLabels;
   locale: Locale;
   headerLabels: AuthHeaderLabels;
+  /** Resolved by the route (server-only) and passed in, so this module stays
+   *  free of `api-environment.server` — keeping the auth barrel client-safe. */
+  envKey: ApiEnvironmentKey;
 }) {
-  const { key: envKey } = await getActiveEnvironment();
-
   return (
     <div className="bg-login-bg flex min-h-dvh flex-col lg:flex-row">
       <div className="flex flex-1 flex-col lg:max-w-[549px]">

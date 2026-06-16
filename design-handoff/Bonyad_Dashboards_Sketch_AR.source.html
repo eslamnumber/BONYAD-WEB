@@ -1,0 +1,246 @@
+<!doctype html><html dir="rtl" lang="ar"><head><meta charset="utf-8">
+<style>
+@font-face{font-family:'Cairo';src:url('Cairo.ttf');font-weight:200 900;font-display:block}
+*{margin:0;padding:0;box-sizing:border-box}
+html{font-family:'Cairo','Geeza Pro',Tahoma,sans-serif;color:#111;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+@page{size:A4 landscape;margin:0}
+.page{width:1122px;height:793px;padding:13px 28px;page-break-after:always;position:relative;background:#fff;overflow:hidden}
+.head{display:flex;align-items:flex-end;justify-content:space-between;border-bottom:2px solid #111;padding-bottom:8px;margin-bottom:6px}
+.ttl{font-size:20px;font-weight:700}
+.sub{font-size:11.5px;color:#777;margin-top:2px}
+.tag{font-size:11px;color:#555;border:1px solid #bbb;border-radius:4px;padding:3px 9px}
+.legend{font-size:10px;color:#888;margin-bottom:9px}
+.legend b{color:#555;font-weight:600}
+.canvas{display:flex;gap:12px;height:706px}
+.cmp{border:1px solid #c8c8c8;border-radius:9px;padding:8px 11px;position:relative;background:#fff}
+.cmp::before{content:attr(data-n);position:absolute;top:-9px;inset-inline-start:11px;width:18px;height:18px;border:1px solid #111;border-radius:50%;background:#fff;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center}
+.ctt{font-size:12.5px;font-weight:700}
+.ann{font-size:10px;color:#888;line-height:1.45;margin-top:3px}
+.rail{width:98px;flex-shrink:0;display:flex;flex-direction:column;gap:8px;padding-top:13px}
+.logo{width:30px;height:30px;border:2px solid #111;border-radius:7px;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;margin:0 auto 2px}
+.nav{display:flex;flex-direction:column;gap:6px;margin-top:3px}
+.ni{display:flex;align-items:center;gap:7px;font-size:10.5px;color:#555}
+.nb{width:17px;height:17px;border:1px solid #aaa;border-radius:5px;flex-shrink:0}
+.ni.on{color:#111;font-weight:700}.ni.on .nb{background:#111;border-color:#111}
+.main{flex:1;min-width:0;display:flex;flex-direction:column;gap:10px}
+.hdr{display:flex;align-items:center;gap:10px}
+.av{width:32px;height:32px;border:1px solid #999;border-radius:50%;flex-shrink:0;position:relative}
+.av::after{content:"";position:absolute;inset:6px;border-radius:50%;border:1px dashed #bbb}
+.sk{height:9px;border-radius:3px;background:#e6e6e6;display:block}
+.skt{height:12px;border-radius:3px;background:#dcdcdc;display:block}
+.btn{border:1.5px solid #111;border-radius:8px;padding:6px 12px;font-size:11.5px;font-weight:700;color:#111;text-align:center;white-space:nowrap}
+.btn.fill{background:#111;color:#fff}
+.btn.blk{display:block;width:100%;margin-top:6px}
+.stats{display:flex;gap:10px}
+.kpi{flex:1;border:1px solid #c8c8c8;border-radius:8px;padding:7px 10px;background:#fafafa}
+.kpi .l{font-size:11px;color:#444;font-weight:600}
+.kpi .vb{height:16px;width:62px;background:#e0e0e0;border-radius:4px;margin-top:5px}
+.mods{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.mh{display:flex;align-items:flex-start;justify-content:space-between;gap:8px}
+.lnk{width:15px;height:15px;border:1px solid #bbb;border-radius:4px;flex-shrink:0}
+.body{margin-top:6px;display:flex;flex-direction:column;gap:5px}
+.row{display:flex;align-items:center;justify-content:space-between;gap:9px;border-bottom:1px dashed #e2e2e2;padding-bottom:6px}
+.row .lines{flex:1;display:flex;flex-direction:column;gap:4px}
+.pill{font-size:9.5px;color:#555;border:1px solid #aaa;border-radius:12px;padding:2px 8px;white-space:nowrap}
+.three{display:flex;gap:10px;align-items:center}
+.three .c{flex:1;text-align:center}.three .c .vb{width:auto;margin:0 auto 4px}
+.three .c .cl{font-size:9.5px;color:#888}
+.bar{height:7px;border:1px solid #c8c8c8;border-radius:10px;overflow:hidden;margin-top:5px}
+.bar i{display:block;height:100%;background:#bbb}
+.adrow{display:flex;align-items:center;gap:14px;border:1px solid #c8c8c8;border-radius:8px;padding:7px 12px;margin-top:6px}
+.adrow .ti{width:210px;display:flex;flex-direction:column;gap:6px}
+.stat3{flex:1;display:flex;gap:18px;justify-content:center}
+.stat3 .c{text-align:center}.stat3 .c .vb{width:44px;height:17px;background:#e0e0e0;border-radius:4px;margin:0 auto}
+.stat3 .c .cl{font-size:9.5px;color:#888;margin-top:3px}
+.acts{display:flex;gap:6px}
+.act{font-size:10px;font-weight:600;border:1px solid #aaa;border-radius:7px;padding:5px 9px;color:#444}
+.feed{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-top:6px}
+.fcard{border:1px solid #c8c8c8;border-radius:8px;padding:9px}
+.who{display:flex;align-items:center;gap:7px;margin:5px 0 7px}
+.who .d{width:19px;height:19px;border:1px solid #aaa;border-radius:50%;flex-shrink:0}
+.tag2{font-size:10px;color:#333;border:1px solid #111;border-radius:4px;padding:2px 7px;font-weight:600}
+.foot{position:absolute;bottom:9px;inset-inline-start:30px;font-size:9.5px;color:#aaa}
+</style></head><body>
+
+<section class="page">
+ <div class="head">
+  <div><div class="ttl">لوحة تتبّع العميل — رسم تخطيطي (Wireframe)</div><div class="sub">أبيض وأسود · المكوّنات مأخوذة من الشاشات الموجودة في التطبيق</div></div>
+  <div class="tag">بنيان · مرجع تصميم</div>
+ </div>
+ <div class="legend">المربّعات الرمادية = محتوى من الـ API.&nbsp;&nbsp;<b>الأرقام ① = المكوّن المطلوب.</b>&nbsp;&nbsp;الزر الأسود الممتلئ = إجراء رئيسي.</div>
+ <div class="canvas">
+
+  <div class="cmp rail" data-n="1">
+   <div class="logo">ب</div>
+   <div class="ctt" style="text-align:center;font-size:11px">التنقّل الجانبي</div>
+   <div class="nav">
+    <div class="ni on"><span class="nb"></span>الرئيسية</div>
+    <div class="ni"><span class="nb"></span>المشاريع</div>
+    <div class="ni"><span class="nb"></span>طلباتي</div>
+    <div class="ni"><span class="nb"></span>المدفوعات</div>
+    <div class="ni"><span class="nb"></span>العقود</div>
+    <div class="ni"><span class="nb"></span>استكشف العروض</div>
+    <div class="ni"><span class="nb"></span>المحادثات</div>
+    <div class="ni"><span class="nb"></span>الإعدادات</div>
+   </div>
+  </div>
+
+  <div class="main">
+
+   <div class="cmp hdr" data-n="2">
+    <div class="av"></div>
+    <div style="flex:1;display:flex;flex-direction:column;gap:6px"><span class="skt" style="width:120px"></span><span class="sk" style="width:175px"></span></div>
+    <div style="flex:1;border:1px dashed #bbb;border-radius:8px;height:32px;display:flex;align-items:center;padding:0 11px;color:#aaa;font-size:11px">شريط بحث عن الخدمات والفنيين…</div>
+    <div class="btn fill">+ أضف مشروعاً</div>
+   </div>
+
+   <div class="cmp" data-n="3" style="padding-bottom:8px">
+    <div class="ctt">صف المؤشرات (KPIs)</div>
+    <div class="ann">مستحق الآن · مدفوع حتى الآن · مشاريع نشطة · طلبات مفتوحة</div>
+    <div class="stats" style="margin-top:8px">
+     <div class="kpi"><div class="l">مستحق الآن</div><div class="vb"></div></div>
+     <div class="kpi"><div class="l">مدفوع حتى الآن</div><div class="vb"></div></div>
+     <div class="kpi"><div class="l">مشاريع نشطة</div><div class="vb" style="width:38px"></div></div>
+     <div class="kpi"><div class="l">طلبات مفتوحة</div><div class="vb" style="width:38px"></div></div>
+    </div>
+   </div>
+
+   <div class="mods">
+    <div class="cmp" data-n="4">
+     <div class="mh"><div><div class="ctt">المدفوعات والأقساط</div><div class="ann">الدفعة القادمة + «ادفع الآن» + قائمة الأقساط + رابط السجل</div></div><span class="lnk"></span></div>
+     <div class="body">
+      <div class="row"><div class="lines"><span class="sk" style="width:85px"></span><span class="sk" style="width:145px"></span></div><span class="pill">ادفع الآن</span></div>
+      <div class="row" style="border:none"><span class="sk" style="width:110px"></span><span class="pill">مدفوع / قادم</span></div>
+     </div>
+    </div>
+    <div class="cmp" data-n="5">
+     <div class="mh"><div><div class="ctt">طلباتي (طلب تسعير)</div><div class="ann">طلبات التسعير + عدد العروض لكل طلب + «قارن العروض»</div></div><span class="lnk"></span></div>
+     <div class="body">
+      <div class="row"><span class="sk" style="width:120px"></span><span class="pill">عدد العروض</span></div>
+      <div class="row" style="border:none"><span class="sk" style="width:130px"></span><span class="pill">بانتظار</span></div>
+     </div>
+     <div class="btn blk">قارن العروض</div>
+    </div>
+    <div class="cmp" data-n="6">
+     <div class="mh"><div><div class="ctt">العقود</div><div class="ann">قائمة العقود + الحالة (وقّع / بانتظار الفني) + «راجع ووقّع»</div></div><span class="lnk"></span></div>
+     <div class="body">
+      <div class="row"><span class="sk" style="width:140px"></span><span class="pill">وقّع</span></div>
+      <div class="row" style="border:none"><span class="sk" style="width:120px"></span><span class="pill">بانتظار الفني</span></div>
+     </div>
+     <div class="btn blk">راجع ووقّع</div>
+    </div>
+    <div class="cmp" data-n="7">
+     <div class="mh"><div><div class="ctt">المشاريع النشطة</div><div class="ann">كل مشروع: الاسم + المرحلة + شريط تقدّم</div></div><span class="lnk"></span></div>
+     <div class="body">
+      <div style="border:none;padding:0"><span class="sk" style="width:105px"></span><div class="bar"><i style="width:45%"></i></div></div>
+      <div style="border:none;padding:0;margin-top:5px"><span class="sk" style="width:90px"></span><div class="bar"><i style="width:18%"></i></div></div>
+     </div>
+    </div>
+   </div>
+
+   <div class="cmp" data-n="8">
+    <div class="mh"><div><div class="ctt">استكشف العروض</div><div class="ann">ما يراه العميل — إعلانات الفنيين: عنوان + وصف + اسم الفني + زر (اطلب سعراً / عرض الملف / اتصال).</div></div><span class="lnk"></span></div>
+    <div class="feed">
+     <div class="fcard" style="display:flex;align-items:center;justify-content:space-between;gap:8px"><div style="display:flex;flex-direction:column;gap:5px"><span class="skt" style="width:95px"></span><div class="who" style="margin:0"><span class="d"></span><span class="sk" style="width:55px"></span></div></div><span class="btn" style="padding:6px 10px">اطلب سعراً</span></div>
+     <div class="fcard" style="display:flex;align-items:center;justify-content:space-between;gap:8px"><div style="display:flex;flex-direction:column;gap:5px"><span class="skt" style="width:85px"></span><div class="who" style="margin:0"><span class="d"></span><span class="sk" style="width:50px"></span></div></div><span class="btn" style="padding:6px 10px">اتصال</span></div>
+     <div class="fcard" style="display:flex;align-items:center;justify-content:space-between;gap:8px"><div style="display:flex;flex-direction:column;gap:5px"><span class="skt" style="width:90px"></span><div class="who" style="margin:0"><span class="d"></span><span class="sk" style="width:52px"></span></div></div><span class="btn" style="padding:6px 10px">عرض الملف</span></div>
+    </div>
+   </div>
+
+  </div>
+ </div>
+ <div class="foot">صفحة 1 من 2 — لوحة العميل</div>
+</section>
+
+<section class="page">
+ <div class="head">
+  <div><div class="ttl">لوحة تتبّع الفني — رسم تخطيطي (Wireframe)</div><div class="sub">أبيض وأسود · المكوّنات مأخوذة من الشاشات الموجودة في التطبيق</div></div>
+  <div class="tag">بنيان · مرجع تصميم</div>
+ </div>
+ <div class="legend">المربّعات الرمادية = محتوى من الـ API.&nbsp;&nbsp;<b>الأرقام ① = المكوّن المطلوب.</b>&nbsp;&nbsp;الزر الأسود الممتلئ = إجراء رئيسي.</div>
+ <div class="canvas">
+
+  <div class="cmp rail" data-n="1">
+   <div class="logo">ب</div>
+   <div class="ctt" style="text-align:center;font-size:11px">التنقّل الجانبي</div>
+   <div class="nav">
+    <div class="ni on"><span class="nb"></span>الرئيسية</div>
+    <div class="ni"><span class="nb"></span>الفرص</div>
+    <div class="ni"><span class="nb"></span>المشاريع</div>
+    <div class="ni"><span class="nb"></span>المدفوعات</div>
+    <div class="ni"><span class="nb"></span>الإعلانات</div>
+    <div class="ni"><span class="nb"></span>العقود</div>
+    <div class="ni"><span class="nb"></span>المشاريع الخارجية</div>
+    <div class="ni"><span class="nb"></span>المحادثات</div>
+    <div class="ni"><span class="nb"></span>الإعدادات</div>
+   </div>
+  </div>
+
+  <div class="main">
+
+   <div class="cmp hdr" data-n="2">
+    <div class="av"></div>
+    <div style="flex:1;display:flex;flex-direction:column;gap:6px"><span class="skt" style="width:130px"></span><span class="sk" style="width:195px"></span></div>
+    <div class="btn">الإشعارات</div>
+   </div>
+
+   <div class="cmp" data-n="3" style="padding-bottom:8px">
+    <div class="ctt">صف المؤشرات (KPIs)</div>
+    <div class="ann">الرصيد المتاح · دفعة معلّقة · مشاريع نشطة · نقرات الإعلانات (7 أيام)</div>
+    <div class="stats" style="margin-top:8px">
+     <div class="kpi"><div class="l">الرصيد المتاح</div><div class="vb"></div></div>
+     <div class="kpi"><div class="l">دفعة معلّقة</div><div class="vb"></div></div>
+     <div class="kpi"><div class="l">مشاريع نشطة</div><div class="vb" style="width:38px"></div></div>
+     <div class="kpi"><div class="l">نقرات الإعلانات</div><div class="vb" style="width:46px"></div></div>
+    </div>
+   </div>
+
+   <div class="cmp" data-n="4">
+    <div class="mh"><div><div class="ctt">إعلاناتي</div><div class="ann">ما يراه الفني — إدارة الإعلانات: العنوان + الحالة + (الظهور · النقرات · نسبة النقر) + (تعديل · إيقاف · حذف).</div></div><div class="btn" style="padding:5px 10px">+ إعلان جديد</div></div>
+    <div class="adrow">
+     <div class="ti"><span class="skt" style="width:165px"></span><span class="pill" style="align-self:flex-start">نشِط</span></div>
+     <div class="stat3"><div class="c"><div class="vb"></div><div class="cl">الظهور</div></div><div class="c"><div class="vb"></div><div class="cl">النقرات</div></div><div class="c"><div class="vb"></div><div class="cl">نسبة النقر</div></div></div>
+     <div class="acts"><span class="act">تعديل</span><span class="act">إيقاف</span><span class="act">حذف</span></div>
+    </div>
+   </div>
+
+   <div class="mods">
+    <div class="cmp" data-n="5">
+     <div class="mh"><div><div class="ctt">الأرباح والتحويلات</div><div class="ann">الرصيد المتاح + أرباح الشهر + آخر الأرباح + «اطلب تحويلاً»</div></div><span class="lnk"></span></div>
+     <div class="body">
+      <div class="three"><div class="c"><div class="vb"></div><div class="cl">متاح</div></div><div class="c"><div class="vb"></div><div class="cl">أرباح الشهر</div></div></div>
+      <div class="row" style="border:none"><span class="sk" style="width:120px"></span><span class="pill">آخر ربح +</span></div>
+     </div>
+     <div class="btn blk">اطلب تحويلاً</div>
+    </div>
+    <div class="cmp" data-n="6">
+     <div class="mh"><div><div class="ctt">المشاريع الخارجية</div><div class="ann">مشاريع الفني خارج المنصة: العنوان + الحالة + نسبة الإنجاز + اسم العميل. + إضافة / حذف.</div></div><div class="btn" style="padding:5px 9px">+ جديد</div></div>
+     <div class="body">
+      <div style="border-bottom:1px dashed #e2e2e2;padding-bottom:6px"><div style="display:flex;justify-content:space-between;gap:8px"><span class="sk" style="width:120px"></span><span class="pill">قيد التنفيذ</span></div><div class="bar"><i style="width:60%"></i></div></div>
+      <div style="margin-top:5px"><div style="display:flex;justify-content:space-between;gap:8px"><span class="sk" style="width:100px"></span><span class="pill">مكتمل</span></div><div class="bar"><i style="width:100%"></i></div></div>
+     </div>
+    </div>
+    <div class="cmp" data-n="7">
+     <div class="mh"><div><div class="ctt">العقود</div><div class="ann">قائمة العقود + الحالة (وقّع / موقّع) + «راجع ووقّع»</div></div><span class="lnk"></span></div>
+     <div class="body">
+      <div class="row"><span class="sk" style="width:140px"></span><span class="pill">وقّع</span></div>
+      <div class="row" style="border:none"><span class="sk" style="width:120px"></span><span class="pill">موقّع</span></div>
+     </div>
+     <div class="btn blk">راجع ووقّع</div>
+    </div>
+    <div class="cmp" data-n="8">
+     <div class="mh"><div><div class="ctt">الفرص المتاحة</div><div class="ann">فرص قريبة: الاسم + المسافة + «أرسل عرضاً»</div></div><span class="lnk"></span></div>
+     <div class="body">
+      <div class="row"><span class="sk" style="width:130px"></span><span class="pill">المسافة</span></div>
+      <div class="row" style="border:none"><span class="sk" style="width:110px"></span><span class="pill">المسافة</span></div>
+     </div>
+     <div class="btn blk">أرسل عرضاً</div>
+    </div>
+   </div>
+
+  </div>
+ </div>
+ <div class="foot">صفحة 2 من 2 — لوحة الفني</div>
+</section>
+
+</body></html>

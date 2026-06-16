@@ -168,6 +168,7 @@
      (badge + deadline), job-card divider, project-image scrim + on-media text. */
   --color-dashboard-panel: var(--dashboard-panel);
   --color-dashboard-search-bg: var(--dashboard-search-bg);
+  --color-dashboard-search-divider: var(--dashboard-search-divider);
   --color-job-accent: var(--job-accent);
   --color-job-divider: var(--job-divider);
   --color-card-scrim: var(--card-scrim);
@@ -220,6 +221,8 @@
   --color-status-rejected-soft: var(--status-rejected-soft);
   --color-status-pending: var(--status-pending);
   --color-status-pending-soft: var(--status-pending-soft);
+  --color-status-bid: var(--status-bid);
+  --color-status-bid-soft: var(--status-bid-soft);
   --color-status-done: var(--status-done);
   --color-status-done-bg: var(--status-done-bg);
   --color-stat-up: var(--stat-up);
@@ -251,6 +254,21 @@
   --color-upcoming: var(--upcoming);
   --color-upcoming-soft: var(--upcoming-soft);
   --color-detail-label: var(--detail-label);
+
+  /* Create-project wizard (Figma 1394:7041…) — 6-step progress bar (active
+     #1a6db4 / complete #00bc7d / track #d9d9d9), the slate-100 phase panel, and
+     the amber rating star in the technician picker. */
+  --color-create-progress-active: var(--create-progress-active);
+  --color-create-progress-complete: var(--create-progress-complete);
+  --color-create-progress-track: var(--create-progress-track);
+  --color-create-phase-panel: var(--create-phase-panel);
+  --color-rating-star: var(--rating-star);
+
+  /* Contract-signing phases card (Figma 1501:14729) — the green per-phase amount
+     badge (fg + soft pill bg). The slate duration badge reuses
+     --color-field-surface + --color-muted-foreground. */
+  --color-phase-amount: var(--phase-amount);
+  --color-phase-amount-soft: var(--phase-amount-soft);
 }
 
 :root {
@@ -398,6 +416,7 @@
      on-media: white text/icons sitting on the scrimmed image (theme-independent). */
   --dashboard-panel: oklch(0.96 0.003 230);
   --dashboard-search-bg: oklch(1 0 0 / 0.6);
+  --dashboard-search-divider: oklch(0.53 0.04 248); /* Figma #64748B — search dropdown divider */
   --job-accent: oklch(0.46 0.18 251);
   --job-divider: oklch(0.84 0 0);
   --card-scrim: oklch(0 0 0 / 0.6);
@@ -454,6 +473,9 @@
   --status-rejected-soft: oklch(0.62 0.23 27 / 0.1);
   --status-pending: oklch(0.56 0.25 300);
   --status-pending-soft: oklch(0.56 0.25 300 / 0.1);
+  /* Bid-received pill + "best value" highlight — Figma #8A38F5 (customer bids screen). */
+  --status-bid: oklch(0.56 0.26 297);
+  --status-bid-soft: oklch(0.56 0.26 297 / 0.1);
   --status-done: oklch(1 0 0);
   --status-done-bg: oklch(0.52 0.13 252);
   --stat-up: oklch(0.7 0.16 158);
@@ -486,6 +508,19 @@
   --upcoming: oklch(0.55 0.04 257);
   --upcoming-soft: oklch(0.55 0.04 257 / 0.1);
   --detail-label: oklch(0.7 0.03 257);
+
+  /* Create-project wizard — light. Progress markers (active #1a6db4 == the
+     detail-action blue, complete #00bc7d emerald, track #d9d9d9), the slate-100
+     phase panel (#f1f5f9), and the amber-500 rating star (#f59e0b). */
+  --create-progress-active: oklch(0.52 0.13 252);
+  --create-progress-complete: oklch(0.71 0.16 162);
+  --create-progress-track: oklch(0.89 0 0);
+  --create-phase-panel: oklch(0.97 0.007 248);
+  --rating-star: oklch(0.77 0.18 70);
+
+  /* Contract-signing phase amount badge — light. Green #128754 fg / soft 10% bg. */
+  --phase-amount: oklch(0.52 0.11 158);
+  --phase-amount-soft: oklch(0.52 0.11 158 / 0.1);
 }
 
 .dark {
@@ -605,6 +640,7 @@
      theme-independent — text over a dark photo is always light). */
   --dashboard-panel: oklch(0.18 0.004 230);
   --dashboard-search-bg: oklch(0.22 0 0 / 0.6);
+  --dashboard-search-divider: oklch(0.44 0.035 248); /* search dropdown divider (dark) */
   --job-accent: oklch(0.7 0.16 250);
   --job-divider: oklch(0.3 0 0);
   --card-scrim: oklch(0 0 0 / 0.6);
@@ -656,6 +692,8 @@
   --status-rejected-soft: oklch(0.68 0.2 27 / 0.2);
   --status-pending: oklch(0.66 0.22 300);
   --status-pending-soft: oklch(0.66 0.22 300 / 0.2);
+  --status-bid: oklch(0.66 0.23 297);
+  --status-bid-soft: oklch(0.66 0.23 297 / 0.2);
   --status-done: oklch(1 0 0);
   --status-done-bg: oklch(0.58 0.13 252);
   --stat-up: oklch(0.76 0.16 158);
@@ -686,6 +724,19 @@
   --upcoming: oklch(0.7 0.03 257);
   --upcoming-soft: oklch(0.7 0.03 257 / 0.2);
   --detail-label: oklch(0.6 0.03 257);
+
+  /* Create-project wizard — dark. Active/complete brightened to read on the dark
+     card; track darkened to the dark border; phase panel → a dark slate surface;
+     the star stays amber (lifted slightly). */
+  --create-progress-active: oklch(0.62 0.13 252);
+  --create-progress-complete: oklch(0.78 0.15 162);
+  --create-progress-track: oklch(0.3 0 0);
+  --create-phase-panel: oklch(0.23 0.01 256);
+  --rating-star: oklch(0.82 0.17 72);
+
+  /* Contract-signing phase amount badge — dark (brighter green, higher-alpha bg). */
+  --phase-amount: oklch(0.72 0.16 158);
+  --phase-amount-soft: oklch(0.72 0.16 158 / 0.2);
 }
 
 html[dir='rtl'] {

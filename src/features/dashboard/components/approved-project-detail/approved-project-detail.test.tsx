@@ -1,7 +1,8 @@
 import { http, HttpResponse } from 'msw';
-import { beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeAll, beforeEach, describe, expect, it } from 'vitest';
 
 import { i18n } from '@/lib/i18n';
+import { useAuthStore } from '@/stores/auth-store';
 import { server } from '@/testing/handlers/server';
 import { renderWithProviders, screen } from '@/testing/render';
 
@@ -72,9 +73,17 @@ describe('ApprovedProjectDetail', () => {
 });
 
 describe('AssignedProjectDetail dispatch', () => {
+  afterEach(() => {
+    useAuthStore.setState({ user: null, isAuthenticated: false });
+  });
+
+  // The approved/offer-accepted view is the TECHNICIAN's screen; the customer's
+  // approved-stage routing to the contract screen is covered in
+  // assigned-project-detail.test.tsx.
   it.each(['APPROVED', 'PHASE_PLANNING'])(
-    'routes the %s phase to the offer-accepted (approved) view',
+    'routes the technician %s phase to the offer-accepted (approved) view',
     async (status) => {
+      useAuthStore.setState({ user: { id: 9, role: 'TECHNICIAN' }, isAuthenticated: true });
       server.use(http.get('*/projects/:id', () => HttpResponse.json(detail(status))));
       renderWithProviders(<AssignedProjectDetail projectId={42} />);
       expect(await screen.findByText('Your offer was accepted')).toBeInTheDocument();

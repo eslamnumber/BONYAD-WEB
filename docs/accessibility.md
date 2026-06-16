@@ -47,15 +47,27 @@ Also move focus to `<h1>` on route change (or to a `<main tabIndex={-1}>` ref). 
 
 ## Patterns by component
 
-| Component        | Pattern                                                                                                              |
-| ---------------- | -------------------------------------------------------------------------------------------------------------------- |
-| Modal/dialog     | shadcn `<Dialog>` (Radix). Focus trap + restore + `Esc` close are built in.                                          |
-| Menu / dropdown  | Radix `<Menu>` via shadcn. Roving tabindex built in.                                                                 |
-| Toast            | `role="status"` for info, `role="alert"` for error.                                                                  |
-| Form errors      | `aria-describedby` on the input pointing to `<FormMessage>` (shadcn does this).                                      |
-| Icon-only button | Always has `aria-label={t('…')}`.                                                                                    |
-| Loading spinner  | Wrapped in `role="status"` with a translated `<span className="sr-only">{t('common.loading')}</span>`.               |
-| Skip link        | `<a href="#main" className="sr-only focus:not-sr-only">{t('a11y.skipToMain')}</a>` as the first element in `<body>`. |
+| Component        | Pattern                                                                                                                                                                                              |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Modal/dialog     | shadcn `<Dialog>` (Radix). Focus trap + restore + `Esc` close are built in.                                                                                                                          |
+| Menu / dropdown  | Radix `<Menu>` via shadcn. Roving tabindex built in.                                                                                                                                                 |
+| Toast            | `role="status"` for info, `role="alert"` for error.                                                                                                                                                  |
+| Form errors      | `aria-invalid` + `aria-describedby` on the input pointing to `<FormMessage>` (shadcn does this). See §Form errors below.                                                                             |
+| Required field   | `aria-required` on the control (announced by SR); the visual `*` is decorative (`aria-hidden`) with a `* required` legend. Never color-only. See [forms-validation.md](forms-validation.md) rule 14. |
+| Icon-only button | Always has `aria-label={t('…')}`.                                                                                                                                                                    |
+| Loading spinner  | Wrapped in `role="status"` with a translated `<span className="sr-only">{t('common.loading')}</span>`.                                                                                               |
+| Skip link        | `<a href="#main" className="sr-only focus:not-sr-only">{t('a11y.skipToMain')}</a>` as the first element in `<body>`.                                                                                 |
+
+## Form errors (WCAG 2.2 §3.3.1 Error Identification, §3.3.3 Error Suggestion)
+
+Validation must be _perceivable and actionable_, not just visual. On a failed submit:
+
+1. **Identify each error in text, tied to its field.** Every invalid control gets `aria-invalid="true"` and an `aria-describedby` pointing at its `<FormMessage>` — shadcn wires both from `fieldState.error`; don't strip them. The message says what's wrong **and** how to fix it (`forms.errors.*` / feature `*.errors.*` i18n keys), never a bare "Invalid".
+2. **Move focus to the first invalid field** so keyboard/SR users land on the problem (`form.setFocus(firstErrorName)` in RHF's `onInvalid`). Don't rely on the user scrolling to find red text.
+3. **Forms longer than ~6 fields render an error summary** above the form: a `role="alert"` container listing each error as an anchor link to its field. The summary receives focus on submit. Short forms (login, OTP) skip the summary — focusing the first field is enough.
+4. **Required-ness is programmatic, not color-only** — `aria-required` carries it; the `*` is `aria-hidden`. Same rule for error state: the red border is backed by `aria-invalid` + text.
+
+The mechanics live in [forms-validation.md](forms-validation.md) rules 14–17; this section is the a11y contract those rules satisfy.
 
 ## Testing
 

@@ -153,8 +153,65 @@ const SAMPLE_ASSIGNED = [
   },
 ];
 
+/**
+ * The signed-in customer's own projects (GET /projects/my) — one row per status
+ * the Figma table demonstrates (in-progress / contract / pending / rejected /
+ * completed). `serviceNameAr` doubles as the "current phase" label and
+ * `createdAt` feeds the creation-date column + the stat-card "this month" delta.
+ */
+const SAMPLE_MY_PROJECTS = [
+  {
+    id: 101,
+    title: 'فيلا سكنية بالرياض',
+    serviceNameEn: 'Construction',
+    serviceNameAr: 'البناء',
+    budget: 180000,
+    status: 'IN_PROGRESS',
+    createdAt: '2025-09-10T00:00:00Z',
+    assignedTechnicianName: 'م. أحمد العتيبي',
+    phases: SAMPLE_PHASES,
+  },
+  {
+    id: 102,
+    title: 'شركة تصميم في جدة',
+    serviceNameEn: 'Interior design',
+    serviceNameAr: 'التصميم الداخلي',
+    budget: 250000,
+    status: 'CONTRACT_SIGNING',
+    createdAt: '2025-10-15T00:00:00Z',
+  },
+  {
+    id: 103,
+    title: 'مشروع تجاري في الدمام',
+    serviceNameEn: 'Construction',
+    serviceNameAr: 'البناء',
+    budget: 2700,
+    status: 'PENDING',
+    createdAt: '2025-11-03T00:00:00Z',
+  },
+  {
+    id: 104,
+    title: 'شقة سكنية في الخبر',
+    serviceNameEn: 'Decor',
+    serviceNameAr: 'الديكور',
+    budget: 300000,
+    status: 'REJECTED',
+    createdAt: '2025-08-22T00:00:00Z',
+  },
+  {
+    id: 105,
+    title: 'طريق سريع في الدمام',
+    serviceNameEn: 'Infrastructure',
+    serviceNameAr: 'البنية التحتية',
+    budget: 300000,
+    status: 'COMPLETED',
+    createdAt: '2025-02-09T00:00:00Z',
+  },
+];
+
 export const projectHandlers = [
   http.get(`${BASE}/projects/my-assigned`, () => HttpResponse.json(SAMPLE_ASSIGNED)),
+  http.get(`${BASE}/projects/my`, () => HttpResponse.json(SAMPLE_MY_PROJECTS)),
   http.get(`${BASE}/projects`, () => HttpResponse.json([SAMPLE_PROJECT])),
   http.get(`${BASE}/projects/:id`, ({ params }) =>
     HttpResponse.json({
@@ -166,4 +223,6 @@ export const projectHandlers = [
     }),
   ),
   http.get(`${BASE}/phases/project/:projectId`, () => HttpResponse.json(SAMPLE_PHASES)),
+  http.post(`${BASE}/projects/create`, () => HttpResponse.json({ id: 999 }, { status: 201 })),
+  http.post(`${BASE}/phases`, () => HttpResponse.json({ id: 1 }, { status: 201 })),
 ];

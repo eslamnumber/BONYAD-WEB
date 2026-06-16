@@ -3,39 +3,68 @@
 import { type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
+import { useAuthStore } from '@/stores/auth-store';
+
 import { useProject } from '../api/get-project';
-import { isApprovedPhase, statusVariant } from '../lib/project-status';
+import { isApprovedPhase, isPendingOrBidPhase, statusVariant } from '../lib/project-status';
 
 import { ApprovedProjectDetail } from './approved-project-detail';
 import { CompletedProjectDetail } from './completed-project-detail';
+import { ContractSigningProjectDetail } from './contract-signing-project-detail';
+import { CustomerApprovedDetail } from './customer-approved-detail';
 import { InProgressProjectDetail } from './in-progress-project-detail';
+import { JobOfferDetail } from './job-offer-detail';
 
 type Props = { projectId: number };
 
 /**
- * Route entry for /dashboard/projects/[id]. Dispatches an assigned-project detail
- * by lifecycle status: APPROVED / PHASE_PLANNING (offer accepted) renders
- * {@link ApprovedProjectDetail}, a completed project renders
- * {@link CompletedProjectDetail}, anything else (contract · in-progress) renders
- * the in-progress execution view {@link InProgressProjectDetail}. Bid/pending
- * projects never reach here — the projects table routes them to
- * /dashboard/job-offers/[id]. The `useProject` call below shares the TanStack
- * Query cache (same key) with the chosen child, so dispatching costs no extra request.
+ * Route entry for /dashboard/projects/[id]. Dispatches a project detail by
+ * lifecycle status AND role — each screen follows the project's real backend
+ * status. A pending / bid-phase project renders {@link JobOfferDetail} (the owner
+ * sees the awaiting-offers card + Edit/Delete, a technician sees the submit-offer
+ * panel). The approved phase — APPROVED / PHASE_PLANNING — is role-split: the
+ * **customer** gets {@link CustomerApprovedDetail} (review provider + pick a signing
+ * method + approve phases), the **technician** keeps {@link ApprovedProjectDetail}
+ * (their offer-accepted view). Once the customer approves the phases the project moves
+ * to CONTRACT_SIGNING → the customer's {@link ContractSigningProjectDetail} (contract
+ * sent to email); the technician falls through to the in-progress view
+ * {@link InProgressProjectDetail} for contract / execution. A completed project renders
+ * {@link CompletedProjectDetail} for both. The customer projects table routes every
+ * status here. The `useProject` call shares the TanStack Query cache (same key) with
+ * the chosen child — no extra request.
  */
 export function AssignedProjectDetail({ projectId }: Props) {
   const { t } = useTranslation();
   const { data: project, isPending, isError } = useProject(projectId);
+  const isTechnician = (useAuthStore((s) => s.user?.role) ?? '').toUpperCase() === 'TECHNICIAN';
 
   if (isPending) return <DetailMessage>{t('dashboard.projectDetail.loading')}</DetailMessage>;
   if (isError || !project)
     return <DetailMessage>{t('dashboard.projectDetail.error')}</DetailMessage>;
 
-  if (isApprovedPhase(project.status)) return <ApprovedProjectDetail projectId={projectId} />;
-  return statusVariant(project.status) === 'completed' ? (
-    <CompletedProjectDetail projectId={projectId} />
-  ) : (
-    <InProgressProjectDetail projectId={projectId} />
-  );
+  return routeDetail(project.status, isTechnician, projectId);
+}
+
+/** Pick the detail view by lifecycle status + role (see {@link AssignedProjectDetail}). */
+function routeDetail(status: string | undefined, isTechnician: boolean, projectId: number) {
+  if (isPendingOrBidPhase(status)) return <JobOfferDetail projectId={projectId} />;
+
+  const variant = statusVariant(status);
+  const isApproved = isApprovedPhase(status);
+
+  // Customer post-acceptance, one screen per backend status: APPROVED / PHASE_PLANNING
+  // = the review-&-approve screen (provider + signing-method picker); after approve-all
+  // the project moves to CONTRACT_SIGNING = the contract-sent screen. Technicians fall
+  // through to their own approved / in-progress views below.
+  if (!isTechnician) {
+    if (isApproved) return <CustomerApprovedDetail projectId={projectId} />;
+    if (variant === 'contractSigning')
+      return <ContractSigningProjectDetail projectId={projectId} />;
+  }
+
+  if (isApproved) return <ApprovedProjectDetail projectId={projectId} />;
+  if (variant === 'completed') return <CompletedProjectDetail projectId={projectId} />;
+  return <InProgressProjectDetail projectId={projectId} />;
 }
 
 function DetailMessage({ children }: { children: ReactNode }) {

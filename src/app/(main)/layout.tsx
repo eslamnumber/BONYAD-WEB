@@ -1,4 +1,4 @@
-import { AppShell, getAppShellLabels } from '@/components/layout';
+import { AppShell, DemoBanner, getAppShellLabels } from '@/components/layout';
 import { HomeAppDownloadBar } from '@/features/home';
 import { getTranslations } from '@/lib/get-translations';
 import { getServerLocale } from '@/lib/locale';
@@ -15,7 +15,12 @@ export default async function MainLayout({ children }: MainLayoutProps) {
     <AppShell
       locale={locale as Locale}
       labels={labels}
-      topBanner={<HomeAppDownloadBar locale={locale as Locale} />}
+      topBanner={
+        <>
+          <DemoBanner label={t('common.demoBanner')} />
+          <HomeAppDownloadBar locale={locale as Locale} />
+        </>
+      }
     >
       {children}
     </AppShell>
