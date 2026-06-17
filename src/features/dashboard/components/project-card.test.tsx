@@ -38,6 +38,17 @@ describe('ProjectCard', () => {
     expect(screen.getByText('Project')).toBeInTheDocument();
   });
 
+  it('renders a cover from an arbitrary backend host without crashing', () => {
+    // A junk/unconfigured host (dev seed data) would throw under `next/image`;
+    // the CSS background-image cover must tolerate any https host.
+    const { container } = renderWithProviders(
+      <ProjectCard project={{ id: 3, files: ['https://x/1.jpg'] }} />,
+    );
+    const cover = container.querySelector('[style*="background-image"]');
+    expect(cover).not.toBeNull();
+    expect(cover?.getAttribute('style')).toContain('https://x/1.jpg');
+  });
+
   it('has no a11y violations', async () => {
     const { container } = renderWithProviders(<ProjectCard project={PROJECT} />);
     expect(await axe(container)).toHaveNoViolations();

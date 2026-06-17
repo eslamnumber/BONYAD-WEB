@@ -1,4 +1,5 @@
 export { AppShell } from './app-shell';
+export { DashboardMobileNav } from './dashboard-mobile-nav';
 export { DashboardSidebar } from './dashboard-sidebar';
 export { DemoBanner } from './demo-banner';
 export { DirectionalIcon } from './directional-icon';

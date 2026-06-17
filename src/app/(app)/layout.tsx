@@ -1,6 +1,11 @@
 import { type ReactNode } from 'react';
 
-import { DashboardSidebar, PageTransition, SkipLink } from '@/components/layout';
+import {
+  DashboardMobileNav,
+  DashboardSidebar,
+  PageTransition,
+  SkipLink,
+} from '@/components/layout';
 import { AuthProvider } from '@/features/auth';
 import { NotificationsDrawer } from '@/features/notifications';
 import { getTranslations } from '@/lib/get-translations';
@@ -23,13 +28,16 @@ export default async function AppLayout({ children }: AppLayoutProps) {
     <AuthProvider initialUser={user}>
       <SkipLink label={t('a11y.skipToMain')} />
       <div className="flex h-dvh overflow-hidden">
-        <main
-          id="main"
-          tabIndex={-1}
-          className="flex min-h-0 min-w-0 flex-1 flex-col focus:outline-none"
-        >
-          <PageTransition>{children}</PageTransition>
-        </main>
+        <div className="flex min-h-0 min-w-0 flex-1 flex-col">
+          <DashboardMobileNav />
+          <main
+            id="main"
+            tabIndex={-1}
+            className="flex min-h-0 flex-1 flex-col overflow-y-auto focus:outline-none"
+          >
+            <PageTransition>{children}</PageTransition>
+          </main>
+        </div>
         <DashboardSidebar />
       </div>
       <NotificationsDrawer />

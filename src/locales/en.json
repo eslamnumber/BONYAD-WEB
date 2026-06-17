@@ -75,7 +75,7 @@
       "customer": "Customer"
     },
     "search": {
-      "placeholder": "?What kind of offer are you looking for",
+      "placeholder": "What kind of offer are you looking for?",
       "label": "Search job offers"
     },
     "hero": {
@@ -357,7 +357,7 @@
         "durationLabel": "Implementation duration",
         "durationPlaceholder": "e.g. 8 weeks",
         "messageLabel": "Application message",
-        "messagePlaceholder": "Write your offer details here...",
+        "messagePlaceholder": "...Write your offer details here",
         "submit": "Submit offer",
         "save": "Save",
         "success": "Your offer has been submitted.",
@@ -1244,7 +1244,7 @@
     },
     "selectConversation": "Select a conversation to view it.",
     "threadEmpty": "No messages yet. Type a message to start the conversation.",
-    "inputPlaceholder": "Type a message...",
+    "inputPlaceholder": "...Type a message",
     "send": "Send",
     "attachFile": "Attach file",
     "emoji": "Add emoji",

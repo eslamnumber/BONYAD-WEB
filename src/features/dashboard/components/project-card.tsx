@@ -1,6 +1,5 @@
 'use client';
 
-import Image from 'next/image';
 import { type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -15,6 +14,21 @@ import { MoneyAmount } from './money-amount';
 const CARD =
   'bg-card-media-fallback border-border relative flex flex-col overflow-hidden rounded-2xl border shadow-[0px_1px_3px_0px_rgba(161,161,161,0.1),0px_5px_5px_0px_rgba(161,161,161,0.09),0px_11px_7px_0px_rgba(161,161,161,0.05)]';
 
+/**
+ * Decorative project cover, painted as a CSS background rather than `next/image`
+ * so an arbitrary backend host needs no `remotePatterns` entry and a junk/unknown
+ * host can never crash the card (CSP `img-src https:` covers it). Same robustness
+ * rationale as the shared `Avatar`.
+ */
+function ProjectCover({ src }: { src: string }) {
+  return (
+    <div
+      style={{ backgroundImage: `url("${encodeURI(src)}")` }}
+      className="absolute inset-0 bg-cover bg-center rtl:-scale-x-100"
+    />
+  );
+}
+
 /** One featured project. Cover image + dark scrim with white content on top. */
 export function ProjectCard({ project }: { project: Project }) {
   const { t, i18n } = useTranslation();
@@ -26,9 +40,7 @@ export function ProjectCard({ project }: { project: Project }) {
   return (
     <article className={CARD}>
       <div aria-hidden className="absolute inset-0">
-        {cover ? (
-          <Image src={cover} alt="" fill sizes="370px" className="object-cover rtl:-scale-x-100" />
-        ) : null}
+        {cover ? <ProjectCover src={cover} /> : null}
         <div className="bg-card-scrim absolute inset-0" />
       </div>
 

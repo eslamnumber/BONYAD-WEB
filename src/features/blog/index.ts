@@ -1,5 +1,6 @@
 export { blogQueryKey, blogsQueryKey, getBlog, getBlogs, useBlog, useBlogs } from './api';
 export type { GetBlogsParams } from './api';
+export { blogToCardVM, staticArticleToCardVM, type BlogCardVM } from './components/blog-card-vm';
 export { BlogDetail } from './components/blog-detail';
 export { BlogFeatured } from './components/blog-featured';
 export { BlogIntro } from './components/blog-intro';
