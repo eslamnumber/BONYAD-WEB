@@ -6,6 +6,7 @@ import { chatHandlers } from './chat';
 import { contactHandlers } from './contact';
 import { contractHandlers } from './contracts';
 import { faqHandlers } from './faqs';
+import { feedbackHandlers } from './feedback';
 import { notificationHandlers } from './notifications';
 import { paymentHandlers } from './payments';
 import { portfolioHandlers } from './portfolio';
@@ -25,6 +26,7 @@ export const handlers = [
   ...contactHandlers,
   ...contractHandlers,
   ...faqHandlers,
+  ...feedbackHandlers,
   ...notificationHandlers,
   ...paymentHandlers,
   ...portfolioHandlers,

@@ -76,7 +76,7 @@ export const ACCOUNT_ROWS: readonly ProfileLinkRow[] = [
 export const HELP_ROWS: readonly ProfileLinkRow[] = [
   { key: 'support', Icon: TrustSupportIcon, href: ROUTES.DASHBOARD_SETTINGS_SUPPORT },
   { key: 'referral', Icon: SendIcon, href: ROUTES.DASHBOARD_SETTINGS_REFERRAL },
-  { key: 'feedback', Icon: MessageCircleIcon, href: ROUTES.CONTACT, disabled: true },
+  { key: 'feedback', Icon: MessageCircleIcon, href: ROUTES.DASHBOARD_SETTINGS_FEEDBACK },
 ];
 
 /** Danger-zone destructive navigation (logout is rendered separately as a button). */

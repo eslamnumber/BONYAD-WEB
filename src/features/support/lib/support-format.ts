@@ -1,4 +1,4 @@
-import { LOCALE_TAG, type Locale } from '@/types/locale';
+import { conventionalDirection, LOCALE_TAG, type Locale } from '@/types/locale';
 
 /** Shared query namespace — invalidated after a new request is created. */
 export const supportQueryKey = () => ['support', 'my-requests'] as const;
@@ -94,10 +94,8 @@ export function requestMatchesFilter(
  * request ("revert it for now"). Applied via a `dir` attribute on the screen root + each
  * portalled modal. Do NOT reuse outside `features/support` without the same sign-off.
  */
-const CONVENTIONAL_DIRECTION: Record<Locale, 'ltr' | 'rtl'> = { en: 'ltr', ar: 'rtl' };
-
 export function conventionalDir(locale: Locale): 'ltr' | 'rtl' {
-  return CONVENTIONAL_DIRECTION[locale];
+  return conventionalDirection(locale);
 }
 
 /** A conversation can be opened once an admin is assigned and a room exists. */

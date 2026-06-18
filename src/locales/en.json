@@ -1993,5 +1993,57 @@
       "retry": "Try again"
     },
     "currency": "SAR"
+  },
+  "feedback": {
+    "title": "My feedback",
+    "back": "Profile",
+    "subtitle": "Send suggestions, report issues, and track what you've shared",
+    "compose": "Send feedback",
+    "list": {
+      "errorTitle": "We couldn't load your feedback",
+      "errorRetry": "Try again"
+    },
+    "empty": {
+      "title": "No feedback yet",
+      "body": "Share a suggestion, report a problem, or tell us what you love.",
+      "cta": "Send feedback"
+    },
+    "card": {
+      "untitled": "Feedback",
+      "teamNote": "Note from the team"
+    },
+    "categories": {
+      "suggestion": "Suggestion",
+      "bug": "Bug",
+      "complaint": "Complaint",
+      "praise": "Praise",
+      "other": "Other"
+    },
+    "status": {
+      "new": "New",
+      "reviewed": "Reviewed",
+      "resolved": "Resolved",
+      "unknown": "Submitted"
+    },
+    "new": {
+      "title": "Send feedback",
+      "close": "Close",
+      "cancel": "Cancel",
+      "submit": "Submit",
+      "submitting": "Submitting…",
+      "categoryLabel": "Category",
+      "categoryPlaceholder": "Choose a category",
+      "subjectLabel": "Subject (optional)",
+      "subjectPlaceholder": "A short summary",
+      "messageLabel": "Message",
+      "messagePlaceholder": "Tell us what's on your mind…",
+      "counter": "{{current}}/{{max}}",
+      "errorFallback": "We couldn't send your feedback — please try again"
+    },
+    "errors": {
+      "messageRequired": "Please write a message",
+      "messageTooLong": "This message is too long",
+      "subjectTooLong": "This subject is too long"
+    }
   }
 }

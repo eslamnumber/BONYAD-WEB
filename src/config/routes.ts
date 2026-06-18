@@ -95,6 +95,7 @@ export const ROUTES = {
    */
   DASHBOARD_SETTINGS_SUPPORT: '/dashboard/settings/support',
   DASHBOARD_SETTINGS_REFERRAL: '/dashboard/settings/referral',
+  DASHBOARD_SETTINGS_FEEDBACK: '/dashboard/settings/feedback',
   DASHBOARD_SETTINGS_DELETE: '/dashboard/settings/delete',
 } as const;
 

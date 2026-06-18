@@ -1993,5 +1993,57 @@
       "retry": "إعادة المحاولة"
     },
     "currency": "ريال"
+  },
+  "feedback": {
+    "title": "ملاحظاتي",
+    "back": "الملف الشخصي",
+    "subtitle": "أرسل اقتراحاتك، وأبلغ عن المشكلات، وتابع ما شاركته معنا",
+    "compose": "أرسل ملاحظة",
+    "list": {
+      "errorTitle": "تعذّر تحميل ملاحظاتك",
+      "errorRetry": "إعادة المحاولة"
+    },
+    "empty": {
+      "title": "لا توجد ملاحظات بعد",
+      "body": "شاركنا اقتراحًا، أو أبلغ عن مشكلة، أو أخبرنا بما يعجبك.",
+      "cta": "أرسل ملاحظة"
+    },
+    "card": {
+      "untitled": "ملاحظة",
+      "teamNote": "ملاحظة من الفريق"
+    },
+    "categories": {
+      "suggestion": "اقتراح",
+      "bug": "خلل",
+      "complaint": "شكوى",
+      "praise": "إشادة",
+      "other": "أخرى"
+    },
+    "status": {
+      "new": "جديد",
+      "reviewed": "تمت المراجعة",
+      "resolved": "تم الحل",
+      "unknown": "تم الإرسال"
+    },
+    "new": {
+      "title": "أرسل ملاحظاتك",
+      "close": "إغلاق",
+      "cancel": "إلغاء",
+      "submit": "إرسال",
+      "submitting": "جارٍ الإرسال…",
+      "categoryLabel": "التصنيف",
+      "categoryPlaceholder": "اختر تصنيفًا",
+      "subjectLabel": "الموضوع (اختياري)",
+      "subjectPlaceholder": "ملخّص قصير",
+      "messageLabel": "الرسالة",
+      "messagePlaceholder": "أخبرنا بما يدور في ذهنك…",
+      "counter": "{{current}}/{{max}}",
+      "errorFallback": "تعذّر إرسال ملاحظتك — يرجى المحاولة مرة أخرى"
+    },
+    "errors": {
+      "messageRequired": "يرجى كتابة رسالة",
+      "messageTooLong": "هذه الرسالة طويلة جدًا",
+      "subjectTooLong": "هذا الموضوع طويل جدًا"
+    }
   }
 }

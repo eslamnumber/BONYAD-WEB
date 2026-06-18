@@ -167,6 +167,18 @@ export const API_ENDPOINTS = {
     /** GET (public) → the nested support category tree for the new-ticket pickers. */
     CATEGORIES_HIERARCHY: '/support/categories/hierarchy',
   },
+  /**
+   * In-app feedback (الملاحظات / "Feedback") — auth required. The signed-in user sends a
+   * suggestion / bug / complaint / praise and tracks their own submissions. Contract supplied
+   * by the product team (the feature is iOS-native; absent from the RN call-site index, so the
+   * shapes below are authoritative): POST /app-feedback, GET /app-feedback/mine.
+   */
+  APP_FEEDBACK: {
+    /** POST `{ category, subject?, message, attachments? }` → the created `AppFeedback`. */
+    SUBMIT: '/app-feedback',
+    /** GET → `{ success, count, feedback[] }` or a bare `AppFeedback[]` — the user's own feedback. */
+    MINE: '/app-feedback/mine',
+  },
   BLOGS: {
     LIST: '/blogs',
     DETAILS: '/blogs/:id',
