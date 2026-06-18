@@ -25,6 +25,7 @@ export default function Icon() {
         color: '#ffffff',
         fontSize: 22,
         fontWeight: 700,
+        // eslint-disable-next-line no-restricted-syntax -- ImageResponse (Satori) renders outside Tailwind; no CSS-var fonts available.
         fontFamily: 'system-ui, sans-serif',
         borderRadius: 6,
       }}

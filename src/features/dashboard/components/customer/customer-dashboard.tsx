@@ -13,7 +13,7 @@ import { CustomerWelcomeHero } from './customer-welcome-hero';
  */
 export function CustomerDashboard() {
   return (
-    <div className="relative isolate mx-auto flex min-h-full w-full max-w-6xl flex-col gap-12 px-4 py-8 sm:px-6 lg:px-8">
+    <div className="relative isolate flex min-h-full w-full flex-col gap-12 px-4 py-8 sm:px-6">
       <CustomerLandingBackdrop />
       <CustomerSearch />
       <CustomerWelcomeHero />

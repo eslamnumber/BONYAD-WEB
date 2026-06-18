@@ -3,7 +3,7 @@
 import { useMemo, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { useAssignedProjects } from '../api';
+import { useTechnicianProjects } from '../api';
 import { matchesFilter } from '../lib/project-status';
 import type { Project } from '../schemas/project';
 
@@ -17,16 +17,18 @@ type Props = {
 
 /**
  * Interactive shell for the SP Projects screen — owns the active status filter,
- * fetches the technician's assigned projects (PROJECTS.MY_ASSIGNED, all statuses:
- * approved / phase-planning / contract / in-progress / completed / direct-assigned)
- * and renders the toolbar + the matching state (loading / error / empty / filtered
- * table). The open-market biddable pool is surfaced separately on the dashboard
- * home; this tab is the technician's own work. The toolbar narrows by phase; the
- * fetch keeps all rows. Kept a thin `'use client'` island so the page stays an RSC.
+ * fetches the technician's full project list via {@link useTechnicianProjects}
+ * (PROJECTS.MY_ASSIGNED for assigned work — approved / contract / in-progress /
+ * completed / direct-assigned — MERGED with BIDS.MY_BIDS for bid-phase work, since
+ * `/projects/my-assigned` lists a project only once a bid is accepted) and renders
+ * the toolbar + the matching state (loading / error / empty / filtered table). The
+ * open-market biddable pool is surfaced separately on the dashboard home; this tab
+ * is the technician's own work. The toolbar narrows by phase; the fetch keeps all
+ * rows. Kept a thin `'use client'` island so the page stays an RSC.
  */
 export function ProjectsView({ emptyState }: Props) {
   const [filter, setFilter] = useState<ProjectFilterKey>('all');
-  const { data, isPending, isError } = useAssignedProjects();
+  const { data, isPending, isError } = useTechnicianProjects();
   const total = data?.length ?? 0;
   const filtered = useMemo(
     () => (data ?? []).filter((p) => matchesFilter(p, filter)),

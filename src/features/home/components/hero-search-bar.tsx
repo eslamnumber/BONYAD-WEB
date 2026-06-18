@@ -54,6 +54,7 @@ function SearchFormPanel({ isPro, formRef, searchLabel, placeholder }: SearchFor
             id="hero-q"
             name="q"
             type="search"
+            dir="auto"
             placeholder={placeholder}
             className="text-foreground placeholder:text-muted-foreground focus-visible:ring-brand-navy w-full bg-transparent text-sm focus-visible:ring-2 focus-visible:outline-none"
           />

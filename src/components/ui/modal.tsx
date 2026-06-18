@@ -53,6 +53,9 @@ type ModalProps = {
   /** id of the element labelling the dialog (the title rendered by {@link ModalHeader}). */
   labelledBy: string;
   className?: string;
+  /** Optional explicit direction for the panel — portalled dialogs don't inherit a caller's
+   *  `dir`, so a screen that overrides the document direction passes it here. */
+  dir?: 'ltr' | 'rtl';
   children: ReactNode;
 };
 
@@ -61,14 +64,14 @@ type ModalProps = {
  * body-scroll lock. Compose with {@link ModalHeader} / {@link ModalFooter}.
  * The scrim click closes the dialog (cancel-equivalent).
  */
-export function Modal({ open, onClose, labelledBy, className, children }: ModalProps) {
+export function Modal({ open, onClose, labelledBy, className, dir, children }: ModalProps) {
   const panelRef = useRef<HTMLDivElement>(null);
   useDialogA11y(open, onClose, panelRef);
 
   if (!open || typeof document === 'undefined') return null;
 
   return createPortal(
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
+    <div dir={dir} className="fixed inset-0 z-50 flex items-center justify-center p-4">
       <div
         aria-hidden
         onClick={onClose}

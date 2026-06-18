@@ -4,6 +4,8 @@ export { FieldHint } from './field-hint';
 export { Input, type InputProps } from './input';
 export { Label, type LabelProps } from './label';
 export { Modal, ModalHeader, ModalFooter } from './modal';
+export { SegmentedTabs, type SegmentedOption } from './segmented-tabs';
+export { Select, type SelectOption } from './select';
 export { Separator, type SeparatorProps } from './separator';
 export { Skeleton, type SkeletonProps } from './skeleton';
 export { Textarea, type TextareaProps } from './textarea';

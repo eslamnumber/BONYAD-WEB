@@ -42,7 +42,7 @@ export function ApprovedProjectDetail({ projectId }: Props) {
   const { images, documents } = partitionProjectFiles(project.files);
 
   return (
-    <div className="relative isolate mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+    <div className="relative isolate w-full px-4 py-8 sm:px-6">
       <TopGlow />
       <div className="flex flex-col gap-6">
         <BackLink />
@@ -101,7 +101,7 @@ function BackLink() {
 
 function DetailMessage({ children }: { children: ReactNode }) {
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+    <div className="w-full px-4 py-8 sm:px-6">
       <p className="text-foreground/60 text-end text-sm">{children}</p>
     </div>
   );

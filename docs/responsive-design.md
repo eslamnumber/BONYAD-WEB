@@ -18,7 +18,8 @@ Bonyad supports every screen from 320 px (small phone) to 4K monitors. **Mobile-
 1. **Mobile-first ALWAYS.** Default classes target 320 px. Every layout choice that diverges for tablet/desktop is added behind `sm:`/`md:`/`lg:`/`xl:`. **The first JSX line written for every section is the 320 px layout** — never copy the Figma desktop pixels into base classes and "make it work on mobile later." That ordering produces broken mobile every time. Never write `max-md:` unless absolutely necessary.
 2. **Touch targets ≥ 44 × 44 CSS px on mobile** (WCAG 2.5.5). Buttons, icon-only controls, links.
 3. **No horizontal scroll, ever.** Test at 320 px in DevTools after every section. Run the assertion `document.documentElement.scrollWidth === window.innerWidth`. If it fails, find the offender via `document.querySelectorAll('*')` and trim it — do NOT mask with `overflow-x-hidden` on `<body>`.
-4. **Content has a max-width** so reading lines don't stretch on 4K monitors. `max-w-3xl` for prose, `max-w-7xl` for app shells.
+4. **Public `(main)` pages have a centered max-width** so reading lines don't stretch on 4K monitors. `max-w-3xl` for prose, `max-w-7xl` for marketing shells. **This does NOT apply to the authenticated `(app)` surface — see rule 4a.**
+   4a. **`(app)` dashboard screens are full-width, flush to the sidebar and window — NO `mx-auto` / `max-w-*` centering on the screen-root container.** The persistent sidebar already constrains the content column, so a second centered max-width just leaves dead gaps between the content and both the sidebar and the window edge. The canonical screen-root container is **`relative isolate flex w-full flex-col gap-… px-4 py-8 sm:px-6`** (mirror `card-management-screen.tsx`): full-width, a small `px-4 → sm:px-6` gutter so content never jams against the edges (incl. mobile, where the sidebar is hidden), `py-8` vertical rhythm, and `lg:gap-8` where the layout wants more breathing room at desktop. **Do not add `lg:px-8`** (it reintroduces the desktop gap) and **do not add `max-w-*` / `mx-auto`** to the root. `max-w-*` is still fine on _inner_ elements (a centered search bar, a reading column inside a card, decorative blob caps). Detail screens that render a loading/error state in a sibling root container apply the same classes to both.
 5. **Use `min-h-dvh`, not `min-h-screen`** — `dvh` accounts for mobile browser chrome (URL bar / keyboard).
 6. **`text-sm`, not `text-[14px]`** — keeps users' browser zoom usable. Hardcoded `text-[Npx]` is allowed only when an exact Figma value has no closest Tailwind scale match.
 7. **Hover is desktop-only.** Anything that depends on `:hover` MUST also work via `:focus-visible` and `:active`.
@@ -91,6 +92,8 @@ Wide (≥ 2xl):     same 3-column · content max-w-2xl in center ·
 ```
 
 This is the canonical pattern Facebook, X, LinkedIn, Reddit, Instagram all use. Don't reinvent it.
+
+**Gutter rule for this surface (see hard rule 4a):** the `(app)` `<main>` content area is **full-width** — the screen-root container is `relative isolate flex w-full flex-col gap-… px-4 py-8 sm:px-6` (NO `mx-auto` / `max-w-*` / `lg:px-8`). Content runs flush from the sidebar to the window edge with only the small `px-4 → sm:px-6` gutter; the sidebar is the only thing constraining width. Public `(main)` marketing pages keep their centered `max-w-7xl` (hard rule 4).
 
 ## Stacking order for asymmetric columns
 

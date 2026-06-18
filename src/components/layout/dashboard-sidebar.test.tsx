@@ -1,8 +1,10 @@
+import { http, HttpResponse } from 'msw';
 import { afterEach, beforeAll, describe, expect, it, vi } from 'vitest';
 
 import { i18n } from '@/lib/i18n';
 import { useAuthStore } from '@/stores/auth-store';
-import { fireEvent, renderWithProviders, screen } from '@/testing/render';
+import { server } from '@/testing/handlers/server';
+import { fireEvent, renderWithProviders, screen, waitFor, within } from '@/testing/render';
 
 import { DashboardSidebar } from './dashboard-sidebar';
 
@@ -64,5 +66,39 @@ describe('DashboardSidebar role-awareness', () => {
     expect(await screen.findByRole('menuitem', { name: 'Sign out' })).toBeInTheDocument();
     // en locale → the language row offers Arabic.
     expect(screen.getByRole('menuitem', { name: 'العربية' })).toBeInTheDocument();
+  });
+
+  it('asks for confirmation before signing out, and cancel dismisses it', async () => {
+    setUser('USER');
+    renderWithProviders(<DashboardSidebar />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Account menu' }));
+    fireEvent.click(await screen.findByRole('menuitem', { name: 'Sign out' }));
+
+    // The confirmation dialog opens — no logout has fired yet (unhandled POST would error).
+    const dialog = await screen.findByRole('dialog', { name: 'Sign out' });
+    expect(within(dialog).getByText('Are you sure you want to sign out of your account?'));
+
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Cancel' }));
+    await waitFor(() => expect(screen.queryByRole('dialog')).not.toBeInTheDocument());
+  });
+
+  it('clears the session via the logout route when confirmed', async () => {
+    let called = false;
+    server.use(
+      http.post('*/api/auth/logout', () => {
+        called = true;
+        return HttpResponse.json({ ok: true });
+      }),
+    );
+    setUser('USER');
+    renderWithProviders(<DashboardSidebar />);
+
+    fireEvent.click(screen.getByRole('button', { name: 'Account menu' }));
+    fireEvent.click(await screen.findByRole('menuitem', { name: 'Sign out' }));
+    const dialog = await screen.findByRole('dialog', { name: 'Sign out' });
+    fireEvent.click(within(dialog).getByRole('button', { name: 'Sign out' }));
+
+    await waitFor(() => expect(called).toBe(true));
   });
 });

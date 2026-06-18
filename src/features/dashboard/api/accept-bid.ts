@@ -27,6 +27,10 @@ export function useAcceptBid(projectId: number) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: projectQueryKey(projectId) });
       queryClient.invalidateQueries({ queryKey: projectBidsQueryKey(projectId) });
+      // Acceptance moves the project from bid-phase (/bids/my) into assigned work
+      // (/projects/my-assigned) for the technician — refresh both list namespaces.
+      queryClient.invalidateQueries({ queryKey: ['projects'] });
+      queryClient.invalidateQueries({ queryKey: ['bids'] });
     },
   });
 }

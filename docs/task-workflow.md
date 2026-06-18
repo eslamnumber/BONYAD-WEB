@@ -4,6 +4,25 @@ Every non-trivial task (new screen, new feature, refactor, integration) is broke
 
 This is mandatory for AI work because skipping phases is the #1 cause of hallucination — symbols invented, types guessed, files referenced that don't exist.
 
+> **⚠️ Design is generated in-house — never fetched from Figma.** The phased execution,
+> verification gates, backend vertical slices (Phase 1), and testing here all **still apply
+> unchanged**. The **only** thing that changes for a design task: **skip every Figma-fetch
+> step** — `get_metadata`, `get_design_context`, `get_screenshot`, `get_variable_defs`, the
+> shallow/deep layer walks, the `visited_nodes` cache, and the leaf pixel ledger (the
+> Phase 0.5 / Phase 5 Figma machinery described below). Those run **solely** when the user
+> explicitly hands over a Figma link and asks to import it. Instead, compose the design
+> in-house with the **`bonyad-production-design` skill** + **`docs/design/BONYAD_DESIGN_IDENTITY.md`**
+>
+> - the **`frontend-design` skill** (see CLAUDE.md → "Production UI design"). For a design
+>   task: understand requirements → inspect the Bonyad identity → apply frontend-design quality
+>   → implement directly in production → integrate real state/APIs → add/reuse translations →
+>   **then run the mandatory end-of-task rule gate** (§Generated-design end-of-task gate below:
+>   RTL & LTR, dark, responsive 12-width, a11y, tokens, i18n, caps, lint/typecheck/test/build,
+>   doc note). Because the pixel source (the leaf ledger) is gone, the pixel-perfect axis of
+>   rule 18 instead means **every CSS value traces to a token + the stated design intent**; the
+>   other four axes (layer→DOM fidelity, RTL, dark, responsive) are unchanged. The Figma
+>   layer-walk steps remain below as historical reference for the explicit-import case only.
+
 ## Why phases
 
 - **Smaller blast radius.** A wrong assumption in phase N is caught before phase N+1 builds on it.
@@ -234,6 +253,47 @@ Phase 5b (home / services grid) — gate report
 - Open questions: none.
 - STOPPING — awaiting "next" before starting 5c.
 ```
+
+## Generated-design end-of-task gate
+
+For a **generated design** (the default — no Figma fetch), the per-section 5-axis Figma gate is
+replaced by **one mandatory gate at the end of the task**. There are no per-phase stops: build
+the design, then run this single pass and post the summary before you report the task done. The
+phased structure (plan → backend slices → build → verify) is otherwise unchanged.
+
+What the gate checks:
+
+1. **Commands — run and paste the real output:** `pnpm lint`, `pnpm typecheck`, the relevant
+   `pnpm test`, `pnpm build`. No claiming green without output.
+2. **Five axes** — observe each if a session/preview exists, otherwise reason about it explicitly:
+   - **Layer→DOM fidelity** — every element maps to a real design intent; no untraceable wrappers; nothing dropped silently. (Replaces "vs the Figma layer list" — the intent is the source now.)
+   - **Pixel/values** — every CSS value traces to a **token + the stated design intent** (the leaf ledger is gone; values must still be justifiable, never eyeballed-arbitrary).
+   - **RTL _and_ LTR** — logical utilities only; the inverted `en→rtl` mapping; `dir="auto"` on dynamic/punctuated copy only.
+   - **Dark** — every surface (incl. background/glow layers) from a token with both `:root` and `.dark` values.
+   - **Responsive** — mobile-first base; 12-width matrix (320 / 375 / 414 / 600 / 768 / 900 / 1024 / 1100 / 1280 / 1366 / 1440 / 1920); no horizontal scroll; touch targets ≥ 44px ≤ 768. **`(app)` screen-roots full-width flush per rule 4a (no `mx-auto` / `max-w-*` / `lg:px-8`); `(main)` pages keep centered `max-w`.**
+3. **Cross-cutting rules** — tokens-only (3), i18n keys in both locales (5), file/function caps (8), a11y AA (13), data classification with all states rendered (23), per-endpoint tests if any endpoint was added (1).
+4. **Docs** — name the files touched per [doc-maintenance.md](doc-maintenance.md), or write "no doc update required" with the reason.
+
+Sample generated-design gate report:
+
+```
+Design task (settings hub redesign) — end-of-task rule gate
+- Commands: pnpm lint ✅  pnpm typecheck ✅  vitest run features/profile ✅ (6/6)  pnpm build ✅
+- Axes:
+  - Layer→DOM: every element traces to design intent; no stray wrappers ✅
+  - Values: all CSS traces to a token (brand gradient, deco-blob glow) + intent ✅
+  - RTL+LTR: logical utilities only; inverted mapping; dir=auto on name/profession only ✅
+  - Dark: every surface from a token with a .dark pair (incl. deco-blob-blue-light) ✅
+  - Responsive: 320→1920 reasoned; mobile-first; glow gated hidden lg:; no h-scroll ✅
+- Cross-cutting: tokens-only ✅  i18n en+ar ✅  files ≤200 ✅  a11y AA ✅  data: reads live profile, no hardcode ✅
+- Verification method: reasoned (authed screen, no preview session) — not observed in-browser ⚠️
+- Docs: updated components.md §Profile (icon remap + skyline).
+- Open questions: none.
+```
+
+> **Verification honesty.** If you reasoned rather than observed (common for authenticated
+> screens with no session — see project memory), say so in the report, as the sample does.
+> Never present reasoned axes as if they were rendered-and-seen.
 
 ## Anti-hallucination guards (run at every phase)
 

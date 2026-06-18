@@ -21,6 +21,7 @@ export default function AppleIcon() {
         color: '#ffffff',
         fontSize: 110,
         fontWeight: 700,
+        // eslint-disable-next-line no-restricted-syntax -- ImageResponse (Satori) renders outside Tailwind; no CSS-var fonts available.
         fontFamily: 'system-ui, sans-serif',
         borderRadius: 36,
       }}

@@ -7,6 +7,24 @@ export const bidHandlers = [
     const body = (await request.json().catch(() => ({}))) as Record<string, unknown>;
     return HttpResponse.json({ id: 1, status: 'PENDING', ...body }, { status: 201 });
   }),
+  http.get(`${BASE}/bids/my`, () =>
+    HttpResponse.json([
+      {
+        id: 50,
+        projectId: 9100,
+        projectDescription: 'تشطيب شقة بالرياض',
+        projectBudget: 120000,
+        userId: 7,
+        userName: 'سارة المطيري',
+        technicianId: 1,
+        proposedBudget: 110000,
+        comment: 'جاهز للبدء',
+        status: 'PENDING',
+        estimatedDurationDays: 30,
+        createdAt: '2026-06-10T00:00:00Z',
+      },
+    ]),
+  ),
   http.get(`${BASE}/bids/project/:projectId`, ({ params }) =>
     HttpResponse.json([
       {

@@ -11,7 +11,7 @@ import { ProjectCarousel } from './project-carousel';
  */
 export function TechnicianDashboard() {
   return (
-    <div className="relative isolate mx-auto flex w-full max-w-6xl flex-col gap-12 px-4 py-8 sm:px-6 lg:px-8">
+    <div className="relative isolate flex w-full flex-col gap-12 px-4 py-8 sm:px-6">
       {/* Decorative navy glow behind the search/hero/carousel (Figma "Ellipse 27",
           a heavily-blurred #003867 ellipse — inlined as a soft radial). */}
       <div

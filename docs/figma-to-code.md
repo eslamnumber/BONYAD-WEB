@@ -1,5 +1,14 @@
 # Figma → code workflow
 
+> **⚠️ Superseded for production design (historical reference).** Production UI is now built
+> directly in the app via the **`bonyad-production-design` skill** + **`docs/design/BONYAD_DESIGN_IDENTITY.md`**
+>
+> - the companion **`frontend-design` skill** — see CLAUDE.md → "Production UI design". The
+>   Figma-generation phase is **no longer required** for normal design work. This doc is kept
+>   as historical reference and is only relevant when the user **explicitly** asks for a Figma
+>   import/frame. The asset-folder structure, icon-export, and animation conventions below
+>   remain valid and are still used by the production-design workflow.
+
 Figma is the **single source of truth** for visuals: layout, spacing, colors, typography, icons, illustrations, and motion. This doc covers the workflow, the asset folder structure, and what Claude (or any AI assistant) can/can't read from a Figma link.
 
 **The target is pixel-perfect.** Every spacing value, font size, radius, color, breakpoint, **and background** (fill, gradient, blur blob, decorative shape, hero image, pattern overlay) comes from Figma — no eyeballing, no rounding, no "looks close enough." If your code produces something that doesn't match the Figma node 1:1, the code is wrong.

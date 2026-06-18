@@ -2,6 +2,10 @@
 # See CLAUDE.md / AGENTS.md for the policy.
 website-bonyad/
 
+# iOS app — backend-integration reference only, never tracked.
+# See CLAUDE.md for the policy.
+bonayd-ios/
+
 # Node / Next.js
 node_modules/
 .next/

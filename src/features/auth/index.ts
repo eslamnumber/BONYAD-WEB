@@ -4,10 +4,13 @@ export { LoginPage } from './components/login-page';
 export { ForgotPasswordPage } from './components/forgot-password-page';
 export { VerifyOtpPage } from './components/verify-otp-page';
 export { RegisterPage } from './components/register-page';
+export { ChangePasswordForm } from './components/change-password-form';
+export { ChangePhoneForm } from './components/change-phone-form';
 export { getAuthHeaderLabels } from './get-auth-header-labels';
 
 // Session foundation
 export { AuthProvider } from './components/auth-provider';
+export { LogoutConfirmModal } from './components/logout-confirm-modal';
 export { useLogout, logoutUser } from './api/logout';
 export {
   loginRequestSchema,

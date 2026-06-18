@@ -12,6 +12,8 @@
 
 **`Modal` (+ `ModalHeader` / `ModalFooter`) is the canonical centered-dialog shell** (`components/ui/modal.tsx`). It portals a scrim + 440px card and owns the dialog a11y (focus trap, `Esc`, body-scroll lock, focus restore, `role="dialog"` + `aria-labelledby`). Compose content between the header and footer; pass a stable `labelledBy` id matching the `ModalHeader` title. Do not hand-roll `role="dialog"` + scrim markup in a feature file. Used by the SP edit-offer / withdraw-offer modals.
 
+**`Select` is the canonical single-select dropdown — the app has NO native `<select>`** (`components/ui/select.tsx`). Controlled (`value` / `onChange(value)` — wrap with an RHF `Controller` in a form). Built from logical utilities so the value + options right-align under the inverted RTL map (`text-end`, no `dir`), dark-safe (`bg-popover` / `bg-field-surface` tokens), `role="listbox"` / `option` a11y, and closes on outside-click / `Esc` / scroll. The listbox is **portalled to `<body>`** (so an `overflow-hidden` ancestor can't crop it) and flips above the trigger with a capped height when there's no room below. Do not add a raw `<select>` or a second dropdown pattern. (`features/dashboard`'s older `wizard-select` predates this and is a candidate to fold into it.)
+
 ## Hard rules
 
 1. **One component per file.** Filename = kebab-case of the component (`project-card.tsx` exports `ProjectCard`).
@@ -52,3 +54,11 @@ Extract when **any** of these is true:
 - The piece would have a clear name on its own ("this is the `ProjectCardHeader`").
 
 Do **not** extract just to make a file shorter when the resulting child has no meaningful identity.
+
+## Profile / account hub — design authored without Figma
+
+The `/dashboard/settings` screen (`features/profile/`) was designed in-house (no Figma node), so the Figma-MCP layer-walk / leaf-ledger steps don't apply — instead every CSS value traces to a token + the agreed mockup. Notes:
+
+- **Row icons are on-brand reuse, not redraws.** `profile-sections.ts` maps each row to the closest-semantic real Bonyad export (rule 21 — no invented icons): completed work → `DashboardProjectsIcon`, transactions/contracts → `SaudiRiyalIcon` (the Saudi-Riyal mark, a deliberate Saudi identity cue), Refer & earn → `SendIcon`, Delete account → `CloseIcon`. The earlier `TrustBadgeIcon`/`SearchClearIcon`/`BookmarkIcon` stand-ins were replaced. Swap to a dedicated glyph if one is ever exported.
+- **Identity banner carries the Bonyad skyline.** `profile-identity-card.tsx` anchors `bg/customer-dashboard-skyline.png` as a faint inverted silhouette along the banner base (desktop-gated, `rtl:-scale-x-100`, top-fade mask), mirroring the `CustomerLandingBackdrop` motif — the brand-specific "construction" cue for the hub header.
+- **Placeholder sub-screen routes.** The hub's account rows link to `ROUTES.DASHBOARD_SETTINGS_*` detail screens that 404 until built (the hub ships first) — the same placeholder convention as `DASHBOARD_SAVED` / `DASHBOARD_OFFERS`.

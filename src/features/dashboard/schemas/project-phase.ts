@@ -18,6 +18,16 @@ export type ProjectPhase = {
   timeSpentDays?: number;
   moneySpent?: number;
   paymentStatus?: string;
+  /** Phase payment progress (mirrors RN PhasePaymentModal.Phase). The backend GET
+   *  /phases response carries these on a payable phase; when absent the payment
+   *  flow derives them (remaining = moneySpent − amountPaid, see lib/phase-payment).
+   *  `requestedPaymentAmount` is set once the technician requests payment. */
+  amountPaid?: number;
+  remainingAmount?: number;
+  percentagePaid?: number;
+  requestedPaymentAmount?: number | null;
+  paymentRequestReason?: string | null;
+  paymentRequestedAt?: string | null;
   /** Set once a phase payment clears (ISO-8601). Mirrors PhaseService.Phase.paidAt;
    *  with `paymentStatus === 'PAID'` it drives the "paid" derivation on the
    *  completed-project screen (see lib/project-finance.ts). */

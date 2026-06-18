@@ -4,6 +4,7 @@ import { useTheme } from 'next-themes';
 import { useSyncExternalStore } from 'react';
 
 import { Button } from '@/components/ui/button';
+import { switchTheme } from '@/lib/theme-switch';
 
 type ThemeToggleProps = {
   /** Localized aria-label. */
@@ -51,7 +52,7 @@ export function ThemeToggle({ ariaLabel, labels }: ThemeToggleProps) {
       size="icon"
       aria-label={ariaLabel}
       title={announce}
-      onClick={() => setTheme(next)}
+      onClick={() => switchTheme(() => setTheme(next))}
     >
       <ThemeGlyph theme={resolvedTheme ?? 'light'} />
     </Button>

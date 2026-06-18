@@ -8,5 +8,6 @@ export { getAppShellLabels } from './get-app-shell-labels';
 export { Header } from './header';
 export { LanguageToggle } from './language-toggle';
 export { PageTransition } from './page-transition';
+export { SettingsAmbientGlow, SettingsBackLink } from './settings-detail-chrome';
 export { SkipLink } from './skip-link';
 export { ThemeToggle } from './theme-toggle';

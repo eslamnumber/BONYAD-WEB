@@ -269,6 +269,17 @@
      --color-field-surface + --color-muted-foreground. */
   --color-phase-amount: var(--phase-amount);
   --color-phase-amount-soft: var(--phase-amount-soft);
+
+  /* Customer in-progress phase-payment flow (Figma 1547:1533 / 1547:7351 /
+     1553:7685 / 1553:8142) — the emerald "paid successfully" + green
+     payment-option amount (#00bc7d, brighter than the forest --phase-amount used
+     for "amount due"), the blue-grey summary-card surface (#ebf0f4) for the
+     review/success "card-ملخص المشروع", and the sky info note (bg + sky-700 text).
+     The recommended-option purple reuses --color-status-bid (#8A38F5). */
+  --color-payment-success: var(--payment-success);
+  --color-payment-summary: var(--payment-summary);
+  --color-note-info: var(--note-info);
+  --color-note-info-soft: var(--note-info-soft);
 }
 
 :root {
@@ -521,6 +532,14 @@
   /* Contract-signing phase amount badge — light. Green #128754 fg / soft 10% bg. */
   --phase-amount: oklch(0.52 0.11 158);
   --phase-amount-soft: oklch(0.52 0.11 158 / 0.1);
+
+  /* Customer in-progress phase-payment flow — light. Success/option green
+     #00bc7d emerald; review/success summary surface #ebf0f4 (blue-grey-100);
+     info note #f0f9ff (sky-50) bg / #0369a1 (sky-700) text. */
+  --payment-success: oklch(0.71 0.16 162);
+  --payment-summary: oklch(0.95 0.012 240);
+  --note-info: oklch(0.52 0.12 240);
+  --note-info-soft: oklch(0.98 0.012 235);
 }
 
 .dark {
@@ -737,6 +756,14 @@
   /* Contract-signing phase amount badge — dark (brighter green, higher-alpha bg). */
   --phase-amount: oklch(0.72 0.16 158);
   --phase-amount-soft: oklch(0.72 0.16 158 / 0.2);
+
+  /* Customer in-progress phase-payment flow — dark. Success/option green
+     brightened; summary surface → a dark slate panel; note bg → a deep sky tint
+     with lifted sky-300 text (matches the blog-badge dark precedent). */
+  --payment-success: oklch(0.78 0.15 162);
+  --payment-summary: oklch(0.23 0.012 245);
+  --note-info: oklch(0.8 0.1 235);
+  --note-info-soft: oklch(0.27 0.04 240);
 }
 
 html[dir='rtl'] {

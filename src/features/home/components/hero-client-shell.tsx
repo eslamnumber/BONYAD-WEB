@@ -69,11 +69,15 @@ function HeadlineBlock({ isPro, i18n }: TabBlockProps) {
       <div className="grid w-full [&>*]:[grid-area:1/1]">
         <CrossfadeLayer active={!isPro} className={STACK_CLASS}>
           <h1 className={H1_CLASS}>{i18n.headline}</h1>
-          <p className={P_CLASS}>{i18n.subheadline}</p>
+          <p dir="auto" className={P_CLASS}>
+            {i18n.subheadline}
+          </p>
         </CrossfadeLayer>
         <CrossfadeLayer active={isPro} className={STACK_CLASS}>
           <h1 className={H1_CLASS}>{i18n.proHeadline}</h1>
-          <p className={P_CLASS}>{i18n.proSubheadline}</p>
+          <p dir="auto" className={P_CLASS}>
+            {i18n.proSubheadline}
+          </p>
         </CrossfadeLayer>
       </div>
     </div>

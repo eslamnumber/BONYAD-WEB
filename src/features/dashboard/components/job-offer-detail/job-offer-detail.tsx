@@ -52,7 +52,7 @@ export function JobOfferDetail({ projectId }: Props) {
         aria-hidden
         className="pointer-events-none absolute inset-x-0 top-0 mx-auto hidden h-[280px] w-full max-w-[1085px] bg-[radial-gradient(75%_100%_at_50%_0%,var(--color-deco-blob-purple),transparent_70%)] opacity-50 blur-[24px] sm:block"
       />
-      <div className="relative z-10 mx-auto flex w-full max-w-6xl flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
+      <div className="relative z-10 flex w-full flex-col gap-6 px-4 py-8 sm:px-6">
         <JobOfferBreadcrumb />
         <ProjectSummaryCard project={project} showStatusBadge={!isTechnician} />
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start">

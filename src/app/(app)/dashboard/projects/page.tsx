@@ -30,7 +30,7 @@ export default async function ProjectsPage() {
   const isTechnician = (user?.role ?? '').toUpperCase() === 'TECHNICIAN';
 
   return (
-    <div className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col gap-8 px-4 py-8 sm:px-6 lg:px-8">
+    <div className="relative flex w-full flex-1 flex-col gap-8 px-4 py-8 sm:px-6">
       {/* Decorative navy glow (Figma "Ellipse 27", blurred). */}
       <div
         aria-hidden

@@ -17,34 +17,43 @@
   --color-destructive: var(--destructive);
   --color-border: var(--border);
   --color-ring: var(--ring);
-  --font-sans: var(--font-sans);
-  --font-arabic: var(--font-arabic);
+  --font-sans: var(--font-sans-stack);
+  --font-arabic: var(--font-arabic-stack);
   --radius: var(--radius);
 }
 
 :root {
   --background: oklch(1 0 0);
   --foreground: oklch(0.15 0 0);
-  --primary: oklch(0.55 0.2 250);
+  --primary: oklch(0.41 0.13 243); /* #00549b */
   --primary-foreground: oklch(0.98 0 0);
   /* … */
-  --font-sans: 'Inter', system-ui, sans-serif;
-  --font-arabic: 'IBM Plex Sans Arabic', system-ui, sans-serif;
+  /* Font FAMILIES are named ONLY in src/lib/fonts.ts (Inter Tight + Noto Sans Arabic),
+     which exposes them as --font-sans-primary / --font-arabic-primary. tokens.css just
+     builds the stacks — never hardcode a family name here either. */
+  --font-sans-stack: var(--font-sans-primary), system-ui, -apple-system, sans-serif;
+  --font-arabic-stack: var(--font-arabic-primary), system-ui, sans-serif;
   --radius: 0.5rem;
 }
 
 .dark {
-  --background: oklch(0.15 0 0);
+  --background: oklch(0.14 0 0);
   --foreground: oklch(0.98 0 0);
-  --primary: oklch(0.7 0.2 250);
+  --primary: oklch(0.65 0.15 243); /* lighter #00549b for dark backgrounds */
   /* … */
 }
 ```
 
+> The snippet above is illustrative. The **real, authoritative** values live in
+> [`src/styles/tokens.css`](../src/styles/tokens.css) (colors/radius/motion) and
+> [`src/lib/fonts.ts`](../src/lib/fonts.ts) (the only place font families are named:
+> **Inter Tight** for Latin, **Noto Sans Arabic** for Arabic). See the full identity
+> inventory in [`docs/design/BONYAD_DESIGN_IDENTITY.md`](design/BONYAD_DESIGN_IDENTITY.md).
+
 ## Rules
 
-1. **No hex / rgb / hsl literals in components.** Only inside `tokens.css`.
-2. **No hardcoded font-family strings outside `tokens.css`.** Use `font-sans` or `font-arabic` Tailwind utilities.
+1. **No hex / rgb / hsl literals in components.** Only inside `tokens.css`. **ESLint-enforced** — a hardcoded color in a Tailwind color-utility arbitrary value (`bg-[#…]`, `text-[rgb(…)]`, …) is a build error (`eslint.config.mjs` → `no-restricted-syntax`). The one exception is `shadow-[…rgba…]`, since shadows are not tokenized.
+2. **No hardcoded font-family strings.** Families are named ONLY in [`src/lib/fonts.ts`](../src/lib/fonts.ts); components use the `font-sans` / `font-arabic` Tailwind utilities. **ESLint-enforced** — an inline `fontFamily` is a build error except in the framework files that render outside Tailwind (`ImageResponse` icons / `global-error`), which carry a documented `eslint-disable` with a reason.
 3. **Every color used in the UI must have a token.** If you need a one-off color, add a token first.
 4. **Token names are semantic, not literal.**
    - ✅ `--color-primary`, `--color-destructive`, `--color-muted`
@@ -92,6 +101,14 @@ The toggle lives in `components/layout/theme-toggle.tsx` and uses `useTheme` fro
 - Cycle `light → dark → system → light`.
 - Have an accessible label (`aria-label={t('theme.toggle')}`).
 - Be keyboard-reachable.
+
+### Animated theme transition
+
+Every theme toggle routes its `setTheme` call through **`switchTheme(applyTheme)`** in `src/lib/theme-switch.ts` — never call `setTheme` directly from a toggle. `switchTheme` runs the change inside a **View Transition** and clip-path-reveals the new theme as a circle anchored at the **bottom-right corner of the screen**, growing to the viewport diagonal so it sweeps to the opposite (top-left) corner. The three call sites are `theme-toggle.tsx`, `profile-controls.tsx` (`DarkModeRow`), and `sidebar-settings-menu.tsx`.
+
+- The new theme commits via `flushSync` so the captured "new" snapshot already reflects it.
+- Progressive enhancement: no View Transitions support (Firefox), no origin, or `prefers-reduced-motion` → the theme applies instantly with the same end state.
+- The pseudo-element CSS lives behind `html[data-theme-shift]` in `globals.css` (kills the default cross-fade, stacks the new snapshot on top). It is **scoped** so it never collides with the locale push animation (`html[data-locale-shift]`, driven by `switchLocale`); both markers are set for the transition's duration only and cleared on `finished`.
 
 ## What to do if a Figma value isn't in tokens
 

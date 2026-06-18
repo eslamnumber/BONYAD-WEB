@@ -77,3 +77,66 @@
 .group:hover .pillar-mission-dot {
   transform: scale(1.35);
 }
+
+/* Language switch — the whole UI is pushed sideways to its mirrored layout as the
+   document direction flips (en ⇄ ar): the old screen slides off one edge while the
+   new one slides in from the other, like a panel shoved across. Direction tracks
+   the target dir (`data-locale-shift`) so toggling back reverses the push. Driven
+   by `switchLocale` (src/lib/locale-switch.ts), which sets `data-locale-shift` for
+   the duration of the transition only and skips it under reduced motion. Scoped to
+   `[data-locale-shift]` so it never bleeds into the theme reveal below. */
+html[data-locale-shift='ltr']::view-transition-old(root) {
+  animation: vt-push-out-ltr 0.85s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+html[data-locale-shift='ltr']::view-transition-new(root) {
+  animation: vt-push-in-ltr 0.85s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+html[data-locale-shift='rtl']::view-transition-old(root) {
+  animation: vt-push-out-rtl 0.85s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+html[data-locale-shift='rtl']::view-transition-new(root) {
+  animation: vt-push-in-rtl 0.85s cubic-bezier(0.4, 0, 0.2, 1) both;
+}
+
+/* Theme switch — light ⇄ dark reveal that blooms from the toggle button. The new
+   theme's snapshot sits on top and is clip-path-revealed as a growing circle
+   (animated in JS by `switchTheme`, src/lib/theme-switch.ts); the old snapshot
+   stays put underneath. We kill the default cross-fade and reset the blend mode so
+   the circle edge reads cleanly. Scoped to `[data-theme-shift]`, set for the
+   transition's duration only, so it never collides with the locale push above. */
+html[data-theme-shift]::view-transition-old(root),
+html[data-theme-shift]::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+html[data-theme-shift]::view-transition-old(root) {
+  z-index: 1;
+}
+html[data-theme-shift]::view-transition-new(root) {
+  z-index: 2147483646;
+}
+
+@keyframes vt-push-out-ltr {
+  to {
+    transform: translateX(-55%);
+    opacity: 0;
+  }
+}
+@keyframes vt-push-in-ltr {
+  from {
+    transform: translateX(55%);
+    opacity: 0;
+  }
+}
+@keyframes vt-push-out-rtl {
+  to {
+    transform: translateX(55%);
+    opacity: 0;
+  }
+}
+@keyframes vt-push-in-rtl {
+  from {
+    transform: translateX(-55%);
+    opacity: 0;
+  }
+}

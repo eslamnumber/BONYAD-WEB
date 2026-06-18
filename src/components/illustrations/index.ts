@@ -3,6 +3,11 @@
    of the card with its peaks roughly aligned with the earnings pill. */
 export { default as TechCtaWave } from './tech-cta-wave.svg';
 
+/* Payment-confirmed modal (Figma 1553:8470) — the "Ticks" success graphic
+   (node 1553:8473), a single-colour certificate-check + sparkles; coloured via
+   currentColor (the success modal sets text-payment-success). */
+export { default as PaymentSuccessTicksIllustration } from './payment-success-ticks.svg';
+
 /* About page — pillar card decorative blobs (shared across Value/Mission/Vision)
    + per-card behind-frost artworks (Value: grid+dots; Mission/Vision land in 5b.2/5b.3). */
 export { default as PillarBlobTop } from './about/pillar-blob-top.svg';

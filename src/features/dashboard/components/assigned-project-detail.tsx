@@ -12,6 +12,7 @@ import { ApprovedProjectDetail } from './approved-project-detail';
 import { CompletedProjectDetail } from './completed-project-detail';
 import { ContractSigningProjectDetail } from './contract-signing-project-detail';
 import { CustomerApprovedDetail } from './customer-approved-detail';
+import { CustomerInProgressDetail } from './customer-in-progress-detail';
 import { InProgressProjectDetail } from './in-progress-project-detail';
 import { JobOfferDetail } from './job-offer-detail';
 
@@ -27,8 +28,9 @@ type Props = { projectId: number };
  * method + approve phases), the **technician** keeps {@link ApprovedProjectDetail}
  * (their offer-accepted view). Once the customer approves the phases the project moves
  * to CONTRACT_SIGNING → the customer's {@link ContractSigningProjectDetail} (contract
- * sent to email); the technician falls through to the in-progress view
- * {@link InProgressProjectDetail} for contract / execution. A completed project renders
+ * sent to email); once execution starts (IN_PROGRESS) the customer gets
+ * {@link CustomerInProgressDetail} (per-phase approval + payment), while the technician
+ * falls through to the in-progress view {@link InProgressProjectDetail}. A completed project renders
  * {@link CompletedProjectDetail} for both. The customer projects table routes every
  * status here. The `useProject` call shares the TanStack Query cache (same key) with
  * the chosen child — no extra request.
@@ -54,12 +56,15 @@ function routeDetail(status: string | undefined, isTechnician: boolean, projectI
 
   // Customer post-acceptance, one screen per backend status: APPROVED / PHASE_PLANNING
   // = the review-&-approve screen (provider + signing-method picker); after approve-all
-  // the project moves to CONTRACT_SIGNING = the contract-sent screen. Technicians fall
-  // through to their own approved / in-progress views below.
+  // the project moves to CONTRACT_SIGNING = the contract-sent screen; once execution
+  // starts (IN_PROGRESS) the customer gets their own phase-approval + per-phase payment
+  // screen (CustomerInProgressDetail). Technicians fall through to their own approved /
+  // in-progress views below.
   if (!isTechnician) {
     if (isApproved) return <CustomerApprovedDetail projectId={projectId} />;
     if (variant === 'contractSigning')
       return <ContractSigningProjectDetail projectId={projectId} />;
+    if (variant === 'inProgress') return <CustomerInProgressDetail projectId={projectId} />;
   }
 
   if (isApproved) return <ApprovedProjectDetail projectId={projectId} />;
@@ -69,7 +74,7 @@ function routeDetail(status: string | undefined, isTechnician: boolean, projectI
 
 function DetailMessage({ children }: { children: ReactNode }) {
   return (
-    <div className="mx-auto w-full max-w-6xl px-4 py-8 sm:px-6 lg:px-8">
+    <div className="w-full px-4 py-8 sm:px-6">
       <p className="text-foreground/60 text-end text-sm">{children}</p>
     </div>
   );

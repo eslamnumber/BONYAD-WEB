@@ -50,6 +50,32 @@ export type ProjectBid = {
 };
 
 /**
+ * A bid as returned by GET /bids/my — the signed-in technician's own bids across
+ * every project. Verified on the dev backend: the bid carries a flattened copy of
+ * its project (`projectId` / `projectDescription` / `projectBudget`) plus the
+ * customer (`userId` / `userName`). Permissive — only the fields the Projects
+ * screen reads when folding a bid into a pseudo-project are typed. `projectStatus`
+ * is present once the bid is ACCEPTED (the real project status to surface);
+ * `smallTaskRequestId` flags a small-task bid the screen skips (mirrors RN).
+ */
+export type MyBid = {
+  id?: number;
+  projectId?: number;
+  projectDescription?: string;
+  projectBudget?: number;
+  projectStatus?: string;
+  userId?: number;
+  userName?: string;
+  technicianId?: number;
+  proposedBudget?: number;
+  comment?: string;
+  status?: string;
+  estimatedDurationDays?: number;
+  createdAt?: string;
+  smallTaskRequestId?: number;
+};
+
+/**
  * A bid enriched with the technician's profile data (rating / review-count /
  * avatar) for the customer's bid-received list + accept modal. The bare
  * {@link ProjectBid} carries only `technicianName`; the rest comes from

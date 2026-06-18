@@ -4,8 +4,7 @@ import { useRouter } from 'next/navigation';
 import { type ReactNode } from 'react';
 
 import { Button } from '@/components/ui/button';
-import { LOCALE_COOKIE_NAME } from '@/config/constants';
-import { i18n } from '@/lib/i18n';
+import { switchLocale } from '@/lib/locale-switch';
 import { type Locale } from '@/types/locale';
 
 type LanguageToggleProps = {
@@ -20,9 +19,7 @@ export function LanguageToggle({ current, ariaLabel, switchToLabel, icon }: Lang
 
   function toggle() {
     const next: Locale = current === 'en' ? 'ar' : 'en';
-    void i18n.changeLanguage(next);
-    document.cookie = `${LOCALE_COOKIE_NAME}=${next}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`;
-    router.refresh();
+    switchLocale(next, () => router.refresh());
   }
 
   return (

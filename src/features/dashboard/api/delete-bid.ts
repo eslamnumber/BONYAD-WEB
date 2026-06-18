@@ -23,6 +23,10 @@ export function useDeleteBid(projectId: number) {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: projectBidsQueryKey(projectId) });
       queryClient.invalidateQueries({ queryKey: projectQueryKey(projectId) });
+      // Withdrawing removes the project from the SP Projects screen (/bids/my) and
+      // returns it to the available pool — refresh both list namespaces.
+      queryClient.invalidateQueries({ queryKey: ['projects'] });
+      queryClient.invalidateQueries({ queryKey: ['bids'] });
     },
   });
 }

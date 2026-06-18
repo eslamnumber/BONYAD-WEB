@@ -44,6 +44,10 @@ export function useSubmitBid() {
     onSuccess: (_data, { request }) => {
       queryClient.invalidateQueries({ queryKey: projectQueryKey(request.projectId) });
       queryClient.invalidateQueries({ queryKey: projectBidsQueryKey(request.projectId) });
+      // The just-bid project must surface in the SP Projects screen (fed by
+      // /bids/my) and drop out of the available pool — invalidate both namespaces.
+      queryClient.invalidateQueries({ queryKey: ['projects'] });
+      queryClient.invalidateQueries({ queryKey: ['bids'] });
     },
   });
 }

@@ -5,7 +5,10 @@ import { statusVariant, type ProjectStatusVariant } from './project-status';
 /**
  * Customer Projects toolbar filters (Figma 1394:8127). Mirrors the status pills
  * the customer's own projects move through; `all` passes everything. `bidding`
- * maps to the `offerSent` badge variant (a project that has received offers).
+ * maps to the `bidReceived` badge variant — the backend flips a customer's
+ * project to `BID_RECEIVED` once an offer arrives (verified on dev). It is NOT
+ * `offerSent`: that is the technician's own-bid pill, a status a customer's
+ * project never carries, so the offers filter was always empty before.
  */
 export const CUSTOMER_FILTERS = [
   'all',
@@ -22,7 +25,7 @@ export type CustomerFilterKey = (typeof CUSTOMER_FILTERS)[number];
 const FILTER_VARIANT: Record<CustomerFilterKey, ProjectStatusVariant | null> = {
   all: null,
   pending: 'pending',
-  bidding: 'offerSent',
+  bidding: 'bidReceived',
   approved: 'approved',
   contract: 'contractSigning',
   inProgress: 'inProgress',

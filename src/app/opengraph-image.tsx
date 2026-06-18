@@ -28,6 +28,7 @@ export default function OpenGraphImage() {
         gap: 28,
         background: 'linear-gradient(135deg, #0f172a 0%, #1e293b 60%, #334155 100%)',
         color: '#ffffff',
+        // eslint-disable-next-line no-restricted-syntax -- ImageResponse (Satori) renders outside Tailwind; no CSS-var fonts available.
         fontFamily: 'system-ui, -apple-system, sans-serif',
         padding: 80,
         textAlign: 'center',

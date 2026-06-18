@@ -32,6 +32,8 @@ export function useMyProjects() {
   return useQuery({
     queryKey: myProjectsQueryKey(),
     queryFn: getMyProjects,
-    staleTime: 1000 * 60 * 5,
+    // Short so a newly-received bid (the project flips to BID_RECEIVED backend-side)
+    // surfaces on the next visit/refocus rather than lingering up to 5 min stale.
+    staleTime: 1000 * 30,
   });
 }

@@ -29,6 +29,7 @@ export default function GlobalError({ error, reset }: GlobalErrorProps) {
           alignItems: 'center',
           justifyContent: 'center',
           padding: '24px',
+          // eslint-disable-next-line no-restricted-syntax -- Root error boundary replaces the whole document and renders without app CSS / tokens.
           fontFamily: 'ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif',
           textAlign: 'center',
         }}

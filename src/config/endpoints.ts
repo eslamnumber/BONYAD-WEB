@@ -12,11 +12,97 @@ export const API_ENDPOINTS = {
      */
     TECHNICIANS_LIST: '/users/technicians',
     /**
+     * The signed-in user's own full profile — `name` · `email` · `phoneNumber` ·
+     * `profileImage` · `averageRating` · `totalReviews` · `type_label` (profession)
+     * · `isCompany`/`companyName`/`crNumber` (Wathq). Mirrors RN `USER.PROFILE`
+     * (website-bonyad/src/services/ProfileService.ts:399 `getUserProfile`).
+     */
+    PROFILE: '/users/profile',
+    /**
      * A user's public profile by id (`averageRating` + `totalReviews` + avatar).
      * Mirrors RN `USER.PROFILE_BY_ID` — used to enrich each bid card with the
      * technician's rating/avatar (RN BidReceivedProjectScreen / BidReviewPage).
      */
     PROFILE_BY_ID: '/users/:id/profile',
+    /**
+     * Update a user's own profile by id (PUT, JSON). The Account-type screen uses
+     * it to flip Individual ↔ Company after a Wathq check — body
+     * `{ isCompany, companyName?, crNumber?, nationalId? }`. Mirrors the iOS call
+     * site bonayd-ios/bonyad-cr-2/App/Screens/Profile/CompanyModeToggleView.swift:196,294.
+     */
+    UPDATE_PROFILE_BY_ID: '/users/:userId/profile',
+    /**
+     * Upload the signed-in user's avatar (POST, multipart/form-data, field
+     * `profileImage`) → `{ profileImage }`. The Edit-profile screen sends this
+     * after the JSON profile PUT. Mirrors the iOS call site
+     * bonayd-ios/bonyad-cr-2/App/Screens/Profile/MyProfile.swift:786.
+     */
+    PROFILE_IMAGE: '/users/update-profile-image',
+    /**
+     * Request an OTP to change the phone number (POST `{ newPhoneNumber }`, 9-digit
+     * national body). The verify step rotates the JWT. Mirrors the iOS call site
+     * MyProfile.swift:1086 (`change-phone-request`) / :1278 (`change-phone-verify`).
+     */
+    CHANGE_PHONE_REQUEST: '/users/:userId/change-phone-request',
+    /** Verify the phone-change OTP (POST `{ otpCode }`) → `{ user, token, message }`. */
+    CHANGE_PHONE_VERIFY: '/users/:userId/change-phone-verify',
+    /**
+     * Change the account password (PUT `{ oldPassword, newPassword }`) →
+     * `{ message }`. Mirrors the iOS call site MyProfile.swift:1480.
+     */
+    CHANGE_PASSWORD: '/users/:userId/change-password',
+    /**
+     * The signed-in technician's current subscription status — joined plan, price,
+     * start/end dates, days remaining. Mirrors RN `TECHNICIANS.SUBSCRIPTION`
+     * (website-bonyad/src/components/profile/SubscriptionCard.tsx:102). A **404
+     * means "no active subscription"** (the empty state), not an error. `DELETE` on
+     * this same path cancels the subscription (RN SubscriptionCard.tsx:228).
+     */
+    SUBSCRIPTION: '/users/subscription',
+    /**
+     * Weekly bid quota for the active subscription — quota, remaining, and reset
+     * timing. Mirrors RN `TECHNICIANS.SUBSCRIPTION_BIDS`
+     * (website-bonyad/src/components/profile/SubscriptionCard.tsx:131). Non-critical:
+     * a failure here degrades gracefully (the bid-usage card is just omitted).
+     */
+    SUBSCRIPTION_BIDS: '/users/subscription/bids',
+    /**
+     * Refer-a-friend invite — send the friend an SMS invitation. POST
+     * `{ phoneNumber }` → `{ success, invitation_id?, invited_phone?, sms_sent?,
+     * error_code?, message? }`. A `success: false` (over 200 or a 4xx) carries an
+     * `error_code` of `RATE_LIMIT` | `ALREADY_USER` | `SELF_REFERRAL` |
+     * `INVALID_PHONE`. Mirrors the iOS call site
+     * bonayd-ios/.../Utils/ReferralAPIService.swift:224 (`invite`).
+     */
+    REFERRAL_INVITE: '/users/me/referral/invite',
+    /**
+     * Refer-a-friend funnel stats — invited / signed-up / converted counts plus the
+     * reward `wallet_balance` and the `next_tier_at` / `next_tier_reward` progress.
+     * Mirrors iOS ReferralAPIService.swift:254 (`fetchStats`).
+     */
+    REFERRAL_STATS: '/users/me/referrals/stats',
+    /**
+     * Refer-a-friend list — `{ invitations[], referrals[] }`: pending/expired SMS
+     * invitations plus the materialized referrals (joined + converted friends).
+     * Mirrors iOS ReferralAPIService.swift:266 (`fetchReferrals`).
+     */
+    REFERRALS: '/users/me/referrals',
+    /**
+     * Reward wallet balance — `{ user_id?, balance?, currency? }`, the SAR credit
+     * earned from converted referrals. Mirrors iOS ReferralAPIService.swift:278
+     * (`fetchWallet`).
+     */
+    WALLET: '/users/me/wallet',
+  },
+  /**
+   * Wathq (واثق) commercial-registration verification. The backend proxies to the
+   * Signit Wathq API to confirm a national ID is an authorised signatory for a
+   * Commercial Registration before an account switches to Company mode. Mirrors
+   * the iOS call site CompanyModeToggleView.swift:245.
+   */
+  WATHQ: {
+    /** POST `{ nationalId, crNumber }` → `{ authorized, isCrFound, isNidFound, message? }`. */
+    VERIFY: '/wathq/verify',
   },
   AUTH: {
     LOGIN: '/auth/login',
@@ -50,6 +136,37 @@ export const API_ENDPOINTS = {
   CONTACT: {
     SUBMIT: '/contact',
   },
+  /**
+   * Support requests (auth required). The signed-in user opens a request that an
+   * admin picks up; the user tracks it here by status. Mirrors the iOS
+   * `SupportRequestService` (bonayd-ios/.../Utils/SupportRequestService.swift): POST
+   * /support/request, GET /support/my-requests, GET /support/requests/:requestId. The
+   * web omits the iOS `aiConversationHistory` (no chatbot). Shapes mirrored from the
+   * iOS production contract.
+   */
+  SUPPORT: {
+    /** POST `{ subject, description, category, priority }` → `{ id, status?, chatRoomRoomId? }`. */
+    REQUEST: '/support/request',
+    /** GET → `SupportRequest[]` — the signed-in user's requests. */
+    MY_REQUESTS: '/support/my-requests',
+    /** GET → `SupportRequestDetail` (with requester info). `:requestId` replaced at call-site. */
+    REQUEST_BY_ID: '/support/requests/:requestId',
+    /**
+     * Support tickets (threaded, admin-replied) — the iOS "Tickets" tab. GET lists the
+     * user's tickets (optional `?status=OPEN|IN_PROGRESS|CLOSED`); POST creates one
+     * (`{ subject, description, priority, categoryId?, subcategoryId? }`). Mirrors the
+     * RN `SupportTicketService`. File-attachment create (`/create-with-files`) is deferred.
+     */
+    TICKETS: '/support/tickets',
+    /** GET → one ticket incl. its `messages[]`. `:id` replaced at call-site. */
+    TICKET_BY_ID: '/support/tickets/:id',
+    /** POST `{ message, content }` → reply on a ticket. `:id` replaced at call-site. */
+    TICKET_MESSAGES: '/support/tickets/:id/messages',
+    /** PUT (no body) → mark a ticket resolved. `:id` replaced at call-site. */
+    TICKET_RESOLVE: '/support/tickets/:id/resolve',
+    /** GET (public) → the nested support category tree for the new-ticket pickers. */
+    CATEGORIES_HIERARCHY: '/support/categories/hierarchy',
+  },
   BLOGS: {
     LIST: '/blogs',
     DETAILS: '/blogs/:id',
@@ -79,9 +196,44 @@ export const API_ENDPOINTS = {
      * `PHASES.APPROVE_ALL` (website-bonyad/src/services/projectContractSigning.ts:49).
      */
     APPROVE_ALL: '/phases/project/:projectId/approve-all',
+    /**
+     * Customer pays a phase — marks it PAID or PARTIALLY_PAID (POST, optional JSON
+     * body: paymentType FULL/PARTIAL · amount · paymentMethod · paymentReference ·
+     * gatewayTransactionId). Called on the HyperPay callback after a successful
+     * charge. Mirrors RN `PHASES.PAY` (website-bonyad/src/services/PhaseService.ts:138).
+     */
+    PAY: '/phases/:phaseId/pay',
+  },
+  /**
+   * HyperPay payment gateway (per-phase payments). `create-checkout` returns a
+   * hosted `redirectUrl`; after the charge HyperPay redirects to /payment/callback,
+   * which verifies via `status/:checkoutId` then marks the phase paid (PHASES.PAY).
+   * Mirrors RN `PAYMENT` (website-bonyad/src/services/HyperPayService.ts).
+   */
+  PAYMENT: {
+    /** Create a HyperPay checkout session (POST JSON) → checkoutId + redirectUrl. */
+    CREATE_CHECKOUT: '/payments/create-checkout',
+    /** Verify a checkout's final result (GET). The checkoutId is appended: `status/:checkoutId`. */
+    STATUS: '/payments/status',
+    /** The user's payment history (GET, paged `?status&type&page&size`). Mirrors RN
+     *  `PAYMENT.MY_TRANSACTIONS` (website-bonyad/src/services/PaymentService.ts:78). */
+    MY_TRANSACTIONS: '/payments/my-transactions',
+    /** A single transaction by id (GET). Mirrors RN `PAYMENT.TRANSACTION_DETAIL`. */
+    TRANSACTION_DETAIL: '/payments/transactions/:id',
+    /** Submit a refund request for a transaction (POST `{ reason }`). Mirrors RN
+     *  `PAYMENT.REQUEST_REFUND` + iOS PaymentTransactionService.swift:225. */
+    REQUEST_REFUND: '/payments/transactions/:id/refund-request',
+    /** The user's refund requests (GET, paged `?page&size`). Mirrors RN
+     *  `PAYMENT.MY_REFUND_REQUESTS` (website-bonyad/src/services/PaymentService.ts:136). */
+    MY_REFUND_REQUESTS: '/payments/my-refund-requests',
   },
   BIDS: {
     CREATE: '/bids/create',
+    /** The signed-in technician's own bids across every project (bid-phase work).
+     *  Mirrors RN `BIDS.MY_BIDS`. The SP Projects screen merges these (as
+     *  BID_RECEIVED pseudo-projects) with `/projects/my-assigned`, which is
+     *  assigned-only and never lists pending bids. */
+    MY_BIDS: '/bids/my',
     /** All bids on a project; the approved screen reads the ACCEPTED one. */
     LIST: '/bids/project/:projectId',
     /** Withdraw a bid (DELETE only — the backend has no update verb on this path). */
@@ -121,5 +273,55 @@ export const API_ENDPOINTS = {
     UNREAD_COUNT: '/notifications/unread-count',
     MARK_READ: '/notifications/:id/read',
     MARK_ALL_READ: '/notifications/mark-all-read',
+  },
+  /**
+   * Saved payment cards (used by both customers and technicians — "unified" in the
+   * iOS app's CardManagementView). Card entry is a 1 SAR HyperPay preauthorisation:
+   * `prepare` opens a checkout, the shopper enters the card on the hosted page, then
+   * `complete` tokenises it and reverses the charge. Mirrors the iOS
+   * `TechnicianCardService` (bonayd-ios/.../Utils/TechnicianCardService.swift), which
+   * targets `/user/cards*` for every role.
+   */
+  CARDS: {
+    /** GET → `{ success, cards: PaymentCard[] }`. */
+    LIST: '/user/cards',
+    /** POST → `{ success, checkoutId, redirectUrl? }`. Opens the 1 SAR preauth checkout. */
+    PREPARE: '/user/cards/prepare',
+    /** POST `{ checkoutId }` → `{ success, card }`. Tokenises the card + reverses the charge. */
+    COMPLETE: '/user/cards/complete',
+    /** PUT → `{ success, card? }`. Promotes a card to the default payout/payment method. */
+    SET_DEFAULT: '/user/cards/:id/default',
+    /** DELETE → `{ success }`. Removes a saved card. */
+    DELETE: '/user/cards/:id',
+  },
+  /**
+   * Technician portfolio ("My Portfolio — add your works here"). A portfolio holds
+   * business info + specialties + a gallery of past projects (each with images).
+   * Mirrors the iOS `PortfolioService` (bonayd-ios/.../Models/PortfolioModels.swift).
+   * **A 404 (or a "No static resource" routing miss) on `ME`/`MY` means "no portfolio
+   * yet"** (the create-vs-manage branch), not an error. The fetcher tries the v2 `ME`
+   * first then falls back to legacy `MY` — exactly like `PortfolioService.checkPortfolioExists`
+   * (this backend only serves `/me`; `/my` 500s with "No static resource"). The PDF /
+   * theme / publish / AI-fill pipeline is intentionally out of scope for now.
+   */
+  PORTFOLIO: {
+    /** GET → the signed-in tech's `Portfolio` (v2 primary). 404 / routing-miss → none. */
+    ME: '/portfolios/me',
+    /** GET → legacy full portfolio incl. `pastProjects`/`projects`. Fallback for `ME`. */
+    MY: '/portfolios/my',
+    /** POST (JSON) → create the portfolio. Body: businessName/bio/tagline/yearsActive/specialties/city/isPublic. */
+    CREATE: '/portfolios/create',
+    /** PATCH (JSON, partial) → edit basic info: businessName/bio/tagline/specialties/yearsActive/published. */
+    UPDATE: '/portfolios/me',
+    /** GET → the tech's past projects (`PastProject[]`). 404/empty → []. */
+    PROJECTS: '/portfolios/projects/my',
+    /** POST (JSON) → add a past project (title/description/dates/photos[]/clientName/projectValue/location/isPublic). */
+    ADD_PROJECT: '/portfolios/projects/add',
+    /** PUT (JSON, full replace incl. combined `photos[]`) → update a past project. */
+    UPDATE_PROJECT: '/portfolios/projects/:id',
+    /** DELETE → remove a past project. */
+    DELETE_PROJECT: '/portfolios/projects/:id',
+    /** POST (multipart, field `file`) → upload one image → `{ photoUrl }`. */
+    UPLOAD_PHOTO: '/portfolios/projects/upload-photo',
   },
 } as const;

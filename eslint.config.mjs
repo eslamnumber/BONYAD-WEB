@@ -181,6 +181,27 @@ export default tseslint.config(
           message:
             'Use logical Tailwind utilities (ms-, me-, ps-, pe-, start-, end-, text-start, text-end, border-s-, border-e-, rounded-s-, rounded-e-). See docs/i18n-and-rtl.md.',
         },
+        {
+          // No hardcoded colors (hex / rgb / rgba / hsl / hsla) in a Tailwind COLOR
+          // utility's arbitrary value. Colors come from tokens in src/styles/tokens.css
+          // (CLAUDE.md rule 3, docs/theming.md, docs/design/BONYAD_DESIGN_IDENTITY.md).
+          // `shadow-` is intentionally excluded — shadows are not tokenized, so an
+          // arbitrary `shadow-[…rgba…]` is the one tolerated exception.
+          selector:
+            "JSXAttribute[name.name='className'] Literal[value=/(bg|text|border|ring|fill|stroke|from|via|to|outline|decoration|caret|accent|divide|placeholder)-\\[(rgba?|hsla?|#)/]",
+          message:
+            'No hardcoded colors in className. Use a token-backed utility (bg-primary, text-foreground, border-border, …). Add a token to src/styles/tokens.css if one is missing. See docs/theming.md + docs/design/BONYAD_DESIGN_IDENTITY.md.',
+        },
+        {
+          // No hardcoded font-family. Fonts are named ONLY in src/lib/fonts.ts and
+          // applied via the font-sans / font-arabic utilities (CLAUDE.md rule 3).
+          // The 4 framework files that render outside Tailwind (icon/apple-icon/
+          // opengraph-image via ImageResponse, global-error) carry an explicit
+          // eslint-disable with a reason.
+          selector: "Property[key.name='fontFamily']",
+          message:
+            'No hardcoded font-family. Use the font-sans / font-arabic utilities; swap fonts only in src/lib/fonts.ts. See docs/design/BONYAD_DESIGN_IDENTITY.md §1.',
+        },
       ],
 
       // Misc safety

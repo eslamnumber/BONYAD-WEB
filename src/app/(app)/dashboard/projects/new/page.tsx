@@ -21,7 +21,7 @@ export async function generateMetadata(): Promise<Metadata> {
  */
 export default function CreateProjectPage() {
   return (
-    <div className="relative mx-auto flex w-full max-w-6xl flex-1 flex-col px-4 py-8 sm:px-6 lg:px-8">
+    <div className="relative flex w-full flex-1 flex-col px-4 py-8 sm:px-6">
       <CreateProjectWizard />
     </div>
   );

@@ -38,8 +38,10 @@ export function BidCard({ bid, isBestValue, onReview, chatHref }: Props) {
       className={`bg-card relative flex w-full flex-col items-end gap-6 rounded-xl p-6 ${border}`}
     >
       {isBestValue ? (
-        <span className="bg-status-bid-soft text-status-bid border-status-bid absolute end-4 -top-3 rounded-full border px-4 py-1 text-xs font-medium">
-          {t('dashboard.jobOffer.customer.bids.bestValue')}
+        <span className="bg-card absolute end-4 -top-3 rounded-full">
+          <span className="bg-status-bid-soft text-status-bid border-status-bid block rounded-full border px-4 py-1 text-xs font-medium">
+            {t('dashboard.jobOffer.customer.bids.bestValue')}
+          </span>
         </span>
       ) : null}
       <BidCardHeader bid={bid} />

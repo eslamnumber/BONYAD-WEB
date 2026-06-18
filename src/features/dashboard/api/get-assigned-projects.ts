@@ -42,6 +42,7 @@ export function useAssignedProjects(params: GetAssignedProjectsParams = {}) {
   return useQuery({
     queryKey: assignedProjectsQueryKey(params),
     queryFn: () => getAssignedProjects(params),
-    staleTime: 1000 * 60 * 5,
+    // Short to keep the SP Projects screen in step with /bids/my (see useMyBids).
+    staleTime: 1000 * 30,
   });
 }

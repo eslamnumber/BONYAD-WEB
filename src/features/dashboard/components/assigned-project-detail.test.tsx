@@ -82,4 +82,20 @@ describe('AssignedProjectDetail — routing follows the backend status', () => {
     expect(await screen.findByText('The contract was sent to your email')).toBeInTheDocument();
     expect(screen.queryByText('Choose signing method')).not.toBeInTheDocument();
   });
+
+  it('opens the customer in-progress (per-phase payment) screen on an IN_PROGRESS project', async () => {
+    useAuthStore.setState({
+      user: { id: 100, role: 'USER', email: 'owner@example.com' },
+      isAuthenticated: true,
+    });
+    mockBackend({ ...APPROVED_PROJECT, status: 'IN_PROGRESS' });
+    renderWithProviders(<AssignedProjectDetail projectId={77} />);
+
+    // Customer IN_PROGRESS → the payment screen (provider + payment status), not the
+    // approve/sign screens nor the technician's offer-accepted view.
+    expect(await screen.findByText('Payment status')).toBeInTheDocument();
+    expect(screen.getByText('Selected service provider')).toBeInTheDocument();
+    expect(screen.queryByText('Choose signing method')).not.toBeInTheDocument();
+    expect(screen.queryByText('Your offer was accepted')).not.toBeInTheDocument();
+  });
 });

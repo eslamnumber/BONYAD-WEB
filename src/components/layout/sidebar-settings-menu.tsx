@@ -5,10 +5,16 @@ import { useTheme } from 'next-themes';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { SidebarDarkModeIcon, SidebarLanguageIcon, SidebarLogoutIcon } from '@/components/icons';
-import { LOCALE_COOKIE_NAME } from '@/config/constants';
-import { useLogout } from '@/features/auth';
-import { i18n } from '@/lib/i18n';
+import {
+  PersonIcon,
+  SidebarDarkModeIcon,
+  SidebarLanguageIcon,
+  SidebarLogoutIcon,
+} from '@/components/icons';
+import { ROUTES } from '@/config/routes';
+import { LogoutConfirmModal } from '@/features/auth';
+import { switchLocale } from '@/lib/locale-switch';
+import { switchTheme } from '@/lib/theme-switch';
 import type { Locale } from '@/types/locale';
 
 const ROW = 'flex items-center justify-end gap-[7px] text-xs whitespace-nowrap transition-colors';
@@ -28,6 +34,7 @@ type Props = {
  */
 export function SidebarSettingsMenu({ children, triggerLabel }: Props) {
   const [open, setOpen] = useState(false);
+  const [confirmLogout, setConfirmLogout] = useState(false);
   const ref = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -58,7 +65,16 @@ export function SidebarSettingsMenu({ children, triggerLabel }: Props) {
       >
         {children}
       </button>
-      {open ? <SettingsMenuPanel onClose={() => setOpen(false)} /> : null}
+      {open ? (
+        <SettingsMenuPanel
+          onClose={() => setOpen(false)}
+          onRequestLogout={() => {
+            setOpen(false);
+            setConfirmLogout(true);
+          }}
+        />
+      ) : null}
+      <LogoutConfirmModal open={confirmLogout} onClose={() => setConfirmLogout(false)} />
     </div>
   );
 }
@@ -94,20 +110,19 @@ function MenuRow({
   );
 }
 
-function SettingsMenuPanel({ onClose }: { onClose: () => void }) {
+type PanelProps = { onClose: () => void; onRequestLogout: () => void };
+
+function SettingsMenuPanel({ onClose, onRequestLogout }: PanelProps) {
   const { t, i18n: i18nInstance } = useTranslation();
   const { resolvedTheme, setTheme } = useTheme();
   const router = useRouter();
-  const { mutate: logout, isPending } = useLogout();
 
   const isDark = resolvedTheme === 'dark';
   const current: Locale = i18nInstance.language?.startsWith('ar') ? 'ar' : 'en';
 
   function toggleLanguage() {
     const next: Locale = current === 'en' ? 'ar' : 'en';
-    void i18n.changeLanguage(next);
-    document.cookie = `${LOCALE_COOKIE_NAME}=${next}; path=/; max-age=${60 * 60 * 24 * 365}; samesite=lax`;
-    router.refresh();
+    switchLocale(next, () => router.refresh());
     onClose();
   }
 
@@ -117,9 +132,18 @@ function SettingsMenuPanel({ onClose }: { onClose: () => void }) {
       className="bg-popover border-border absolute start-0 bottom-full z-20 mb-2 flex min-w-[188px] flex-col items-stretch gap-2 rounded-xl border p-4 shadow-[0px_2px_20px_0px_rgba(0,0,0,0.1)]"
     >
       <MenuRow
+        label={t('profile.title')}
+        icon={<PersonIcon className="size-4 shrink-0" aria-hidden />}
+        onClick={() => {
+          router.push(ROUTES.DASHBOARD_SETTINGS);
+          onClose();
+        }}
+      />
+      <div className="bg-border h-px w-full" aria-hidden />
+      <MenuRow
         label={isDark ? t('dashboard.menu.lightMode') : t('dashboard.menu.darkMode')}
         icon={<SidebarDarkModeIcon className="size-4 shrink-0" aria-hidden />}
-        onClick={() => setTheme(isDark ? 'light' : 'dark')}
+        onClick={() => switchTheme(() => setTheme(isDark ? 'light' : 'dark'))}
       />
       <div className="bg-border h-px w-full" aria-hidden />
       <MenuRow
@@ -131,9 +155,8 @@ function SettingsMenuPanel({ onClose }: { onClose: () => void }) {
       <MenuRow
         label={t('dashboard.signOut')}
         icon={<SidebarLogoutIcon className="size-4 shrink-0" aria-hidden />}
-        onClick={() => logout()}
+        onClick={onRequestLogout}
         tone="danger"
-        disabled={isPending}
       />
     </div>
   );

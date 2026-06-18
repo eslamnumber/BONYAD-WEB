@@ -1,9 +1,6 @@
-import { cookies } from 'next/headers';
 import { NextResponse, type NextRequest } from 'next/server';
 
-import { AUTH_COOKIE_NAME } from '@/config/constants';
 import { API_ENDPOINTS } from '@/config/endpoints';
-import { isDevelopment } from '@/config/env';
 import {
   PENDING_VERIFICATION_CODE,
   loginRequestSchema,
@@ -12,20 +9,7 @@ import {
 } from '@/features/auth';
 import { ApiError, apiClient } from '@/lib/api-client';
 import { getActiveBackendBaseUrl } from '@/lib/api-environment.server';
-
-/** 7 days — matches the backend JWT lifetime expectation on the RN app. */
-const SESSION_MAX_AGE_SECONDS = 60 * 60 * 24 * 7;
-
-async function setSessionCookie(token: string): Promise<void> {
-  const store = await cookies();
-  store.set(AUTH_COOKIE_NAME, token, {
-    httpOnly: true,
-    secure: !isDevelopment,
-    sameSite: 'lax',
-    path: '/',
-    maxAge: SESSION_MAX_AGE_SECONDS,
-  });
-}
+import { setSessionCookie } from '@/lib/session-cookie';
 
 function jsonError(body: unknown, status: number): NextResponse {
   return NextResponse.json(body ?? null, { status });

@@ -506,12 +506,77 @@
         "loading": "Loading phases…",
         "empty": "No phases defined yet.",
         "addUpdate": "Add update",
-        "requestApproval": "Request phase approval"
+        "requestApproval": "Request phase approval",
+        "approve": "Approve",
+        "requestChanges": "Request changes",
+        "confirmCompletion": "Confirm project completion"
       },
       "images": {
         "heading": "Project images",
         "empty": "No images yet.",
         "alt": "Project image {{number}}"
+      }
+    },
+    "payment": {
+      "callback": {
+        "title": "Payment",
+        "verifying": "Verifying your payment…",
+        "verifyingHint": "Please wait while we confirm your payment."
+      },
+      "options": {
+        "title": "How would you like to pay?",
+        "subtitle": "Pay the full phase, or pay part of it now.",
+        "recommended": "Recommended",
+        "full": {
+          "title": "Pay the full phase",
+          "description": "Settle this phase's full amount."
+        },
+        "partial": {
+          "title": "Pay part of the phase",
+          "description": "Pay a smaller amount now and complete the rest later.",
+          "inputLabel": "Amount (SAR)",
+          "inputHint": "Enter an amount less than {{max}}"
+        },
+        "cancel": "Cancel",
+        "confirm": "Confirm payment",
+        "error": {
+          "invalid": "Enter a valid amount.",
+          "exceeds": "Amount can't exceed {{max}}.",
+          "partialTooHigh": "A partial amount must be less than {{max}}."
+        }
+      },
+      "review": {
+        "title": "Review payment",
+        "amountDue": "Amount due",
+        "phaseCaption": "Phase {{number}}: {{title}}",
+        "detailsHeading": "Operation details",
+        "phaseValue": "Phase amount",
+        "processingFee": "Processing fee",
+        "total": "Total",
+        "remainingHeading": "Remaining after payment",
+        "remainingPhase": "Phase {{number}} — {{title}}",
+        "remainingTotal": "Total remaining",
+        "note": "The amount is transferred to the provider once you confirm. Later payments stay available for each phase as it's completed.",
+        "back": "Back",
+        "confirm": "Confirm payment",
+        "processing": "Processing…",
+        "error": "Couldn't start the payment. Please try again."
+      },
+      "success": {
+        "heading": "Payment successful",
+        "subtitle": "Thank you — your payment is confirmed.",
+        "detailsHeading": "Operation details",
+        "transactionId": "Transaction no.",
+        "amount": "Amount",
+        "method": "Payment method",
+        "date": "Date",
+        "viewProjects": "View my projects",
+        "close": "Close"
+      },
+      "failed": {
+        "heading": "Payment failed",
+        "subtitle": "We couldn't process your payment. Please try again.",
+        "back": "Back to projects"
       }
     },
     "projectEdit": {
@@ -611,6 +676,271 @@
         "close": "Close",
         "error": "Couldn't approve the phases. Please try again.",
         "empty": "No phases defined yet."
+      }
+    },
+    "transactions": {
+      "title": "Transactions",
+      "subtitle": "Your payment history and refund requests.",
+      "back": "Back",
+      "filtersLabel": "Filter transactions by status",
+      "tabs": {
+        "transactions": "Transactions",
+        "refunds": "Refund requests"
+      },
+      "filters": {
+        "all": "All",
+        "pending": "Pending",
+        "completed": "Completed",
+        "failed": "Failed",
+        "refunded": "Refunded"
+      },
+      "status": {
+        "pending": "Pending",
+        "completed": "Completed",
+        "failed": "Failed",
+        "refunded": "Refunded",
+        "approved": "Approved",
+        "rejected": "Rejected",
+        "processed": "Processed"
+      },
+      "type": {
+        "project": "Project payment",
+        "phase": "Phase payment",
+        "small_task": "Task payment",
+        "default": "Payment"
+      },
+      "card": {
+        "phase": "Phase {{number}}",
+        "refundAction": "Request refund",
+        "refundPending": "Refund request pending"
+      },
+      "loadMore": "Load more",
+      "empty": {
+        "title": "No transactions yet",
+        "subtitle": "Your payments will appear here once you complete a transaction."
+      },
+      "error": {
+        "title": "Couldn't load transactions",
+        "subtitle": "Something went wrong. Please try again.",
+        "retry": "Try again"
+      },
+      "refunds": {
+        "empty": {
+          "title": "No refund requests",
+          "subtitle": "Refund requests you submit will appear here."
+        },
+        "error": {
+          "title": "Couldn't load refund requests",
+          "subtitle": "Something went wrong. Please try again.",
+          "retry": "Try again"
+        },
+        "card": {
+          "reasonLabel": "Reason",
+          "rejectionLabel": "Rejection reason",
+          "adminLabel": "Admin notes",
+          "requestedAt": "Requested {{date}}",
+          "processedAt": "Processed {{date}}"
+        }
+      },
+      "modal": {
+        "title": "Request refund",
+        "close": "Close",
+        "detailsTitle": "Transaction details",
+        "amountLabel": "Amount",
+        "reasonLabel": "Refund reason",
+        "reasonHint": "Please describe why you're requesting a refund (at least 10 characters).",
+        "reasonPlaceholder": "Tell us why you'd like a refund…",
+        "cancel": "Cancel",
+        "submit": "Submit request",
+        "error": "Couldn't submit your request. Please try again."
+      }
+    }
+  },
+  "profile": {
+    "title": "Profile",
+    "subtitle": "Manage your account, services and preferences",
+    "myInfo": {
+      "title": "My info",
+      "subtitle": "Your account details and security",
+      "back": "Profile",
+      "fallbackName": "Your account",
+      "role": {
+        "technician": "Service provider",
+        "user": "Customer"
+      },
+      "summary": {
+        "status": "Account status",
+        "verified": "Verified",
+        "email": "Email",
+        "phone": "Phone number"
+      },
+      "nav": {
+        "section": "Manage",
+        "edit": {
+          "title": "Edit profile information",
+          "subtitle": "Update your personal details"
+        },
+        "phone": {
+          "title": "Change phone number",
+          "subtitle": "Update the number on your account"
+        },
+        "password": {
+          "title": "Change password",
+          "subtitle": "Update your account password"
+        },
+        "transactions": {
+          "title": "My transactions",
+          "subtitle": "View your payment history"
+        }
+      },
+      "changePassword": {
+        "oldLabel": "Current password",
+        "newLabel": "New password",
+        "confirmLabel": "Confirm new password",
+        "submit": "Update password",
+        "saving": "Updating…",
+        "success": "Your password has been updated.",
+        "showPassword": "Show password",
+        "hidePassword": "Hide password"
+      },
+      "editProfile": {
+        "nameLabel": "Full name",
+        "emailLabel": "Email",
+        "nationalIdLabel": "National ID",
+        "bioLabel": "Bio",
+        "addressLabel": "Address",
+        "zoneLabel": "Service zone",
+        "zonePlaceholder": "Select a zone",
+        "yearsLabel": "Years of experience",
+        "submit": "Save changes",
+        "saving": "Saving…",
+        "success": "Your profile has been updated.",
+        "errors": {
+          "email": "Enter a valid email address.",
+          "nationalId": "The national ID must be exactly 10 digits."
+        }
+      },
+      "changePhone": {
+        "phoneLabel": "New phone number",
+        "phoneHint": "Saudi mobile — 9 digits starting with 5.",
+        "send": "Send code",
+        "sending": "Sending…",
+        "otpSentTo": "We sent a 4-digit code to {{phone}}.",
+        "otpAria": "Verification code",
+        "verify": "Verify & save",
+        "verifying": "Verifying…",
+        "resend": "Resend code",
+        "changeNumber": "Change number",
+        "success": "Your phone number has been updated."
+      }
+    },
+    "accountType": {
+      "title": "Account type",
+      "subtitle": "Switch between an individual and a verified company account",
+      "back": "Profile",
+      "currentLabel": "Current account type",
+      "individual": "Individual",
+      "company": "Company",
+      "individualAccount": "Individual account",
+      "companyAccount": "Company account",
+      "verified": "Wathq verified",
+      "crLabel": "CR No.",
+      "about": {
+        "title": "About company accounts",
+        "body": "Switching verifies your commercial registration through Wathq using your national ID, then unlocks bidding and signing contracts under your company name.",
+        "point1": "Your national ID must be an authorized signatory on the CR.",
+        "point2": "You can switch back to an individual account anytime."
+      },
+      "success": {
+        "individual": "Switched to an individual account.",
+        "company": "Your company account is verified and active."
+      },
+      "error": {
+        "crNotFound": "We couldn't find that commercial registration. Check the CR number and try again.",
+        "nidNotFound": "Your national ID isn't linked to this registration.",
+        "notAuthorized": "Your national ID isn't an authorized signatory for this registration.",
+        "updateFailed": "We couldn't update your account. Try again.",
+        "generic": "Something went wrong. Try again."
+      },
+      "modal": {
+        "title": "Switch to company",
+        "close": "Close",
+        "cancel": "Cancel",
+        "submit": "Verify & switch",
+        "verifying": "Verifying…",
+        "info": "We verify your company through Wathq using your national ID and commercial registration. Your national ID must be an authorized signatory on the CR.",
+        "nationalId": "National ID",
+        "nationalIdMissing": "Add your national ID in Edit profile before switching to a company account.",
+        "companyName": "Company name",
+        "companyNamePlaceholder": "Your registered company name",
+        "crNumber": "Commercial registration (CR) number",
+        "crNumberPlaceholder": "10-digit CR number",
+        "crInvalid": "The CR number must be exactly 10 digits."
+      }
+    },
+    "identity": {
+      "wathqVerified": "Wathq verified",
+      "reviews": "{{count}} reviews",
+      "edit": "Edit profile"
+    },
+    "sections": {
+      "account": "Account",
+      "preferences": "Settings",
+      "danger": "Danger zone"
+    },
+    "rows": {
+      "myInfo": {
+        "title": "My info",
+        "subtitle": "Update your personal information"
+      },
+      "accountType": {
+        "title": "Account type",
+        "subtitle": "Wathq-verified business"
+      },
+      "portfolio": {
+        "title": "My portfolio",
+        "subtitle": "Add your completed work here"
+      },
+      "services": {
+        "title": "Services & subscription",
+        "subtitle": "The services you offer and your plan"
+      },
+      "cards": {
+        "title": "Payment cards",
+        "subtitle": "Manage payment methods"
+      },
+      "transactions": {
+        "title": "Transactions & contracts",
+        "subtitle": "Your payment history and contracts"
+      },
+      "language": {
+        "title": "Language",
+        "subtitle": "App language"
+      },
+      "darkMode": {
+        "title": "Dark mode",
+        "on": "On",
+        "off": "Off"
+      },
+      "support": {
+        "title": "Support center",
+        "subtitle": "Get help and contact us"
+      },
+      "referral": {
+        "title": "Refer & earn",
+        "subtitle": "Invite friends and earn credit"
+      },
+      "feedback": {
+        "title": "Feedback",
+        "subtitle": "Send us your suggestions"
+      },
+      "delete": {
+        "title": "Delete account",
+        "subtitle": "A permanent action that can't be undone"
+      },
+      "subscriptions": {
+        "title": "My subscriptions",
+        "subtitle": "Manage your subscriptions"
       }
     }
   },
@@ -953,6 +1283,13 @@
       "special": "One special character",
       "noSpaces": "No spaces",
       "noSequence": "No sequences like 1234"
+    },
+    "logout": {
+      "title": "Sign out",
+      "close": "Close",
+      "body": "Are you sure you want to sign out of your account?",
+      "confirm": "Sign out",
+      "cancel": "Cancel"
     }
   },
   "howItWorks": {
@@ -991,8 +1328,6 @@
       "tabPro": "Service Provider",
       "tabCustomer": "Customer",
       "pro": {
-        "headline": "Start Offering Your Services and Share Your Expertise!",
-        "body": "Discover how to use Bonyad step by step to offer your services and grow your business with ease.",
         "1": {
           "title": "Create Your Professional Profile",
           "body": "Showcase your skills, add your portfolio, and set your service rates.",
@@ -1032,11 +1367,11 @@
             "Organize work details",
             "Opportunities for new projects"
           ]
-        }
+        },
+        "headline": "Start Offering Your Services and Share Your Expertise!",
+        "body": "Discover how to use Bonyad step by step to offer your services and grow your business with ease."
       },
       "customer": {
-        "headline": "Get Your Projects Done with Trusted Experts!",
-        "body": "Discover how to use Bonyad step by step to reach the right experts and manage your project with greater ease.",
         "1": {
           "title": "Post Your Project",
           "body": "Describe the work required. Add photos, location, and budget range.",
@@ -1076,7 +1411,9 @@
             "Organize notes and requests",
             "Follow completion milestones"
           ]
-        }
+        },
+        "headline": "Get Your Projects Done with Trusted Experts!",
+        "body": "Discover how to use Bonyad step by step to reach the right experts and manage your project with greater ease."
       }
     },
     "cta": {
@@ -1091,6 +1428,132 @@
         "title": "Frequently Asked Questions",
         "description": "Find answers to common questions about Bonyad — how to find verified technicians, post projects, pricing, and more."
       }
+    }
+  },
+  "support": {
+    "title": "Support center",
+    "back": "Profile",
+    "subtitle": "Open a request and our team will get back to you",
+    "new": {
+      "trigger": "New request",
+      "title": "New support request",
+      "close": "Close",
+      "cancel": "Cancel",
+      "submit": "Submit request",
+      "submitting": "Submitting…",
+      "subjectLabel": "Subject",
+      "subjectPlaceholder": "Briefly, what do you need help with?",
+      "descriptionLabel": "Details",
+      "descriptionPlaceholder": "Describe your issue or question in detail",
+      "categoryLabel": "Category",
+      "categoryPlaceholder": "Choose a category",
+      "priorityLabel": "Priority",
+      "priorityPlaceholder": "Choose a priority",
+      "errorFallback": "We couldn't submit your request — please try again"
+    },
+    "categories": {
+      "general": "General",
+      "account": "Account",
+      "payments": "Payments & refunds",
+      "projects": "Projects & bids",
+      "technical": "Technical issue",
+      "other": "Other"
+    },
+    "priorities": {
+      "low": "Low",
+      "medium": "Medium",
+      "high": "High",
+      "urgent": "Urgent"
+    },
+    "errors": {
+      "subjectTooShort": "Please enter a subject (at least 3 characters)",
+      "subjectTooLong": "This subject is too long",
+      "descriptionTooShort": "Please add a few more details (at least 10 characters)",
+      "descriptionTooLong": "These details are too long"
+    },
+    "list": {
+      "heading": "Your requests",
+      "errorTitle": "We couldn't load your requests",
+      "errorRetry": "Try again",
+      "emptyTitle": "No requests yet",
+      "emptyBody": "When you open a support request, it'll appear here with its status"
+    },
+    "status": {
+      "pending": "Awaiting agent",
+      "inProgress": "In progress",
+      "resolved": "Resolved",
+      "rejected": "Declined",
+      "unknown": "Submitted"
+    },
+    "detail": {
+      "title": "Request details",
+      "close": "Close",
+      "error": "We couldn't load this request",
+      "reference": "Reference",
+      "category": "Category",
+      "priority": "Priority",
+      "agent": "Assigned agent",
+      "unassigned": "Not yet assigned",
+      "submittedAt": "Submitted",
+      "resolvedAt": "Resolved"
+    },
+    "tabs": {
+      "tickets": "Tickets",
+      "conversations": "Conversations",
+      "aria": "Support sections"
+    },
+    "requestFilter": {
+      "all": "All",
+      "pending": "Pending",
+      "active": "Active",
+      "resolved": "Resolved",
+      "aria": "Filter requests by status"
+    },
+    "ticketFilter": {
+      "all": "All",
+      "open": "Open",
+      "in_progress": "In progress",
+      "closed": "Closed",
+      "aria": "Filter tickets by status"
+    },
+    "ticketStatus": {
+      "open": "Open",
+      "inProgress": "In progress",
+      "resolved": "Resolved"
+    },
+    "ticket": {
+      "new": "New ticket",
+      "newTitle": "New support ticket",
+      "close": "Close",
+      "submit": "Create ticket",
+      "detailTitle": "Ticket",
+      "detailError": "We couldn't load this ticket",
+      "errorTitle": "We couldn't load your tickets",
+      "emptyTitle": "No tickets yet",
+      "emptyBody": "Open a ticket and our team will reply here",
+      "resolve": "Mark resolved",
+      "resolveError": "We couldn't resolve this ticket — please try again",
+      "closedNote": "This ticket is closed",
+      "noMessages": "No messages yet",
+      "subjectLabel": "Subject",
+      "subjectPlaceholder": "Briefly, what do you need help with?",
+      "categoryLabel": "Category",
+      "categoryPlaceholder": "Choose a category",
+      "subcategoryLabel": "Subcategory",
+      "subcategoryPlaceholder": "Choose a subcategory",
+      "priorityLabel": "Priority",
+      "priorityPlaceholder": "Choose a priority",
+      "descriptionLabel": "Details",
+      "descriptionPlaceholder": "Describe your issue in detail"
+    },
+    "conversation": {
+      "title": "Conversation",
+      "close": "Close",
+      "send": "Send message",
+      "placeholder": "Write a message",
+      "empty": "No messages yet — say hello to start",
+      "error": "We couldn't load this conversation",
+      "closed": "This conversation is closed"
     }
   },
   "contact": {
@@ -1278,5 +1741,257 @@
     },
     "error": "We couldn't load your notifications. Please try again.",
     "loading": "Loading notifications"
+  },
+  "cards": {
+    "title": "Payment cards",
+    "back": "Profile",
+    "info": {
+      "technician": "Add a card to receive payments from clients.",
+      "user": "Add a card to pay for services and projects."
+    },
+    "add": {
+      "button": "Add payment card",
+      "preparing": "Preparing…",
+      "secureNote": "Secured by a refundable 1 SAR authorization"
+    },
+    "row": {
+      "default": "Default",
+      "pending": "Pending validation",
+      "setDefault": "Set as default",
+      "settingDefault": "Setting…",
+      "delete": "Delete"
+    },
+    "delete": {
+      "title": "Delete card",
+      "close": "Close",
+      "body": "Are you sure you want to delete {{card}}? This action can't be undone.",
+      "confirm": "Delete card",
+      "cancel": "Cancel"
+    },
+    "empty": {
+      "title": "No cards registered",
+      "technician": "Add a card to receive payouts.",
+      "user": "Add a card to make payments."
+    },
+    "error": {
+      "title": "Couldn't load your cards",
+      "subtitle": "Something went wrong while loading your saved cards.",
+      "retry": "Try again"
+    },
+    "feedback": {
+      "added": "Card added successfully.",
+      "addFailed": "We couldn't add your card. Please try again.",
+      "prepareFailed": "We couldn't start card registration. Please try again.",
+      "defaultSet": "Default card updated.",
+      "defaultFailed": "We couldn't set the default card. Please try again.",
+      "deleted": "Card deleted.",
+      "deleteFailed": "We couldn't delete the card. Please try again.",
+      "dismiss": "Dismiss"
+    }
+  },
+  "subscription": {
+    "title": "My subscription",
+    "subtitle": "Manage your plan, bid quota and billing.",
+    "currency": "SAR",
+    "active": {
+      "badge": "Active",
+      "activating": "Your subscription is being activated",
+      "perWeekBids": "{{count}} bids / week"
+    },
+    "details": {
+      "startDate": "Start date",
+      "endDate": "Renews / ends",
+      "daysRemaining": "Days remaining",
+      "daysValue": "{{count}} days",
+      "status": "Status",
+      "statusActive": "Active",
+      "notAvailable": "—"
+    },
+    "bids": {
+      "title": "Weekly bid usage",
+      "remainingOfQuota": "{{remaining}} of {{quota}} left",
+      "weeklyQuota": "Weekly quota",
+      "remaining": "Bids remaining",
+      "nextReset": "Next reset",
+      "resetsIn": "Resets in",
+      "unlimited": "Unlimited"
+    },
+    "cancel": {
+      "action": "Cancel subscription",
+      "title": "Cancel subscription",
+      "close": "Close",
+      "body": "Cancel your {{plan}} subscription? You'll keep access until {{date}}, then stop receiving new project leads.",
+      "bodyNoDate": "Cancel your subscription? You'll stop receiving new project leads.",
+      "confirm": "Cancel subscription",
+      "keep": "Keep subscription",
+      "success": "Your subscription has been cancelled.",
+      "error": "We couldn't cancel your subscription. Please try again."
+    },
+    "empty": {
+      "title": "No active subscription",
+      "subtitle": "Subscribe to a plan to start receiving project leads and placing bids.",
+      "browse": "Browse plans"
+    },
+    "error": {
+      "title": "Couldn't load your subscription",
+      "subtitle": "Something went wrong while loading your subscription.",
+      "retry": "Try again"
+    },
+    "back": "Profile"
+  },
+  "portfolio": {
+    "title": "My portfolio",
+    "subtitle": "Showcase your completed work to win more clients.",
+    "back": "Profile",
+    "create": {
+      "title": "Create your portfolio",
+      "subtitle": "Add your business details, then showcase the projects you've delivered.",
+      "submit": "Create portfolio",
+      "creating": "Creating…",
+      "benefits": {
+        "showcase": "Show off your best completed projects with photos.",
+        "trust": "Build trust with verified, real work clients can browse.",
+        "reach": "Stand out and win more requests."
+      }
+    },
+    "edit": {
+      "button": "Edit info",
+      "title": "Edit portfolio",
+      "close": "Close",
+      "save": "Save changes",
+      "saving": "Saving…",
+      "cancel": "Cancel"
+    },
+    "error": {
+      "title": "Couldn't load your portfolio",
+      "subtitle": "Something went wrong while loading your portfolio.",
+      "retry": "Try again"
+    },
+    "fields": {
+      "businessName": "Business name",
+      "businessNamePlaceholder": "e.g. Burj Finishing Co.",
+      "tagline": "Tagline",
+      "taglinePlaceholder": "A short line that sums up your work",
+      "bio": "About",
+      "bioPlaceholder": "Describe your experience and what you do best",
+      "city": "City",
+      "cityPlaceholder": "e.g. Riyadh",
+      "yearsActive": "Years of experience",
+      "specialties": "Specialties",
+      "specialtiesPlaceholder": "Add a specialty and press Enter",
+      "addSpecialty": "Add specialty",
+      "removeSpecialty": "Remove {{name}}",
+      "visibility": "Public portfolio",
+      "visibilityHint": "Show your portfolio to clients.",
+      "photos": "Photos ({{count}}/{{max}})",
+      "addPhoto": "Add",
+      "removePhoto": "Remove photo"
+    },
+    "info": {
+      "years": "{{count}} years of experience",
+      "projectsStat": "Projects",
+      "yearsStat": "Years",
+      "public": "Public",
+      "private": "Private"
+    },
+    "projects": {
+      "title": "Your work",
+      "add": "Add work",
+      "error": "Couldn't load your projects.",
+      "emptyTitle": "No projects yet",
+      "emptyBody": "Add your completed work so clients can see what you do."
+    },
+    "project": {
+      "addTitle": "Add a project",
+      "editTitle": "Edit project",
+      "close": "Close",
+      "save": "Save project",
+      "saving": "Saving…",
+      "cancel": "Cancel",
+      "edit": "Edit",
+      "delete": "Delete",
+      "deleteNamed": "Delete {{title}}",
+      "deleteTitle": "Delete project",
+      "deleteBody": "Are you sure you want to delete \"{{title}}\"? This action can't be undone.",
+      "deleteConfirm": "Delete project",
+      "coverAlt": "Cover photo of {{title}}",
+      "photoCount": "{{count}} photos",
+      "fields": {
+        "title": "Project title",
+        "titlePlaceholder": "e.g. Villa finishing — Al Narjis",
+        "description": "Description",
+        "descriptionPlaceholder": "What did you deliver on this project?",
+        "startDate": "Start date",
+        "endDate": "End date",
+        "clientName": "Client name",
+        "projectValue": "Project value (SAR)",
+        "location": "Location",
+        "visibility": "Public project",
+        "visibilityHint": "Show this project on your portfolio."
+      }
+    },
+    "errors": {
+      "businessNameRequired": "Please enter a business name",
+      "titleRequired": "Please enter a project title",
+      "endBeforeStart": "The end date must be after the start date",
+      "createFailed": "We couldn't create your portfolio. Please try again.",
+      "updateFailed": "We couldn't save your changes. Please try again.",
+      "projectFailed": "We couldn't save the project. Please try again.",
+      "deleteFailed": "We couldn't delete the project. Please try again."
+    }
+  },
+  "referral": {
+    "title": "Refer & earn",
+    "hero": {
+      "balanceLabel": "Reward wallet",
+      "subtitle": "Invite friends to Bonyad. When they complete their first project, you earn SAR credit.",
+      "nextTier": "Invite {{remaining}} more to unlock your next {{reward}} SAR reward.",
+      "tierComplete": "You've unlocked every reward tier — keep inviting to keep earning."
+    },
+    "stats": {
+      "invited": "Invited",
+      "signedUp": "Joined",
+      "converted": "Rewarded"
+    },
+    "invite": {
+      "title": "Invite a friend",
+      "subtitle": "Enter a Saudi mobile number and we'll send them an SMS invitation.",
+      "label": "Friend's mobile number",
+      "placeholder": "5XXXXXXXX",
+      "send": "Send invite",
+      "sending": "Sending…",
+      "success": "Invitation sent to {{phone}}.",
+      "errors": {
+        "rateLimit": "You've sent too many invites recently. Please try again later.",
+        "alreadyUser": "This number already has a Bonyad account.",
+        "selfReferral": "You can't invite your own number.",
+        "invalidPhone": "Enter a valid Saudi mobile number.",
+        "generic": "We couldn't send the invite. Please try again."
+      }
+    },
+    "list": {
+      "title": "Your invitations",
+      "joined": "Joined",
+      "pending": "Pending sign-up",
+      "expired": "Expired",
+      "waitingFirstProject": "Joined — waiting for their first project",
+      "earnedReward": "Earned {{reward}} SAR",
+      "status": {
+        "pending": "Invitation sent",
+        "signedUp": "Signed up",
+        "expired": "Invitation expired",
+        "revoked": "Invitation revoked"
+      }
+    },
+    "empty": {
+      "title": "Invite your first friend",
+      "subtitle": "Share Bonyad with people you trust. You'll earn SAR credit when they complete their first project."
+    },
+    "error": {
+      "title": "Couldn't load your rewards",
+      "subtitle": "Something went wrong loading your referral activity.",
+      "retry": "Try again"
+    },
+    "currency": "SAR"
   }
 }
