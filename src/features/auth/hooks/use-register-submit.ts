@@ -17,6 +17,7 @@ export function useRegisterSubmit(
   form: UseFormReturn<RegisterFormValues>,
   userRole: Role,
   errorLabels: ErrorLabels,
+  termsId?: number,
 ) {
   const router = useRouter();
   const mutation = useRegister();
@@ -35,7 +36,11 @@ export function useRegisterSubmit(
       {
         onSuccess: () => {
           const phone = normalizePhoneForApi(values.phone);
-          router.push(`${ROUTES.VERIFY_OTP}?phone=${encodeURIComponent(phone)}&role=${userRole}`);
+          const params = new URLSearchParams({ phone, role: userRole });
+          // Thread the agreed terms version to the OTP step, where it's recorded
+          // server-side with the issued token (mirrors the iOS termsId hand-off).
+          if (termsId) params.set('termsId', String(termsId));
+          router.push(`${ROUTES.VERIFY_OTP}?${params.toString()}`);
         },
         onError: handleError,
       },

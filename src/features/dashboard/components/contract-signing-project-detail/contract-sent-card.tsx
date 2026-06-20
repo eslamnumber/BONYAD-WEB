@@ -1,6 +1,6 @@
 'use client';
 
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQueryClient } from '@tanstack/react-query';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -10,10 +10,11 @@ import { useAuthStore } from '@/stores/auth-store';
 import { useCreateSignature } from '../../api/create-signature';
 import { contractQueryKey, useContractByProject } from '../../api/get-contract';
 import { projectQueryKey } from '../../api/get-project';
-import { getUserProfile, userProfileQueryKey } from '../../api/get-user-profile';
 import { type Contract } from '../../schemas/contract';
 import { type ProjectDetail } from '../../schemas/project';
 import { type ProjectPhase } from '../../schemas/project-phase';
+
+import { ContractDownloadButton } from './contract-download-button';
 
 type Props = { project: ProjectDetail; phases: ProjectPhase[] };
 type ResendState = { isPending: boolean; isSuccess: boolean };
@@ -34,7 +35,7 @@ export function ContractSentCard({ project, phases }: Props) {
 
   const { data: contract, isPending } = useContractByProject(project.id);
   const userEmail = useAuthStore((s) => s.user?.email);
-  const { ready, onResend, resend } = useResendContract(project, phases, locale, userEmail);
+  const { ready, onResend, resend } = useResendContract(project, phases, locale);
 
   const onSigned = () => {
     setAcknowledged(true);
@@ -47,6 +48,8 @@ export function ContractSentCard({ project, phases }: Props) {
       <ContractSentIcon className="text-status-contract size-[45px] shrink-0" aria-hidden />
       <SentBody contract={contract} isPending={isPending} userEmail={userEmail} locale={locale} />
       <SentActions
+        projectId={project.id}
+        technicianId={project.assignedTechnicianId}
         acknowledged={acknowledged}
         ready={ready}
         resend={resend}
@@ -57,38 +60,17 @@ export function ContractSentCard({ project, phases }: Props) {
   );
 }
 
-/** Resend orchestration: fetch the technician (for their email), assemble the
- *  /signatures body, and expose a guarded `onResend`. */
-function useResendContract(
-  project: ProjectDetail,
-  phases: ProjectPhase[],
-  locale: string,
-  userEmail: string | undefined,
-) {
-  const technicianId = project.assignedTechnicianId ?? undefined;
-  const { data: technician } = useQuery({
-    queryKey: userProfileQueryKey(technicianId ?? 0),
-    queryFn: () => getUserProfile(technicianId as number),
-    enabled: hasId(technicianId),
-    staleTime: 1000 * 60 * 5,
-  });
+/** Resend orchestration: assemble the /signatures body (projectId + phaseIds +
+ *  language, emails auto-fetched backend-side) and expose a guarded `onResend`. */
+function useResendContract(project: ProjectDetail, phases: ProjectPhase[], locale: string) {
   const resend = useCreateSignature();
   const phaseIds = phaseIdsOf(phases);
-  const ready = resendReady({
-    technicianId,
-    userEmail,
-    technicianEmail: technician?.email,
-    phaseCount: phaseIds.length,
-    pending: resend.isPending,
-  });
+  const ready = phaseIds.length > 0 && !resend.isPending;
 
   const onResend = () => {
-    if (!ready || !hasId(technicianId)) return;
+    if (!ready) return;
     resend.mutate({
       projectId: project.id,
-      technicianId,
-      userEmail: userEmail as string,
-      technicianEmail: technician?.email as string,
       phaseIds,
       language: locale === 'ar' ? 'AR' : 'EN',
     });
@@ -141,12 +123,16 @@ function SentBody({
 }
 
 function SentActions({
+  projectId,
+  technicianId,
   acknowledged,
   ready,
   resend,
   onSigned,
   onResend,
 }: {
+  projectId: number;
+  technicianId: number | null | undefined;
   acknowledged: boolean;
   ready: boolean;
   resend: ResendState;
@@ -164,6 +150,7 @@ function SentActions({
       >
         {t(`dashboard.contractSigning.sent.${acknowledged ? 'signedAck' : 'signed'}`)}
       </button>
+      <ContractDownloadButton projectId={projectId} technicianId={technicianId} />
       <button
         type="button"
         onClick={onResend}
@@ -182,24 +169,8 @@ function resendLabel(resend: ResendState): 'resending' | 'resent' | 'resend' {
   return 'resend';
 }
 
-function hasId(id: number | undefined): id is number {
-  return typeof id === 'number' && id > 0;
-}
-
 function phaseIdsOf(phases: ProjectPhase[]): number[] {
-  return phases.map((p) => p.id).filter((id): id is number => typeof id === 'number');
-}
-
-function resendReady(o: {
-  technicianId: number | undefined;
-  userEmail: string | undefined;
-  technicianEmail: string | undefined;
-  phaseCount: number;
-  pending: boolean;
-}): boolean {
-  return (
-    hasId(o.technicianId) && !!o.userEmail && !!o.technicianEmail && o.phaseCount > 0 && !o.pending
-  );
+  return phases.map((p) => p.id).filter((id): id is number => typeof id === 'number' && id > 0);
 }
 
 /** Localised "N <unit> ago" from an ISO timestamp (seconds → days), via Intl. */

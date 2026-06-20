@@ -14,11 +14,19 @@ type Photo = { file: File; url: string };
 function usePhotoFiles(onChange: (files: File[]) => void) {
   const [photos, setPhotos] = useState<Photo[]>([]);
   const photosRef = useRef<Photo[]>([]);
+  // Hold the latest onChange in a ref so it is NOT an effect dependency. Callers pass a
+  // fresh inline closure each render (e.g. `onChange={(p) => onUpdate({ photos: p })}`);
+  // depending on it would re-run the report effect every render → setDraft → re-render →
+  // loop. Sync the ref in its own effect (writing it during render is disallowed).
+  const onChangeRef = useRef(onChange);
+  useEffect(() => {
+    onChangeRef.current = onChange;
+  });
 
   useEffect(() => {
     photosRef.current = photos;
-    onChange(photos.map((p) => p.file));
-  }, [photos, onChange]);
+    onChangeRef.current(photos.map((p) => p.file));
+  }, [photos]);
   useEffect(() => () => photosRef.current.forEach((p) => URL.revokeObjectURL(p.url)), []);
 
   const add = (list: FileList | null) => {

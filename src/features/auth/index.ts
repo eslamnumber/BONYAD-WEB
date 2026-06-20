@@ -13,6 +13,8 @@ export { getAuthHeaderLabels } from './get-auth-header-labels';
 export { AuthProvider } from './components/auth-provider';
 export { LogoutConfirmModal } from './components/logout-confirm-modal';
 export { useLogout, logoutUser } from './api/logout';
+/** Server-side Terms recording — consumed by the `/api/auth/verify-otp` route handler. */
+export { approveTerms } from './api/approve-terms';
 export {
   loginRequestSchema,
   toLoginResult,

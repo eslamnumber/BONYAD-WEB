@@ -66,17 +66,15 @@ export function JobOfferDetail({ projectId }: Props) {
             ) : (
               <CustomerOfferStatus projectId={projectId} />
             )}
-            {/* AI Scope-of-Work, primary group (objectives + KPIs) — self-hides for
-                manual projects. Sits under the bids / offer column. */}
-            <ProjectSowColumn project={project} group="primary" />
           </div>
           <div className="flex w-full flex-col gap-6 lg:min-w-0 lg:flex-1">
             <ProjectDescriptionCard project={project} />
             <ProjectPhasesCard projectId={projectId} />
+            {/* AI Scope-of-Work above the images: objectives + scope. Self-hides for manual. */}
+            <ProjectSowColumn project={project} group="above" />
             <ProjectImagesCard images={images} />
-            {/* AI Scope-of-Work, secondary group (scope, deliverables, resources,
-                compliance, risks) — self-hides for manual projects. */}
-            <ProjectSowColumn project={project} group="secondary" />
+            {/* AI Scope-of-Work below the images: deliverables, resources, compliance, risks, KPIs. */}
+            <ProjectSowColumn project={project} group="below" />
           </div>
         </div>
       </div>

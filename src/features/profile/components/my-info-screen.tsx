@@ -1,73 +1,40 @@
 'use client';
 
+import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { ROUTES } from '@/config/routes';
 import { useAuthStore } from '@/stores/auth-store';
-import type { AuthUser } from '@/types/auth';
 
 import { useMyProfile } from '../api';
-import { resolveProfileIdentity, type ProfileIdentity } from '../lib/identity';
-import type { UserProfile } from '../schemas/profile';
+import { resolveProfileIdentity } from '../lib/identity';
 
-import { ManageAccordion, type ManageForms } from './manage-accordion';
-import { MyInfoSummary, type MyInfoSummaryData } from './my-info-summary';
+import { ManageAccordion, type ManageForms, type ManageKey } from './manage-accordion';
+import { PersonalInfoCard } from './personal-info-card';
 import { ProfileAmbientGlow, ProfileBackLink } from './profile-chrome';
 
-type TFn = ReturnType<typeof useTranslation>['t'];
-
-/** Backend statuses treated as "account verified" for the status pill. */
-const VERIFIED_STATUSES = ['VERIFIED', 'ACTIVE', 'APPROVED', 'ACCEPTED'];
-
-/** "PHONE_PENDING" → "Phone pending" — a readable fallback for an unknown status. */
-function prettyStatus(raw: string): string {
-  const spaced = raw.replace(/_/g, ' ').toLowerCase();
-  return spaced.charAt(0).toUpperCase() + spaced.slice(1);
-}
-
-/** Fold the live profile + session + resolved identity into the summary-card data. */
-function buildSummary(
-  profile: UserProfile | undefined,
-  user: AuthUser | null,
-  identity: ProfileIdentity,
-  t: TFn,
-): MyInfoSummaryData {
-  const p: Partial<UserProfile> = profile ?? {};
-  const u: Partial<AuthUser> = user ?? {};
-  const statusRaw = (u.status ?? '').toUpperCase();
-  const isVerified = statusRaw === '' || VERIFIED_STATUSES.includes(statusRaw);
-  return {
-    name: identity.name,
-    profileImage: identity.profileImage,
-    roleLabel: identity.isTechnician
-      ? t('profile.myInfo.role.technician')
-      : t('profile.myInfo.role.user'),
-    isVerified,
-    statusText: isVerified ? t('profile.myInfo.summary.verified') : prettyStatus(statusRaw),
-    email: p.email ?? u.email,
-    phone: p.phoneNumber ?? u.phoneNumber,
-  };
-}
-
 /**
- * "My info" screen (`/dashboard/settings/profile`). An account snapshot beside a
- * "Manage" accordion: Edit profile / Change phone / Change password each expand
- * their form inline (one open at a time), so there are no separate routes. The
- * forms are passed in by the route page — `features/profile` never imports
- * `features/auth`. "My transactions" stays a link, hidden for technicians.
+ * "Personal info" screen (`/dashboard/settings/profile`, Figma 1674:7946). A single
+ * centred column: the identity card (avatar · name · role · change-photo) over a
+ * Manage card whose Edit profile / Change phone / Change password rows expand their
+ * form inline (one at a time), and whose "My transactions" row drills through
+ * (customers only). The identity card's chevron opens the Edit-profile form below, so
+ * the screen edits in place with no separate routes. Forms are injected by the route
+ * page, so `features/profile` never imports `features/auth`.
  */
 export function MyInfoScreen({ forms = {} }: { forms?: ManageForms }) {
   const { t } = useTranslation();
   const user = useAuthStore((s) => s.user);
   const { data: profile } = useMyProfile();
+  const [open, setOpen] = useState<ManageKey | null>(null);
 
   const identity = resolveProfileIdentity(profile, user);
-  const summary = buildSummary(profile, user, identity, t);
+  const toggle = (key: ManageKey) => setOpen((current) => (current === key ? null : key));
 
   return (
-    // Settings sub-screen: centered column (rule 4a settings exception) — mx-auto +
-    // max-w-5xl, standard px-4 → sm:px-6 gutter (no lg:px-8). Mirrors card-management-screen.tsx.
-    <div className="relative isolate mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-8 sm:px-6">
+    // Settings sub-screen: centered single column (rule 4a settings exception) — mx-auto +
+    // max-w-2xl, standard px-4 → sm:px-6 gutter (no lg:px-8). Mirrors the Figma 612px column.
+    <div className="relative isolate mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-8 sm:px-6">
       <ProfileAmbientGlow />
       <ProfileBackLink href={ROUTES.DASHBOARD_SETTINGS} label={t('profile.myInfo.back')} />
 
@@ -75,19 +42,16 @@ export function MyInfoScreen({ forms = {} }: { forms?: ManageForms }) {
         <h1 className="text-foreground text-end text-2xl font-semibold tracking-tight sm:text-3xl">
           {t('profile.myInfo.title')}
         </h1>
-        <p className="text-muted-foreground mt-1.5 text-end text-sm">
-          {t('profile.myInfo.subtitle')}
-        </p>
       </header>
 
-      {/* Two columns from xl (avoids cramped columns on small laptops); summary leads on mobile. */}
-      <div className="grid gap-6 xl:grid-cols-2 xl:items-start">
-        <div className="xl:order-2">
-          <MyInfoSummary data={summary} />
-        </div>
-        <div className="xl:order-1">
-          <ManageAccordion forms={forms} showTransactions={!identity.isTechnician} />
-        </div>
+      <div className="flex flex-col gap-6">
+        <PersonalInfoCard identity={identity} onEditProfile={() => setOpen('edit')} />
+        <ManageAccordion
+          open={open}
+          onToggle={toggle}
+          forms={forms}
+          showTransactions={!identity.isTechnician}
+        />
       </div>
     </div>
   );

@@ -8,15 +8,12 @@ import { createSignature } from './create-signature';
 
 const VALID = {
   projectId: 102,
-  technicianId: 9,
-  userEmail: 'owner@example.com',
-  technicianEmail: 'tech@example.com',
   phaseIds: [1, 2, 3],
   language: 'AR' as const,
 };
 
 describe('createSignature', () => {
-  it('POSTs /signatures form-urlencoded with the RN body shape (phaseIds as CSV)', async () => {
+  it('POSTs /signatures form-urlencoded with phaseIds as repeated fields (RN email path)', async () => {
     let contentType: string | null = null;
     let body: URLSearchParams | undefined;
     server.use(
@@ -31,14 +28,29 @@ describe('createSignature', () => {
 
     expect(contentType).toContain('application/x-www-form-urlencoded');
     expect(body?.get('projectId')).toBe('102');
-    expect(body?.get('technicianId')).toBe('9');
-    expect(body?.get('userEmail')).toBe('owner@example.com');
-    expect(body?.get('technicianEmail')).toBe('tech@example.com');
-    expect(body?.get('phaseIds')).toBe('1,2,3');
+    // Repeated fields, not a CSV — mirrors RN's buildFormData (phaseIds=1&phaseIds=2…).
+    expect(body?.getAll('phaseIds')).toEqual(['1', '2', '3']);
     expect(body?.get('language')).toBe('AR');
+    // The backend auto-fetches emails; the body must NOT carry them.
+    expect(body?.has('userEmail')).toBe(false);
+    expect(body?.has('technicianEmail')).toBe(false);
+    expect(body?.has('technicianId')).toBe(false);
   });
 
-  it('rejects an invalid body before any request (zod)', async () => {
+  it('includes contractTerms only when provided', async () => {
+    let body: URLSearchParams | undefined;
+    server.use(
+      http.post('*/signatures', async ({ request }) => {
+        body = new URLSearchParams(await request.text());
+        return HttpResponse.json({ id: 2 }, { status: 201 });
+      }),
+    );
+
+    await createSignature({ ...VALID, contractTerms: 'Net 30' });
+    expect(body?.get('contractTerms')).toBe('Net 30');
+  });
+
+  it('rejects an empty phase list before any request (zod)', async () => {
     let called = false;
     server.use(
       http.post('*/signatures', () => {
@@ -46,7 +58,7 @@ describe('createSignature', () => {
         return HttpResponse.json({}, { status: 201 });
       }),
     );
-    await expect(createSignature({ ...VALID, userEmail: 'not-an-email' })).rejects.toThrow();
+    await expect(createSignature({ ...VALID, phaseIds: [] })).rejects.toThrow();
     expect(called).toBe(false);
   });
 

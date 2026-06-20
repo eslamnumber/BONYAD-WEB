@@ -32,7 +32,6 @@ describe('ProfileScreen role-awareness', () => {
     setUser('USER');
     renderWithProviders(<ProfileScreen />);
 
-    expect(screen.getByText('My info')).toBeInTheDocument();
     expect(screen.getByText('Transactions & contracts')).toBeInTheDocument();
     expect(screen.queryByText('My portfolio')).not.toBeInTheDocument();
     expect(screen.queryByText('Services & subscription')).not.toBeInTheDocument();
@@ -62,16 +61,17 @@ describe('ProfileScreen role-awareness', () => {
       '/dashboard/settings/cards',
     );
     expect(screen.getByRole('link', { name: /Feedback/ })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: /My info/ })).toBeInTheDocument();
   });
 
-  it('renders the three section groups and the always-on controls', () => {
+  it('renders the section groups and the always-on controls', () => {
     setUser('USER');
     renderWithProviders(<ProfileScreen />);
 
+    expect(
+      screen.getByRole('heading', { level: 1, name: 'Personal information' }),
+    ).toBeInTheDocument();
     expect(screen.getByText('Account')).toBeInTheDocument();
-    expect(screen.getByText('Settings')).toBeInTheDocument();
-    expect(screen.getByText('Danger zone')).toBeInTheDocument();
+    expect(screen.getByText('Preferences & Support')).toBeInTheDocument();
     expect(screen.getByText('Language')).toBeInTheDocument();
     expect(screen.getByText('Dark mode')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Sign out' })).toBeInTheDocument();

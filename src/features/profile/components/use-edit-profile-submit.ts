@@ -11,6 +11,7 @@ import { useAuthStore } from '@/stores/auth-store';
 import { useMyProfile } from '../api';
 import { useUpdateProfile } from '../api/update-profile';
 import { resolveProfileIdentity } from '../lib/identity';
+import { isEmailTakenError } from '../lib/profile-errors';
 import {
   editProfileFormSchema,
   toProfileUpdateBody,
@@ -59,9 +60,14 @@ export function useEditProfileSubmit() {
 
   const onSubmit = form.handleSubmit((v) => {
     setSuccess(false);
-    mutation.mutate(toProfileUpdateBody(v, isTechnician), {
+    mutation.mutate(toProfileUpdateBody(v, isTechnician, values), {
       onSuccess: () => setSuccess(true),
       onError: (err) => {
+        if (isEmailTakenError(err)) {
+          // Field message keys are translated by the field component (TextField → t()).
+          form.setError('email', { message: 'profile.myInfo.editProfile.errors.emailTaken' });
+          return;
+        }
         const msg =
           err instanceof ApiError
             ? (err.localizedMessage(i18n.language) ?? t('auth.errors.genericError'))

@@ -12,7 +12,9 @@ export type RegisterFormLabels = {
   confirmPasswordPlaceholder: string;
   confirmPasswordAriaLabel: string;
   togglePasswordVisibility: string;
-  termsText: string;
+  termsAgreePrefix: string;
+  termsLinkText: string;
+  termsAgreeSuffix: string;
   termsAriaLabel: string;
   submitButton: string;
   hints: {

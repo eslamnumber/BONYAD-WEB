@@ -131,8 +131,8 @@ function SidebarNavLink({
   );
 }
 
-/** Profile card (name + role + avatar); customers get the account menu wrapper. */
-export function SidebarProfile({ variant }: { variant: SidebarVariant }) {
+/** Profile card (name + role + avatar) wrapped in the account menu — both roles. */
+export function SidebarProfile() {
   const { t } = useTranslation();
   const user = useAuthStore((s) => s.user);
   const roleKey = user ? ROLE_LABEL_KEY[(user.role ?? '').toUpperCase()] : undefined;
@@ -152,10 +152,7 @@ export function SidebarProfile({ variant }: { variant: SidebarVariant }) {
     </div>
   );
 
-  if (variant === 'customer') {
-    return (
-      <SidebarSettingsMenu triggerLabel={t('dashboard.menu.ariaLabel')}>{card}</SidebarSettingsMenu>
-    );
-  }
-  return card;
+  return (
+    <SidebarSettingsMenu triggerLabel={t('dashboard.menu.ariaLabel')}>{card}</SidebarSettingsMenu>
+  );
 }

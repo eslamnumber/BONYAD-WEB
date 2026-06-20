@@ -5,10 +5,9 @@ import { useTranslation } from 'react-i18next';
 
 import { SaudiRiyalIcon } from '@/components/icons';
 import { ROUTES } from '@/config/routes';
-import { useAuthStore } from '@/stores/auth-store';
 
 import { localizedServiceName } from '../lib/project-format';
-import { isPendingOrBidPhase, statusVariant } from '../lib/project-status';
+import { isPendingOrBidPhase } from '../lib/project-status';
 import type { Project } from '../schemas/project';
 
 import { ProjectStatusBadge } from './project-status-badge';
@@ -73,13 +72,11 @@ function ProjectRow({ project }: { project: Project }) {
   // `projectType` is the assignment enum (DIRECT_ASSIGNMENT / BIDDING), not a
   // phase label — show the localized service for the "Current phase" column.
   const phase = service || '—';
-  // Bid/pending projects open the offer-submission screen; an assigned project
-  // (approved · in-progress · completed) opens the shared detail route, which
-  // dispatches the right view by status. CONTRACT_SIGNING opens the customer's
-  // contract-signing screen, but stays card-only for technicians (no detail view
-  // for them yet) — so the dash gates on the technician role, not the status alone.
-  const isTechnician = (useAuthStore((s) => s.user?.role) ?? '').toUpperCase() === 'TECHNICIAN';
-  const cardOnly = statusVariant(project.status) === 'contractSigning' && isTechnician;
+  // Bid/pending projects open the offer-submission screen; every assigned project
+  // (approved · CONTRACT_SIGNING · in-progress · completed) opens the shared detail
+  // route, which dispatches the right view by status AND role — CONTRACT_SIGNING now
+  // resolves to each side's own contract-signing screen (the customer sends / resends,
+  // the technician views + downloads), so the technician gets a Details link too.
   const detailHref = isPendingOrBidPhase(project.status)
     ? ROUTES.DASHBOARD_JOB_OFFER(String(project.id))
     : ROUTES.DASHBOARD_PROJECT(String(project.id));
@@ -87,7 +84,7 @@ function ProjectRow({ project }: { project: Project }) {
   return (
     <tr className="border-border border-b last:border-b-0">
       <td className="px-3 py-4">
-        <DetailsCell cardOnly={cardOnly} href={detailHref} />
+        <DetailsCell href={detailHref} />
       </td>
       <td className={BODY_CELL}>
         {typeof project.budget === 'number' ? (
@@ -116,13 +113,9 @@ function ProjectRow({ project }: { project: Project }) {
   );
 }
 
-/** Action cell: a Details link, or a disabled dash for technician CONTRACT_SIGNING. */
-function DetailsCell({ cardOnly, href }: { cardOnly: boolean; href: string }) {
+/** Action cell: a Details link to the shared project-detail route (role-aware). */
+function DetailsCell({ href }: { href: string }) {
   const { t } = useTranslation();
-  if (cardOnly)
-    return (
-      <span className="text-foreground/40 inline-flex px-4 py-1.5 text-xs font-medium">—</span>
-    );
   return (
     <Link
       href={href}

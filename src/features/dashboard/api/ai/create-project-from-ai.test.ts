@@ -41,6 +41,8 @@ describe('createProjectFromAi', () => {
       serviceSubcategoryId: 87,
       serviceId: 87,
       timeRequiredDays: 84,
+      // Open for bids — without this the backend never lists the project for technicians.
+      projectType: 'ALL',
     });
     const sent = body as unknown as Record<string, unknown>;
     // The SOW carries the original fields PLUS the mirrored service ids (the backend
@@ -50,6 +52,7 @@ describe('createProjectFromAi', () => {
       serviceId: 87,
       serviceCategoryId: 5,
       serviceSubcategoryId: 87,
+      projectType: 'ALL',
     });
     expect(sent.sowJsonRaw).toMatchObject({ serviceId: 87 });
     expect(projectIdOf(res)).toBe(321);

@@ -40,7 +40,7 @@ export function DashboardSidebar() {
           </Link>
           <SidebarNav variant={variant} />
         </div>
-        <SidebarProfile variant={variant} />
+        <SidebarProfile />
       </div>
     </aside>
   );

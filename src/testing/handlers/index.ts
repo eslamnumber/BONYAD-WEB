@@ -16,6 +16,7 @@ import { referralHandlers } from './referral';
 import { serviceHandlers } from './services';
 import { subscriptionHandlers } from './subscriptions';
 import { technicianHandlers } from './technicians';
+import { termsHandlers } from './terms';
 
 export const handlers = [
   ...authHandlers,
@@ -36,4 +37,5 @@ export const handlers = [
   ...serviceHandlers,
   ...subscriptionHandlers,
   ...technicianHandlers,
+  ...termsHandlers,
 ];

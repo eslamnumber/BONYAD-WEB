@@ -53,24 +53,48 @@ export const profileUpdateRequestSchema = z.object({
 
 export type ProfileUpdateRequest = z.infer<typeof profileUpdateRequestSchema>;
 
+/** Universal form keys that map straight onto the PUT body. */
+const SCALAR_FIELDS = ['name', 'email', 'nationalId'] as const;
+/** Technician-only form keys, sent only when the signed-in user is a technician. */
+const TECH_FIELDS = ['bio', 'address', 'yearsOfExperience', 'regionId'] as const;
+
 /**
- * Fold the form values into the PUT body — only non-empty fields, mirroring the
- * iOS saveProfile body (MyProfile.swift:716). Technician-only fields are dropped
- * for customers.
+ * Non-empty form fields whose value differs from the loaded profile. With no
+ * baseline (`original` omitted) every non-empty field counts as changed.
+ */
+function changedFields(
+  v: EditProfileFormValues,
+  original: EditProfileFormValues | undefined,
+  keys: readonly (keyof EditProfileFormValues)[],
+): Set<string> {
+  const out = new Set<string>();
+  for (const k of keys) {
+    if (v[k] && (!original || v[k] !== original[k])) out.add(k);
+  }
+  return out;
+}
+
+/**
+ * Fold the form values into the PUT body — **only the fields the user actually
+ * changed** (diffed against `original`), mirroring the iOS saveProfile body
+ * (MyProfile.swift:716). The backend does a full-row update, so re-sending an
+ * *unchanged* `email` re-writes the unique column and 500s on `users_email_key`;
+ * untouched fields must never ride along. Technician-only fields drop for customers.
  */
 export function toProfileUpdateBody(
   v: EditProfileFormValues,
   isTechnician: boolean,
+  original?: EditProfileFormValues,
 ): ProfileUpdateRequest {
+  const keys = isTechnician ? [...SCALAR_FIELDS, ...TECH_FIELDS] : SCALAR_FIELDS;
+  const c = changedFields(v, original, keys);
   const body: ProfileUpdateRequest = {};
-  if (v.name) body.name = v.name;
-  if (v.email) body.email = v.email;
-  if (v.nationalId) body.nationalId = v.nationalId;
-  if (isTechnician) {
-    if (v.bio) body.description = v.bio;
-    if (v.address) body.address = v.address;
-    if (v.yearsOfExperience) body.yearsOfExperience = Number(v.yearsOfExperience);
-    if (v.regionId) body.regionId = Number(v.regionId);
-  }
+  if (c.has('name')) body.name = v.name;
+  if (c.has('email')) body.email = v.email;
+  if (c.has('nationalId')) body.nationalId = v.nationalId;
+  if (c.has('bio')) body.description = v.bio;
+  if (c.has('address')) body.address = v.address;
+  if (c.has('yearsOfExperience')) body.yearsOfExperience = Number(v.yearsOfExperience);
+  if (c.has('regionId')) body.regionId = Number(v.regionId);
   return body;
 }

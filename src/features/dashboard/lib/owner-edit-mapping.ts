@@ -91,3 +91,27 @@ export function formValuesToPayload(values: OwnerEditFormValues): OwnerEditPaylo
   if (existing.length > 0) payload.existingPhotos = existing;
   return ownerEditPayloadSchema.parse(payload);
 }
+
+/**
+ * Form values + new photos → multipart FormData for the owner-edit PUT — the RN
+ * OwnerProjectEditScreen FormData branch (website-bonyad/.../OwnerProjectEditScreen.tsx:373-429),
+ * taken whenever the project gains new images. Reuses {@link formValuesToPayload} for
+ * the scalar fields so the JSON and multipart branches never drift; `phases` rides as
+ * a JSON string, `existingPhotos` round-trip the kept images, and the new files are
+ * appended as repeated `images` parts — the SAME field manual creation uses, so the
+ * backend stores them in the project's `files[]` (the images-gallery source).
+ */
+export function buildOwnerEditFormData(
+  values: OwnerEditFormValues,
+  photos: readonly File[],
+): FormData {
+  const payload = formValuesToPayload(values);
+  const fd = new FormData();
+  fd.append('description', payload.description);
+  fd.append('address', payload.address);
+  if (payload.budget !== undefined) fd.append('budget', String(payload.budget));
+  fd.append('phases', JSON.stringify(payload.phases));
+  (payload.existingPhotos ?? []).forEach((url) => fd.append('existingPhotos', url));
+  photos.forEach((file, i) => fd.append('images', file, file.name || `photo_${i}.jpg`));
+  return fd;
+}

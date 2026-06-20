@@ -276,6 +276,13 @@
   --color-create-phase-panel: var(--create-phase-panel);
   --color-rating-star: var(--rating-star);
 
+  /* Refer & earn screen (Figma 1691:2642) — the purple reward-wallet hero gradient
+     (#8A38F5 → #51218F) and the amber "send invite" button (#F59E0B / near-black text). */
+  --color-reward-hero-from: var(--reward-hero-from);
+  --color-reward-hero-to: var(--reward-hero-to);
+  --color-referral-send: var(--referral-send);
+  --color-referral-send-foreground: var(--referral-send-foreground);
+
   /* Contract-signing phases card (Figma 1501:14729) — the green per-phase amount
      badge (fg + soft pill bg). The slate duration badge reuses
      --color-field-surface + --color-muted-foreground. */
@@ -501,6 +508,11 @@
   --status-bid: oklch(0.56 0.26 297);
   --status-bid-soft: oklch(0.56 0.26 297 / 0.1);
   --status-bid-tint: oklch(0.94 0.03 300);
+  /* Refer & earn — reward hero gradient (#8A38F5 → #51218F) + amber send button. */
+  --reward-hero-from: oklch(0.56 0.26 297);
+  --reward-hero-to: oklch(0.39 0.17 297);
+  --referral-send: oklch(0.77 0.18 70);
+  --referral-send-foreground: oklch(0.15 0 0);
   --status-done: oklch(1 0 0);
   --status-done-bg: oklch(0.52 0.13 252);
   /* Create-project chooser option accents (Figma #D97706 / #00BC7D / #8A38F5 /
@@ -779,6 +791,13 @@
   --create-progress-track: oklch(0.3 0 0);
   --create-phase-panel: oklch(0.23 0.01 256);
   --rating-star: oklch(0.82 0.17 72);
+
+  /* Refer & earn — dark. Gradient deepened so the white hero text keeps contrast;
+     the amber send button stays amber with near-black text. */
+  --reward-hero-from: oklch(0.5 0.22 297);
+  --reward-hero-to: oklch(0.33 0.14 297);
+  --referral-send: oklch(0.82 0.17 72);
+  --referral-send-foreground: oklch(0.15 0 0);
 
   /* Contract-signing phase amount badge — dark (brighter green, higher-alpha bg). */
   --phase-amount: oklch(0.72 0.16 158);

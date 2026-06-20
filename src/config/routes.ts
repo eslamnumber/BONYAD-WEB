@@ -125,6 +125,14 @@ export const INTERNAL_API = {
    * browser can't) and returns the updated user. Body: `{ userId, otpCode }`.
    */
   AUTH_CHANGE_PHONE_VERIFY: '/api/auth/change-phone-verify',
+  /**
+   * Verify a registration OTP server-side. The backend issues a session token on
+   * success; this route uses it ONCE (server-side) to record the Terms agreement
+   * (POST /users/terms/approve) before discarding it — the token never reaches
+   * browser JS. Recording is best-effort and never blocks verification. Body:
+   * `{ phoneNumber, otpCode, role, termsId? }`.
+   */
+  AUTH_VERIFY_OTP: '/api/auth/verify-otp',
   /** Runtime backend switcher (beta-tester tool). Persists env + clears session. */
   API_ENVIRONMENT: '/api/dev/api-environment',
   /**

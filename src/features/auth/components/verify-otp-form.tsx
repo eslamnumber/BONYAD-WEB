@@ -20,6 +20,10 @@ function resolveOtpError(msg: string | undefined, t: (k: string) => string) {
   return msg ? t(msg) : undefined;
 }
 
+function submitErrorMessage(err: Error, labels: VerifyOtpFormLabels): string {
+  return err instanceof ApiError ? err.message : labels.errors.genericError;
+}
+
 export type VerifyOtpFormLabels = {
   otpAriaLabel: string;
   submitButton: string;
@@ -58,7 +62,12 @@ function OtpInputSection({
   );
 }
 
-function useVerifyOtpFormState(labels: VerifyOtpFormLabels, phone: string, accountRole: Role) {
+function useVerifyOtpFormState(
+  labels: VerifyOtpFormLabels,
+  phone: string,
+  accountRole: Role,
+  termsId?: number,
+) {
   const { t } = useTranslation();
   const mutation = useVerifyOtp();
   const resendMutation = useResendOtp();
@@ -72,14 +81,8 @@ function useVerifyOtpFormState(labels: VerifyOtpFormLabels, phone: string, accou
 
   const onSubmit = form.handleSubmit((values) =>
     mutation.mutate(
-      { ...values, phoneNumber: phone, role: localRole },
-      {
-        onError: (err) => {
-          form.setError('root', {
-            message: err instanceof ApiError ? err.message : labels.errors.genericError,
-          });
-        },
-      },
+      { ...values, phoneNumber: phone, role: localRole, termsId },
+      { onError: (err) => form.setError('root', { message: submitErrorMessage(err, labels) }) },
     ),
   );
 
@@ -121,12 +124,14 @@ export function VerifyOtpForm({
   labels,
   phone,
   accountRole,
+  termsId,
 }: {
   labels: VerifyOtpFormLabels;
   phone: string;
   accountRole: Role;
+  termsId?: number;
 }) {
-  const state = useVerifyOtpFormState(labels, phone, accountRole);
+  const state = useVerifyOtpFormState(labels, phone, accountRole, termsId);
   const { mutation, form, localRole, setLocalRole, secondsLeft, otpValue } = state;
   const { onSubmit, isPending, otpError, canResend, handleResend, handleOtpChange } = state;
 

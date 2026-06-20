@@ -2,7 +2,11 @@ import { describe, expect, it } from 'vitest';
 
 import { type OwnerEditFormValues, type OwnerEditResponse } from '../schemas/owner-edit';
 
-import { formValuesToPayload, responseToFormValues } from './owner-edit-mapping';
+import {
+  buildOwnerEditFormData,
+  formValuesToPayload,
+  responseToFormValues,
+} from './owner-edit-mapping';
 
 const baseForm: OwnerEditFormValues = {
   name: 'Villa',
@@ -94,5 +98,39 @@ describe('formValuesToPayload', () => {
     expect(
       formValuesToPayload({ ...baseForm, existingPhotos: ['keep.jpg'] }).existingPhotos,
     ).toEqual(['keep.jpg']);
+  });
+});
+
+describe('buildOwnerEditFormData', () => {
+  const jpeg = (name: string) => new File([new Uint8Array([1])], name, { type: 'image/jpeg' });
+
+  it('appends scalars + new files as `images`, round-tripping existing photos', () => {
+    const fd = buildOwnerEditFormData({ ...baseForm, existingPhotos: ['keep.jpg'] }, [
+      jpeg('a.jpg'),
+      jpeg('b.jpg'),
+    ]);
+    expect(fd.get('description')).toBe('Villa\n\nBuild a villa');
+    expect(fd.get('budget')).toBe('250000');
+    expect(fd.get('address')).toBe('Riyadh');
+    expect(fd.getAll('existingPhotos')).toEqual(['keep.jpg']);
+    expect(fd.getAll('images').map((f) => (f as File).name)).toEqual(['a.jpg', 'b.jpg']);
+  });
+
+  it('serializes phases as a JSON string and omits budget when unspecified', () => {
+    const fd = buildOwnerEditFormData(
+      {
+        ...baseForm,
+        budgetUnspecified: true,
+        budget: '',
+        phases: [{ id: null, phaseNumber: '1', description: 'P1', durationWeeks: '2', amount: '' }],
+      },
+      [],
+    );
+    expect(fd.has('budget')).toBe(false);
+    expect(fd.getAll('images')).toEqual([]);
+    expect(JSON.parse(String(fd.get('phases')))[0]).toMatchObject({
+      description: 'P1',
+      timeSpentDays: 14,
+    });
   });
 });

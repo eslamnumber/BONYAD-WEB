@@ -18,6 +18,7 @@ type FormSectionProps = {
   labels: VerifyOtpPageLabels;
   phone: string;
   accountRole: 'USER' | 'TECHNICIAN';
+  termsId?: number;
   locale: Locale;
   headerLabels: AuthHeaderLabels;
 };
@@ -26,6 +27,7 @@ function VerifyOtpFormSection({
   labels,
   phone,
   accountRole,
+  termsId,
   locale,
   headerLabels,
 }: FormSectionProps) {
@@ -42,7 +44,12 @@ function VerifyOtpFormSection({
               <bdi>{labels.subheading}</bdi>
             </p>
           </div>
-          <VerifyOtpForm labels={labels} phone={phone} accountRole={accountRole} />
+          <VerifyOtpForm
+            labels={labels}
+            phone={phone}
+            accountRole={accountRole}
+            termsId={termsId}
+          />
         </div>
       </div>
     </div>
@@ -86,12 +93,14 @@ export function VerifyOtpPage({
   labels,
   phone,
   accountRole,
+  termsId,
   locale,
   headerLabels,
 }: {
   labels: VerifyOtpPageLabels;
   phone: string;
   accountRole: 'USER' | 'TECHNICIAN';
+  termsId?: number;
   locale: Locale;
   headerLabels: AuthHeaderLabels;
 }) {
@@ -101,6 +110,7 @@ export function VerifyOtpPage({
         labels={labels}
         phone={phone}
         accountRole={accountRole}
+        termsId={termsId}
         locale={locale}
         headerLabels={headerLabels}
       />

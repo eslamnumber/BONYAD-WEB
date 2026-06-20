@@ -28,9 +28,15 @@ function SubmitButton({ pending, label }: { pending: boolean; label: string }) {
 export function RegisterForm({
   labels,
   userRole,
+  termsId,
+  onOpenTerms,
 }: {
   labels: RegisterFormLabels;
   userRole: 'USER' | 'TECHNICIAN';
+  /** Active terms version to pin on agreement; threaded into the OTP step. */
+  termsId?: number;
+  /** Opens the read-only Terms document modal. */
+  onOpenTerms?: () => void;
 }) {
   const { t } = useTranslation();
   const [showPwd, setShowPwd] = useState(false);
@@ -39,7 +45,7 @@ export function RegisterForm({
     resolver: zodResolver(registerFormSchema),
     defaultValues: { name: '', phone: '', password: '', confirmPassword: '', terms: false },
   });
-  const { onSubmit, isPending } = useRegisterSubmit(form, userRole, labels.errors);
+  const { onSubmit, isPending } = useRegisterSubmit(form, userRole, labels.errors, termsId);
   const passwordValue = useWatch({ control: form.control, name: 'password' }) ?? '';
   return (
     <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
@@ -51,6 +57,7 @@ export function RegisterForm({
         onTogglePwd={() => setShowPwd((v) => !v)}
         onToggleConfirm={() => setShowConfirmPwd((v) => !v)}
         passwordValue={passwordValue}
+        onOpenTerms={onOpenTerms}
         t={t}
       />
       {form.formState.errors.root && (

@@ -42,15 +42,25 @@ function readRequestEnv(req: NextRequest): { token: string | undefined; baseUrl:
 }
 
 /**
- * Read the forwardable body. Multipart uploads (chat send-with-file) are parsed
- * as FormData and passed through verbatim — `apiClient` re-streams the FormData
- * to the backend with a fresh boundary. Everything else is JSON.
+ * Read the forwardable body, preserving its wire format so `apiClient` re-sends it
+ * to the backend with the matching Content-Type:
+ *   - `multipart/form-data` (chat send-with-file) → FormData, re-streamed with a
+ *     fresh boundary.
+ *   - `application/x-www-form-urlencoded` (POST /signatures, contract PDF gen) →
+ *     URLSearchParams, passed through untouched. Reading these as JSON would throw
+ *     and silently drop the body — the backend then answers "Required request body
+ *     is missing" (its `@RequestBody` binds to null).
+ *   - everything else → JSON.
  */
 async function readBody(method: Method, req: NextRequest): Promise<unknown> {
   if (method !== 'post' && method !== 'put' && method !== 'patch') return undefined;
   const contentType = req.headers.get('content-type') ?? '';
   if (contentType.includes('multipart/form-data')) {
     return req.formData().catch(() => undefined);
+  }
+  if (contentType.includes('application/x-www-form-urlencoded')) {
+    const text = await req.text().catch(() => '');
+    return text ? new URLSearchParams(text) : undefined;
   }
   return req.json().catch(() => undefined);
 }

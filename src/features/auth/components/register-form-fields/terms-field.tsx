@@ -12,10 +12,11 @@ import { FieldFooter } from './field-footer';
 type Props = {
   register: UseFormRegister<RegisterFormValues>;
   errorText?: string;
-  labels: Pick<RegisterFormLabels, 'termsText'>;
+  labels: Pick<RegisterFormLabels, 'termsAgreePrefix' | 'termsLinkText' | 'termsAgreeSuffix'>;
+  onOpenTerms?: () => void;
 };
 
-export function TermsField({ register, errorText, labels }: Props) {
+export function TermsField({ register, errorText, labels, onOpenTerms }: Props) {
   return (
     <div className="flex flex-col gap-1">
       <div className="flex items-start justify-end gap-2">
@@ -23,7 +24,15 @@ export function TermsField({ register, errorText, labels }: Props) {
           htmlFor="register-terms"
           className="text-foreground/60 flex-1 cursor-pointer text-end text-sm"
         >
-          {labels.termsText}
+          {labels.termsAgreePrefix}
+          <button
+            type="button"
+            onClick={() => onOpenTerms?.()}
+            className="text-primary focus-visible:outline-ring rounded font-medium underline-offset-2 hover:underline focus-visible:outline-2"
+          >
+            {labels.termsLinkText}
+          </button>
+          {labels.termsAgreeSuffix}
         </label>
         <div className="relative mt-0.5 shrink-0">
           <input

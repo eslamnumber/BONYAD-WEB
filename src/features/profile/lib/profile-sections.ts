@@ -1,18 +1,17 @@
+import {
+  Briefcase,
+  CreditCard,
+  Gift,
+  Headphones,
+  MessageCircle,
+  Star,
+  Trash2,
+  User,
+  Wallet,
+  Wrench,
+} from 'lucide-react';
 import type { ComponentType, SVGProps } from 'react';
 
-import {
-  CloseIcon,
-  DashboardJobOffersIcon,
-  DashboardPaymentsIcon,
-  DashboardProjectsIcon,
-  FeatureVerifiedIcon,
-  MessageCircleIcon,
-  PersonIcon,
-  SaudiRiyalIcon,
-  SendIcon,
-  TrustBadgeIcon,
-  TrustSupportIcon,
-} from '@/components/icons';
 import { ROUTES } from '@/config/routes';
 
 type IconComponent = ComponentType<SVGProps<SVGSVGElement>>;
@@ -31,53 +30,54 @@ export type ProfileLinkRow = {
 
 /**
  * Account hub navigation rows. Each links to a profile sub-screen (placeholders
- * for now). `technicianOnly` rows are filtered out for customers. Every icon is a
- * real Bonyad export from `src/components/icons` (rule 21 — no invented icons),
- * picked for the closest on-brand semantic: completed work → projects glyph,
- * money/contracts → the Saudi-Riyal mark, referral → send, delete → close.
+ * for now). `technicianOnly` rows are filtered out for customers. The Figma design
+ * is drawn with Lucide outline icons (its nodes are named `user` / `credit-card` /
+ * `headphones` / `gift` / `trash` …), so every row uses the matching `lucide-react`
+ * glyph — rule 15 (lucide is allowed for system glyphs whose default form matches
+ * the design). Rows the Figma doesn't show reuse on-theme Lucide icons for a
+ * consistent outline set across the panel.
  */
 export const ACCOUNT_ROWS: readonly ProfileLinkRow[] = [
-  { key: 'myInfo', Icon: PersonIcon, href: ROUTES.DASHBOARD_SETTINGS_PROFILE },
   {
     key: 'accountType',
-    Icon: FeatureVerifiedIcon,
+    Icon: User,
     href: ROUTES.DASHBOARD_SETTINGS_ACCOUNT_TYPE,
     technicianOnly: true,
   },
   {
     key: 'portfolio',
-    Icon: DashboardProjectsIcon,
+    Icon: Briefcase,
     href: ROUTES.DASHBOARD_SETTINGS_PORTFOLIO,
     technicianOnly: true,
   },
   {
     key: 'services',
-    Icon: DashboardJobOffersIcon,
+    Icon: Wrench,
     href: ROUTES.DASHBOARD_SETTINGS_SERVICES,
     technicianOnly: true,
     disabled: true,
   },
   {
     key: 'subscriptions',
-    Icon: TrustBadgeIcon,
+    Icon: Star,
     href: ROUTES.DASHBOARD_SETTINGS_SUBSCRIPTIONS,
     technicianOnly: true,
   },
-  { key: 'cards', Icon: DashboardPaymentsIcon, href: ROUTES.DASHBOARD_SETTINGS_CARDS },
-  { key: 'transactions', Icon: SaudiRiyalIcon, href: ROUTES.DASHBOARD_PAYMENTS },
+  { key: 'cards', Icon: Wallet, href: ROUTES.DASHBOARD_SETTINGS_CARDS },
+  { key: 'transactions', Icon: CreditCard, href: ROUTES.DASHBOARD_PAYMENTS },
 ];
 
 /** Help / extras rows, shown under the language + theme toggles. */
 export const HELP_ROWS: readonly ProfileLinkRow[] = [
-  { key: 'support', Icon: TrustSupportIcon, href: ROUTES.DASHBOARD_SETTINGS_SUPPORT },
-  { key: 'referral', Icon: SendIcon, href: ROUTES.DASHBOARD_SETTINGS_REFERRAL },
-  { key: 'feedback', Icon: MessageCircleIcon, href: ROUTES.DASHBOARD_SETTINGS_FEEDBACK },
+  { key: 'support', Icon: Headphones, href: ROUTES.DASHBOARD_SETTINGS_SUPPORT },
+  { key: 'referral', Icon: Gift, href: ROUTES.DASHBOARD_SETTINGS_REFERRAL },
+  { key: 'feedback', Icon: MessageCircle, href: ROUTES.DASHBOARD_SETTINGS_FEEDBACK },
 ];
 
 /** Danger-zone destructive navigation (logout is rendered separately as a button). */
 export const DELETE_ROW: ProfileLinkRow = {
   key: 'delete',
-  Icon: CloseIcon,
+  Icon: Trash2,
   href: ROUTES.DASHBOARD_SETTINGS_DELETE,
   tone: 'danger',
 };

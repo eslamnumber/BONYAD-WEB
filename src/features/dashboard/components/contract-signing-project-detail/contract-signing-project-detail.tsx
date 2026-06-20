@@ -6,6 +6,7 @@ import { useTranslation } from 'react-i18next';
 
 import { ChevronLeftIcon } from '@/components/icons';
 import { ROUTES } from '@/config/routes';
+import { useAuthStore } from '@/stores/auth-store';
 
 import { useProject } from '../../api/get-project';
 import { useProjectPhases } from '../../api/get-project-phases';
@@ -15,19 +16,23 @@ import { ContractPhasesCard } from './contract-phases-card';
 import { ContractProviderCard } from './contract-provider-card';
 import { ContractSentCard } from './contract-sent-card';
 import { ContractSummaryCard } from './contract-summary-card';
+import { TechnicianContractCard } from './technician-contract-card';
 
 type Props = { projectId: number };
 
 /**
- * Customer's CONTRACT_SIGNING view of a project (Figma "Dashboard-Contract sent to
- * email", node 1501:14660). The previously-deferred contract screen: a summary
- * header + the selected-provider card and "contract sent to email" panel on the
- * left, progress + phases on the right. Routed from {@link AssignedProjectDetail}
- * only for the customer (technicians keep the in-progress view). Client component;
- * data via TanStack Query (the proxy attaches the session token).
+ * CONTRACT_SIGNING view of a project (Figma "Dashboard-Contract sent to email", node
+ * 1501:14660), role-aware like RN's ContractSigningProjectScreen `isTechnician`
+ * branch: a summary header + the selected-provider card on the left, progress +
+ * phases on the right. The **customer** gets the "contract sent to email" panel
+ * (send/resend + "I've signed"); the **technician** gets a view + download card — the
+ * technician never initiates, both parties sign through the emailed link. Routed from
+ * {@link AssignedProjectDetail} for both roles. Client component; data via TanStack
+ * Query (the proxy attaches the session token).
  */
 export function ContractSigningProjectDetail({ projectId }: Props) {
   const { t } = useTranslation();
+  const isTechnician = (useAuthStore((s) => s.user?.role) ?? '').toUpperCase() === 'TECHNICIAN';
   const { data: project, isPending, isError } = useProject(projectId);
   const { data: phases } = useProjectPhases(projectId);
 
@@ -44,7 +49,14 @@ export function ContractSigningProjectDetail({ projectId }: Props) {
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
           <div className="flex w-full flex-col gap-6 lg:w-[400px] lg:shrink-0">
             <ContractProviderCard project={project} />
-            <ContractSentCard project={project} phases={phases ?? []} />
+            {isTechnician ? (
+              <TechnicianContractCard
+                projectId={projectId}
+                technicianId={project.assignedTechnicianId}
+              />
+            ) : (
+              <ContractSentCard project={project} phases={phases ?? []} />
+            )}
           </div>
           <div className="flex w-full flex-col gap-6 lg:min-w-0 lg:flex-1">
             <ProjectProgressCard phases={phases ?? []} />

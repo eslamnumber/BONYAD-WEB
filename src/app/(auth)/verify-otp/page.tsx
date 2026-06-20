@@ -17,12 +17,14 @@ export async function generateMetadata(): Promise<Metadata> {
 export default async function VerifyOtpRoutePage({
   searchParams,
 }: {
-  searchParams: Promise<{ phone?: string; source?: string; role?: string }>;
+  searchParams: Promise<{ phone?: string; source?: string; role?: string; termsId?: string }>;
 }) {
   const [locale, params] = await Promise.all([getServerLocale(), searchParams]);
   const { t } = getTranslations(locale);
   const phone = params.phone ?? '';
   const role = params.role === 'TECHNICIAN' ? 'TECHNICIAN' : 'USER';
+  const parsedTermsId = Number.parseInt(params.termsId ?? '', 10);
+  const termsId = Number.isFinite(parsedTermsId) && parsedTermsId > 0 ? parsedTermsId : undefined;
 
   const labels = {
     heading: t('auth.verifyOtp.heading'),
@@ -45,6 +47,7 @@ export default async function VerifyOtpRoutePage({
       labels={labels}
       phone={phone}
       accountRole={role}
+      termsId={termsId}
       locale={locale}
       headerLabels={getAuthHeaderLabels(t, locale)}
     />

@@ -34,23 +34,20 @@ afterEach(() => {
 });
 
 describe('AccountTypeScreen', () => {
-  it('shows the Individual state and opens the registration sheet when picking Company', () => {
+  it('shows the inline "Switch to company" form for an individual account', () => {
     h.profile = { id: 1, isCompany: false, nationalId: '1122334455' };
     renderWithProviders(<AccountTypeScreen />);
 
-    expect(screen.getByText('Individual account')).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Individual' })).toBeInTheDocument();
-
-    fireEvent.click(screen.getByRole('button', { name: 'Company' }));
-
-    // The sheet is open — switching has NOT fired yet (Wathq runs on submit).
-    expect(screen.getByText('Switch to company')).toBeInTheDocument();
+    expect(screen.getByRole('heading', { name: 'Switch to company' })).toBeInTheDocument();
     expect(screen.getByText('Company name')).toBeInTheDocument();
-    expect(screen.getByText('1122334455')).toBeInTheDocument();
+    expect(screen.getByText('Commercial registration (CR) number')).toBeInTheDocument();
+    expect(screen.getByText('National ID')).toBeInTheDocument();
+    // National ID is pre-filled from the profile but editable.
+    expect(screen.getByDisplayValue('1122334455')).toBeInTheDocument();
     expect(h.mutate).not.toHaveBeenCalled();
   });
 
-  it('shows the verified company strip for a company account', () => {
+  it('shows the verified company panel for a company account', () => {
     h.profile = {
       id: 1,
       isCompany: true,
@@ -63,28 +60,27 @@ describe('AccountTypeScreen', () => {
     expect(screen.getByText('مؤسسة العتيبي للمقاولات')).toBeInTheDocument();
     expect(screen.getByText('Wathq verified')).toBeInTheDocument();
     expect(screen.getByText('1010101010')).toBeInTheDocument();
+    expect(screen.queryByText('Switch to company')).not.toBeInTheDocument();
   });
 
-  it('switches to Individual immediately (no sheet) when picking Individual on a company account', () => {
+  it('switches a company account back to Individual', () => {
     h.profile = { id: 1, isCompany: true, companyName: 'X', crNumber: '1010101010' };
     renderWithProviders(<AccountTypeScreen />);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Individual' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Switch to individual account' }));
 
     expect(h.mutate).toHaveBeenCalledTimes(1);
     expect(h.mutate).toHaveBeenCalledWith({ mode: 'individual' }, expect.anything());
-    expect(screen.queryByText('Switch to company')).not.toBeInTheDocument();
   });
 
   it('submits the company registration with the Wathq verify payload', () => {
     h.profile = { id: 1, isCompany: false, nationalId: '1122334455' };
     renderWithProviders(<AccountTypeScreen />);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Company' }));
-    fireEvent.change(screen.getByPlaceholderText('Your registered company name'), {
+    fireEvent.change(screen.getByPlaceholderText('Enter company name'), {
       target: { value: 'مؤسسة البناء الحديث' },
     });
-    fireEvent.change(screen.getByPlaceholderText('10-digit CR number'), {
+    fireEvent.change(screen.getByPlaceholderText('Enter CR number'), {
       target: { value: '1010101010' },
     });
     fireEvent.click(screen.getByRole('button', { name: 'Verify & switch' }));
@@ -101,6 +97,21 @@ describe('AccountTypeScreen', () => {
     );
   });
 
+  it('keeps "Verify & switch" disabled until the CR number is 10 digits', () => {
+    h.profile = { id: 1, isCompany: false, nationalId: '1122334455' };
+    renderWithProviders(<AccountTypeScreen />);
+
+    fireEvent.change(screen.getByPlaceholderText('Enter company name'), {
+      target: { value: 'Acme' },
+    });
+    fireEvent.change(screen.getByPlaceholderText('Enter CR number'), {
+      target: { value: '101010' },
+    });
+
+    expect(screen.getByText('The CR number must be exactly 10 digits.')).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Verify & switch' })).toBeDisabled();
+  });
+
   // RTL rule 4 (inverted en→rtl map): the company-name field anchors to the same
   // physical edge as its end-aligned label, so it uses `text-end` and inherits the
   // document dir — NEVER `dir="auto"` (which would flip the edge per typed language).
@@ -108,8 +119,7 @@ describe('AccountTypeScreen', () => {
     h.profile = { id: 1, isCompany: false, nationalId: '1122334455' };
     renderWithProviders(<AccountTypeScreen />);
 
-    fireEvent.click(screen.getByRole('button', { name: 'Company' }));
-    const nameField = screen.getByPlaceholderText('Your registered company name');
+    const nameField = screen.getByPlaceholderText('Enter company name');
 
     expect(nameField).toHaveClass('text-end');
     expect(nameField).not.toHaveAttribute('dir');

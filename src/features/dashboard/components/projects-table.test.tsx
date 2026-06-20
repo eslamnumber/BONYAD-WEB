@@ -110,13 +110,18 @@ describe('ProjectsTable', () => {
     );
   });
 
-  it('keeps the contract-signing row card-only for a technician (no detail screen)', () => {
+  it('links the contract-signing row to its detail for a technician (role-aware detail screen)', () => {
     useAuthStore.setState({ user: { id: 1, role: 'TECHNICIAN' }, isAuthenticated: true });
     renderWithProviders(
       <ProjectsTable projects={[{ id: 185, title: 'Riyadh build', status: 'CONTRACT_SIGNING' }]} />,
     );
     expect(screen.getByText('Contract signing')).toBeInTheDocument();
-    expect(screen.queryByRole('link', { name: /details/i })).not.toBeInTheDocument();
+    // The technician now has a Details link → shared detail route, which routes them to
+    // their own (view + download) contract-signing screen.
+    expect(screen.getByRole('link', { name: /details/i })).toHaveAttribute(
+      'href',
+      '/dashboard/projects/185',
+    );
   });
 
   it('has column headers and no a11y violations', async () => {

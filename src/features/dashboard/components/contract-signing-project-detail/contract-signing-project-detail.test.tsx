@@ -99,6 +99,8 @@ describe('ContractSigningProjectDetail', () => {
     expect(await screen.findByText('owner@example.com')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'I have signed' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Resend' })).toBeInTheDocument();
+    // Download pre-generates the PDF, so its label flips from "Preparing…" once ready.
+    expect(await screen.findByRole('button', { name: 'Download contract (PDF)' })).toBeEnabled();
 
     // Progress card.
     expect(screen.getByText('Project progress')).toBeInTheDocument();
@@ -111,7 +113,7 @@ describe('ContractSigningProjectDetail', () => {
     expect(screen.getByText('Site prep and clearing.')).toBeInTheDocument();
   });
 
-  it('enables Resend once the technician profile + customer email are loaded', async () => {
+  it('enables Resend once the phases are loaded (emails are auto-fetched backend-side)', async () => {
     useAuthStore.setState({
       user: { id: 100, role: 'USER', email: 'owner@example.com' },
       isAuthenticated: true,
@@ -120,9 +122,35 @@ describe('ContractSigningProjectDetail', () => {
     renderWithProviders(<ContractSigningProjectDetail projectId={PROJECT_ID} />);
 
     const resend = await screen.findByRole('button', { name: 'Resend' });
-    // Wait for the technician profile (carries the email needed for /signatures).
-    await screen.findByText('Ahmed Al-Qahtani');
+    // /signatures only needs projectId + phaseIds + language — no technician email lookup.
+    await screen.findByText('Phase 1: Foundations');
     expect(resend).toBeEnabled();
+  });
+
+  it('shows the technician a view + download card — no send / resend / "I have signed"', async () => {
+    useAuthStore.setState({
+      user: { id: 9, role: 'TECHNICIAN', email: 'tech@example.com' },
+      isAuthenticated: true,
+    });
+    server.use(
+      http.get('*/projects/:id', () => HttpResponse.json({ project: PROJECT, phases: PHASES })),
+      http.get('*/phases/project/:projectId', () => HttpResponse.json(PHASES)),
+      http.get('*/contracts/project/:projectId', () =>
+        HttpResponse.json({ ...CONTRACT, documentUrl: 'https://cdn.example.com/c/501.pdf' }),
+      ),
+      http.get('*/users/:id/profile', () => HttpResponse.json(TECHNICIAN)),
+    );
+    renderWithProviders(<ContractSigningProjectDetail projectId={PROJECT_ID} />);
+
+    // Technician's view+download card (RN's isTechnician branch).
+    expect(await screen.findByText('Contract ready for signature')).toBeInTheDocument();
+    // Download pre-generates the PDF (POST /contracts/test/generate-pdf) then opens it.
+    expect(await screen.findByRole('button', { name: 'Download contract (PDF)' })).toBeEnabled();
+
+    // The technician cannot initiate / resend / acknowledge — both parties sign by email.
+    expect(screen.queryByRole('button', { name: 'Resend' })).not.toBeInTheDocument();
+    expect(screen.queryByRole('button', { name: 'I have signed' })).not.toBeInTheDocument();
+    expect(screen.queryByText('The contract was sent to your email')).not.toBeInTheDocument();
   });
 
   it('has no a11y violations', async () => {

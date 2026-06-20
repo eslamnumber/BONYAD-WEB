@@ -56,16 +56,18 @@ function routeDetail(status: string | undefined, isTechnician: boolean, projectI
   const variant = statusVariant(status);
   const isApproved = isApprovedPhase(status);
 
+  // CONTRACT_SIGNING is role-aware inside ContractSigningProjectDetail (RN's
+  // `isTechnician` branch): the customer sends / resends the contract, the technician
+  // views + downloads it. Both roles route here — never to the in-progress screen.
+  if (variant === 'contractSigning') return <ContractSigningProjectDetail projectId={projectId} />;
+
   // Customer post-acceptance, one screen per backend status: APPROVED / PHASE_PLANNING
-  // = the review-&-approve screen (provider + signing-method picker); after approve-all
-  // the project moves to CONTRACT_SIGNING = the contract-sent screen; once execution
+  // = the review-&-approve screen (provider + signing-method picker); once execution
   // starts (IN_PROGRESS) the customer gets their own phase-approval + per-phase payment
   // screen (CustomerInProgressDetail). Technicians fall through to their own approved /
   // in-progress views below.
   if (!isTechnician) {
     if (isApproved) return <CustomerApprovedDetail projectId={projectId} />;
-    if (variant === 'contractSigning')
-      return <ContractSigningProjectDetail projectId={projectId} />;
     if (variant === 'inProgress') return <CustomerInProgressDetail projectId={projectId} />;
   }
 

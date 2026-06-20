@@ -8,11 +8,10 @@ import { useAuthStore } from '@/stores/auth-store';
 
 import { useMyProfile } from '../api';
 
-import { AccountTypeAbout, AccountTypeCard } from './account-type-card';
-import { type AccountMode } from './account-type-toggle';
-import { CompanyRegistrationModal } from './company-registration-modal';
+import { AccountTypeForm } from './account-type-form';
+import { AccountTypeVerified } from './account-type-verified';
 import { ProfileAmbientGlow, ProfileBackLink } from './profile-chrome';
-import { useAccountTypeSwitch } from './use-account-type-switch';
+import { type AccountMode, useAccountTypeSwitch } from './use-account-type-switch';
 
 /**
  * Inline feedback banner — success (green) or error (red). The message is
@@ -24,14 +23,14 @@ function StatusBanner({ tone, children }: { tone: 'success' | 'error'; children:
     <div
       dir="auto"
       role={tone === 'error' ? 'alert' : 'status'}
-      className={`rounded-xl px-4 py-3 text-start text-sm font-medium ${tone === 'success' ? 'bg-success/10 text-success' : 'bg-destructive/10 text-destructive'}`}
+      className={`w-full rounded-xl px-4 py-3 text-start text-sm font-medium ${tone === 'success' ? 'bg-success/10 text-success' : 'bg-destructive/10 text-destructive'}`}
     >
       {children}
     </div>
   );
 }
 
-/** Success banner after a switch, or the individual-flow error — at most one shows. */
+/** Success banner after a switch, or the verify/update error — at most one shows. */
 function SwitchFeedback({ switchedTo, error }: { switchedTo: AccountMode | null; error?: string }) {
   const { t } = useTranslation();
   if (switchedTo) {
@@ -45,8 +44,10 @@ function SwitchFeedback({ switchedTo, error }: { switchedTo: AccountMode | null;
 
 /**
  * Account-type screen (`/dashboard/settings/account-type`) — the iOS
- * `CompanyModeToggleView`. Switch Individual ↔ Company: Company opens the Wathq
- * registration sheet (verify → update); Individual switches immediately. Reads the
+ * `CompanyModeToggleView`, redesigned to the Figma "Switch to company" card
+ * (node 1682:8239): a single white card with a back link, a title, and the inline
+ * registration form. An Individual account sees the form (Wathq verify → switch);
+ * a verified Company account sees its details + a switch-back action. Reads the
  * live profile so the card reflects the new type once the mutation settles.
  */
 export function AccountTypeScreen() {
@@ -59,45 +60,36 @@ export function AccountTypeScreen() {
     <div className="relative isolate flex w-full flex-1 flex-col px-4 py-8 sm:px-6">
       <ProfileAmbientGlow />
 
-      {/* One column at every width (requested), centered (mx-auto) and capped to a
-          readable width so the form sits in the middle of the content area and never
-          stretches on wide monitors (responsive matrix line 22). Rule 4a settings
-          exception: settings sub-screens are centered, not sidebar-flush. */}
-      <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
-        <ProfileBackLink href={ROUTES.DASHBOARD_SETTINGS} label={t('profile.accountType.back')} />
+      {/* Centered, readable-width card so the form sits in the middle of the content
+          area and never stretches on wide monitors (rule 4a settings exception). */}
+      <div className="mx-auto w-full max-w-xl">
+        <div className="bg-card border-border relative isolate flex flex-col items-end gap-8 overflow-hidden rounded-2xl border p-6 shadow-sm sm:gap-10 sm:p-9">
+          <ProfileBackLink href={ROUTES.DASHBOARD_SETTINGS} label={t('profile.accountType.back')} />
 
-        <header>
-          <h1 className="text-foreground text-end text-2xl font-semibold tracking-tight sm:text-3xl">
-            {t('profile.accountType.title')}
-          </h1>
-          <p className="text-muted-foreground mt-1.5 text-end text-sm">
-            {t('profile.accountType.subtitle')}
-          </p>
-        </header>
+          <header className="w-full">
+            <h1 className="text-foreground text-end text-2xl font-medium tracking-tight">
+              {t(sw.isCompany ? 'profile.accountType.title' : 'profile.accountType.switchTitle')}
+            </h1>
+          </header>
 
-        <SwitchFeedback switchedTo={sw.switchedTo} error={sw.bannerError} />
+          <SwitchFeedback switchedTo={sw.switchedTo} error={sw.bannerError} />
 
-        {/* Card (the control) leads, the About panel follows beneath it. */}
-        <div className="flex flex-col gap-5">
-          <AccountTypeCard
-            isCompany={sw.isCompany}
-            companyName={profile?.companyName}
-            crNumber={profile?.crNumber}
-            pending={sw.isPending}
-            onSelect={sw.select}
-          />
-          <AccountTypeAbout />
+          {sw.isCompany ? (
+            <AccountTypeVerified
+              companyName={profile?.companyName}
+              crNumber={profile?.crNumber}
+              pending={sw.isPending}
+              onSwitchToIndividual={sw.switchToIndividual}
+            />
+          ) : (
+            <AccountTypeForm
+              defaultNationalId={profile?.nationalId}
+              pending={sw.isPending}
+              onSubmit={sw.submitCompany}
+            />
+          )}
         </div>
       </div>
-
-      <CompanyRegistrationModal
-        open={sw.modalOpen}
-        onClose={sw.closeModal}
-        nationalId={profile?.nationalId}
-        pending={sw.isPending}
-        errorMessage={sw.modalError}
-        onSubmit={sw.submitCompany}
-      />
     </div>
   );
 }

@@ -1,3 +1,5 @@
+import { addProjectImages } from '../add-project-images';
+
 import { PUBLISH_TRIGGER } from './ai-constants';
 import { createPhasesFromSow } from './create-phase';
 import { createProjectFromAi, projectIdOf } from './create-project-from-ai';
@@ -5,7 +7,6 @@ import { fetchServices, matchService } from './match-service';
 import { saveAiDraft } from './save-ai-draft';
 import { sendWizardMessage } from './send-wizard-message';
 import type { SowDocument } from './sow-types';
-import { uploadAttachments } from './upload-attachment';
 
 export type PublishErrorKind = 'no-service' | 'create-failed';
 
@@ -65,9 +66,13 @@ export async function runPublish(input: PublishInput): Promise<PublishResult> {
   }
   if (!projectId) throw new PublishFailure('create-failed');
 
-  // 5d–5f — best-effort, non-blocking.
+  // 5d–5f — best-effort, non-blocking. Photos are attached via the owner-edit PUT
+  // (addProjectImages) so they land in the project's files[] exactly like manual
+  // creation's images — a failed upload never blocks the published project.
   const phasesCreated = await createPhasesFromSow(projectId, input.sow);
-  const photosUploaded = input.photos.length ? await uploadAttachments(projectId, input.photos) : 0;
+  const photosUploaded = input.photos.length
+    ? await addProjectImages(projectId, input.photos).catch(() => 0)
+    : 0;
   await saveAiDraft(input.sow, input.conversationId);
 
   return { projectId, phasesCreated, photosUploaded };

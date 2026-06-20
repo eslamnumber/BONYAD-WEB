@@ -29,7 +29,7 @@ function MobileNavDrawer({ variant, onClose }: DrawerProps) {
           <SidebarNav variant={variant} onNavigate={onClose} />
         </div>
         <div className="border-header-border flex justify-end border-t px-6 py-4">
-          <SidebarProfile variant={variant} />
+          <SidebarProfile />
         </div>
       </div>
     </>

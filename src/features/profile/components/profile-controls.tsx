@@ -1,10 +1,10 @@
 'use client';
 
+import { Globe, LogOut, Moon } from 'lucide-react';
 import { useTheme } from 'next-themes';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { SidebarDarkModeIcon, SidebarLanguageIcon, SidebarLogoutIcon } from '@/components/icons';
 import { LanguageToggle } from '@/components/layout/language-toggle';
 import { LogoutConfirmModal } from '@/features/auth';
 import { switchTheme } from '@/lib/theme-switch';
@@ -47,10 +47,9 @@ export function DarkModeRow() {
   const isDark = resolvedTheme === 'dark';
   return (
     <ProfileRowShell
-      Icon={SidebarDarkModeIcon}
-      title={t('profile.rows.darkMode.title')}
-      subtitle={isDark ? t('profile.rows.darkMode.on') : t('profile.rows.darkMode.off')}
-      trailing={
+      Icon={Moon}
+      label={t('profile.rows.darkMode.title')}
+      control={
         <Switch
           checked={isDark}
           label={t('profile.rows.darkMode.title')}
@@ -73,10 +72,9 @@ export function LanguageRow() {
 
   return (
     <ProfileRowShell
-      Icon={SidebarLanguageIcon}
-      title={t('profile.rows.language.title')}
-      subtitle={t('profile.rows.language.subtitle')}
-      trailing={
+      Icon={Globe}
+      label={t('profile.rows.language.title')}
+      control={
         <LanguageToggle
           current={current}
           ariaLabel={t('language.ariaLabel')}
@@ -96,7 +94,7 @@ export function LogoutRow() {
   return (
     <>
       <button type="button" onClick={() => setConfirmOpen(true)} className={ROW_BTN}>
-        <ProfileRowShell Icon={SidebarLogoutIcon} title={t('dashboard.signOut')} />
+        <ProfileRowShell Icon={LogOut} label={t('dashboard.signOut')} />
       </button>
       <LogoutConfirmModal open={confirmOpen} onClose={() => setConfirmOpen(false)} />
     </>

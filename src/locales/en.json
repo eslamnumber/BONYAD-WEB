@@ -931,6 +931,15 @@
         "resend": "Resend",
         "resending": "Resending…",
         "resent": "Contract resent"
+      },
+      "download": "Download contract (PDF)",
+      "downloadPreparing": "Preparing PDF…",
+      "downloadError": "Couldn't prepare the PDF. Please try again.",
+      "downloadUnavailable": "Contract PDF not ready yet",
+      "technician": {
+        "title": "Contract ready for signature",
+        "description": "Review and download the service agreement. You will receive an email with a link to sign it.",
+        "waiting": "Waiting for both parties to sign via the emailed link."
       }
     },
     "customerApproved": {
@@ -1105,6 +1114,7 @@
         "success": "Your profile has been updated.",
         "errors": {
           "email": "Enter a valid email address.",
+          "emailTaken": "This email is already in use by another account.",
           "nationalId": "The national ID must be exactly 10 digits."
         }
       },
@@ -1124,20 +1134,24 @@
     },
     "accountType": {
       "title": "Account type",
-      "subtitle": "Switch between an individual and a verified company account",
-      "back": "Profile",
-      "currentLabel": "Current account type",
+      "switchTitle": "Switch to company",
+      "back": "Back",
       "individual": "Individual",
       "company": "Company",
-      "individualAccount": "Individual account",
-      "companyAccount": "Company account",
-      "verified": "Wathq verified",
-      "crLabel": "CR No.",
-      "about": {
-        "title": "About company accounts",
-        "body": "Switching verifies your commercial registration through Wathq using your national ID, then unlocks bidding and signing contracts under your company name.",
-        "point1": "Your national ID must be an authorized signatory on the CR.",
-        "point2": "You can switch back to an individual account anytime."
+      "companyName": "Company name",
+      "companyNamePlaceholder": "Enter company name",
+      "crNumber": "Commercial registration (CR) number",
+      "crNumberPlaceholder": "Enter CR number",
+      "crInvalid": "The CR number must be exactly 10 digits.",
+      "nationalId": "National ID",
+      "nationalIdPlaceholder": "Enter national ID",
+      "submit": "Verify & switch",
+      "verifying": "Verifying…",
+      "verified": {
+        "label": "Company account",
+        "badge": "Wathq verified",
+        "crLabel": "CR No.",
+        "switchBack": "Switch to individual account"
       },
       "success": {
         "individual": "Switched to an individual account.",
@@ -1149,21 +1163,6 @@
         "notAuthorized": "Your national ID isn't an authorized signatory for this registration.",
         "updateFailed": "We couldn't update your account. Try again.",
         "generic": "Something went wrong. Try again."
-      },
-      "modal": {
-        "title": "Switch to company",
-        "close": "Close",
-        "cancel": "Cancel",
-        "submit": "Verify & switch",
-        "verifying": "Verifying…",
-        "info": "We verify your company through Wathq using your national ID and commercial registration. Your national ID must be an authorized signatory on the CR.",
-        "nationalId": "National ID",
-        "nationalIdMissing": "Add your national ID in Edit profile before switching to a company account.",
-        "companyName": "Company name",
-        "companyNamePlaceholder": "Your registered company name",
-        "crNumber": "Commercial registration (CR) number",
-        "crNumberPlaceholder": "10-digit CR number",
-        "crInvalid": "The CR number must be exactly 10 digits."
       }
     },
     "identity": {
@@ -1172,6 +1171,7 @@
       "edit": "Edit profile",
       "photo": {
         "change": "Change profile photo",
+        "editLink": "Edit photo",
         "updated": "Your profile photo was updated.",
         "errorType": "Please choose an image file.",
         "errorSize": "The image must be under 5 MB.",
@@ -1179,8 +1179,9 @@
       }
     },
     "sections": {
+      "personalInfo": "Personal information",
       "account": "Account",
-      "preferences": "Settings",
+      "preferences": "Preferences & Support",
       "danger": "Danger zone"
     },
     "rows": {
@@ -1236,6 +1237,10 @@
       "subscriptions": {
         "title": "My subscriptions",
         "subtitle": "Manage your subscriptions"
+      },
+      "verification": {
+        "title": "Verification",
+        "active": "Active"
       }
     }
   },
@@ -1553,7 +1558,9 @@
       "confirmPasswordPlaceholder": "Enter password",
       "confirmPasswordAriaLabel": "Re-enter your password",
       "togglePasswordVisibility": "Toggle password visibility",
-      "termsText": "Yes, I understand and agree to Bonyad's Terms of Service, including the User Agreement and Privacy Policy.",
+      "termsAgreePrefix": "Yes, I understand and agree to Bonyad's ",
+      "termsLinkText": "Terms & Conditions",
+      "termsAgreeSuffix": ", including the User Agreement and Privacy Policy.",
       "termsAriaLabel": "Accept terms and conditions",
       "submitButton": "Create account",
       "hasAccount": "Already have an account?",
@@ -1561,6 +1568,18 @@
       "roleCustomer": "User",
       "roleProfessional": "Service Provider",
       "roleToggleAriaLabel": "Select your account type"
+    },
+    "terms": {
+      "title": "Terms & Conditions",
+      "close": "Close",
+      "gotIt": "Got it",
+      "documentTitle": "Terms & Conditions document",
+      "version": "Version {{version}}",
+      "errorTitle": "Couldn't load the Terms",
+      "errorBody": "Something went wrong loading the document. Check your connection and try again.",
+      "retry": "Try again",
+      "unavailableTitle": "Terms aren't available yet",
+      "unavailable": "The Terms & Conditions can't be shown right now. You can still create your account — they'll be shared with you before you continue."
     },
     "errors": {
       "phoneRequired": "Mobile number is required",
@@ -2259,9 +2278,11 @@
     }
   },
   "referral": {
-    "title": "Refer & earn",
+    "title": "Invite & earn",
+    "back": "Back",
+    "subtitle": "Invite your friends — when they finish their first project, you both earn rewards.",
     "hero": {
-      "balanceLabel": "Reward wallet",
+      "balanceLabel": "Wallet balance",
       "subtitle": "Invite friends to Bonyad. When they complete their first project, you earn SAR credit.",
       "nextTier": "Invite {{remaining}} more to unlock your next {{reward}} SAR reward.",
       "tierComplete": "You've unlocked every reward tier — keep inviting to keep earning."
@@ -2274,9 +2295,9 @@
     "invite": {
       "title": "Invite a friend",
       "subtitle": "Enter a Saudi mobile number and we'll send them an SMS invitation.",
-      "label": "Friend's mobile number",
-      "placeholder": "5XXXXXXXX",
-      "send": "Send invite",
+      "label": "Invite by phone number",
+      "placeholder": "05XXXXXXXX",
+      "send": "Send",
       "sending": "Sending…",
       "success": "Invitation sent to {{phone}}.",
       "errors": {

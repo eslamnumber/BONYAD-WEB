@@ -115,6 +115,33 @@ export const API_ENDPOINTS = {
     REFRESH_TOKEN: '/auth/refresh-token',
     VALIDATE_TOKEN: '/auth/validate-token',
   },
+  /**
+   * Terms & Conditions (signup legal agreement). Privacy stipulations are folded
+   * into the same document body — there is no separate Privacy Policy endpoint. The
+   * GETs are **public** (the pre-login signup screen renders the document); the POSTs
+   * are **Bearer-auth** (recording the agreement needs the post-OTP token). Both AR
+   * and EN bodies ship in every GET — the client picks by language. Mirrors the iOS
+   * `TermsService` (bonayd-ios/.../App/Services/TermsService.swift), which targets
+   * `/api/terms/*` and `/api/users/terms/approve`; on web the base URL already carries
+   * `/api`, so the constants stay un-prefixed like every other endpoint.
+   */
+  TERMS: {
+    /** GET (public) → the active USER terms document. Empty/404 ⇒ "no active terms". */
+    USER: '/terms/user',
+    /** GET (public) → the active TECHNICIAN terms document. Empty/404 ⇒ "no active terms". */
+    TECHNICIAN: '/terms/technician',
+    /**
+     * POST (Bearer) `{ termsId }` → record the agreement pinned to a specific version.
+     * The current signup path (post-OTP). 2xx ⇒ success even if the body omits `success`.
+     */
+    APPROVE: '/users/terms/approve',
+    /**
+     * POST (Bearer) `{ userRole }` → legacy, version-agnostic agreement used by the
+     * standalone Terms view (e.g. opened from profile). New code uses APPROVE. Kept
+     * here for parity with the iOS contract; not wired on web yet (no consumer).
+     */
+    AGREE: '/terms/agree',
+  },
   SUBSCRIPTIONS: {
     CATEGORIES: '/subscriptions/categories',
   },
@@ -283,15 +310,25 @@ export const API_ENDPOINTS = {
      * show when the contract was sent. Mirrors RN `CONTRACTS.BY_PROJECT`.
      */
     BY_PROJECT: '/contracts/project/:projectId',
+    /**
+     * Generate / refresh the contract PDF and return its URL — **form-urlencoded** body
+     * (`projectId, technicianId, language, returnPdf=false`) → `{ downloadUrl | pdfUrl }`.
+     * The "Download contract (PDF)" action on the CONTRACT_SIGNING screen calls this,
+     * then opens the returned URL (relative URLs resolve against the public site origin).
+     * Backend requires the project to be in CONTRACT_SIGNING. Mirrors RN
+     * `CONTRACTS.GENERATE_PDF` (website-bonyad/src/components/dashboard/ContractPDFViewer.tsx:116).
+     */
+    GENERATE_PDF: '/contracts/test/generate-pdf',
   },
   SIGNATURES: {
     /**
      * Create / (re)send the e-sign request — **form-urlencoded** body
-     * (`projectId, technicianId, userEmail, technicianEmail, phaseIds(csv), language`).
-     * Backend requires the project to be in CONTRACT_SIGNING. Mirrors RN
-     * `SIGNATURES.CREATE` / `CONTRACTS.CREATE` (both `/signatures`). The deferred
-     * Nafath/Absher variants (`/signatures/signature-nafath`, `…-absher`) ship with
-     * the frame-1 method picker.
+     * (`projectId, phaseIds` as repeated fields, `language`, optional `contractTerms`).
+     * The backend auto-fetches both parties' emails from their profiles. Requires the
+     * project to be in CONTRACT_SIGNING. Mirrors RN `createEmailSignatureRequest`
+     * (website-bonyad/src/services/SignatureService.ts:143). The deferred Nafath/Absher
+     * variants (`/signatures/signature-nafath`, `…-absher`) add national-id fields and
+     * ship with the frame-1 method picker.
      */
     CREATE: '/signatures',
   },

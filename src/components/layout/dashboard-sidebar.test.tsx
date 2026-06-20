@@ -38,14 +38,14 @@ describe('DashboardSidebar role-awareness', () => {
     expect(screen.getByText('Customer')).toBeInTheDocument();
   });
 
-  it('renders the technician nav with a static (non-menu) profile for other roles', () => {
+  it('renders the technician nav with the account menu for other roles', () => {
     setUser('TECHNICIAN', 'Sara');
     renderWithProviders(<DashboardSidebar />);
 
     expect(screen.getByRole('link', { name: 'Job offers' })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: 'Payments' })).toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'Offers' })).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Account menu' })).not.toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Account menu' })).toBeInTheDocument();
     expect(screen.getByText('Service provider')).toBeInTheDocument();
   });
 

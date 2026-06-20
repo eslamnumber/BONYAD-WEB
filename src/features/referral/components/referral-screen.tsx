@@ -1,8 +1,11 @@
 'use client';
 
+import { ChevronLeft } from 'lucide-react';
+import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
 import { Button } from '@/components/ui';
+import { ROUTES } from '@/config/routes';
 import type { Locale } from '@/types/locale';
 
 import { useReferralStats } from '../api/get-referral-stats';
@@ -10,20 +13,17 @@ import { useReferrals } from '../api/get-referrals';
 import { useReferralWallet } from '../api/get-wallet';
 import { resolveBalance } from '../lib/referral-format';
 import { hasReferralActivity } from '../lib/referral-groups';
-import type { ReferralList as ReferralListData, ReferralStats } from '../types/referral';
+import type { ReferralList as ReferralListData } from '../types/referral';
 
-import { ReferralEmpty } from './referral-empty';
 import { ReferralInviteForm } from './referral-invite-form';
 import { ReferralList } from './referral-list';
 import { ReferralSkeleton } from './referral-skeleton';
-import { ReferralStatsRow } from './referral-stats-row';
 import { ReferralWalletHero } from './referral-wallet-hero';
 
 /**
  * Signature ambient glow — one soft purple color-ellipse (the reward accent) behind
- * the hero, for on-brand depth instead of a flat page. Inert, behind content (`-z-10`
- * in the screen's isolate), desktop-gated (never a source of horizontal scroll on
- * phones), dark-mode-safe (the token has a `.dark` pair). Centred → no mirror flip.
+ * the hero, for on-brand depth. Inert, behind content (`-z-10`), desktop-gated (never
+ * a source of horizontal scroll on phones), dark-safe. Centred → no mirror flip.
  */
 function AmbientGlow() {
   return (
@@ -33,6 +33,34 @@ function AmbientGlow() {
     >
       <div className="bg-deco-blob-purple mt-[-160px] h-[420px] w-[560px] rounded-full opacity-20 blur-[120px]" />
     </div>
+  );
+}
+
+/** Back link to the profile hub — chevron points to the inline-start under conventional dir. */
+function BackLink() {
+  const { t } = useTranslation();
+  return (
+    <nav className="flex">
+      <Link
+        href={ROUTES.DASHBOARD_SETTINGS}
+        className="text-brand-dark-navy focus-visible:outline-ring inline-flex items-center gap-1.5 rounded text-sm font-semibold transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 motion-safe:hover:opacity-80"
+      >
+        {t('referral.back')}
+        <ChevronLeft className="size-3.5 shrink-0 rtl:-scale-x-100" aria-hidden />
+      </Link>
+    </nav>
+  );
+}
+
+function Header() {
+  const { t } = useTranslation();
+  return (
+    <header className="flex flex-col gap-2">
+      <h1 className="text-foreground text-2xl font-bold">{t('referral.title')}</h1>
+      <p className="text-muted-foreground text-sm leading-6" dir="auto">
+        {t('referral.subtitle')}
+      </p>
+    </header>
   );
 }
 
@@ -51,15 +79,9 @@ function ErrorState({ onRetry }: { onRetry: () => void }) {
   );
 }
 
-function ReferralHeader() {
-  const { t } = useTranslation();
-  return <h1 className="text-foreground text-2xl font-bold">{t('referral.title')}</h1>;
-}
-
 type ReferralScreenData = {
   isPending: boolean;
   isError: boolean;
-  stats: ReferralStats;
   list: ReferralListData | undefined;
   balance: number;
   hasActivity: boolean;
@@ -74,7 +96,6 @@ function useReferralScreenData(): ReferralScreenData {
   return {
     isPending: stats.isPending || referrals.isPending,
     isError: stats.isError || referrals.isError,
-    stats: stats.data ?? {},
     list: referrals.data,
     balance: resolveBalance(wallet.data, stats.data),
     hasActivity: hasReferralActivity(referrals.data),
@@ -86,46 +107,40 @@ function useReferralScreenData(): ReferralScreenData {
   };
 }
 
-/** The settled (loaded, no error) body: hero + funnel + invite form + list/empty. */
+/** The settled body: hero + invite field + the grouped list once there's activity. */
 function ReferralBody({ data, locale }: { data: ReferralScreenData; locale: Locale }) {
   return (
     <>
-      <ReferralWalletHero balance={data.balance} stats={data.stats} locale={locale} />
-      <ReferralStatsRow stats={data.stats} />
+      <ReferralWalletHero balance={data.balance} locale={locale} />
       <ReferralInviteForm />
-      {data.hasActivity ? <ReferralList list={data.list} locale={locale} /> : <ReferralEmpty />}
+      {data.hasActivity ? <ReferralList list={data.list} locale={locale} /> : null}
     </>
   );
 }
 
 /**
- * Refer & earn (`/dashboard/settings/referral`) — both roles. Reads the reward wallet
- * (GET /users/me/wallet), funnel stats (…/referrals/stats) and the invitations list
- * (…/referrals), then renders one of: loading skeleton, error+retry, or the wallet
- * hero + funnel + invite form + grouped list (empty state when there's no activity
- * yet). Mirrors the iOS `ReferralView` flow; the contacts picker has no web analogue,
- * so the SMS-by-phone invite is the single invite path. Client island — the `(app)`
- * layout supplies the sidebar + auth gate.
+ * Refer & earn (`/dashboard/settings/referral`) — both roles, rebuilt to match
+ * Figma 1691:2642: back link, header + subtitle, the purple reward-wallet hero and
+ * the inline-send invite field, with the grouped invitations list appended once
+ * there's activity. Reads the wallet, funnel stats (balance fallback) and
+ * invitations list. This screen uses the NATURAL direction (en→ltr / ar→rtl) via a
+ * scoped `dir`, not the project's inverted mapping — every logical utility inside
+ * re-resolves accordingly.
  */
 export function ReferralScreen() {
   const { i18n } = useTranslation();
   const locale: Locale = i18n.language?.startsWith('ar') ? 'ar' : 'en';
   const data = useReferralScreenData();
-
-  // Per-screen direction override (requested): this screen reads NATURALLY — English
-  // LTR, Arabic RTL — instead of the project's inverted `LOCALE_DIRECTION` mapping
-  // (en→rtl / ar→ltr, docs/i18n-and-rtl.md). Scoping `dir` to this root re-resolves
-  // every logical utility + `rtl:`/`ltr:` variant inside this subtree only; the rest
-  // of the app keeps the documented inverted mapping untouched.
   const dir = locale === 'ar' ? 'rtl' : 'ltr';
 
   return (
     <div
       dir={dir}
-      className="relative isolate mx-auto flex w-full max-w-3xl flex-1 flex-col gap-6 px-4 py-8 sm:px-6 lg:gap-8"
+      className="relative isolate mx-auto flex w-full max-w-2xl flex-1 flex-col gap-6 px-4 py-8 sm:px-6"
     >
       <AmbientGlow />
-      <ReferralHeader />
+      <BackLink />
+      <Header />
       {data.isPending ? <ReferralSkeleton /> : null}
       {data.isError ? <ErrorState onRetry={data.retry} /> : null}
       {!data.isPending && !data.isError ? <ReferralBody data={data} locale={locale} /> : null}

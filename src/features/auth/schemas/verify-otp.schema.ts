@@ -13,6 +13,8 @@ export const verifyOtpRequestSchema = z.object({
   phoneNumber: z.string(),
   otpCode: z.string(),
   role: z.enum(['USER', 'TECHNICIAN']),
+  /** Terms version agreed on the signup screen; threaded to the server-side approve. */
+  termsId: z.number().int().positive().optional(),
 });
 
 export const resendOtpRequestSchema = z.object({

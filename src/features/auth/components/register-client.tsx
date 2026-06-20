@@ -1,8 +1,14 @@
 'use client';
 
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { type Locale } from '@/types/locale';
+
+import { useRegisterTerms } from '../hooks/use-register-terms';
 
 import { type RegisterFormLabels, RegisterForm } from './register-form';
+import { TermsModal } from './terms-modal';
 
 type Role = 'USER' | 'TECHNICIAN';
 
@@ -56,12 +62,26 @@ function RoleToggle({
 }
 
 export function RegisterClient({ labels }: { labels: RegisterClientLabels }) {
+  const { i18n } = useTranslation();
+  const locale: Locale = i18n.language?.startsWith('ar') ? 'ar' : 'en';
   const [role, setRole] = useState<Role>('TECHNICIAN');
+  const terms = useRegisterTerms(role);
 
   return (
     <div className="flex flex-col gap-6">
       <RoleToggle role={role} onRoleChange={setRole} labels={labels} />
-      <RegisterForm labels={labels} userRole={role} />
+      <RegisterForm
+        labels={labels}
+        userRole={role}
+        termsId={terms.termsId}
+        onOpenTerms={terms.openTerms}
+      />
+      <TermsModal
+        open={terms.isOpen}
+        onClose={terms.closeTerms}
+        locale={locale}
+        query={terms.query}
+      />
     </div>
   );
 }

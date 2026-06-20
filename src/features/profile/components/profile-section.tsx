@@ -1,114 +1,109 @@
+import { ChevronLeft } from 'lucide-react';
 import Link from 'next/link';
 import { type ComponentType, type ReactNode, type SVGProps } from 'react';
-
-import { ChevronLeftIcon } from '@/components/icons';
 
 type IconComponent = ComponentType<SVGProps<SVGSVGElement>>;
 type Tone = 'default' | 'danger';
 
-const CHIP: Record<Tone, string> = {
-  default: 'bg-primary/10 text-primary',
-  danger: 'bg-destructive/10 text-destructive',
+const TEXT_TONE: Record<Tone, string> = {
+  default: 'text-foreground',
+  danger: 'text-destructive',
 };
 
-/** Labelled card grouping a set of rows (account / preferences / danger zone). */
+/**
+ * A titled group — an optional section heading + a single rounded card that
+ * divides its rows. Mirrors the Figma "Section Header → Card" structure; the
+ * danger group omits the heading. The first group on the page passes `as="h1"`.
+ */
 export function ProfileSection({
   label,
-  tone = 'default',
-  className,
+  as: Heading = 'h2',
   children,
 }: {
-  label: string;
-  tone?: Tone;
-  className?: string;
+  label?: string;
+  as?: 'h1' | 'h2';
   children: ReactNode;
 }) {
   return (
-    <section className={className}>
-      <h2
-        className={`mb-2.5 px-1 text-end text-xs font-medium tracking-wide ${tone === 'danger' ? 'text-destructive' : 'text-muted-foreground'}`}
-      >
-        {label}
-      </h2>
-      <div
-        className={`bg-card divide-border divide-y rounded-2xl border shadow-sm ${tone === 'danger' ? 'border-destructive/40' : 'border-border'}`}
-      >
+    <section>
+      {label ? (
+        <Heading className="text-foreground mb-3 px-1 text-end text-lg font-semibold tracking-tight">
+          {label}
+        </Heading>
+      ) : null}
+      <div className="bg-card border-border divide-border divide-y rounded-2xl border shadow-sm">
         {children}
       </div>
     </section>
   );
 }
 
-/** Visual row: leading icon chip + title/subtitle + a trailing slot. */
+/**
+ * One profile row — a plain outline icon pinned to the inline-end with its label
+ * beside it, and an optional control (value / chevron / toggle / badge) at the
+ * inline-start. Single line, 64px tall to match the Figma row. No colored chip.
+ */
 export function ProfileRowShell({
   Icon,
-  title,
-  subtitle,
-  trailing,
+  label,
+  control,
   tone = 'default',
 }: {
   Icon: IconComponent;
-  title: string;
-  subtitle?: string;
-  trailing?: ReactNode;
+  label: string;
+  control?: ReactNode;
   tone?: Tone;
 }) {
   return (
-    <div className="flex items-center gap-3 px-4 py-3.5">
-      {trailing}
-      <span className="min-w-0 flex-1">
-        <span
-          className={`block text-end text-sm font-medium ${tone === 'danger' ? 'text-destructive' : 'text-foreground'}`}
-        >
-          {title}
-        </span>
-        {subtitle ? (
-          <span className="text-muted-foreground mt-0.5 block text-end text-xs">{subtitle}</span>
-        ) : null}
+    <div className="flex min-h-16 items-center gap-3 px-4">
+      {control ? <span className="flex shrink-0 items-center gap-2">{control}</span> : null}
+      <span className={`min-w-0 flex-1 text-end text-sm font-medium ${TEXT_TONE[tone]}`}>
+        {label}
       </span>
-      <span
-        className={`flex size-10 shrink-0 items-center justify-center rounded-xl ${CHIP[tone]}`}
-      >
-        <Icon className="size-5" aria-hidden />
-      </span>
+      <Icon
+        className={`size-5 shrink-0 ${tone === 'danger' ? 'text-destructive' : 'text-muted-foreground'}`}
+        aria-hidden
+      />
     </div>
   );
 }
 
-/**
- * Intentionally non-interactive row — the same shell, greyed out, with no drill-in
- * chevron and no Link, so the entry stays visible but can't be opened.
- */
-export function ProfileDisabledRow({
+/** Static info row — label + a trailing value / badge, no navigation. */
+export function ProfileInfoRow({
   Icon,
-  title,
-  subtitle,
-  tone,
+  label,
+  control,
 }: {
   Icon: IconComponent;
-  title: string;
-  subtitle?: string;
-  tone?: Tone;
+  label: string;
+  control: ReactNode;
 }) {
+  return <ProfileRowShell Icon={Icon} label={label} control={control} />;
+}
+
+/** Drill-in chevron pinned to the inline-start (points along the reading flow). */
+function DrillChevron() {
   return (
-    <div aria-disabled className="block cursor-not-allowed rounded-xl opacity-60">
-      <ProfileRowShell Icon={Icon} title={title} subtitle={subtitle} tone={tone} />
-    </div>
+    <ChevronLeft
+      className="text-muted-foreground/50 size-4 shrink-0 rtl:-scale-x-100"
+      aria-hidden
+    />
   );
 }
 
-/** Navigation row — wraps the shell in a Link with a forward (drill-in) chevron. */
+/** Navigation row — wraps the shell in a Link with a drill-in chevron. */
 export function ProfileLinkRow({
   href,
   Icon,
-  title,
-  subtitle,
+  label,
+  leading,
   tone,
 }: {
   href: string;
   Icon: IconComponent;
-  title: string;
-  subtitle?: string;
+  label: string;
+  /** Optional node shown next to the chevron at the inline-start (e.g. a value badge). */
+  leading?: ReactNode;
   tone?: Tone;
 }) {
   return (
@@ -118,16 +113,32 @@ export function ProfileLinkRow({
     >
       <ProfileRowShell
         Icon={Icon}
-        title={title}
-        subtitle={subtitle}
+        label={label}
         tone={tone}
-        trailing={
-          <ChevronLeftIcon
-            className="text-muted-foreground/50 size-3 shrink-0 rtl:-scale-x-100"
-            aria-hidden
-          />
+        control={
+          <>
+            <DrillChevron />
+            {leading}
+          </>
         }
       />
     </Link>
+  );
+}
+
+/** Non-interactive (coming-soon) row — greyed, no link, no chevron. */
+export function ProfileDisabledRow({
+  Icon,
+  label,
+  tone,
+}: {
+  Icon: IconComponent;
+  label: string;
+  tone?: Tone;
+}) {
+  return (
+    <div aria-disabled className="cursor-not-allowed opacity-60">
+      <ProfileRowShell Icon={Icon} label={label} tone={tone} />
+    </div>
   );
 }

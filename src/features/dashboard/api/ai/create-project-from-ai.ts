@@ -40,7 +40,15 @@ const fromAiEnvelopeSchema = z.object({
   serviceSubcategoryId: z.number().nullable(),
   serviceId: z.number().positive(),
   timeRequiredDays: z.number().positive(),
+  /** Assignment type — `'ALL'` opens the project for bids, exactly like manual
+   *  creation (`buildCreateProjectFormData` → `projectType: 'ALL'`). Without it the
+   *  backend never marks the AI project biddable, so it never reaches the technician
+   *  pool (GET /projects → pending + unassigned). */
+  projectType: z.string(),
 });
+
+/** AI projects are always open for bids (the publish flow has no direct-assign step). */
+const AI_PROJECT_TYPE = 'ALL';
 
 function resolveQualityTier(sow: SowDocument): string {
   const raw = sow.project_metadata?.quality_tier;
@@ -74,6 +82,7 @@ export async function createProjectFromAi(args: CreateFromAiArgs): Promise<FromA
     serviceSubcategoryId: args.match.subcategoryId,
     serviceId: args.match.serviceId,
     timeRequiredDays: timeRequiredDays(args.sow),
+    projectType: AI_PROJECT_TYPE,
   });
 
   // Mirror the resolved IDs INSIDE the SOW too — the backend reads serviceId from
@@ -86,6 +95,7 @@ export async function createProjectFromAi(args: CreateFromAiArgs): Promise<FromA
     serviceSubcategoryId: envelope.serviceSubcategoryId,
     qualityTier: envelope.qualityTier,
     timeRequiredDays: envelope.timeRequiredDays,
+    projectType: envelope.projectType,
   };
   const body = { ...envelope, sow: sowWithIds, sowJsonRaw: sowWithIds };
   return apiClient.post<FromAiProjectResponse>(API_ENDPOINTS.AI.CREATE_FROM_AI, { body });

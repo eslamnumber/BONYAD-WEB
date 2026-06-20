@@ -43,6 +43,34 @@ describe('proxy route — GET', () => {
   });
 });
 
+describe('proxy route — POST x-www-form-urlencoded', () => {
+  it('forwards a urlencoded body verbatim (POST /signatures) instead of dropping it', async () => {
+    let received: URLSearchParams | undefined;
+    let contentType: string | null = null;
+    server.use(
+      http.post('*/signatures', async ({ request }) => {
+        contentType = request.headers.get('content-type');
+        received = new URLSearchParams(await request.text());
+        return HttpResponse.json({ id: 7 }, { status: 201 });
+      }),
+    );
+
+    const request = new NextRequest('http://localhost/api/proxy/signatures', {
+      method: 'POST',
+      headers: { 'content-type': 'application/x-www-form-urlencoded' },
+      body: new URLSearchParams({ projectId: '102', language: 'AR' }).toString(),
+    });
+    request.cookies.set('bonyad-token', 'tok');
+
+    const res = await POST(request, ctx(['signatures']));
+
+    expect(res.status).toBe(200);
+    expect(contentType).toContain('application/x-www-form-urlencoded');
+    expect(received?.get('projectId')).toBe('102');
+    expect(received?.get('language')).toBe('AR');
+  });
+});
+
 describe('proxy route — POST multipart', () => {
   it('forwards a multipart file upload with the Bearer token attached', async () => {
     let received: FormData | undefined;

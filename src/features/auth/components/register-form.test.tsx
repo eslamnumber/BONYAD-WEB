@@ -27,7 +27,9 @@ const labels = {
   confirmPasswordPlaceholder: 'Enter password',
   confirmPasswordAriaLabel: 'Re-enter your password',
   togglePasswordVisibility: 'Toggle password visibility',
-  termsText: 'Yes, I understand and agree to the Terms of Service.',
+  termsAgreePrefix: 'Yes, I understand and agree to the ',
+  termsLinkText: 'Terms & Conditions',
+  termsAgreeSuffix: ', including the Privacy Policy.',
   termsAriaLabel: 'Accept terms and conditions',
   submitButton: 'Create account',
   hints: {

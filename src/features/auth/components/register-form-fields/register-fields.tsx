@@ -19,6 +19,7 @@ export type RegisterFieldsProps = {
   onTogglePwd: () => void;
   onToggleConfirm: () => void;
   passwordValue: string;
+  onOpenTerms?: () => void;
   t: (k: string) => string;
 };
 
@@ -54,6 +55,7 @@ export function RegisterFields(p: RegisterFieldsProps) {
         register={p.form.register}
         errorText={resolveError(errors.terms, p.t)}
         labels={p.labels}
+        onOpenTerms={p.onOpenTerms}
       />
     </>
   );

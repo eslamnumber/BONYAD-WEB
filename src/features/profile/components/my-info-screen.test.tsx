@@ -11,7 +11,7 @@ vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: vi.fn(), replace: vi.fn(), refresh: vi.fn(), prefetch: vi.fn() }),
 }));
 
-// The summary reads the live profile; drive it from a fixture so we test the
+// The identity card reads the live profile; drive it from a fixture so we test the
 // composition + role gate (the fetcher itself is covered by get-my-profile.test.ts).
 vi.mock('../api', () => ({
   useMyProfile: () => ({ data: { id: 1, email: 'ahmed@example.com', phoneNumber: '0551234567' } }),
@@ -30,14 +30,14 @@ function setUser(role: string) {
 }
 
 describe('MyInfoScreen', () => {
-  it('renders the account snapshot (status · email · phone) and all nav cards for a customer', () => {
+  it('renders the identity card and all manage rows for a customer', () => {
     setUser('USER');
     renderWithProviders(<MyInfoScreen />);
 
     expect(screen.getByText('My info')).toBeInTheDocument();
-    expect(screen.getByText('Verified')).toBeInTheDocument();
-    expect(screen.getByText('ahmed@example.com')).toBeInTheDocument();
-    expect(screen.getByText('0551234567')).toBeInTheDocument();
+    expect(screen.getByText('Ahmed')).toBeInTheDocument();
+    expect(screen.getByText('Customer')).toBeInTheDocument();
+    expect(screen.getByText('Edit photo')).toBeInTheDocument();
 
     expect(screen.getByText('Edit profile information')).toBeInTheDocument();
     expect(screen.getByText('Change phone number')).toBeInTheDocument();
@@ -49,6 +49,7 @@ describe('MyInfoScreen', () => {
     setUser('TECHNICIAN');
     renderWithProviders(<MyInfoScreen />);
 
+    expect(screen.getByText('Service provider')).toBeInTheDocument();
     expect(screen.getByText('Edit profile information')).toBeInTheDocument();
     expect(screen.queryByText('My transactions')).not.toBeInTheDocument();
   });

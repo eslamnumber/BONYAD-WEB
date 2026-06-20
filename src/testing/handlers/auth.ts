@@ -96,6 +96,19 @@ export const authHandlers = [
     return HttpResponse.json({ token: 'mock-reset-token', message: 'OTP verified' });
   }),
 
+  // Internal registration-OTP route (browser path). Returns the route's token-less
+  // result; the real handler records the Terms agreement server-side first.
+  http.post('*/api/auth/verify-otp', async ({ request }) => {
+    const body = (await request.json()) as { otpCode?: string };
+    if (body.otpCode === '0000') {
+      return HttpResponse.json(
+        { messageEn: 'Invalid OTP', errorCode: 'INVALID_OTP' },
+        { status: 401 },
+      );
+    }
+    return HttpResponse.json({ message: 'OTP verified' });
+  }),
+
   http.post('*/auth/resend-otp', async ({ request }) => {
     const body = (await request.json()) as { phoneNumber?: string; role?: string };
 

@@ -37,6 +37,24 @@ describe('toProfileUpdateBody', () => {
       nationalId: '1122334455',
     });
   });
+
+  it('sends only changed fields, never an untouched email (users_email_key guard)', () => {
+    // A name-only edit must NOT re-send the unchanged email — that is what made
+    // the full-row backend update collide with the unique email constraint.
+    expect(toProfileUpdateBody({ ...FORM, name: 'Ahmed Updated' }, true, FORM)).toEqual({
+      name: 'Ahmed Updated',
+    });
+  });
+
+  it('sends an empty body when nothing changed', () => {
+    expect(toProfileUpdateBody(FORM, true, FORM)).toEqual({});
+  });
+
+  it('coerces a changed technician number field and omits the rest', () => {
+    expect(toProfileUpdateBody({ ...FORM, yearsOfExperience: '8' }, true, FORM)).toEqual({
+      yearsOfExperience: 8,
+    });
+  });
 });
 
 describe('updateProfile', () => {

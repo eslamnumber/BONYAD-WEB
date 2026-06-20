@@ -22,4 +22,9 @@ export const contractHandlers = [
     HttpResponse.json({ ...SAMPLE_CONTRACT, projectId: Number(params.projectId) }),
   ),
   http.post(`${BASE}/signatures`, () => HttpResponse.json({ id: 1 }, { status: 201 })),
+  // Contract-PDF generation (the Download button). Wildcard so it also matches the
+  // same-origin `/api/proxy/*` URL that component tests hit in happy-dom.
+  http.post('*/contracts/test/generate-pdf', () =>
+    HttpResponse.json({ downloadUrl: 'https://placehold.co/contract.pdf' }),
+  ),
 ];

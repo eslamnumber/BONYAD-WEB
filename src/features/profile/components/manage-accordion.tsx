@@ -1,11 +1,13 @@
 'use client';
 
 import { AnimatePresence, motion } from 'framer-motion';
-import { type ComponentType, type ReactNode, type SVGProps, useState } from 'react';
+import Link from 'next/link';
+import { type ComponentType, type ReactNode, type SVGProps } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import {
   ChevronDownIcon,
+  ChevronLeftIcon,
   DashboardPaymentsIcon,
   LockIcon,
   PersonIcon,
@@ -13,7 +15,7 @@ import {
 } from '@/components/icons';
 import { ROUTES } from '@/config/routes';
 
-import { ProfileLinkRow, ProfileRowShell } from './profile-section';
+import { ManageRow } from './manage-row';
 
 type IconComponent = ComponentType<SVGProps<SVGSVGElement>>;
 export type ManageKey = 'edit' | 'phone' | 'password';
@@ -32,7 +34,7 @@ function ComingSoon() {
   return <p className="text-muted-foreground text-end text-sm">{t('common.comingSoon')}</p>;
 }
 
-/** A selector button — highlights + rotates its chevron when its panel is showing. */
+/** Accordion trigger — its chevron rotates as the panel opens (honest expand affordance). */
 function ManageButton({
   row,
   active,
@@ -51,13 +53,13 @@ function ManageButton({
       aria-controls="manage-panel"
       className={`focus-visible:outline-ring block w-full transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 ${active ? 'bg-primary/5' : 'motion-safe:hover:bg-muted/60'}`}
     >
-      <ProfileRowShell
+      <ManageRow
         Icon={row.Icon}
         title={t(`profile.myInfo.nav.${row.key}.title`)}
         subtitle={t(`profile.myInfo.nav.${row.key}.subtitle`)}
-        trailing={
+        chevron={
           <ChevronDownIcon
-            className={`size-4 shrink-0 transition-transform ${active ? 'text-primary rotate-180' : 'text-muted-foreground/60'}`}
+            className={`size-5 shrink-0 transition-transform ${active ? 'text-primary rotate-180' : 'text-muted-foreground/50'}`}
             aria-hidden
           />
         }
@@ -88,52 +90,68 @@ function ManagePanel({ openKey, forms }: { openKey: ManageKey | null; forms: Man
   );
 }
 
+/** "My transactions" — a real drill-in link (customers only), so it keeps a navigation chevron. */
+function TransactionsRow() {
+  const { t } = useTranslation();
+  return (
+    <Link
+      href={ROUTES.DASHBOARD_PAYMENTS}
+      className="focus-visible:outline-ring motion-safe:hover:bg-muted/60 block transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2"
+    >
+      <ManageRow
+        Icon={DashboardPaymentsIcon}
+        title={t('profile.myInfo.nav.transactions.title')}
+        subtitle={t('profile.myInfo.nav.transactions.subtitle')}
+        chevron={
+          <ChevronLeftIcon
+            className="text-muted-foreground/50 size-5 shrink-0 rtl:-scale-x-100"
+            aria-hidden
+          />
+        }
+      />
+    </Link>
+  );
+}
+
 /**
- * "Manage" section — the three account actions as a selector group, with the
- * selected sub-screen expanding in **one panel below all the buttons** (not under
- * the clicked row). The panel animates its height on open/close/swap (framer-motion;
- * reduced-motion honored globally). "My transactions" stays a link (customers only).
+ * "Manage" card (Figma 1674:7963) — four account-action rows. Edit profile / Change
+ * phone / Change password expand their form inline in **one panel below all the
+ * buttons** (controlled by the parent so the identity card's chevron can open Edit
+ * too); the panel animates its height on open/close/swap (framer-motion, reduced-
+ * motion honored globally). "My transactions" stays a drill-in link (customers only).
  * Forms are supplied by the route page so `features/profile` never imports `features/auth`.
  */
 export function ManageAccordion({
+  open,
+  onToggle,
   forms,
   showTransactions,
 }: {
+  open: ManageKey | null;
+  onToggle: (key: ManageKey) => void;
   forms: ManageForms;
   showTransactions: boolean;
 }) {
-  const { t } = useTranslation();
-  const [open, setOpen] = useState<ManageKey | null>(null);
   return (
-    <section>
-      <h2 className="text-muted-foreground mb-2.5 px-1 text-end text-xs font-medium tracking-wide">
-        {t('profile.myInfo.nav.section')}
-      </h2>
-      <div className="bg-card border-border overflow-hidden rounded-2xl border shadow-sm">
-        <div className="divide-border divide-y">
-          {ROWS.map((row) => (
-            <ManageButton
-              key={row.key}
-              row={row}
-              active={open === row.key}
-              onClick={() => setOpen((current) => (current === row.key ? null : row.key))}
-            />
-          ))}
-        </div>
-
-        <ManagePanel openKey={open} forms={forms} />
-
-        {showTransactions ? (
-          <div className="border-border border-t">
-            <ProfileLinkRow
-              href={ROUTES.DASHBOARD_PAYMENTS}
-              Icon={DashboardPaymentsIcon}
-              title={t('profile.myInfo.nav.transactions.title')}
-              subtitle={t('profile.myInfo.nav.transactions.subtitle')}
-            />
-          </div>
-        ) : null}
+    <div className="bg-card border-border overflow-hidden rounded-2xl border shadow-sm">
+      <div className="divide-border divide-y">
+        {ROWS.map((row) => (
+          <ManageButton
+            key={row.key}
+            row={row}
+            active={open === row.key}
+            onClick={() => onToggle(row.key)}
+          />
+        ))}
       </div>
-    </section>
+
+      <ManagePanel openKey={open} forms={forms} />
+
+      {showTransactions ? (
+        <div className="border-border border-t">
+          <TransactionsRow />
+        </div>
+      ) : null}
+    </div>
   );
 }

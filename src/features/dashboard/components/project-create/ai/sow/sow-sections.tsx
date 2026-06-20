@@ -15,32 +15,20 @@ import { SowTimelineSection } from './sections/sow-timeline-section';
 import type { T } from './sow-flow-types';
 
 /**
- * Renders the SOW document — each section hides itself when it has no data. With
- * `extrasOnly` (the status-screen panel), the overview (metadata), timeline, and
- * costs & payments (commercials) are dropped because the status screen's summary
- * card + phases + payment flow already cover them; the create-flow review leaves it
- * off to render the full document.
+ * The full SOW document — every section, in order. Each section hides itself when it
+ * has no data. Used by the create-flow review; the status screens render selected
+ * sections directly (see `job-offer-detail/project-sow-column.tsx`).
  */
-export function SowSections({
-  sow,
-  locale,
-  t,
-  extrasOnly = false,
-}: {
-  sow: SowDocument;
-  locale: Locale;
-  t: T;
-  extrasOnly?: boolean;
-}) {
+export function SowSections({ sow, locale, t }: { sow: SowDocument; locale: Locale; t: T }) {
   return (
     <div className="flex flex-col gap-4">
-      {extrasOnly ? null : <SowMetadataSection meta={sow.project_metadata} t={t} />}
+      <SowMetadataSection meta={sow.project_metadata} t={t} />
       <SowObjectivesSection objectives={sow.objectives} t={t} />
       <SowScopeSection scope={sow.scope} t={t} />
       <SowDeliverablesSection deliverables={sow.deliverables} t={t} />
-      {extrasOnly ? null : <SowTimelineSection timeline={sow.timeline} t={t} />}
+      <SowTimelineSection timeline={sow.timeline} t={t} />
       <SowResourcesSection resources={sow.resources} locale={locale} t={t} />
-      {extrasOnly ? null : <SowCommercialsSection commercials={sow.commercials} t={t} />}
+      <SowCommercialsSection commercials={sow.commercials} t={t} />
       <SowComplianceSection compliance={sow.compliance} t={t} />
       <SowRisksSection risks={sow.risks} t={t} />
       <SowKpisSection kpis={sow.kpis} t={t} />

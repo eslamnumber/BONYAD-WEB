@@ -6,23 +6,21 @@ import { apiClient } from '@/lib/api-client';
 import { type SignatureRequest, signatureRequestSchema } from '../schemas/signature';
 
 /**
- * Create / resend the contract e-sign request. Mirrors the RN call site
- * website-bonyad/src/screens/projects/in-progress/modals/hooks/usePhaseApprovalData.ts:170
- * — POST /signatures with a **form-urlencoded** body, `phaseIds` joined as a CSV
- * and `language` upper-cased. The request is zod-validated first (CLAUDE rule 1).
- * The backend emails a copy of the contract to each party's registered address;
- * the customer's CONTRACT_SIGNING screen calls this for the "resend" action.
+ * Create / resend the contract e-sign request. Mirrors the RN email path
+ * website-bonyad/src/services/SignatureService.ts:143 (`createEmailSignatureRequest`
+ * → `buildFormData`) — POST /signatures with a **form-urlencoded** body where each
+ * phase id is a **repeated** `phaseIds` field (`phaseIds=1&phaseIds=2`), `language`
+ * is upper-cased, and the backend auto-fetches both parties' emails from their
+ * profiles. The request is zod-validated first (CLAUDE rule 1). The customer's
+ * APPROVED + CONTRACT_SIGNING screens call this to send / resend the contract.
  */
 export async function createSignature(input: SignatureRequest): Promise<void> {
   const body = signatureRequestSchema.parse(input);
-  const form = new URLSearchParams({
-    projectId: String(body.projectId),
-    technicianId: String(body.technicianId),
-    userEmail: body.userEmail,
-    technicianEmail: body.technicianEmail,
-    phaseIds: body.phaseIds.join(','),
-    language: body.language,
-  });
+  const form = new URLSearchParams();
+  form.set('projectId', String(body.projectId));
+  body.phaseIds.forEach((id) => form.append('phaseIds', String(id)));
+  form.set('language', body.language);
+  if (body.contractTerms) form.set('contractTerms', body.contractTerms);
   await apiClient.post<unknown>(API_ENDPOINTS.SIGNATURES.CREATE, { body: form });
 }
 
