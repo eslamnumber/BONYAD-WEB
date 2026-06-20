@@ -1,6 +1,5 @@
 'use client';
 
-import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,6 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { Button } from '@/components/ui';
 
 import { useDeleteProject } from '../../api/delete-project';
+import { ProjectEditModal } from '../project-edit';
 
 import { DeleteProjectModal } from './delete-project-modal';
 
@@ -15,13 +15,14 @@ const ACTION = 'h-12 w-full rounded-lg text-[15px] font-semibold';
 
 /**
  * Customer actions on a pending project (RN ProjectDetailScreen, `!isTechnician`):
- * Edit (links to the owner-edit route) + Delete (confirm modal → DELETE, then back
- * to the projects list). Shown only to the project owner via the role gate in
+ * Edit (opens the owner-edit modal) + Delete (confirm modal → DELETE, then back to
+ * the projects list). Shown only to the project owner via the role gate in
  * {@link JobOfferDetail}.
  */
 export function CustomerProjectActions({ projectId }: { projectId: number }) {
   const { t } = useTranslation();
   const router = useRouter();
+  const [editOpen, setEditOpen] = useState(false);
   const [confirmOpen, setConfirmOpen] = useState(false);
   const [failed, setFailed] = useState(false);
   const remove = useDeleteProject();
@@ -40,12 +41,11 @@ export function CustomerProjectActions({ projectId }: { projectId: number }) {
   return (
     <div className="flex w-full flex-col gap-3">
       <Button
-        asChild
+        type="button"
+        onClick={() => setEditOpen(true)}
         className={`bg-brand-dark-navy text-on-media motion-safe:hover:opacity-90 ${ACTION}`}
       >
-        <Link href={`/dashboard/projects/${projectId}/edit`}>
-          {t('dashboard.jobOffer.customer.editProject')}
-        </Link>
+        {t('dashboard.jobOffer.customer.editProject')}
       </Button>
       <Button
         type="button"
@@ -55,6 +55,7 @@ export function CustomerProjectActions({ projectId }: { projectId: number }) {
       >
         {t('dashboard.jobOffer.customer.deleteProject')}
       </Button>
+      <ProjectEditModal open={editOpen} projectId={projectId} onClose={() => setEditOpen(false)} />
       <DeleteProjectModal
         open={confirmOpen}
         onClose={() => setConfirmOpen(false)}

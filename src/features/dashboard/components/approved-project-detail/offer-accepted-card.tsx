@@ -63,21 +63,29 @@ export function OfferAcceptedCard({ project }: Props) {
         <InfoRow label={t('dashboard.approvedProject.accepted.dateLabel')}>{date ?? '—'}</InfoRow>
       </div>
 
-      <div className="flex w-full flex-col gap-3">
-        <button
-          type="button"
-          className="bg-brand-dark-navy text-on-media focus-visible:outline-ring flex w-full items-center justify-center rounded-lg p-3 text-[15px] font-medium transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 motion-safe:hover:opacity-90"
-        >
-          {t('dashboard.approvedProject.accepted.reviewContract')}
-        </button>
-        <Link
-          href={contactHref}
-          className="border-brand-dark-navy text-brand-dark-navy focus-visible:outline-ring motion-safe:hover:bg-field-surface flex w-full items-center justify-center rounded-lg border p-3 text-[15px] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
-        >
-          {t('dashboard.approvedProject.accepted.contactClient')}
-        </Link>
-      </div>
+      <AcceptedActions contactHref={contactHref} />
     </section>
+  );
+}
+
+/** Contract / contact action buttons (review-&-sign placeholder + contact-client link). */
+function AcceptedActions({ contactHref }: { contactHref: string }) {
+  const { t } = useTranslation();
+  return (
+    <div className="flex w-full flex-col gap-3">
+      <button
+        type="button"
+        className="bg-brand-dark-navy text-on-media focus-visible:outline-ring flex w-full items-center justify-center rounded-lg p-3 text-[15px] font-medium transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 motion-safe:hover:opacity-90"
+      >
+        {t('dashboard.approvedProject.accepted.reviewContract')}
+      </button>
+      <Link
+        href={contactHref}
+        className="border-brand-dark-navy text-brand-dark-navy focus-visible:outline-ring motion-safe:hover:bg-field-surface flex w-full items-center justify-center rounded-lg border p-3 text-[15px] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
+      >
+        {t('dashboard.approvedProject.accepted.contactClient')}
+      </Link>
+    </div>
   );
 }
 

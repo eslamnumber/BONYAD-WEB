@@ -72,7 +72,7 @@ describe('JobOfferDetail role gating', () => {
     renderWithProviders(<JobOfferDetail projectId={42} />);
 
     expect(await screen.findByText('No offers yet')).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Edit project' })).toBeInTheDocument();
+    expect(screen.getByRole('button', { name: 'Edit project' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Delete project' })).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Submit offer' })).not.toBeInTheDocument();
   });

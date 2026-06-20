@@ -24,6 +24,13 @@ const clientSchema = z.object({
    * `connect-src` (see `src/middleware.ts`). Defaults to the production broker.
    */
   NEXT_PUBLIC_MQTT_BROKER_URL: z.url().default('wss://admin.bonyad-hub.com/mqtt'),
+  /**
+   * Google Maps JavaScript SDK key for the location picker (Places autocomplete +
+   * geocoding). Public by design (shipped in the client bundle); restrict by HTTP
+   * referrer in the Google Cloud Console. Mirrors the legacy RN app's key. The Maps
+   * script + XHR origins are allow-listed in the CSP (`src/middleware.ts`).
+   */
+  NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: z.string().default('AIzaSyA0bEyvVa8NecLryi5DOiEjXQvOQ3p0CfA'),
 });
 
 const serverSchema = z.object({
@@ -45,6 +52,7 @@ const clientRaw = {
   NEXT_PUBLIC_SENTRY_DSN: raw.NEXT_PUBLIC_SENTRY_DSN,
   NEXT_PUBLIC_ANALYTICS_KEY: raw.NEXT_PUBLIC_ANALYTICS_KEY,
   NEXT_PUBLIC_MQTT_BROKER_URL: raw.NEXT_PUBLIC_MQTT_BROKER_URL,
+  NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: raw.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
 };
 
 const parsed = isServer

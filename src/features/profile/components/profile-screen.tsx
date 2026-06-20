@@ -40,6 +40,24 @@ function AmbientGlow() {
  * on mobile they stack. Navigation rows link to profile sub-screens; language /
  * theme / sign-out act inline.
  */
+/** One account/help row — disabled (coming-soon) or a link to its sub-screen. */
+function ProfileRow({ row }: { row: Row }) {
+  const { t } = useTranslation();
+  const title = t(`profile.rows.${row.key}.title`);
+  const subtitle = t(`profile.rows.${row.key}.subtitle`);
+  return row.disabled ? (
+    <ProfileDisabledRow Icon={row.Icon} title={title} subtitle={subtitle} tone={row.tone} />
+  ) : (
+    <ProfileLinkRow
+      href={row.href}
+      Icon={row.Icon}
+      title={title}
+      subtitle={subtitle}
+      tone={row.tone}
+    />
+  );
+}
+
 export function ProfileScreen() {
   const { t } = useTranslation();
   const user = useAuthStore((s) => s.user);
@@ -47,31 +65,8 @@ export function ProfileScreen() {
 
   const identity = resolveProfileIdentity(profile, user);
 
-  const renderRow = (row: Row) => {
-    const title = t(`profile.rows.${row.key}.title`);
-    const subtitle = t(`profile.rows.${row.key}.subtitle`);
-    return row.disabled ? (
-      <ProfileDisabledRow
-        key={row.key}
-        Icon={row.Icon}
-        title={title}
-        subtitle={subtitle}
-        tone={row.tone}
-      />
-    ) : (
-      <ProfileLinkRow
-        key={row.key}
-        href={row.href}
-        Icon={row.Icon}
-        title={title}
-        subtitle={subtitle}
-        tone={row.tone}
-      />
-    );
-  };
-
   return (
-    <div className="relative isolate flex w-full flex-1 flex-col gap-6 px-4 py-8 sm:px-6 lg:gap-8">
+    <div className="relative isolate mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-8 sm:px-6 lg:gap-8">
       <AmbientGlow />
 
       <header>
@@ -85,19 +80,23 @@ export function ProfileScreen() {
 
       <div className="grid gap-5 lg:grid-cols-2 lg:items-start lg:gap-6">
         <ProfileSection label={t('profile.sections.account')} className="lg:order-2">
-          {visibleRows(ACCOUNT_ROWS, identity.isTechnician).map(renderRow)}
+          {visibleRows(ACCOUNT_ROWS, identity.isTechnician).map((row) => (
+            <ProfileRow key={row.key} row={row} />
+          ))}
         </ProfileSection>
 
         <div className="flex flex-col gap-5 lg:order-1 lg:gap-6">
           <ProfileSection label={t('profile.sections.preferences')}>
             <LanguageRow />
             <DarkModeRow />
-            {HELP_ROWS.map(renderRow)}
+            {HELP_ROWS.map((row) => (
+              <ProfileRow key={row.key} row={row} />
+            ))}
           </ProfileSection>
 
           <ProfileSection label={t('profile.sections.danger')} tone="danger">
             <LogoutRow />
-            {renderRow(DELETE_ROW)}
+            <ProfileRow row={DELETE_ROW} />
           </ProfileSection>
         </div>
       </div>

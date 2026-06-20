@@ -85,7 +85,7 @@ describe('CustomerOfferStatus', () => {
     renderWithProviders(<CustomerOfferStatus projectId={42} />);
 
     const acceptButtons = await screen.findAllByRole('button', { name: 'Accept' });
-    fireEvent.click(acceptButtons[0]);
+    fireEvent.click(acceptButtons[0] as HTMLElement);
 
     expect(await screen.findByRole('button', { name: 'Accept offer' })).toBeInTheDocument();
     expect(screen.getByText('Offer message')).toBeInTheDocument();

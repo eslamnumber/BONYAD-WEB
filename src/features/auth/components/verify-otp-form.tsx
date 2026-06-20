@@ -1,19 +1,18 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { ApiError } from '@/lib/api-client';
 
 import { useResendOtp, useVerifyOtp } from '../api/verify-otp';
+import { useResendTimer } from '../hooks/use-resend-timer';
 import { verifyOtpFormSchema, type VerifyOtpFormValues } from '../schemas/verify-otp.schema';
 
 import { OtpBoxes } from './otp-boxes';
 import { ResendSection, RoleToggle } from './verify-otp-sections';
-
-const RESEND_SECONDS = 54;
 
 type Role = 'USER' | 'TECHNICIAN';
 
@@ -33,18 +32,6 @@ export type VerifyOtpFormLabels = {
   roleToggleAriaLabel: string;
   errors: { genericError: string };
 };
-
-function useResendTimer() {
-  const [secondsLeft, setSecondsLeft] = useState(RESEND_SECONDS);
-  useEffect(() => {
-    if (secondsLeft <= 0) return;
-    const id = setInterval(() => {
-      setSecondsLeft((s) => s - 1);
-    }, 1000);
-    return () => clearInterval(id);
-  }, [secondsLeft]);
-  return { secondsLeft, reset: () => setSecondsLeft(RESEND_SECONDS) };
-}
 
 function OtpInputSection({
   value,

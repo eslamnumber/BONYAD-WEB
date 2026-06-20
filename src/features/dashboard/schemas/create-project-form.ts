@@ -36,11 +36,15 @@ export const createProjectFormSchema = z
     phases: z.array(createProjectPhaseFormSchema),
     assignmentType: z.enum(['ALL', 'DIRECT_ASSIGNMENT']),
     assignedTechnicianId: z.number().nullable(),
+    /** Chosen technician's display name — surfaced on the review step only, never submitted. */
+    assignedTechnicianName: z.string().trim(),
     /** Step 6 location — the selected region id + its localized name (sent as `address`). */
     regionId: z.string().trim(),
     regionName: z.string().trim(),
     /** Step 6 offer deadline (optional, `yyyy-mm-dd`). Captured but not yet submitted. */
     bidDeadline: z.string().trim(),
+    /** Step 6 optional photos — uploaded as multipart `images` on create. */
+    photos: z.array(z.custom<File>()),
   })
   .refine((v) => v.noBudget || !v.budget || Number(v.budget.replace(/[^\d]/g, '')) > 0, {
     message: `${E}.budgetInvalid`,
@@ -61,6 +65,8 @@ export const STEP_FIELDS: (keyof CreateProjectFormValues)[][] = [
   ['phases'],
   ['assignmentType', 'assignedTechnicianId'],
   ['regionId', 'regionName', 'bidDeadline'],
+  // Step 7 (review) adds no new fields — every step was validated on the way in.
+  [],
 ];
 
 export function defaultCreateProjectValues(): CreateProjectFormValues {
@@ -75,8 +81,10 @@ export function defaultCreateProjectValues(): CreateProjectFormValues {
     phases: [emptyPhaseInput()],
     assignmentType: 'ALL',
     assignedTechnicianId: null,
+    assignedTechnicianName: '',
     regionId: '',
     regionName: '',
     bidDeadline: '',
+    photos: [],
   };
 }

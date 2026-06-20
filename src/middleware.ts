@@ -72,11 +72,15 @@ function generateNonce(): string {
 }
 
 function buildCsp(nonce: string): string {
+  // Google Maps SDK (location picker): the script host (needed in dev; ignored under
+  // prod `strict-dynamic`, where the nonce'd loader propagates trust) + the Places/
+  // Geocoding XHR origins. Map tiles are images, covered by `img-src https:`.
+  const maps = 'https://maps.googleapis.com https://maps.gstatic.com';
   // Dev mode needs to allow eval + inline for React Fast Refresh + Tailwind.
   // Production locks down to nonce + strict-dynamic.
   const scriptSrc = isDevelopment
-    ? `'self' 'nonce-${nonce}' 'unsafe-eval' 'unsafe-inline'`
-    : `'self' 'nonce-${nonce}' 'strict-dynamic'`;
+    ? `'self' 'nonce-${nonce}' 'unsafe-eval' 'unsafe-inline' ${maps}`
+    : `'self' 'nonce-${nonce}' 'strict-dynamic' ${maps}`;
 
   return [
     `default-src 'self'`,
@@ -84,7 +88,7 @@ function buildCsp(nonce: string): string {
     `style-src 'self' 'unsafe-inline'`,
     `img-src 'self' data: blob: https:`,
     `font-src 'self' data:`,
-    `connect-src 'self' https://*.sentry.io wss://admin.bonyad-hub.com`,
+    `connect-src 'self' https://*.sentry.io wss://admin.bonyad-hub.com ${maps}`,
     `frame-ancestors 'none'`,
     `base-uri 'self'`,
     `form-action 'self'`,

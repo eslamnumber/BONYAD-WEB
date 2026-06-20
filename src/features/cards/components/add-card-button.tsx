@@ -36,8 +36,14 @@ export function AddCardButton({
   async function start() {
     try {
       const session = await prepare.mutateAsync();
-      storePendingCheckout(session.checkoutId);
       const target = resolveCardRedirectTarget(session, buildCardReturnUrl(window.location.origin));
+      if (!target) {
+        // Real checkout but the backend returned no hosted-page URL — there's no way
+        // to capture the card on web yet, so don't stash the checkout or redirect.
+        onError(t('cards.add.unavailable'));
+        return;
+      }
+      storePendingCheckout(session.checkoutId);
       window.location.assign(target);
     } catch (err) {
       onError(localizedCardError(err, locale, t('cards.feedback.prepareFailed')));

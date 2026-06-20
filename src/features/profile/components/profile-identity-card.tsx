@@ -4,11 +4,12 @@ import Image from 'next/image';
 import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
-import { Avatar } from '@/components/avatar';
 import { DetailRateIcon, FeatureVerifiedIcon, PersonIcon } from '@/components/icons';
 import { ROUTES } from '@/config/routes';
 
 import type { ProfileIdentity } from '../lib/identity';
+
+import { EditableAvatar } from './editable-avatar';
 
 /** Frosted trust chip — verification / rating / reviews / profession. */
 const PILL =
@@ -72,9 +73,10 @@ export function ProfileIdentityCard({ identity }: { identity: ProfileIdentity })
         {t('profile.identity.edit')}
       </Link>
 
-      <Avatar
+      <EditableAvatar
         name={identity.name}
         src={identity.profileImage}
+        tone="light"
         className="size-20 border-2 border-white/60 bg-white/15 text-2xl text-white shadow-md sm:size-24"
       />
 

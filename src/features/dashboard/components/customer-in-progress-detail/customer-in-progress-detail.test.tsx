@@ -1,5 +1,5 @@
 import { http, HttpResponse } from 'msw';
-import { beforeAll, describe, expect, it } from 'vitest';
+import { afterEach, beforeAll, describe, expect, it } from 'vitest';
 
 import { i18n } from '@/lib/i18n';
 import { server } from '@/testing/handlers/server';
@@ -74,5 +74,47 @@ describe('CustomerInProgressDetail — Approve opens the payment flow', () => {
 
     fireEvent.click(phase2Header);
     expect(phase2Header).toHaveAttribute('aria-expanded', 'true');
+  });
+});
+
+describe('CustomerInProgressDetail — payment return shows the result modal in place', () => {
+  afterEach(() => {
+    window.history.pushState({}, '', '/dashboard/projects/5');
+    try {
+      sessionStorage.clear();
+    } catch {
+      /* ignore */
+    }
+  });
+
+  it('pops the success modal here (no "View my projects" button) after a verified charge', async () => {
+    mockBackend();
+    server.use(
+      http.get('*/payments/status/:checkoutId', () =>
+        HttpResponse.json({
+          paymentResult: true,
+          code: '000.100.110',
+          transactionId: 'TXN-IP-1',
+          amount: '25000',
+          currency: 'SAR',
+          paymentBrand: 'MADA',
+        }),
+      ),
+      http.post('*/phases/:phaseId/pay', ({ params }) =>
+        HttpResponse.json({ phaseId: Number(params.phaseId), paymentStatus: 'PAID' }),
+      ),
+    );
+    window.history.pushState(
+      {},
+      '',
+      '/dashboard/projects/5?type=phase&phaseId=1&paymentType=FULL&amount=25000&id=CHK_IP',
+    );
+
+    renderWithProviders(<CustomerInProgressDetail projectId={5} />);
+
+    expect(await screen.findByText('Payment successful')).toBeInTheDocument();
+    expect(screen.getByText('TXN-IP-1')).toBeInTheDocument();
+    // The footer CTA is dropped in modal mode — the customer is already on the project.
+    expect(screen.queryByRole('link', { name: 'View my projects' })).not.toBeInTheDocument();
   });
 });

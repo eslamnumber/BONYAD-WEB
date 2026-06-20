@@ -1,5 +1,8 @@
 export { ApprovedProjectDetail } from './approved-project-detail';
 export { CreateProjectWizard } from './project-create/create-project-wizard';
+export { CreateProjectChooser } from './project-create/create-project-chooser';
+export { CreateProjectMethod } from './project-create/create-project-method';
+export { OmdahInterview } from './project-create/ai/omdah-interview';
 export { AssignedProjectDetail } from './assigned-project-detail';
 export { CompletedProjectDetail } from './completed-project-detail';
 export { CustomerApprovedDetail } from './customer-approved-detail';
@@ -11,7 +14,7 @@ export { DashboardSearch } from './dashboard-search';
 export { JobOfferDetail } from './job-offer-detail';
 export { JobOffersSection } from './job-offers-section';
 export { ProjectCarousel } from './project-carousel';
-export { ProjectEdit } from './project-edit';
+export { ProjectEditModal } from './project-edit';
 export { ProjectStatCards } from './project-stat-cards';
 export { ProjectsEmptyState } from './projects-empty-state';
 export { ProjectsToolbar, PROJECT_FILTERS, type ProjectFilterKey } from './projects-toolbar';

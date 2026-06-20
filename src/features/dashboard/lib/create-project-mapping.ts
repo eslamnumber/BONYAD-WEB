@@ -10,8 +10,10 @@ import { type CreatePhaseInput, type PhaseInput } from '../schemas/phase-input';
 export function formValuesToSubmitVars(values: CreateProjectFormValues): {
   project: CreateProjectInput;
   phases: PhaseInput[];
+  photos: File[];
 } {
   return {
+    photos: values.photos,
     project: {
       serviceCategoryId: Number(values.serviceCategoryId),
       title: values.projectName,
@@ -41,16 +43,26 @@ function digits(value: string): string {
   return value.replace(/[^\d]/g, '');
 }
 
+/** Append photos as repeated `images` parts (iOS manual-form contract). */
+function appendPhotos(fd: FormData, photos: readonly File[]): void {
+  photos.forEach((file, i) => fd.append('images', file, file.name || `photo_${i}.jpg`));
+}
+
 /**
  * Normalized create input → multipart FormData body for POST /projects/create.
  * Mirrors the RN FormData assembly in
  * website-bonyad/src/screens/projects/creation/hooks/useNewProjectView.ts:331-383
  * (title / description / serviceCategoryId, budget + budgetUnspecified,
  * timeline + timeRequired days, deliverables, the hardcoded address / lat / long,
- * projectType, and the direct-assignment technician). The web wizard uploads no
- * files, so no photo parts are appended.
+ * projectType, and the direct-assignment technician). Optional `photos` are
+ * appended as repeated `images` parts — mirroring the iOS manual form
+ * (bonayd-ios ManualProjectForm.swift:1496-1518); the backend returns them in the
+ * project detail `files[]`, which the images gallery renders.
  */
-export function buildCreateProjectFormData(input: CreateProjectRequest): FormData {
+export function buildCreateProjectFormData(
+  input: CreateProjectRequest,
+  photos: readonly File[],
+): FormData {
   const fd = new FormData();
   fd.append('title', input.title);
   fd.append('description', input.description);
@@ -85,6 +97,8 @@ export function buildCreateProjectFormData(input: CreateProjectRequest): FormDat
     fd.append('assignedTechnicianId', String(input.assignedTechnicianId));
     fd.append('assignmentType', 'DIRECT_ASSIGNMENT');
   }
+
+  appendPhotos(fd, photos);
 
   return fd;
 }

@@ -59,14 +59,11 @@ export function AccountTypeScreen() {
     <div className="relative isolate flex w-full flex-1 flex-col px-4 py-8 sm:px-6">
       <ProfileAmbientGlow />
 
-      {/* One column at every width (requested). Capped to a readable width and
-          flush to the inline-END via self-end — the DashboardSidebar is the
-          inline-end flex child, so this hugs the content against the sidebar (no
-          gap there) and pushes the leftover cap space to the window edge instead.
-          The cap also stops the form stretching on wide monitors (responsive
-          matrix line 22). Rule 4a: the cap lives on this inner wrapper, never on
-          the screen-root; no mx-auto centring. */}
-      <div className="flex w-full max-w-3xl flex-col gap-6 self-end">
+      {/* One column at every width (requested), centered (mx-auto) and capped to a
+          readable width so the form sits in the middle of the content area and never
+          stretches on wide monitors (responsive matrix line 22). Rule 4a settings
+          exception: settings sub-screens are centered, not sidebar-flush. */}
+      <div className="mx-auto flex w-full max-w-3xl flex-col gap-6">
         <ProfileBackLink href={ROUTES.DASHBOARD_SETTINGS} label={t('profile.accountType.back')} />
 
         <header>

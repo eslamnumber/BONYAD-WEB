@@ -17,11 +17,14 @@ import {
  * the strict {@link createProjectRequestSchema} (hard rule 1) before the FormData
  * body is assembled. Browser calls go through `/api/proxy/*`, which attaches the
  * session token; `apiClient` passes FormData through so fetch sets the multipart
- * boundary itself.
+ * boundary itself. Optional `photos` ride along as `images` parts.
  */
-export async function createProject(input: CreateProjectInput): Promise<CreateProjectResponse> {
+export async function createProject(
+  input: CreateProjectInput,
+  photos: readonly File[] = [],
+): Promise<CreateProjectResponse> {
   const parsed = createProjectRequestSchema.parse(input);
-  const body = buildCreateProjectFormData(parsed);
+  const body = buildCreateProjectFormData(parsed, photos);
   return apiClient.post<CreateProjectResponse>(API_ENDPOINTS.PROJECTS.CREATE, { body });
 }
 
@@ -33,7 +36,7 @@ export async function createProject(input: CreateProjectInput): Promise<CreatePr
 export function useCreateProject() {
   const queryClient = useQueryClient();
   return useMutation<CreateProjectResponse, Error, CreateProjectInput>({
-    mutationFn: createProject,
+    mutationFn: (input) => createProject(input),
     onSuccess: () => queryClient.invalidateQueries({ queryKey: ['projects'] }),
   });
 }

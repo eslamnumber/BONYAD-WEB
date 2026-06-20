@@ -48,6 +48,21 @@ describe('submitNewProject', () => {
     expect(bodies.every((b) => b.projectId === 321)).toBe(true);
   });
 
+  it('forwards uploaded photos to the create request as `images`', async () => {
+    const ref: { fd?: FormData } = {};
+    server.use(
+      http.post('*/projects/create', async ({ request }) => {
+        ref.fd = await request.formData();
+        return HttpResponse.json({ id: 700 });
+      }),
+    );
+    capturePhases();
+    const file = new File(['x'], 'photo.jpg', { type: 'image/jpeg' });
+    const id = await submitNewProject({ project: PROJECT, phases: [], photos: [file] });
+    expect(id).toBe(700);
+    expect((ref.fd ?? new FormData()).getAll('images')).toHaveLength(1);
+  });
+
   it('skips the phases POST when there are no phases', async () => {
     mockCreate(322);
     const bodies = capturePhases();

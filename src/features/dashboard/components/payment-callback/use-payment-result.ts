@@ -5,7 +5,11 @@ import { useEffect, useRef, useState } from 'react';
 import { getPaymentStatus } from '../../api/get-payment-status';
 import { payPhase } from '../../api/pay-phase';
 import { PENDING_CHECKOUT_KEY } from '../../lib/checkout-request';
-import { type PaymentContext, resolvePaymentContext } from '../../lib/payment-callback';
+import {
+  hasPaymentReturn,
+  type PaymentContext,
+  resolvePaymentContext,
+} from '../../lib/payment-callback';
 
 export type PaymentResultStatus = 'verifying' | 'success' | 'failed';
 
@@ -90,20 +94,33 @@ async function runVerification(
 }
 
 /**
- * Drives the /payment/callback page (5d.4): resolve the checkout context →
+ * Drives the phase-payment result (5d.4): resolve the checkout context →
  * GET /payments/status → mark the phase paid → success / failed. Runs once on
  * mount (guarded against React's double-invoke).
+ *
+ * Shared by the standalone /payment/callback page (default — always verifies) and
+ * the in-progress project screen, which passes `requireReturnParams` so it only
+ * activates when the gateway has actually redirected back (a checkout marker is in
+ * the URL). `active` tells the host whether to show the result modal.
  */
-export function usePaymentResult() {
+export function usePaymentResult({ requireReturnParams = false } = {}) {
   const [status, setStatus] = useState<PaymentResultStatus>('verifying');
   const [details, setDetails] = useState<PaymentResultDetails | null>(null);
+  // Whether a result is expected: always on the standalone page; on the project
+  // screen only once the gateway has actually redirected back. Derived (no effect
+  // setState) — the project screen renders client-side, so window is available.
+  const [active] = useState(
+    () =>
+      !requireReturnParams ||
+      (typeof window !== 'undefined' && hasPaymentReturn(window.location.search)),
+  );
   const ran = useRef(false);
 
   useEffect(() => {
-    if (ran.current) return;
+    if (ran.current || !active) return;
     ran.current = true;
     void runVerification(setStatus, setDetails);
-  }, []);
+  }, [active]);
 
-  return { status, details };
+  return { status, details, active };
 }

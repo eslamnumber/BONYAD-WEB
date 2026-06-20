@@ -15,23 +15,26 @@ function splitName(name: string | undefined): { givenName: string; surname: stri
 }
 
 /**
- * The /payment/callback return URL carrying the phase context HyperPay echoes back
- * (`?type=phase&phaseId=&paymentType=&amount=`). The callback reads these to mark
- * the phase paid. Mirrors website-bonyad/.../PhasePaymentModal.tsx:302.
+ * The HyperPay return URL carrying the phase context the gateway echoes back
+ * (`?type=phase&phaseId=&paymentType=&amount=`). The browser lands **back on the
+ * project detail page**, which verifies the charge, marks the phase paid, and pops
+ * the result modal in place (no standalone confirmation screen). Mirrors
+ * website-bonyad/.../PhasePaymentModal.tsx:302 (only the path differs).
  */
-export function buildShopperResultUrl(
-  origin: string,
-  phaseId: number,
-  paymentType: 'FULL' | 'PARTIAL',
-  amount: number,
-): string {
+export function buildShopperResultUrl(opts: {
+  origin: string;
+  projectId: number;
+  phaseId: number;
+  paymentType: 'FULL' | 'PARTIAL';
+  amount: number;
+}): string {
   const params = new URLSearchParams({
     type: 'phase',
-    phaseId: String(phaseId),
-    paymentType,
-    amount: String(amount),
+    phaseId: String(opts.phaseId),
+    paymentType: opts.paymentType,
+    amount: String(opts.amount),
   });
-  return `${origin}/payment/callback?${params.toString()}`;
+  return `${opts.origin}/dashboard/projects/${opts.projectId}?${params.toString()}`;
 }
 
 /**

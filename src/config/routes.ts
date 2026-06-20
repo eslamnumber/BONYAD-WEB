@@ -39,13 +39,25 @@ export const ROUTES = {
   DASHBOARD_JOB_OFFERS: '/dashboard/job-offers',
   DASHBOARD_JOB_OFFER: (id: string) => `/dashboard/job-offers/${id}`,
   DASHBOARD_PROJECTS: '/dashboard/projects',
+  /** Create-a-project chooser — the launcher that offers the four creation methods
+   *  (Figma 1574:2384); "New project" routes on to the method picker below. */
+  DASHBOARD_PROJECTS_CREATE: '/dashboard/projects/create',
+  /** "Create a project" method picker (Figma 1579:2551) — reached from the chooser's
+   *  "New project" card; offers the AI assistant (Omda, beta) and manual entry. The
+   *  manual option routes on to the wizard below. */
+  DASHBOARD_PROJECTS_CREATE_PROJECT: '/dashboard/projects/create/project',
+  /** Omdah AI Q&A interview (Figma 1583:2747) — reached from the method picker's AI
+   *  row. A local 7-question guided interview (no backend yet); SOW generation is later. */
+  DASHBOARD_PROJECTS_CREATE_AI: '/dashboard/projects/create/ai',
   /** Customer create-project wizard (Figma 1394:7041…). */
   DASHBOARD_PROJECTS_NEW: '/dashboard/projects/new',
   /** Assigned-project detail — dispatches approved / completed (Figma 1103:6757) / in-progress by status. */
   DASHBOARD_PROJECT: (id: string) => `/dashboard/projects/${id}`,
   DASHBOARD_PAYMENTS: '/dashboard/payments',
-  /** HyperPay return URL — verifies the charge then marks the phase paid (Figma
-   *  1553:8142 success modal). Phase context travels in the querystring
+  /** Standalone HyperPay return page (fallback). Phase payments now return to the
+   *  project detail page itself, which verifies the charge, marks the phase paid, and
+   *  shows the result as a modal in place (Figma 1553:8142). This page stays as a
+   *  belt-and-braces landing; phase context travels in the querystring
    *  (`?type=phase&phaseId=&paymentType=&amount=`). */
   PAYMENT_CALLBACK: '/payment/callback',
   /** Customer "Offers" (العروض) — offers/bids received on the customer's projects. Placeholder; screen TBD. */

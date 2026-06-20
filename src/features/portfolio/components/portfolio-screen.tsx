@@ -82,12 +82,11 @@ export function PortfolioScreen() {
     // (LTR in English, RTL in Arabic) — a deliberate per-screen revert (user request).
     <div dir={dir} className="relative isolate flex w-full flex-1 flex-col px-4 py-8 sm:px-6">
       <SettingsAmbientGlow />
-      {/* Capped content hugged to the sidebar. The DashboardSidebar sits at the
-          DOCUMENT's inline-end (set by the inverted map), which is the OPPOSITE side
-          from this screen's overridden dir — so `self-start` (not `self-end`) is what
-          lands the content against the sidebar, with the leftover cap space on the
-          window edge. Cap on this inner wrapper, never the screen-root (rule 4a). */}
-      <div className="flex w-full max-w-5xl flex-col gap-6 self-start lg:gap-8">
+      {/* Centered (mx-auto) + capped so the content sits in the middle of the content
+          area and never stretches on wide monitors. mx-auto is direction-agnostic, so
+          it centers correctly despite this screen's `dir` override. Rule 4a settings
+          exception: settings sub-screens are centered, not sidebar-flush. */}
+      <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 lg:gap-8">
         <PortfolioBackLink label={t('portfolio.back')} />
         <header>
           <h1 className="text-foreground text-start text-2xl font-semibold tracking-tight sm:text-3xl">

@@ -33,15 +33,17 @@ const SHARED_ITEM =
 const ACTIVE_ITEM = `${SHARED_ITEM} text-on-media border-primary from-primary/0 to-primary bg-gradient-to-r rtl:bg-gradient-to-l`;
 const INACTIVE_ITEM = `${SHARED_ITEM} group text-sidebar-link rounded-s-2xl border-transparent transition-[color,background-color,border-color] duration-200 ease-out motion-safe:hover:bg-nav-hover motion-safe:hover:text-foreground motion-safe:hover:border-primary/40 motion-safe:active:scale-[0.98]`;
 
-// Customer inactive rows are compact 20px text lines (Figma) — no border/box,
-// just a colour-shift on hover; the icon follows via currentColor.
+// Customer inactive rows are compact 20px text lines (Figma); they share the
+// technician hover affordance — background tint + content zoom + icon colour shift.
 const CUSTOMER_INACTIVE =
-  'group focus-visible:outline-ring flex h-5 w-full items-center justify-end rounded px-4 text-sm font-medium text-sidebar-link transition-colors duration-200 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 motion-safe:hover:text-foreground';
+  'group focus-visible:outline-ring flex h-5 w-full items-center justify-end rounded px-4 text-sm font-medium text-sidebar-link transition-colors duration-200 ease-out focus-visible:outline-2 focus-visible:outline-offset-2 motion-safe:hover:bg-nav-hover motion-safe:hover:text-foreground motion-safe:active:scale-[0.98]';
 
-// Inner content row — technician variant zooms + nudges on hover; customer is flat.
-const ITEM_CONTENT_TECH =
+// Inner content row zooms + nudges on hover for both variants.
+const ITEM_CONTENT =
   'flex items-center gap-3 transition-transform duration-200 ease-out motion-safe:group-hover:scale-110';
-const ITEM_CONTENT = 'flex items-center gap-3';
+
+// Icon shifts to the primary colour on row hover (shared by both variants).
+const ICON_CLASS = 'motion-safe:group-hover:text-primary size-4 shrink-0 transition-colors';
 
 type SidebarNavProps = {
   variant: SidebarVariant;
@@ -95,14 +97,11 @@ function SidebarNavLink({
   const { Icon, href, badge } = item;
   const isCustomer = variant === 'customer';
   const inactiveClass = isCustomer ? CUSTOMER_INACTIVE : INACTIVE_ITEM;
-  const iconClass = isCustomer
-    ? 'size-4 shrink-0'
-    : 'motion-safe:group-hover:text-primary size-4 shrink-0 transition-colors';
   const content = (
-    <span className={isCustomer ? ITEM_CONTENT : ITEM_CONTENT_TECH}>
+    <span className={ITEM_CONTENT}>
       {badge ? <span className="bg-notif-unread size-1.5 rounded-full" aria-hidden /> : null}
       <span>{label}</span>
-      <Icon className={iconClass} aria-hidden />
+      <Icon className={ICON_CLASS} aria-hidden />
     </span>
   );
 

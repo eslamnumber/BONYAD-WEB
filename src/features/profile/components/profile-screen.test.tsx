@@ -48,19 +48,20 @@ describe('ProfileScreen role-awareness', () => {
     expect(screen.getByText('Account type')).toBeInTheDocument();
   });
 
-  it('renders feedback, services and payment cards as visible-but-non-clickable rows', () => {
+  it('keeps not-yet-built rows visible-but-non-clickable, but links the built ones', () => {
     setUser('TECHNICIAN');
     renderWithProviders(<ProfileScreen />);
 
-    // Disabled rows still show their label…
+    // "Services & subscription" has no screen yet → visible label, but not a link.
     expect(screen.getByText('Services & subscription')).toBeInTheDocument();
-    expect(screen.getByText('Payment cards')).toBeInTheDocument();
-    expect(screen.getByText('Feedback')).toBeInTheDocument();
-    // …but are not links (can't be opened)
     expect(screen.queryByRole('link', { name: /Services & subscription/ })).toBeNull();
-    expect(screen.queryByRole('link', { name: /Payment cards/ })).toBeNull();
-    expect(screen.queryByRole('link', { name: /Feedback/ })).toBeNull();
-    // A normal row stays clickable
+
+    // Payment cards + Feedback ship a screen now → they are real navigation links.
+    expect(screen.getByRole('link', { name: /Payment cards/ })).toHaveAttribute(
+      'href',
+      '/dashboard/settings/cards',
+    );
+    expect(screen.getByRole('link', { name: /Feedback/ })).toBeInTheDocument();
     expect(screen.getByRole('link', { name: /My info/ })).toBeInTheDocument();
   });
 

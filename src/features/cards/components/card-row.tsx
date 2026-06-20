@@ -87,15 +87,14 @@ function SetDefaultButton({
   );
 }
 
-/** Set-default (hidden once default) + delete, with their mutations + confirm modal. */
-function CardActions({ card, locale, onFeedback }: RowProps) {
+/** Set-default + delete mutations with their feedback wiring + confirm-modal state. */
+function useCardActions(card: PaymentCard, locale: Locale, onFeedback: (f: CardFeedback) => void) {
   const { t } = useTranslation();
   const [confirmOpen, setConfirmOpen] = useState(false);
   const setDefault = useSetDefaultCard();
   const del = useDeleteCard();
-  const busy = setDefault.isPending || del.isPending;
 
-  function makeDefault() {
+  const makeDefault = () =>
     setDefault.mutate(card.id, {
       onSuccess: () => onFeedback({ tone: 'success', message: t('cards.feedback.defaultSet') }),
       onError: (err) =>
@@ -104,9 +103,8 @@ function CardActions({ card, locale, onFeedback }: RowProps) {
           message: localizedCardError(err, locale, t('cards.feedback.defaultFailed')),
         }),
     });
-  }
 
-  function confirmDelete() {
+  const confirmDelete = () =>
     del.mutate(card.id, {
       onSuccess: () => {
         setConfirmOpen(false);
@@ -118,29 +116,44 @@ function CardActions({ card, locale, onFeedback }: RowProps) {
           message: localizedCardError(err, locale, t('cards.feedback.deleteFailed')),
         }),
     });
-  }
+
+  return {
+    confirmOpen,
+    setConfirmOpen,
+    settingDefault: setDefault.isPending,
+    deleting: del.isPending,
+    busy: setDefault.isPending || del.isPending,
+    makeDefault,
+    confirmDelete,
+  };
+}
+
+/** Set-default (hidden once default) + delete, with their mutations + confirm modal. */
+function CardActions({ card, locale, onFeedback }: RowProps) {
+  const { t } = useTranslation();
+  const a = useCardActions(card, locale, onFeedback);
 
   return (
     <div className="mt-4 flex gap-2">
       {!card.isDefault ? (
-        <SetDefaultButton pending={setDefault.isPending} busy={busy} onClick={makeDefault} />
+        <SetDefaultButton pending={a.settingDefault} busy={a.busy} onClick={a.makeDefault} />
       ) : null}
       <Button
         type="button"
         variant="outline"
         size="sm"
-        disabled={busy}
-        onClick={() => setConfirmOpen(true)}
+        disabled={a.busy}
+        onClick={() => a.setConfirmOpen(true)}
         className="text-destructive border-destructive/40 hover:bg-destructive/5 flex-1"
       >
         {t('cards.row.delete')}
       </Button>
       <DeleteCardModal
-        open={confirmOpen}
+        open={a.confirmOpen}
         cardLabel={`${brandLabel(card)} ${maskedNumber(card)}`}
-        isDeleting={del.isPending}
-        onClose={() => setConfirmOpen(false)}
-        onConfirm={confirmDelete}
+        isDeleting={a.deleting}
+        onClose={() => a.setConfirmOpen(false)}
+        onConfirm={a.confirmDelete}
       />
     </div>
   );

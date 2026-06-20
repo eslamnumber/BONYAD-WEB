@@ -12,10 +12,16 @@ import {
 const phase: ProjectPhase = { id: 12, phaseNumber: 1, remainingAmount: 25000 };
 
 describe('buildShopperResultUrl', () => {
-  it('encodes the phase context the callback reads back', () => {
-    const url = buildShopperResultUrl('https://app.test', 12, 'PARTIAL', 5000);
+  it('returns the browser to the project page with the phase context it reads back', () => {
+    const url = buildShopperResultUrl({
+      origin: 'https://app.test',
+      projectId: 5,
+      phaseId: 12,
+      paymentType: 'PARTIAL',
+      amount: 5000,
+    });
     const parsed = new URL(url);
-    expect(parsed.pathname).toBe('/payment/callback');
+    expect(parsed.pathname).toBe('/dashboard/projects/5');
     expect(parsed.searchParams.get('type')).toBe('phase');
     expect(parsed.searchParams.get('phaseId')).toBe('12');
     expect(parsed.searchParams.get('paymentType')).toBe('PARTIAL');

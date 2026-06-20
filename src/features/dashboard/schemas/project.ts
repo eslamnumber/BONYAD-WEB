@@ -32,6 +32,31 @@ export type Project = {
   bidsCloseAt?: string;
   createdAt?: string;
   regionId?: number;
+  /**
+   * AI (Omdah) Scope-of-Work fields — null/absent for manually-created projects.
+   * Mirrors the iOS project model (bonayd-ios `ProjectsListView.swift` BackendProject):
+   * a project is AI-generated when `hasSow` OR `aiGenerated`; `sowJsonSnapshot` is the
+   * full SOW JSON (source of truth for rich rendering); the flat `sow*` columns are a
+   * fallback. Surfaced read-only on the status screens via `parseProjectSow`. All
+   * optional + permissive — manual projects simply omit them.
+   */
+  aiGenerated?: boolean;
+  hasSow?: boolean;
+  sowJsonSnapshot?: string;
+  sowScope?: string;
+  sowKpis?: string;
+  sowResourcesJson?: string;
+  sowEstimatedBudget?: number | null;
+  sowDurationMonths?: number | null;
+  sowQualityTier?: string;
+  sowProjectType?: string;
+  sowSector?: string;
+  sowPropertyType?: string;
+  sowCity?: string;
+  sowDistrict?: string;
+  sowComplexity?: string;
+  sowCurrency?: string;
+  sowPricingModel?: string;
 };
 
 /**

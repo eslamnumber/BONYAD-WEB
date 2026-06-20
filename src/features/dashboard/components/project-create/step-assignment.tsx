@@ -27,6 +27,7 @@ export function StepAssignment({ form }: { form: UseFormReturn<CreateProjectForm
   const selectBidding = () => {
     form.setValue('assignmentType', 'ALL', { shouldValidate: true });
     form.setValue('assignedTechnicianId', null, { shouldValidate: true });
+    form.setValue('assignedTechnicianName', '');
     setChosen(null);
   };
   const selectDirect = () => {
@@ -36,6 +37,7 @@ export function StepAssignment({ form }: { form: UseFormReturn<CreateProjectForm
   const onChoose = (technician: Technician) => {
     setChosen(technician);
     form.setValue('assignedTechnicianId', technician.id, { shouldValidate: true });
+    form.setValue('assignedTechnicianName', technicianName(technician));
     setOpen(false);
   };
 

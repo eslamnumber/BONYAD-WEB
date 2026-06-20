@@ -197,6 +197,29 @@ export const API_ENDPOINTS = {
     /** Owner load/save of an editable pending project — GET + PUT (RN OwnerProjectEditScreen). */
     OWNER_EDIT: '/projects/:id/owner-edit',
   },
+  /**
+   * Omdah AI project creation. The conversational/refine endpoints live on separate
+   * hosts (see `src/config/ai-hosts.ts`) and are reached through same-origin Next
+   * route handlers under `/api/ai/*` (browser → route → foreign host); the create /
+   * draft / attachment endpoints are on the main backend and go through `/api/proxy/*`.
+   * Mirrors the iOS `ChatbotAPIService` + `AIProjectAPIService` + `SOWRefineService`.
+   */
+  AI: {
+    /** Chatbot health — Cloud Run `GET /health` → `{ status: 'ok' }`. Foreign host. */
+    HEALTH: '/health',
+    /** Conversational wizard step (REST) — Cloud Run `POST /api/chat`. Foreign host. */
+    CHAT: '/api/chat',
+    /** SOW generation stream (SSE) — Cloud Run `POST /api/chat/stream`. Foreign host. */
+    CHAT_STREAM: '/api/chat/stream',
+    /** NL SOW refine — AWS `POST /api/project/refine/await`. Foreign host. */
+    REFINE: '/api/project/refine/await',
+    /** Create the project from a generated SOW — main API `POST /v1/projects/from-ai`. */
+    CREATE_FROM_AI: '/v1/projects/from-ai',
+    /** Silent analytics/recovery draft — main API `PUT /v1/ai/draft`. */
+    DRAFT: '/v1/ai/draft',
+    /** Project photo/attachment (multipart) — main API `POST /v1/projects/:id/attachments`. */
+    ATTACHMENTS: '/v1/projects/:id/attachments',
+  },
   PHASES: {
     LIST: '/phases/project/:projectId',
     /** Create one phase (JSON). RN posts this once per phase after project create. */
@@ -336,4 +359,18 @@ export const API_ENDPOINTS = {
     /** POST (multipart, field `file`) → upload one image → `{ photoUrl }`. */
     UPLOAD_PHOTO: '/portfolios/projects/upload-photo',
   },
+} as const;
+
+/**
+ * Same-origin Next route handlers that bridge the browser to the AI foreign hosts
+ * (Cloud Run chatbot + AWS refine), since CSP `connect-src 'self'` forbids direct
+ * cross-origin calls. The client fetchers call these with `internal: true`; each
+ * route forwards to the matching `API_ENDPOINTS.AI.*` path on its foreign host.
+ * Kept here (not inline) so no route literal lives outside this file (rule 2).
+ */
+export const AI_INTERNAL_ROUTES = {
+  HEALTH: '/api/ai/health',
+  CHAT: '/api/ai/chat',
+  CHAT_STREAM: '/api/ai/chat/stream',
+  REFINE: '/api/ai/refine',
 } as const;

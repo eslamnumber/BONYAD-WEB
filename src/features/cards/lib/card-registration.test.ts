@@ -36,6 +36,11 @@ describe('resolveCardRedirectTarget', () => {
       'https://app.test/x?registration=return&id=CHK_1',
     );
   });
+
+  it('returns null for a real checkout with no hosted-page url (no card-entry path)', () => {
+    const noUrl: CardCheckoutSession = { ...hosted, redirectUrl: null };
+    expect(resolveCardRedirectTarget(noUrl, 'https://app.test/x?registration=return')).toBeNull();
+  });
 });
 
 describe('resolveReturnCheckoutId', () => {

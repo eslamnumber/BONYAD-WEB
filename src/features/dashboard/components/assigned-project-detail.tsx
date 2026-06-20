@@ -44,6 +44,8 @@ export function AssignedProjectDetail({ projectId }: Props) {
   if (isError || !project)
     return <DetailMessage>{t('dashboard.projectDetail.error')}</DetailMessage>;
 
+  // The pending/bid screen (JobOfferDetail) carries its own AI Scope-of-Work columns;
+  // every other lifecycle screen renders without an AI panel.
   return routeDetail(project.status, isTechnician, projectId);
 }
 

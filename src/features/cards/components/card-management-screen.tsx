@@ -46,14 +46,18 @@ export function CardManagementScreen() {
   return (
     <div className="relative isolate flex w-full flex-1 flex-col px-4 py-8 sm:px-6">
       <SettingsAmbientGlow />
-      {/* Capped + flush to the inline-END (self-end) so the grid hugs the sidebar with
-          no gap there and the leftover cap space sits on the window edge — stops the
-          cards stretching on wide monitors. Rule 4a + memory `feedback_app_screens_full_width`:
-          cap on this inner wrapper, never the screen-root; no mx-auto. */}
-      <div className="flex w-full max-w-5xl flex-col gap-6 self-end lg:gap-8">
+      {/* Centered (mx-auto) + capped so the grid sits in the middle of the content area
+          and never stretches on wide monitors. Rule 4a settings exception + memory
+          `feedback_app_screens_full_width`: settings sub-screens are centered, not
+          sidebar-flush. */}
+      <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 lg:gap-8">
         <SettingsBackLink href={ROUTES.DASHBOARD_SETTINGS} label={t('cards.back')} />
 
-        <header className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        {/* Reversed so the title block anchors to the inline-end (right in Arabic,
+            left in English under the inverted locale mapping) — lined up with the
+            back link + the profile header — while the add CTA takes the inline-start.
+            Base stays a column with the title stacked on top. */}
+        <header className="flex flex-col gap-4 sm:flex-row-reverse sm:items-end sm:justify-between">
           <CardManagementHeader isTechnician={isTechnician} />
           <AddCardButton
             locale={locale}

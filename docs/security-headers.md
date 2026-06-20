@@ -50,15 +50,19 @@ export function middleware(req: NextRequest) {
   const nonce = Buffer.from(crypto.randomUUID()).toString('base64');
   const csp = [
     `default-src 'self'`,
-    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic'`,
+    `script-src 'self' 'nonce-${nonce}' 'strict-dynamic' https://maps.googleapis.com https://maps.gstatic.com`,
     `style-src 'self' 'unsafe-inline'`, // Tailwind generates inline styles in dev; tighten in prod via hash list
     `img-src 'self' data: https:`,
     `font-src 'self' data:`,
-    `connect-src 'self' https://bonyad-app-nyayeditqq-ww.a.run.app https://*.sentry.io wss://admin.bonyad-hub.com`,
+    `connect-src 'self' https://bonyad-app-nyayeditqq-ww.a.run.app https://*.sentry.io wss://admin.bonyad-hub.com https://maps.googleapis.com https://maps.gstatic.com`,
     // ^ The `wss://admin.bonyad-hub.com` origin is the realtime-chat MQTT broker.
     //   The browser connects to it directly (src/lib/mqtt-chat.ts), so it must be
     //   allow-listed here or the WebSocket handshake is blocked. Keep in sync with
     //   NEXT_PUBLIC_MQTT_BROKER_URL.
+    // ^ `maps.googleapis.com` / `maps.gstatic.com` are the Google Maps JS SDK
+    //   (Omdah publish location picker): the script host (needed in dev; ignored
+    //   under prod `strict-dynamic`, where the nonce'd loader propagates trust) +
+    //   the Places/Geocoding XHR origins. Map tiles are images (img-src https:).
     `frame-ancestors 'none'`,
     `base-uri 'self'`,
     `form-action 'self'`,

@@ -42,10 +42,10 @@ export function CustomerWelcomeHero() {
         </p>
       </div>
       <div className="flex flex-col items-end gap-1">
-        <Link href={ROUTES.DASHBOARD_PROJECTS_NEW} className={PRIMARY_CTA}>
+        <Link href={ROUTES.DASHBOARD_PROJECTS_CREATE} className={PRIMARY_CTA}>
           {t('dashboard.customer.cta.startProject')}
         </Link>
-        <Link href={ROUTES.HOW_IT_WORKS} className={SECONDARY_CTA}>
+        <Link href={ROUTES.HOW_IT_WORKS} dir="auto" className={SECONDARY_CTA}>
           {t('dashboard.customer.cta.howItWorks')}
         </Link>
       </div>

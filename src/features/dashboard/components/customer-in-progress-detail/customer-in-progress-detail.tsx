@@ -20,6 +20,8 @@ import { ProjectImagesCard } from '../job-offer-detail/project-images-card';
 
 import { CustomerPhasesCard } from './customer-phases-card';
 import { PhasePaymentFlow } from './payment-flow';
+import { PhasePaymentResultModal } from './phase-payment-result-modal';
+import { usePhasePaymentResult } from './use-phase-payment-result';
 
 type Props = { projectId: number };
 
@@ -46,6 +48,8 @@ export function CustomerInProgressDetail({ projectId }: Props) {
   // The phase the customer is paying — set by a row's Approve button, opens the
   // payment flow (5d). null = no flow open.
   const [payingPhase, setPayingPhase] = useState<ProjectPhase | null>(null);
+  // The HyperPay redirect returns here (5d.4) → result shown as a modal in place.
+  const paymentResult = usePhasePaymentResult(projectId);
 
   if (isPending) return <DetailMessage>{t('dashboard.projectDetail.loading')}</DetailMessage>;
   if (isError || !project)
@@ -85,6 +89,7 @@ export function CustomerInProgressDetail({ projectId }: Props) {
           </div>
         </div>
       </div>
+      <PhasePaymentResultModal {...paymentResult} />
     </div>
   );
 }

@@ -20,6 +20,9 @@ const labels = {
   phonePlaceholder: 'Mobile number',
   phoneAriaLabel: 'Enter your mobile number',
   submitButton: 'Send verification code',
+  roleCustomer: 'User',
+  roleProfessional: 'Service Provider',
+  roleToggleAriaLabel: 'Select your account type',
   errors: { genericError: 'Something went wrong. Please try again.' },
 };
 
@@ -38,15 +41,27 @@ describe('ForgotPasswordForm', () => {
     });
   });
 
-  it('navigates to /verify-otp with phone param on successful submission', async () => {
+  it('navigates to /reset-password with phone param on successful submission', async () => {
     renderWithProviders(<ForgotPasswordForm labels={labels} accountRole="USER" />);
     fireEvent.change(screen.getByRole('textbox', { name: /enter your mobile number/i }), {
       target: { value: '0500000000' },
     });
     fireEvent.click(screen.getByRole('button', { name: /send verification code/i }));
     await waitFor(() => {
-      expect(mockPush).toHaveBeenCalledWith(expect.stringContaining('/verify-otp'));
+      expect(mockPush).toHaveBeenCalledWith(expect.stringContaining('/reset-password'));
       expect(mockPush).toHaveBeenCalledWith(expect.stringContaining('phone=500000000'));
+    });
+  });
+
+  it('forwards the selected role (technician) to the reset-password route', async () => {
+    renderWithProviders(<ForgotPasswordForm labels={labels} accountRole="USER" />);
+    fireEvent.click(screen.getByRole('button', { name: /service provider/i }));
+    fireEvent.change(screen.getByRole('textbox', { name: /enter your mobile number/i }), {
+      target: { value: '0500000000' },
+    });
+    fireEvent.click(screen.getByRole('button', { name: /send verification code/i }));
+    await waitFor(() => {
+      expect(mockPush).toHaveBeenCalledWith(expect.stringContaining('role=TECHNICIAN'));
     });
   });
 

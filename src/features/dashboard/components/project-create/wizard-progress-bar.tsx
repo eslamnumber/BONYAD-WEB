@@ -22,7 +22,7 @@ export function WizardProgressBar({ currentStep }: { currentStep: number }) {
       role="progressbar"
       aria-valuemin={1}
       aria-valuemax={PROGRESS_SEGMENTS}
-      aria-valuenow={currentStep + 1}
+      aria-valuenow={Math.min(currentStep + 1, PROGRESS_SEGMENTS)}
     >
       {Array.from({ length: PROGRESS_SEGMENTS }, (_, i) => (
         <span key={i} className={`${SEG} ${segClass(i, currentStep)}`} />

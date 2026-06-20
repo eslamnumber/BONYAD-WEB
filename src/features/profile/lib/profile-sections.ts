@@ -63,12 +63,7 @@ export const ACCOUNT_ROWS: readonly ProfileLinkRow[] = [
     href: ROUTES.DASHBOARD_SETTINGS_SUBSCRIPTIONS,
     technicianOnly: true,
   },
-  {
-    key: 'cards',
-    Icon: DashboardPaymentsIcon,
-    href: ROUTES.DASHBOARD_SETTINGS_CARDS,
-    disabled: true,
-  },
+  { key: 'cards', Icon: DashboardPaymentsIcon, href: ROUTES.DASHBOARD_SETTINGS_CARDS },
   { key: 'transactions', Icon: SaudiRiyalIcon, href: ROUTES.DASHBOARD_PAYMENTS },
 ];
 

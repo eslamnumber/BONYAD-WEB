@@ -17,14 +17,17 @@ type Props = {
   isLast: boolean;
   pending: boolean;
   canProceed: boolean;
+  /** True on the step whose Next click returns to the review summary (edit-from-review). */
+  returnsToReview: boolean;
   rootError?: string;
+  onEdit: (step: number) => void;
   onBack: () => void;
   onSkip: () => void;
   onNext: () => void;
 };
 
 /** The wizard's `<form>`: per-step heading + active step body + the nav row. */
-export function WizardForm({ step, form, config, ...nav }: Props) {
+export function WizardForm({ step, form, config, onEdit, ...nav }: Props) {
   const { t } = useTranslation();
   return (
     <form
@@ -36,7 +39,7 @@ export function WizardForm({ step, form, config, ...nav }: Props) {
         title={t(config.headingKey)}
         description={config.descriptionKey ? t(config.descriptionKey) : undefined}
       />
-      <WizardStepBody step={step} form={form} />
+      <WizardStepBody step={step} form={form} onEdit={onEdit} />
       <WizardNav config={config} {...nav} />
     </form>
   );

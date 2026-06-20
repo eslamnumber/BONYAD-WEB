@@ -1,1 +1,1 @@
-export { ProjectEdit } from './project-edit';
+export { ProjectEditModal } from './project-edit-modal';

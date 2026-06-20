@@ -25,4 +25,8 @@ export const profileHandlers = [
     HttpResponse.json({ authorized: true, isCrFound: true, isNidFound: true }),
   ),
   http.put(`${BASE}/users/:userId/profile`, () => HttpResponse.json({ ok: true })),
+  // Change-photo control: avatar upload (default happy path).
+  http.post('*/users/update-profile-image', () =>
+    HttpResponse.json({ profileImage: 'https://cdn.example/new-avatar.jpg' }),
+  ),
 ];

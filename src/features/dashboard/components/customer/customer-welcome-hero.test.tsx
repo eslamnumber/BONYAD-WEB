@@ -38,12 +38,12 @@ describe('CustomerWelcomeHero', () => {
     expect(heading).not.toHaveTextContent('Welcome,');
   });
 
-  it('links the CTAs to the projects + how-it-works routes', () => {
+  it('links the CTAs to the create-project chooser + how-it-works routes', () => {
     renderWithProviders(<CustomerWelcomeHero />);
 
     expect(screen.getByRole('link', { name: 'Start your project now' })).toHaveAttribute(
       'href',
-      ROUTES.DASHBOARD_PROJECTS,
+      ROUTES.DASHBOARD_PROJECTS_CREATE,
     );
     expect(screen.getByRole('link', { name: 'How does the platform work?' })).toHaveAttribute(
       'href',

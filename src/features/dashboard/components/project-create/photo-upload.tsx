@@ -1,22 +1,36 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
+import { type UseFormReturn } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { CloseIcon, UploadIcon } from '@/components/icons';
+
+import { type CreateProjectFormValues } from '../../schemas/create-project-form';
 
 const MAX_PHOTOS = 5;
 const K = 'dashboard.createProject.steps.location';
 
 type Photo = { file: File; url: string };
 
-/** Local photo state with object-URL previews, revoked on remove + unmount. */
-function usePhotoFiles() {
-  const [photos, setPhotos] = useState<Photo[]>([]);
-  const photosRef = useRef<Photo[]>([]);
+/**
+ * Photo state with object-URL previews, revoked on remove + unmount, mirrored to
+ * the wizard form's `photos` field so the files survive step navigation and reach
+ * the create request. Previews are rebuilt from the form's `File[]` on remount.
+ */
+function usePhotoFiles(form: UseFormReturn<CreateProjectFormValues>) {
+  const [photos, setPhotos] = useState<Photo[]>(() =>
+    (form.getValues('photos') ?? []).map((file) => ({ file, url: URL.createObjectURL(file) })),
+  );
+  const photosRef = useRef<Photo[]>(photos);
   useEffect(() => {
     photosRef.current = photos;
-  }, [photos]);
+    form.setValue(
+      'photos',
+      photos.map((p) => p.file),
+      { shouldDirty: true },
+    );
+  }, [photos, form]);
   useEffect(() => () => photosRef.current.forEach((p) => URL.revokeObjectURL(p.url)), []);
 
   const add = (list: FileList | null) => {
@@ -63,13 +77,15 @@ function PhotoThumb({
 
 /**
  * Optional project photos (Figma 1394:7581) — image previews with add/remove.
- * Files are captured client-side only: the create endpoint (per the RN reference)
- * receives no photo parts, so they are not submitted yet.
+ * The selected files are mirrored into the wizard form's `photos` field and sent
+ * as multipart `images` parts on create (see `buildCreateProjectFormData`); the
+ * backend returns them in the project detail `files[]`, which the images gallery
+ * renders.
  */
-export function PhotoUpload() {
+export function PhotoUpload({ form }: { form: UseFormReturn<CreateProjectFormValues> }) {
   const { t } = useTranslation();
   const inputRef = useRef<HTMLInputElement>(null);
-  const { photos, add, removeAt } = usePhotoFiles();
+  const { photos, add, removeAt } = usePhotoFiles(form);
 
   return (
     <div className="flex w-full flex-col items-end gap-4">

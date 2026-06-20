@@ -9,6 +9,8 @@ import { createProject } from './create-project';
 export type SubmitNewProjectVars = {
   project: CreateProjectInput;
   phases: PhaseInput[];
+  /** Optional photos, uploaded with the create request as multipart `images`. */
+  photos?: File[];
 };
 
 /**
@@ -21,8 +23,9 @@ export type SubmitNewProjectVars = {
 export async function submitNewProject({
   project,
   phases,
+  photos = [],
 }: SubmitNewProjectVars): Promise<number | undefined> {
-  const created = await createProject(project);
+  const created = await createProject(project, photos);
   const id = createdProjectId(created);
   if (id !== undefined && phases.length > 0) {
     await createPhasesForProject(id, phases);

@@ -133,3 +133,19 @@ export { default as CloseIcon } from './close.svg';
 export { default as StarIcon } from './star.svg';
 export { default as AssignmentBiddingIcon } from './assignment-bidding.svg';
 export { default as AssignmentDirectIcon } from './assignment-direct.svg';
+
+/* Create-project chooser (Figma 1574:2384) — the four creation-method option cards
+   (quick task / text-&-voice / smart 2D→3D / new project). Each is the accent-coloured
+   line glyph, recoloured via currentColor by its card's accent token. */
+export { default as QuickTaskIcon } from './quick-task.svg';
+export { default as TextVoiceDesignIcon } from './text-voice-design.svg';
+export { default as SmartDesignIcon } from './smart-design.svg';
+export { default as NewProjectIcon } from './new-project.svg';
+
+/* Create-project method picker (Figma 1579:2551) — the AI-assistant ("Omda") sparkle
+   and the manual-entry pointer for the two creation-method rows. */
+export { default as AiAssistantIcon } from './ai-assistant.svg';
+export { default as ManualEntryIcon } from './manual-entry.svg';
+
+/* Omdah AI Q&A interview (Figma 1583:2747) — the pill send/advance arrow. */
+export { default as ArrowUpIcon } from './arrow-up.svg';

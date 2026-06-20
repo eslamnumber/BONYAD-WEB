@@ -35,6 +35,9 @@ export default async function ForgotPasswordRoutePage({
     phoneHint: t('auth.hints.phoneFormat'),
     submitButton: t('auth.forgotPassword.submitButton'),
     backToLogin: t('auth.forgotPassword.backToLogin'),
+    roleCustomer: t('auth.register.roleCustomer'),
+    roleProfessional: t('auth.register.roleProfessional'),
+    roleToggleAriaLabel: t('auth.register.roleToggleAriaLabel'),
     headingBrand: t('site.name'),
     errors: {
       genericError: t('auth.errors.genericError'),

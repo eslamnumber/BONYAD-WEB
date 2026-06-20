@@ -1,7 +1,10 @@
 import { type CreateProjectFormValues } from '../../schemas/create-project-form';
 
-/** The wizard's six content steps; the last (location) submits. */
-export const TOTAL_STEPS = 6;
+/**
+ * Seven steps: six content steps + a final review (which submits). The progress
+ * bar tracks only the six content steps, so it reads full on the review step.
+ */
+export const TOTAL_STEPS = 7;
 export const PROGRESS_SEGMENTS = 6;
 
 const NS = 'dashboard.createProject.steps';
@@ -48,6 +51,12 @@ export const STEPS: WizardStepConfig[] = [
     hasBack: true,
     hasSkip: false,
   },
+  {
+    headingKey: 'dashboard.createProject.review.heading',
+    descriptionKey: 'dashboard.createProject.review.description',
+    hasBack: true,
+    hasSkip: false,
+  },
 ];
 
 /** Safe lookup — `step` is always in range, but this keeps the type non-optional. */
@@ -76,4 +85,14 @@ export function isStepComplete(index: number, v: CreateProjectFormValues): boole
     default:
       return true;
   }
+}
+
+/**
+ * Last step covered by the review card whose Edit link targets `startStep`. All
+ * cards map 1:1 to a step except the "assignment & extra details" card, which spans
+ * the assignment (4) + location (5) steps — so editing it from review walks 4→5
+ * before returning to the summary. See {@link useWizardNav}.
+ */
+export function editGroupEnd(startStep: number): number {
+  return startStep === 4 ? 5 : startStep;
 }

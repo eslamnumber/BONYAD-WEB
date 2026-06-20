@@ -118,6 +118,13 @@
   --color-deco-blob-green: var(--deco-blob-green);
   --color-deco-blob-purple: var(--deco-blob-purple);
 
+  /* Create-project chooser (Figma 1574:2384) — per-card accent: the option icon
+     stroke + its corner glow blob. amber/green/purple/blue. */
+  --color-create-option-amber: var(--create-option-amber);
+  --color-create-option-green: var(--create-option-green);
+  --color-create-option-purple: var(--create-option-purple);
+  --color-create-option-blue: var(--create-option-blue);
+
   /* Tech services right panel background */
   --color-tech-services-panel: var(--tech-services-panel-bg);
 
@@ -159,6 +166,8 @@
      in light; nearly-clear in dark so the dark card surface reads through). */
   --color-about-panel-soft: var(--about-panel-soft);
   --color-about-accent: var(--about-accent);
+  /* AI Q&A interview input pill border — Figma #75b1e4 (light blue). */
+  --color-ai-input-border: var(--ai-input-border);
   --color-pillar-frost: var(--pillar-frost);
   /* pillar-blob is the soft decorative cloud at the top of the Value/Mission cards —
      a very light blue (was navy). */
@@ -223,6 +232,9 @@
   --color-status-pending-soft: var(--status-pending-soft);
   --color-status-bid: var(--status-bid);
   --color-status-bid-soft: var(--status-bid-soft);
+  /* Opaque light-purple fill for the "Beta" pill — must be opaque so it cuts the
+     card border it straddles (Figma #ede7fb). */
+  --color-status-bid-tint: var(--status-bid-tint);
   --color-status-done: var(--status-done);
   --color-status-done-bg: var(--status-done-bg);
   --color-stat-up: var(--stat-up);
@@ -414,6 +426,7 @@
      to one perceptually-identical token; Figma #005DAC (timeline accent). */
   --about-panel-soft: oklch(0.97 0.012 245);
   --about-accent: oklch(0.46 0.18 251);
+  --ai-input-border: oklch(0.72 0.09 245);
   /* Pillar card frosted overlay — light tint so the resting state shows the artwork BLURRED
      (through the backdrop-blur) rather than as a solid white veil. */
   --pillar-frost: oklch(1 0 0 / 0.18);
@@ -487,8 +500,15 @@
   /* Bid-received pill + "best value" highlight — Figma #8A38F5 (customer bids screen). */
   --status-bid: oklch(0.56 0.26 297);
   --status-bid-soft: oklch(0.56 0.26 297 / 0.1);
+  --status-bid-tint: oklch(0.94 0.03 300);
   --status-done: oklch(1 0 0);
   --status-done-bg: oklch(0.52 0.13 252);
+  /* Create-project chooser option accents (Figma #D97706 / #00BC7D / #8A38F5 /
+     #005DAC) — value-matched to --awaiting / --stat-up / --status-bid / --about-accent. */
+  --create-option-amber: oklch(0.67 0.16 60);
+  --create-option-green: oklch(0.7 0.16 158);
+  --create-option-purple: oklch(0.56 0.26 297);
+  --create-option-blue: oklch(0.46 0.18 251);
   --stat-up: oklch(0.7 0.16 158);
   --stat-up-soft: oklch(0.7 0.16 158 / 0.15);
   --stat-down: oklch(0.62 0.23 27);
@@ -647,6 +667,7 @@
      timeline divider and stats numbers stay legible against the dark surface. */
   --about-panel-soft: oklch(0.22 0.025 245);
   --about-accent: oklch(0.7 0.16 250);
+  --ai-input-border: oklch(0.52 0.1 245);
   /* Pillar frost — barely-there white veil over the dark card surface so the
      overlay still tinges the artwork lighter without washing it out. */
   --pillar-frost: oklch(1 0 0 / 0.06);
@@ -713,8 +734,14 @@
   --status-pending-soft: oklch(0.66 0.22 300 / 0.2);
   --status-bid: oklch(0.66 0.23 297);
   --status-bid-soft: oklch(0.66 0.23 297 / 0.2);
+  --status-bid-tint: oklch(0.32 0.08 300);
   --status-done: oklch(1 0 0);
   --status-done-bg: oklch(0.58 0.13 252);
+  /* Create-project chooser option accents — brightened to read on the dark glass card. */
+  --create-option-amber: oklch(0.76 0.15 60);
+  --create-option-green: oklch(0.76 0.16 158);
+  --create-option-purple: oklch(0.66 0.23 297);
+  --create-option-blue: oklch(0.7 0.16 250);
   --stat-up: oklch(0.76 0.16 158);
   --stat-up-soft: oklch(0.76 0.16 158 / 0.22);
   --stat-down: oklch(0.68 0.2 27);
@@ -787,5 +814,31 @@ html[dir='rtl'] {
 @keyframes notif-fade-in {
   from {
     opacity: 0;
+  }
+}
+
+/* Toast entrance — pops down from the top edge of the viewport. Resting state is
+   in place, so the pill stays visible when motion is disabled (motion-safe only). */
+@keyframes toast-slide-down {
+  from {
+    opacity: 0;
+    transform: translateY(-12px);
+  }
+}
+
+/* Omdah AI avatar — a gentle "breathing" scale + a slow swirl of the orb's gradient
+   (ChatGPT-style). Applied only under motion-safe; the resting state is the static orb. */
+@keyframes omdah-breathe {
+  0%,
+  100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.06);
+  }
+}
+@keyframes omdah-swirl {
+  to {
+    transform: rotate(360deg);
   }
 }

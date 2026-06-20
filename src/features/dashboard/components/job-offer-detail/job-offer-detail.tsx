@@ -16,6 +16,7 @@ import { OfferPanel } from './offer-panel';
 import { ProjectDescriptionCard } from './project-description-card';
 import { ProjectImagesCard } from './project-images-card';
 import { ProjectPhasesCard } from './project-phases-card';
+import { ProjectSowColumn } from './project-sow-column';
 import { ProjectSummaryCard } from './project-summary-card';
 
 type Props = { projectId: number };
@@ -65,11 +66,17 @@ export function JobOfferDetail({ projectId }: Props) {
             ) : (
               <CustomerOfferStatus projectId={projectId} />
             )}
+            {/* AI Scope-of-Work, primary group (objectives + KPIs) — self-hides for
+                manual projects. Sits under the bids / offer column. */}
+            <ProjectSowColumn project={project} group="primary" />
           </div>
           <div className="flex w-full flex-col gap-6 lg:min-w-0 lg:flex-1">
             <ProjectDescriptionCard project={project} />
             <ProjectPhasesCard projectId={projectId} />
             <ProjectImagesCard images={images} />
+            {/* AI Scope-of-Work, secondary group (scope, deliverables, resources,
+                compliance, risks) — self-hides for manual projects. */}
+            <ProjectSowColumn project={project} group="secondary" />
           </div>
         </div>
       </div>

@@ -107,9 +107,7 @@ export function ProjectsSection({
   locale: Locale;
   fallbackProjects: PortfolioProject[];
 }) {
-  const { t } = useTranslation();
   const query = usePortfolioProjects();
-  const del = useDeleteProject();
   const [addOpen, setAddOpen] = useState(false);
   const [editing, setEditing] = useState<PortfolioProject | null>(null);
   const [deleting, setDeleting] = useState<PortfolioProject | null>(null);
@@ -118,11 +116,6 @@ export function ProjectsSection({
   const projects = fetched.length > 0 ? fetched : fallbackProjects;
   const isPending = query.isPending && fallbackProjects.length === 0;
   const isError = query.isError && fallbackProjects.length === 0;
-
-  function confirmDelete() {
-    if (!deleting) return;
-    del.mutate(deleting.id, { onSuccess: () => setDeleting(null) });
-  }
 
   return (
     <section className="flex flex-col gap-4">
@@ -141,18 +134,37 @@ export function ProjectsSection({
       {editing ? (
         <ProjectFormModal open project={editing} onClose={() => setEditing(null)} />
       ) : null}
-      <DeleteProjectModal
-        open={deleting !== null}
-        title={deleting?.title ?? ''}
-        isDeleting={del.isPending}
-        errorMessage={
-          del.isError
-            ? localizedPortfolioError(del.error, locale, t('portfolio.errors.deleteFailed'))
-            : undefined
-        }
-        onClose={() => setDeleting(null)}
-        onConfirm={confirmDelete}
-      />
+      <DeleteProjectControl deleting={deleting} locale={locale} onClose={() => setDeleting(null)} />
     </section>
+  );
+}
+
+/** Delete-confirmation dialog + its mutation — open while a project is pending deletion. */
+function DeleteProjectControl({
+  deleting,
+  locale,
+  onClose,
+}: {
+  deleting: PortfolioProject | null;
+  locale: Locale;
+  onClose: () => void;
+}) {
+  const { t } = useTranslation();
+  const del = useDeleteProject();
+  return (
+    <DeleteProjectModal
+      open={deleting !== null}
+      title={deleting?.title ?? ''}
+      isDeleting={del.isPending}
+      errorMessage={
+        del.isError
+          ? localizedPortfolioError(del.error, locale, t('portfolio.errors.deleteFailed'))
+          : undefined
+      }
+      onClose={onClose}
+      onConfirm={() => {
+        if (deleting) del.mutate(deleting.id, { onSuccess: onClose });
+      }}
+    />
   );
 }

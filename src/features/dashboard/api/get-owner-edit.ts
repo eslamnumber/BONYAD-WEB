@@ -19,11 +19,13 @@ export async function getOwnerEdit(id: number): Promise<OwnerEditResponse> {
   return apiClient.get<OwnerEditResponse>(path);
 }
 
-export function useOwnerEdit(id: number) {
+export function useOwnerEdit(id: number, enabled = true) {
   return useQuery({
     queryKey: ownerEditQueryKey(id),
     queryFn: () => getOwnerEdit(id),
-    // Always reload the latest server state when the owner opens the edit form.
+    // Only fetch once the edit dialog is open, and always reload the latest server
+    // state when the owner reopens it.
+    enabled,
     staleTime: 0,
   });
 }

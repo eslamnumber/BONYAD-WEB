@@ -1,0 +1,36 @@
+<svg preserveAspectRatio="xMidYMid meet" width="100%" height="100%" overflow="visible" viewBox="0 0 172 173" fill="none" xmlns="http://www.w3.org/2000/svg">
+<g id="omdah-avatar" filter="url(#omdah_filter0)">
+<g filter="url(#omdah_filter1)">
+<rect x="30" y="31" width="112" height="112" rx="56" fill="#4A4A4A"/>
+<rect x="30" y="31" width="112" height="112" rx="56" fill="url(#omdah_paint0)"/>
+</g>
+<g>
+<circle cx="86" cy="86" r="56" fill="url(#omdah_paint1)"/>
+<circle cx="86" cy="86" r="56" fill="url(#omdah_paint2)"/>
+</g>
+</g>
+<defs>
+<filter id="omdah_filter0" x="0" y="0" width="172" height="173" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="15" result="effect1_foregroundBlur"/>
+</filter>
+<filter id="omdah_filter1" x="8.77358" y="9.77358" width="154.453" height="154.453" filterUnits="userSpaceOnUse" color-interpolation-filters="sRGB">
+<feFlood flood-opacity="0" result="BackgroundImageFix"/>
+<feBlend mode="normal" in="SourceGraphic" in2="BackgroundImageFix" result="shape"/>
+<feGaussianBlur stdDeviation="10.6132" result="effect1_foregroundBlur"/>
+</filter>
+<radialGradient id="omdah_paint0" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(86 87) scale(56 66.3897)">
+<stop stop-color="#4B7DFA"/>
+<stop offset="1" stop-color="#00DCFA"/>
+</radialGradient>
+<radialGradient id="omdah_paint1" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(86 86) scale(56 65.6211)">
+<stop stop-color="#D23DFF"/>
+<stop offset="1" stop-color="#E6699B"/>
+</radialGradient>
+<radialGradient id="omdah_paint2" cx="0" cy="0" r="1" gradientUnits="userSpaceOnUse" gradientTransform="translate(86 86) scale(56 66.3897)">
+<stop stop-color="#003867"/>
+<stop offset="1" stop-color="#1A6DB4"/>
+</radialGradient>
+</defs>
+</svg>

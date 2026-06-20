@@ -3,8 +3,9 @@
 import { type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Avatar } from '@/components/avatar';
 import { FeatureVerifiedIcon } from '@/components/icons';
+
+import { EditableAvatar } from './editable-avatar';
 
 export type MyInfoSummaryData = {
   name?: string;
@@ -60,8 +61,8 @@ function StatusChip({ verified, text }: { verified: boolean; text: string }) {
 /**
  * Account card — a centred identity (avatar · name · verified seal · role) over a
  * typographic definition list of the account snapshot (status · email · phone). A
- * quiet blue glow behind the avatar gives it on-brand depth. Read-only; the
- * editable fields live behind the Manage cards.
+ * quiet blue glow behind the avatar gives it on-brand depth. The avatar is the
+ * change-photo control; the editable text fields live behind the Manage cards.
  */
 export function MyInfoSummary({ data }: { data: MyInfoSummaryData }) {
   const { t } = useTranslation();
@@ -72,7 +73,7 @@ export function MyInfoSummary({ data }: { data: MyInfoSummaryData }) {
         className="bg-deco-blob-blue-light pointer-events-none absolute inset-x-0 -top-14 -z-10 mx-auto size-44 rounded-full opacity-25 blur-[60px]"
       />
       <div className="flex flex-col items-center gap-3 px-5 pt-8 pb-6 text-center">
-        <Avatar
+        <EditableAvatar
           name={data.name}
           src={data.profileImage}
           className="ring-border size-20 text-2xl shadow-sm ring-1"

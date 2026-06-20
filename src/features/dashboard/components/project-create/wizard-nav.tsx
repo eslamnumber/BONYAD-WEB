@@ -16,11 +16,20 @@ type Props = {
   pending: boolean;
   /** False while the current step's required fields are unmet — disables Next/Create. */
   canProceed: boolean;
+  /** True when this step was reached via a review-card Edit link and Next returns to it. */
+  returnsToReview: boolean;
   rootError?: string;
   onBack: () => void;
   onSkip: () => void;
   onNext: () => void;
 };
+
+/** Primary-button label key: Create on the final step, Save when returning to review, else Next. */
+function primaryLabelKey(isLast: boolean, returnsToReview: boolean): string {
+  if (isLast) return 'dashboard.createProject.nav.create';
+  if (returnsToReview) return 'dashboard.createProject.nav.saveReview';
+  return 'dashboard.createProject.nav.next';
+}
 
 /**
  * Per-step button row: optional Skip / Back ghost buttons + the primary
@@ -32,6 +41,7 @@ export function WizardNav({
   isLast,
   pending,
   canProceed,
+  returnsToReview,
   rootError,
   onBack,
   onSkip,
@@ -54,7 +64,7 @@ export function WizardNav({
         ) : null}
         <Button type="button" onClick={onNext} disabled={pending || !canProceed} className={NEXT}>
           <ProjectArrowIcon aria-hidden className="rtl:-scale-x-100" />
-          {isLast ? t('dashboard.createProject.nav.create') : t('dashboard.createProject.nav.next')}
+          {t(primaryLabelKey(isLast, returnsToReview))}
         </Button>
       </div>
     </div>

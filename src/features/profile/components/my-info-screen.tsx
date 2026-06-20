@@ -65,9 +65,9 @@ export function MyInfoScreen({ forms = {} }: { forms?: ManageForms }) {
   const summary = buildSummary(profile, user, identity, t);
 
   return (
-    // (app) screen-root: full-width flush — no mx-auto / max-w / lg:px-8 (rule 4a; the
-    // sidebar already constrains the column). Mirrors card-management-screen.tsx.
-    <div className="relative isolate mx-auto flex w-full max-w-7xl flex-1 flex-col gap-6 px-4 py-8 sm:px-6 lg:px-8">
+    // Settings sub-screen: centered column (rule 4a settings exception) — mx-auto +
+    // max-w-5xl, standard px-4 → sm:px-6 gutter (no lg:px-8). Mirrors card-management-screen.tsx.
+    <div className="relative isolate mx-auto flex w-full max-w-5xl flex-1 flex-col gap-6 px-4 py-8 sm:px-6">
       <ProfileAmbientGlow />
       <ProfileBackLink href={ROUTES.DASHBOARD_SETTINGS} label={t('profile.myInfo.back')} />
 

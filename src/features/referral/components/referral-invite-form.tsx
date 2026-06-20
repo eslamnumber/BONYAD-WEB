@@ -18,6 +18,19 @@ function errorMessageKey(error: unknown): string | null {
   return error ? 'referral.invite.errors.generic' : null;
 }
 
+/** Title + punctuated subtitle (`dir="auto"`) for the invite card. */
+function InviteHeader() {
+  const { t } = useTranslation();
+  return (
+    <div className="flex flex-col gap-1">
+      <h2 className="text-foreground text-base font-semibold">{t('referral.invite.title')}</h2>
+      <p className="text-muted-foreground text-sm leading-6" dir="auto">
+        {t('referral.invite.subtitle')}
+      </p>
+    </div>
+  );
+}
+
 /**
  * Invite-a-friend form — a single Saudi mobile field (live-filtered to a `5XXXXXXXX`
  * body by the shared phone normaliser, so a non-Saudi number can never be submitted)
@@ -42,12 +55,7 @@ export function ReferralInviteForm() {
 
   return (
     <section className="bg-card border-border flex flex-col gap-4 rounded-2xl border p-5 shadow-sm">
-      <div className="flex flex-col gap-1">
-        <h2 className="text-foreground text-base font-semibold">{t('referral.invite.title')}</h2>
-        <p className="text-muted-foreground text-sm leading-6" dir="auto">
-          {t('referral.invite.subtitle')}
-        </p>
-      </div>
+      <InviteHeader />
       <form onSubmit={onSubmit} className="flex flex-col gap-3" noValidate>
         <Label htmlFor={inputId}>{t('referral.invite.label')}</Label>
         <div className="flex flex-col gap-2 sm:flex-row">

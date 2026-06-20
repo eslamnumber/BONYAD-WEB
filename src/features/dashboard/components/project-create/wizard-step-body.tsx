@@ -10,14 +10,18 @@ import { StepDeliverables } from './step-deliverables';
 import { StepLocation } from './step-location';
 import { StepPhases } from './step-phases';
 import { StepProjectInfo } from './step-project-info';
+import { StepReview } from './step-review';
 
-/** Renders the active wizard step body (Figma create-project steps 1–5). */
+/** Renders the active wizard step body (Figma create-project steps 1–6 + review). */
 export function WizardStepBody({
   step,
   form,
+  onEdit,
 }: {
   step: number;
   form: UseFormReturn<CreateProjectFormValues>;
+  /** Jump back to a given step — used by the review step's per-card Edit links. */
+  onEdit: (step: number) => void;
 }) {
   switch (step) {
     case 0:
@@ -32,6 +36,8 @@ export function WizardStepBody({
       return <StepAssignment form={form} />;
     case 5:
       return <StepLocation form={form} />;
+    case 6:
+      return <StepReview form={form} onEdit={onEdit} />;
     default:
       return null;
   }

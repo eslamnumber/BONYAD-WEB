@@ -105,4 +105,23 @@ export const authHandlers = [
 
     return HttpResponse.json({ message: 'OTP resent successfully' });
   }),
+
+  http.post('*/auth/reset-password', async ({ request }) => {
+    const body = (await request.json()) as {
+      phoneNumber?: string;
+      role?: string;
+      otpCode?: string;
+      newPassword?: string;
+    };
+
+    if (!body.phoneNumber || !body.role || !body.otpCode || !body.newPassword) {
+      return HttpResponse.json({ message: 'Missing fields' }, { status: 400 });
+    }
+
+    if (body.otpCode === '0000') {
+      return HttpResponse.json({ message: 'Invalid OTP' }, { status: 401 });
+    }
+
+    return HttpResponse.json({ message: 'Password reset successfully' });
+  }),
 ];

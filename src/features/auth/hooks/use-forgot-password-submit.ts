@@ -27,7 +27,7 @@ export function useForgotPasswordSubmit(
         onSuccess: (_, variables) => {
           const phone = normalizePhoneForApi(variables.phone);
           router.push(
-            `${ROUTES.VERIFY_OTP}?phone=${encodeURIComponent(phone)}&role=${variables.role}`,
+            `${ROUTES.RESET_PASSWORD}?phone=${encodeURIComponent(phone)}&role=${variables.role}`,
           );
         },
         onError: (err) =>

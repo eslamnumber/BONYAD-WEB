@@ -84,6 +84,23 @@ describe('createProject', () => {
     });
   });
 
+  it('appends uploaded photos as repeated `images` parts', async () => {
+    const ref = captureCreate();
+    const a = new File(['a'], 'plan.jpg', { type: 'image/jpeg' });
+    const b = new File(['b'], 'site.png', { type: 'image/png' });
+    await createProject(BASE_INPUT, [a, b]);
+    const images = (ref.fd ?? new FormData()).getAll('images');
+    expect(images).toHaveLength(2);
+    expect((images[0] as File).name).toBe('plan.jpg');
+    expect((images[1] as File).name).toBe('site.png');
+  });
+
+  it('appends no `images` part when no photos are provided', async () => {
+    const ref = captureCreate();
+    await createProject(BASE_INPUT);
+    expect((ref.fd ?? new FormData()).getAll('images')).toHaveLength(0);
+  });
+
   it('rejects (no network) when the input is invalid — empty title', async () => {
     await expect(createProject({ ...BASE_INPUT, title: '   ' })).rejects.toThrow();
   });

@@ -51,6 +51,11 @@ const clientSchema = z.object({
   // Realtime chat broker (MQTT-over-WSS). Defaults to the production broker;
   // its origin must also be in the CSP connect-src (src/middleware.ts).
   NEXT_PUBLIC_MQTT_BROKER_URL: z.string().url(),
+  // Google Maps JS SDK key for the Omdah publish location picker (Places +
+  // geocoding). Public by design; defaults to the legacy RN app's key, restrict by
+  // HTTP referrer in the Cloud Console. The maps script + XHR origins are in the CSP
+  // script-src + connect-src (src/middleware.ts).
+  NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: z.string().default('…'),
 });
 
 const isServer = typeof window === 'undefined';

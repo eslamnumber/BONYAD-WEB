@@ -61,7 +61,7 @@ export function StepLocation({ form }: { form: UseFormReturn<CreateProjectFormVa
         />
       </div>
       {regions.isError ? <FieldHint tone="error">{t(`${K}.cityLoadError`)}</FieldHint> : null}
-      <PhotoUpload />
+      <PhotoUpload form={form} />
     </div>
   );
 }

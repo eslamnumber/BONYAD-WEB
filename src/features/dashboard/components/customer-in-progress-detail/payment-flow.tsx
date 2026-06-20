@@ -26,9 +26,9 @@ type Props = {
  * 5d.1 choose-payment + 5d.2 review & confirm are wired; confirming the review
  * starts the checkout redirect (5d.3) and the /payment/callback success (5d.4).
  */
-export function PhasePaymentFlow({ phase, phases, onClose }: Props) {
+export function PhasePaymentFlow({ phase, phases, projectId, onClose }: Props) {
   const [selection, setSelection] = useState<PaymentSelection | null>(null);
-  const checkout = usePhaseCheckout();
+  const checkout = usePhaseCheckout(projectId);
   if (!phase) return null;
 
   if (selection === null) {

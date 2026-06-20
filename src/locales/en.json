@@ -10,7 +10,8 @@
     "tryAgain": "Try again",
     "goToHome": "Go to homepage",
     "comingSoon": "Coming soon",
-    "demoBanner": "Demo platform"
+    "demoBanner": "Demo platform",
+    "dismiss": "Dismiss"
   },
   "a11y": {
     "skipToMain": "Skip to main content",
@@ -107,11 +108,265 @@
       "metaTitle": "Create a new project",
       "title": "Create a new project",
       "subtitle": "Complete the following steps to post your project and receive offers",
+      "chooser": {
+        "metaTitle": "Create a request",
+        "back": "Back",
+        "heading": "Create a request",
+        "description": "Choose the type of request you need",
+        "comingSoon": "Coming soon",
+        "options": {
+          "quickTask": {
+            "title": "Quick task",
+            "subtitle": "A fast service request (an hour or two)"
+          },
+          "textVoice": {
+            "title": "Text & voice design",
+            "subtitle": "Describe your space by voice or text and get an instant floor plan"
+          },
+          "smartDesign": {
+            "title": "Smart 2D → 3D design",
+            "subtitle": "Describe your project and get 4 designs with a 3D view"
+          },
+          "newProject": {
+            "title": "New project",
+            "subtitle": "Manual or AI-assisted"
+          }
+        }
+      },
+      "method": {
+        "metaTitle": "Create a project",
+        "back": "Back",
+        "heading": "Create a project",
+        "description": "Describe your needs and we'll help you define the scope of work and estimate the expected cost and duration",
+        "options": {
+          "ai": {
+            "title": "Let Omda build your project",
+            "subtitle": "Your smart project assistant — describe your project",
+            "badge": "Beta · First release"
+          },
+          "manual": {
+            "title": "Fill in manually",
+            "subtitle": "Fill in all the project details yourself"
+          }
+        },
+        "help": {
+          "question": "Need help?",
+          "link": "Learn how to create a good project"
+        },
+        "tips": {
+          "title": "Tips for a great project",
+          "intro": "A clear, detailed request attracts better offers from professionals.",
+          "items": {
+            "clearTitle": "Give your project a clear, specific title.",
+            "scope": "Describe the scope in detail — what, where, and any materials.",
+            "budget": "Set a realistic budget and timeline.",
+            "photos": "Add photos or references if you have them.",
+            "phases": "Break larger work into phases."
+          },
+          "close": "Close",
+          "gotIt": "Got it"
+        }
+      },
+      "ai": {
+        "metaTitle": "Create with Omdah",
+        "back": "Back",
+        "send": "Send",
+        "inputLabel": "Your answer",
+        "placeholder": "Type your answer here",
+        "start": "Let's start",
+        "intro": {
+          "title": "Omdah, your smart assistant",
+          "subtitle": "Answer a few quick questions and I'll set up your project."
+        },
+        "greeting": "Hi! I'm Omdah, your Bonyad assistant. Let's set up your project together.",
+        "greetingNamed": "Hi {{name}}! I'm Omdah, your Bonyad assistant. Let's set up your project together.",
+        "questions": {
+          "project_name": "What would you like to build or fix?",
+          "description": "Tell me a bit more about it.",
+          "property_area": "What's the property type and size?",
+          "location": "Where is it? (city and district)",
+          "quality_tier": "What quality level — economy, standard, premium, or luxury?",
+          "budget": "What's your budget in SAR?",
+          "duration_days": "In how many days would you like it done?"
+        },
+        "closing": "Great — that's everything I need! Generating your scope of work is coming soon.",
+        "summary": {
+          "generate": "Generate scope of work",
+          "edit": "Edit answers"
+        },
+        "sow": {
+          "back": "Back",
+          "sar": "SAR",
+          "sections": {
+            "project_metadata": "Project overview",
+            "objectives": "Objectives",
+            "scope": "Scope of work",
+            "deliverables": "Deliverables",
+            "timeline": "Timeline",
+            "resources": "Resources",
+            "commercials": "Costs & payments",
+            "compliance": "Compliance",
+            "risks": "Risks",
+            "kpis": "Success metrics"
+          },
+          "generating": {
+            "title": "Omdah is building your scope of work",
+            "subtitle": "Analyzing your project and drafting each section…"
+          },
+          "metadata": {
+            "title": "Project overview",
+            "type": "Work type",
+            "sector": "Sector",
+            "property": "Property",
+            "complexity": "Complexity",
+            "location": "Location",
+            "floor": "Floor",
+            "conditions": "Site conditions"
+          },
+          "objectives": {
+            "title": "Objectives",
+            "business": "Business objective",
+            "functional": "Functional objective",
+            "time": "Time",
+            "cost": "Cost",
+            "quality": "Quality"
+          },
+          "scope": {
+            "title": "Scope of work",
+            "inScope": "In scope",
+            "outScope": "Out of scope",
+            "assumptions": "Assumptions"
+          },
+          "deliverables": {
+            "title": "Deliverables",
+            "acceptance": "Acceptance"
+          },
+          "timeline": {
+            "title": "Timeline",
+            "duration": "{{count}} weeks total",
+            "week": "Week {{count}}"
+          },
+          "resources": {
+            "title": "Resources",
+            "labor": "Labor",
+            "materials": "Materials",
+            "saudization": "Saudization"
+          },
+          "commercials": {
+            "title": "Costs & payments",
+            "labor": "Labor",
+            "materials": "Materials",
+            "overhead": "Overhead",
+            "exclVat": "Total (excl. VAT)",
+            "vat": "VAT (15%)",
+            "grandTotal": "Grand total",
+            "schedule": "Payment schedule"
+          },
+          "compliance": {
+            "title": "Compliance",
+            "permits": "Permits required",
+            "codes": "Applicable SBC codes",
+            "saudization": "Saudization requirement",
+            "vatApplicable": "VAT applicable"
+          },
+          "risks": {
+            "title": "Risks",
+            "probability": "Probability",
+            "impact": "Impact",
+            "mitigation": "Mitigation"
+          },
+          "kpis": {
+            "title": "Success metrics",
+            "target": "Target",
+            "tolerance": "Tolerance"
+          },
+          "review": {
+            "byOmdah": "Generated by Omdah",
+            "untitled": "Your project",
+            "tier": "Quality {{tier}}",
+            "degraded": "Omdah couldn't reach full detail, so this is a basic scope from your answers. Refine it below or continue.",
+            "refining": "Omdah is refining…",
+            "continue": "Looks good — continue"
+          },
+          "refine": {
+            "label": "Ask Omdah to adjust the scope",
+            "placeholder": "e.g. raise quality to A+ and add 10,000 to the budget",
+            "send": "Send",
+            "working": "Omdah is applying your change…",
+            "hint": "Ask in your own words — Omdah updates the whole scope."
+          },
+          "publish": {
+            "title": "Where is the project?",
+            "subtitle": "Add the address and drop a pin so technicians know where to go.",
+            "addressLabel": "Address",
+            "addressPlaceholder": "District, street, building…",
+            "mapLabel": "Pin the location (optional)",
+            "searchLabel": "Search for a place",
+            "searchPlaceholder": "Search for a place or address…",
+            "useLocation": "Use my current location",
+            "continue": "Continue",
+            "back": "Back",
+            "photos": {
+              "label": "Photos ({{count}}/{{max}})",
+              "add": "Add photo",
+              "remove": "Remove photo"
+            }
+          },
+          "confirm": {
+            "title": "Review & publish",
+            "subtitle": "Confirm the details before your project goes live.",
+            "project": "Project",
+            "tier": "Quality",
+            "budget": "Budget",
+            "duration": "Duration",
+            "weeks": "{{count}} weeks",
+            "address": "Address",
+            "photos": "Photos",
+            "note": "Publishing creates the project and its phases. Technicians can then send you offers.",
+            "publish": "Publish project",
+            "back": "Back"
+          },
+          "publishing": {
+            "title": "Publishing your project",
+            "subtitle": "Creating the project, phases, and uploads…"
+          },
+          "success": {
+            "title": "Your project is live!",
+            "subtitle": "Technicians can now see it and send you offers.",
+            "view": "View project",
+            "allProjects": "All projects"
+          },
+          "error": {
+            "exit": "Back to chat",
+            "offline": {
+              "title": "Omdah is offline",
+              "message": "We couldn't reach the assistant right now. Please check your connection and try again.",
+              "retry": "Try again"
+            },
+            "generation": {
+              "title": "Couldn't build the scope",
+              "message": "Something went wrong while generating your scope of work. Please try again.",
+              "retry": "Try again"
+            },
+            "publish-service": {
+              "title": "Couldn't match a service",
+              "message": "We couldn't match your scope to a Bonyad service. Refine the scope to be more specific, then publish again.",
+              "retry": "Refine the scope"
+            },
+            "publish-failed": {
+              "title": "Couldn't publish",
+              "message": "Something went wrong while publishing your project. Please try again.",
+              "retry": "Try again"
+            }
+          }
+        }
+      },
       "nav": {
         "next": "Next",
         "back": "Back",
         "skip": "Skip",
-        "create": "Create project"
+        "create": "Create project",
+        "saveReview": "Save"
       },
       "steps": {
         "info": {
@@ -185,6 +440,37 @@
         "loading": "Loading technicians...",
         "error": "Couldn't load technicians.",
         "empty": "No technicians found."
+      },
+      "review": {
+        "heading": "Review project",
+        "description": "Review your project details before publishing",
+        "edit": "Edit",
+        "notSpecified": "Not specified",
+        "currency": "SAR",
+        "sections": {
+          "info": "Project information",
+          "budget": "Budget & timeline",
+          "deliverables": "Deliverables",
+          "phases": "Project phases",
+          "assignment": "Assignment & extra details"
+        },
+        "fields": {
+          "projectName": "Project name:",
+          "category": "Service category:",
+          "description": "Description:",
+          "budget": "Expected budget:",
+          "timeline": "Timeline:",
+          "phase": "Phase {{number}}:",
+          "method": "Method:",
+          "deadline": "Offer deadline:",
+          "city": "City:"
+        },
+        "values": {
+          "weeks": "{{n}} weeks",
+          "bidding": "Receive offers",
+          "direct": "Direct assignment",
+          "directNamed": "Direct assignment — {{name}}"
+        }
       },
       "errors": {
         "categoryRequired": "Please choose a service category",
@@ -576,11 +862,13 @@
       "failed": {
         "heading": "Payment failed",
         "subtitle": "We couldn't process your payment. Please try again.",
-        "back": "Back to projects"
+        "back": "Back to projects",
+        "dismiss": "Try again"
       }
     },
     "projectEdit": {
       "title": "Edit project",
+      "close": "Close",
       "subtitle": "Update your project details before offers arrive.",
       "loading": "Loading project…",
       "loadError": "Couldn't load this project.",
@@ -881,7 +1169,14 @@
     "identity": {
       "wathqVerified": "Wathq verified",
       "reviews": "{{count}} reviews",
-      "edit": "Edit profile"
+      "edit": "Edit profile",
+      "photo": {
+        "change": "Change profile photo",
+        "updated": "Your profile photo was updated.",
+        "errorType": "Please choose an image file.",
+        "errorSize": "The image must be under 5 MB.",
+        "errorGeneric": "We couldn't update your photo. Please try again."
+      }
     },
     "sections": {
       "account": "Account",
@@ -1217,6 +1512,28 @@
       "resendCode": "Resend code",
       "resendAriaLabel": "Resend verification code",
       "successMessage": "Verified successfully"
+    },
+    "resetPassword": {
+      "pageTitle": "Reset password — Bonyad",
+      "metaDescription": "Enter the verification code sent to your number and choose a new password.",
+      "heading": "Set a new password",
+      "subheading": "Enter the verification code sent to your number, then choose a new password",
+      "otpLabel": "Verification code",
+      "otpAriaLabel": "Enter the verification code",
+      "newPasswordLabel": "New password",
+      "newPasswordPlaceholder": "New password",
+      "newPasswordAriaLabel": "Enter your new password",
+      "confirmPasswordLabel": "Confirm new password",
+      "confirmPasswordPlaceholder": "Confirm new password",
+      "confirmPasswordAriaLabel": "Re-enter your new password",
+      "showPassword": "Show password",
+      "hidePassword": "Hide password",
+      "submitButton": "Reset password",
+      "didNotReceiveCode": "Didn't receive the code?",
+      "resendCode": "Resend code",
+      "resendAriaLabel": "Resend verification code",
+      "backToLogin": "Back to login",
+      "successMessage": "Your password has been reset. You can now log in."
     },
     "register": {
       "pageTitle": "Create an account",
@@ -1752,7 +2069,8 @@
     "add": {
       "button": "Add payment card",
       "preparing": "Preparing…",
-      "secureNote": "Secured by a refundable 1 SAR authorization"
+      "secureNote": "Secured by a refundable 1 SAR authorization",
+      "unavailable": "Card registration isn't available right now. Please try again later."
     },
     "row": {
       "default": "Default",

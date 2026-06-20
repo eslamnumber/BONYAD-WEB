@@ -43,17 +43,18 @@ function rememberPending(
  * hosted page (or, in mimic mode, straight to /payment/callback). The callback
  * (5d.4) verifies the charge and marks the phase paid.
  */
-export function usePhaseCheckout() {
+export function usePhaseCheckout(projectId: number) {
   const user = useAuthStore((s) => s.user);
   const mutation = useCreateCheckout();
 
   const start = (phase: ProjectPhase, selection: PaymentSelection) => {
-    const shopperResultUrl = buildShopperResultUrl(
-      window.location.origin,
-      phase.id,
-      selection.paymentType,
-      selection.amount,
-    );
+    const shopperResultUrl = buildShopperResultUrl({
+      origin: window.location.origin,
+      projectId,
+      phaseId: phase.id,
+      paymentType: selection.paymentType,
+      amount: selection.amount,
+    });
     const request = buildCheckoutRequest({
       phase,
       selection,

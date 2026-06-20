@@ -4,24 +4,16 @@ import { type UseFormReturn } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
 import { FieldHint } from '@/components/ui';
-import { LOCALE_DIRECTION, type Locale } from '@/types/locale';
+import { type Locale } from '@/types/locale';
 
 import { useServices } from '../../api/get-services';
+import { localizedServiceName } from '../../lib/service-format';
 import { type CreateProjectFormValues } from '../../schemas/create-project-form';
-import { type Service } from '../../schemas/service';
 
 import { WizardTextArea, WizardTextField } from './wizard-fields';
 import { WizardSelectField } from './wizard-select';
 
 const K = 'dashboard.createProject.steps.info';
-
-/** Pick the localized service name (inverted en→rtl mapping), with fallbacks. */
-function localizedName(s: Service, locale: Locale): string {
-  const en = s.nameEn?.trim() || undefined;
-  const ar = s.nameAr?.trim() || undefined;
-  const primary = LOCALE_DIRECTION[locale] === 'ltr' ? ar : en;
-  return primary ?? en ?? ar ?? String(s.id);
-}
 
 /** Step 1 — service category + project name + description (Figma 1394:7054). */
 export function StepProjectInfo({ form }: { form: UseFormReturn<CreateProjectFormValues> }) {
@@ -30,7 +22,7 @@ export function StepProjectInfo({ form }: { form: UseFormReturn<CreateProjectFor
   const { errors } = form.formState;
   const options = (services.data ?? []).map((s) => ({
     value: String(s.id),
-    label: localizedName(s, i18n.language as Locale),
+    label: localizedServiceName(s, i18n.language as Locale),
   }));
 
   return (

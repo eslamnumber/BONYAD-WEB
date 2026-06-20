@@ -1,7 +1,7 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { type ChangeEvent, useMemo } from 'react';
+import { type ChangeEvent, useMemo, useState } from 'react';
 import { type UseFormRegister, useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -16,7 +16,11 @@ import {
 } from '../schemas/forgot-password.schema';
 import { normalizePhoneInput } from '../utils';
 
-export type ForgotPasswordFormLabels = {
+import { RoleToggle, type RoleToggleLabels } from './role-toggle';
+
+type Role = 'USER' | 'TECHNICIAN';
+
+export type ForgotPasswordFormLabels = RoleToggleLabels & {
   phoneLabel: string;
   phonePlaceholder: string;
   phoneAriaLabel: string;
@@ -84,21 +88,19 @@ export function ForgotPasswordForm({
   accountRole,
 }: {
   labels: ForgotPasswordFormLabels;
-  accountRole: 'USER' | 'TECHNICIAN';
+  accountRole: Role;
 }) {
   const { t } = useTranslation();
+  const [role, setRole] = useState<Role>(accountRole);
   const form = useForm<ForgotPasswordFormValues>({
     resolver: zodResolver(forgotPasswordFormSchema),
     defaultValues: { phone: '' },
   });
-  const { onSubmit, isPending } = useForgotPasswordSubmit(
-    form,
-    accountRole,
-    labels.errors.genericError,
-  );
+  const { onSubmit, isPending } = useForgotPasswordSubmit(form, role, labels.errors.genericError);
   const phoneMsg = form.formState.errors.phone?.message;
   return (
     <form onSubmit={onSubmit} noValidate className="flex flex-col gap-4">
+      <RoleToggle role={role} onRoleChange={setRole} labels={labels} />
       <PhoneInputField
         register={form.register}
         errorText={phoneMsg ? t(phoneMsg) : undefined}

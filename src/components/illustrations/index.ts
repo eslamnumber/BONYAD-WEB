@@ -16,3 +16,8 @@ export { default as PillarValueIllustration } from './about/pillar-value-illustr
 export { default as PillarMissionIllustration } from './about/pillar-mission-illustration.svg';
 export { default as PillarVisionBlobWhite } from './about/pillar-vision-blob-white.svg';
 export { default as PillarVisionBlobNavy } from './about/pillar-vision-blob-navy.svg';
+
+/* Omdah AI assistant avatar — the idle glowing orb (Figma 1583:2923), a multi-stop
+   radial-gradient blob (blue/cyan + purple/pink + navy) with a soft blur. Self-lit, so
+   it reads on both themes; not recoloured. Used by the AI Q&A interview screen. */
+export { default as OmdahAvatarIllustration } from './omdah-avatar.svg';

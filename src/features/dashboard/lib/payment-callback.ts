@@ -19,6 +19,18 @@ type StoredCheckout = {
 /** 30-minute TTL on the sessionStorage fallback (RN parity). */
 const STORED_TTL_MS = 30 * 60 * 1000;
 
+/**
+ * True when the URL carries a HyperPay return marker (a checkout id / resourcePath).
+ * Distinguishes a real payment redirect from a normal visit to the project page, so
+ * the in-progress screen only pops the result modal after the gateway sends the
+ * browser back — never on an ordinary load (a stale sessionStorage record alone must
+ * not trigger it).
+ */
+export function hasPaymentReturn(search: string): boolean {
+  const params = new URLSearchParams(search);
+  return Boolean(params.get('id') ?? params.get('checkoutId') ?? params.get('resourcePath'));
+}
+
 function numOrNull(value: string | null | undefined): number | null {
   if (value === null || value === undefined || value === '') return null;
   const n = Number(value);

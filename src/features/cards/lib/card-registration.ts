@@ -20,16 +20,27 @@ export function buildCardReturnUrl(origin: string): string {
 
 /**
  * Where to send the browser after `prepare`: the gateway's hosted page for a real
- * preauth, or — in mimic mode / when no hosted URL is returned — straight back to the
- * cards page with the checkoutId so it can complete registration. Mirrors the phase
- * payment's `resolveRedirectTarget`.
+ * preauth, or — in mimic mode — straight back to the cards page with the checkoutId so
+ * it can complete directly. Returns `null` for a real checkout that came back with no
+ * hosted-page URL: web has no on-page card-entry widget, so without a redirect URL
+ * there's nowhere to capture the card, and jumping to `complete` on an unpaid checkout
+ * crashes the backend (no payment result). Mirrors the phase payment's
+ * `resolveRedirectTarget`.
  */
-export function resolveCardRedirectTarget(session: CardCheckoutSession, returnUrl: string): string {
-  if (session.isMimic || !session.redirectUrl) {
+export function resolveCardRedirectTarget(
+  session: CardCheckoutSession,
+  returnUrl: string,
+): string | null {
+  // Mimic = backend-simulated charge → skip card entry, complete directly (doc A.4).
+  if (session.isMimic) {
     const sep = returnUrl.includes('?') ? '&' : '?';
     return `${returnUrl}${sep}id=${encodeURIComponent(session.checkoutId)}`;
   }
-  return session.redirectUrl;
+  // A real preauth must be paid on the gateway's hosted page before we can complete.
+  if (session.redirectUrl) return session.redirectUrl;
+  // Real checkout, no hosted-page URL → can't capture the card on web. Signal the
+  // caller to surface a clear error instead of bouncing into a doomed `complete`.
+  return null;
 }
 
 function safeSession(): Storage | null {

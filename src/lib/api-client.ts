@@ -104,7 +104,39 @@ async function request<T>(
   return json as T;
 }
 
+type StreamOptions = {
+  body?: unknown;
+  token?: string;
+  internal?: boolean;
+  baseUrl?: string;
+  signal?: AbortSignal;
+  /** Extra request headers (e.g. `Accept: text/event-stream`). */
+  headers?: Record<string, string>;
+};
+
+/**
+ * POST that returns the raw streaming {@link Response} instead of parsed JSON —
+ * the only way to consume a server-sent-events body. The SSE/line parsing lives
+ * in the caller (it is not a `fetch`, so it may live outside this file). Used by
+ * the Omdah SOW generation stream both server-side (route → Cloud Run) and
+ * client-side (hook → same-origin `/api/ai/chat/stream`). Throws {@link ApiError}
+ * on a non-2xx response so callers can fall back to the REST path.
+ */
+async function streamRequest(path: string, opts: StreamOptions = {}): Promise<Response> {
+  const { body, token, internal = false, baseUrl, signal, headers: extra } = opts;
+  const url = resolveUrl(path, internal, baseUrl);
+  const payload = serializeBody(body);
+  const headers: HeadersInit = { Accept: 'text/event-stream', ...extra };
+  if (payload.contentType) headers['Content-Type'] = payload.contentType;
+  if (token) headers['Authorization'] = `Bearer ${token}`;
+
+  const res = await fetch(url.toString(), { method: 'POST', headers, body: payload.body, signal });
+  if (!res.ok) throw new ApiError(res.status, await res.json().catch(() => null));
+  return res;
+}
+
 export const apiClient = {
+  stream: streamRequest,
   get: <T>(path: string, opts?: Omit<RequestOptions<T>, 'body'>) => request<T>('GET', path, opts),
   post: <T>(path: string, opts?: RequestOptions<T>) => request<T>('POST', path, opts),
   put: <T>(path: string, opts?: RequestOptions<T>) => request<T>('PUT', path, opts),

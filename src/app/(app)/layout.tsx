@@ -33,7 +33,7 @@ export default async function AppLayout({ children }: AppLayoutProps) {
           <main
             id="main"
             tabIndex={-1}
-            className="flex min-h-0 flex-1 flex-col overflow-y-auto focus:outline-none"
+            className="flex min-h-0 flex-1 flex-col overflow-x-clip overflow-y-auto focus:outline-none"
           >
             <PageTransition>{children}</PageTransition>
           </main>
