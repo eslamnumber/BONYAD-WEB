@@ -3,8 +3,10 @@
 import { useTranslation } from 'react-i18next';
 
 import { ChevronUpIcon, PhaseCheckIcon, PlusIcon } from '@/components/icons';
+import { ApiError } from '@/lib/api-client';
 
-import { type PhaseProgress } from '../../lib/project-finance';
+import { useRequestPhasePayment } from '../../api/request-phase-payment';
+import { type PhaseProgress, phasePaymentAction } from '../../lib/project-finance';
 import { type ProjectPhase } from '../../schemas/project-phase';
 
 type Props = {
@@ -13,6 +15,8 @@ type Props = {
   index: number;
   expanded: boolean;
   onToggle: () => void;
+  /** Owning project — used to wire + invalidate the request-payment mutation. */
+  projectId: number;
 };
 
 /**
@@ -26,7 +30,7 @@ type Props = {
  * AttachmentsCard); the remaining action buttons are visual placeholders until their
  * phase mutations are wired.
  */
-export function PhaseStep({ phase, state, index, expanded, onToggle }: Props) {
+export function PhaseStep({ phase, state, index, expanded, onToggle, projectId }: Props) {
   const { t } = useTranslation();
   const number = phase.phaseNumber ?? index + 1;
 
@@ -59,7 +63,7 @@ export function PhaseStep({ phase, state, index, expanded, onToggle }: Props) {
         </div>
       </button>
 
-      {expanded ? <PhaseBody /> : null}
+      {expanded ? <PhaseBody phase={phase} projectId={projectId} /> : null}
     </div>
   );
 }
@@ -86,7 +90,7 @@ function StatusIcon({ state }: { state: PhaseProgress }) {
   return <span className="border-upcoming/40 size-5 shrink-0 rounded-full border-2" aria-hidden />;
 }
 
-function PhaseBody() {
+function PhaseBody({ phase, projectId }: { phase: ProjectPhase; projectId: number }) {
   const { t } = useTranslation();
   return (
     <div className="flex flex-wrap justify-end gap-3 pb-4">
@@ -99,6 +103,54 @@ function PhaseBody() {
       >
         {t('dashboard.projectDetail.phases.requestApproval')}
       </button>
+      <PhasePaymentAction phase={phase} projectId={projectId} />
+    </div>
+  );
+}
+
+/**
+ * Technician "Request payment" action — POST /phases/:id/request-payment (mirrors RN
+ * PhaseService.requestPayment). Shown only when the phase is approved + PENDING; once
+ * requested it becomes a non-interactive "Payment requested" badge (awaiting the
+ * customer). The button disables while in flight (no double-submit, RN fix #19) and
+ * surfaces a localized error inline (RN swallowed it).
+ */
+function PhasePaymentAction({ phase, projectId }: { phase: ProjectPhase; projectId: number }) {
+  const { t, i18n } = useTranslation();
+  const action = phasePaymentAction(phase);
+  const mutation = useRequestPhasePayment(projectId);
+
+  if (action === 'requested') {
+    return (
+      <span className="bg-status-progress-soft text-status-progress inline-flex items-center rounded-lg px-4 py-2.5 text-sm font-medium">
+        {t('dashboard.projectDetail.phases.paymentRequested')}
+      </span>
+    );
+  }
+  if (action !== 'request') return null;
+
+  const errorMessage =
+    mutation.error instanceof ApiError
+      ? (mutation.error.localizedMessage(i18n.language) ??
+        t('dashboard.projectDetail.phases.requestPaymentError'))
+      : t('dashboard.projectDetail.phases.requestPaymentError');
+
+  return (
+    <div className="flex flex-col items-end gap-1">
+      <button
+        type="button"
+        onClick={() => mutation.mutate(phase.id)}
+        disabled={mutation.isPending}
+        aria-busy={mutation.isPending}
+        className="bg-brand-dark-navy text-on-media focus-visible:outline-ring rounded-lg px-4 py-2.5 text-sm font-medium transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 disabled:opacity-60 motion-safe:hover:opacity-90"
+      >
+        {t('dashboard.projectDetail.phases.requestPayment')}
+      </button>
+      {mutation.isError ? (
+        <p className="text-destructive text-end text-xs" role="alert">
+          {errorMessage}
+        </p>
+      ) : null}
     </div>
   );
 }

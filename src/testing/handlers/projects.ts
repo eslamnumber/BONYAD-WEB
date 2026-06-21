@@ -5,6 +5,7 @@ const BASE = 'https://bonyad-app-nyayeditqq-ww.a.run.app/api';
 const SAMPLE_PROJECT = {
   id: 1,
   userName: 'صاحب العمل',
+  serviceId: 1,
   serviceNameEn: 'Building renovation',
   serviceNameAr: 'تجديد المباني',
   description:

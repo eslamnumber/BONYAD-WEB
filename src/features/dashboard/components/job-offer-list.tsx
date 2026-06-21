@@ -2,7 +2,8 @@
 
 import { useTranslation } from 'react-i18next';
 
-import { useAvailableProjects } from '../api';
+import { useAvailableProjects, useMyTechnicianServices } from '../api';
+import { filterProjectsByServices } from '../lib/filter-projects-by-service';
 import type { Project } from '../schemas/project';
 
 import { JobOfferItem } from './job-offer-item';
@@ -17,12 +18,35 @@ function sortForTab(projects: Project[], tab: JobTabKey): Project[] {
   return projects;
 }
 
+/**
+ * Biddable offers narrowed to the technician's own services. Combines the
+ * available-projects query with the my-services query: either still loading →
+ * pending; a my-services **error fails OPEN** (show all offers rather than
+ * hard-block on a secondary call, mirroring RN); otherwise filter by the
+ * technician's services (empty set → no offers). `isError` stays tied to the
+ * projects query alone.
+ */
+function useScopedOffers(): { offers: Project[]; isPending: boolean; isError: boolean } {
+  const projects = useAvailableProjects();
+  const services = useMyTechnicianServices();
+  const available = projects.data ?? [];
+  const offers =
+    services.isError || !services.data
+      ? available
+      : filterProjectsByServices(available, services.data);
+  return {
+    offers,
+    isPending: projects.isPending || (services.isPending && !services.isError),
+    isError: projects.isError,
+  };
+}
+
 type JobOfferListProps = { activeTab: JobTabKey; panelId: string };
 
 export function JobOfferList({ activeTab, panelId }: JobOfferListProps) {
   const { t } = useTranslation();
-  const { data, isPending, isError } = useAvailableProjects();
-  const projects = sortForTab(data ?? [], activeTab);
+  const { offers, isPending, isError } = useScopedOffers();
+  const projects = sortForTab(offers, activeTab);
   const emptyText =
     activeTab === 'saved' ? t('dashboard.offer.savedEmpty') : t('dashboard.offer.empty');
 

@@ -11,6 +11,7 @@ import { useProject } from '../../api/get-project';
 import { useProjectPhases } from '../../api/get-project-phases';
 import { partitionProjectFiles } from '../../lib/project-files';
 import { type ProjectPhase } from '../../schemas/project-phase';
+import { ChangeRequestsSection, useChangeRequestViews } from '../change-requests';
 import { ContractProviderCard } from '../contract-signing-project-detail/contract-provider-card';
 import { PaymentStatusCard } from '../in-progress-project-detail/payment-status-card';
 import { ProjectHeaderCard } from '../in-progress-project-detail/project-header-card';
@@ -50,6 +51,9 @@ export function CustomerInProgressDetail({ projectId }: Props) {
   const [payingPhase, setPayingPhase] = useState<ProjectPhase | null>(null);
   // The HyperPay redirect returns here (5d.4) → result shown as a modal in place.
   const paymentResult = usePhasePaymentResult(projectId);
+  // Shared change-request modal state — opened by the section's button and by a
+  // phase row's "Request changes" (seeded with that phase as an UPDATE).
+  const changeRequestViews = useChangeRequestViews();
 
   if (isPending) return <DetailMessage>{t('dashboard.projectDetail.loading')}</DetailMessage>;
   if (isError || !project)
@@ -64,32 +68,71 @@ export function CustomerInProgressDetail({ projectId }: Props) {
         <BackLink />
         <ProjectHeaderCard project={project} />
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
-          <div className="flex w-full flex-col gap-6 lg:w-[400px] lg:shrink-0">
-            <ContractProviderCard project={project} />
-            {/* Approve on a phase opens the choose-payment → review flow inline here,
-                above the payments-status card (Figma 1547:7351 / 1553:7685). */}
-            <PhasePaymentFlow
-              key={payingPhase?.id ?? 'closed'}
-              phase={payingPhase}
-              phases={phases}
-              projectId={projectId}
-              onClose={() => setPayingPhase(null)}
-            />
-            <PaymentStatusCard phases={phases} pending={phasesPending} />
-            <AttachmentsCard project={project} files={documents} />
-          </div>
+          <LeftColumn
+            project={project}
+            phases={phases}
+            projectId={projectId}
+            phasesPending={phasesPending}
+            documents={documents}
+            payingPhase={payingPhase}
+            setPayingPhase={setPayingPhase}
+            views={changeRequestViews}
+          />
           <div className="flex w-full flex-col gap-6 lg:min-w-0 lg:flex-1">
             <ProjectProgressCard phases={phases} />
             <CustomerPhasesCard
               phases={phases}
               pending={phasesPending}
               onApprovePhase={setPayingPhase}
+              onRequestChanges={(phase) => changeRequestViews.openCreate(phase.id)}
             />
             <ProjectImagesCard images={images} />
           </div>
         </div>
       </div>
       <PhasePaymentResultModal {...paymentResult} />
+    </div>
+  );
+}
+
+type DetailProject = NonNullable<ReturnType<typeof useProject>['data']>;
+type DetailFiles = ReturnType<typeof partitionProjectFiles>;
+type ChangeRequestViews = ReturnType<typeof useChangeRequestViews>;
+
+/** Left column — provider card, inline payment flow, payment status, attachments,
+ *  and the change-requests section (Figma 1547:1533 left rail). */
+function LeftColumn({
+  project,
+  phases,
+  projectId,
+  phasesPending,
+  documents,
+  payingPhase,
+  setPayingPhase,
+  views,
+}: {
+  project: DetailProject;
+  phases: ProjectPhase[];
+  projectId: number;
+  phasesPending: boolean;
+  documents: DetailFiles['documents'];
+  payingPhase: ProjectPhase | null;
+  setPayingPhase: (phase: ProjectPhase | null) => void;
+  views: ChangeRequestViews;
+}) {
+  return (
+    <div className="flex w-full flex-col gap-6 lg:w-[400px] lg:shrink-0">
+      <ContractProviderCard project={project} isTechnician={false} />
+      <PhasePaymentFlow
+        key={payingPhase?.id ?? 'closed'}
+        phase={payingPhase}
+        phases={phases}
+        projectId={projectId}
+        onClose={() => setPayingPhase(null)}
+      />
+      <PaymentStatusCard phases={phases} pending={phasesPending} />
+      <AttachmentsCard project={project} files={documents} />
+      <ChangeRequestsSection projectId={projectId} phases={phases} views={views} />
     </div>
   );
 }

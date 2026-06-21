@@ -7,6 +7,7 @@ import {
   budgetSummary,
   paidSoFar,
   paymentState,
+  phasePaymentAction,
   phaseProgress,
   progressPercent,
 } from './project-finance';
@@ -101,5 +102,27 @@ describe('phaseProgress', () => {
 
   it('leaves no active phase when all are completed', () => {
     expect(phaseProgress([phase({ id: 1, completed: true })])).toEqual(['completed']);
+  });
+});
+
+describe('phasePaymentAction', () => {
+  it('offers "request" only when the phase is approved and PENDING', () => {
+    expect(phasePaymentAction(phase({ approved: true, paymentStatus: 'PENDING' }))).toBe('request');
+    expect(phasePaymentAction(phase({ approved: false, paymentStatus: 'PENDING' }))).toBe('none');
+    expect(phasePaymentAction(phase({ paymentStatus: 'PENDING' }))).toBe('none');
+  });
+
+  it('reports "requested" once payment has been requested (regardless of approval)', () => {
+    expect(phasePaymentAction(phase({ paymentStatus: 'REQUESTED_PAYMENT' }))).toBe('requested');
+    expect(phasePaymentAction(phase({ approved: true, paymentStatus: 'requested_payment' }))).toBe(
+      'requested',
+    );
+  });
+
+  it('returns "none" for paid / partially-paid phases', () => {
+    expect(phasePaymentAction(phase({ approved: true, paymentStatus: 'PAID' }))).toBe('none');
+    expect(phasePaymentAction(phase({ approved: true, paymentStatus: 'PARTIALLY_PAID' }))).toBe(
+      'none',
+    );
   });
 });

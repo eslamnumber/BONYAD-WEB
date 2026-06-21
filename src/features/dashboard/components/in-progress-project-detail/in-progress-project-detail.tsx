@@ -10,6 +10,7 @@ import { ROUTES } from '@/config/routes';
 import { useProject } from '../../api/get-project';
 import { useProjectPhases } from '../../api/get-project-phases';
 import { partitionProjectFiles } from '../../lib/project-files';
+import { ChangeRequestsSection, useChangeRequestViews } from '../change-requests';
 import { AttachmentsCard } from '../job-offer-detail/attachments-card';
 import { ProjectImagesCard } from '../job-offer-detail/project-images-card';
 
@@ -35,6 +36,7 @@ export function InProgressProjectDetail({ projectId }: Props) {
   const { t } = useTranslation();
   const { data: project, isPending, isError } = useProject(projectId);
   const { data: phases = [], isPending: phasesPending } = useProjectPhases(projectId);
+  const changeRequestViews = useChangeRequestViews();
 
   if (isPending) return <DetailMessage>{t('dashboard.projectDetail.loading')}</DetailMessage>;
   if (isError || !project)
@@ -53,10 +55,15 @@ export function InProgressProjectDetail({ projectId }: Props) {
             <BudgetSummaryCard project={project} phases={phases} pending={phasesPending} />
             <PaymentStatusCard phases={phases} pending={phasesPending} />
             <AttachmentsCard project={project} files={documents} />
+            <ChangeRequestsSection
+              projectId={projectId}
+              phases={phases}
+              views={changeRequestViews}
+            />
           </div>
           <div className="flex w-full flex-col gap-6 lg:min-w-0 lg:flex-1">
             <ProjectProgressCard phases={phases} />
-            <ProjectPhasesTimeline phases={phases} pending={phasesPending} />
+            <ProjectPhasesTimeline phases={phases} pending={phasesPending} projectId={projectId} />
             <ProjectImagesCard images={images} />
           </div>
         </div>

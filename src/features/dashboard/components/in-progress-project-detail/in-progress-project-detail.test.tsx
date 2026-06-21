@@ -4,7 +4,7 @@ import { axe } from 'vitest-axe';
 
 import { i18n } from '@/lib/i18n';
 import { server } from '@/testing/handlers/server';
-import { renderWithProviders, screen } from '@/testing/render';
+import { fireEvent, renderWithProviders, screen, waitFor } from '@/testing/render';
 
 import { InProgressProjectDetail } from './in-progress-project-detail';
 
@@ -55,6 +55,9 @@ beforeEach(() => {
   server.use(
     http.get('*/projects/:id', () => HttpResponse.json({ project: PROJECT, phases: PHASES })),
     http.get('*/phases/project/:projectId', () => HttpResponse.json(PHASES)),
+    // The change-requests section fetches active negotiations; keep it empty +
+    // deterministic so its async settle doesn't leak past these assertions.
+    http.get('*/change-requests/project/:projectId/active', () => HttpResponse.json([])),
   );
 });
 
@@ -76,6 +79,37 @@ describe('InProgressProjectDetail', () => {
     expect(screen.getByText('Project phases')).toBeInTheDocument();
     expect(screen.getByText('Concrete structure')).toBeInTheDocument();
     expect(screen.getByText('Request phase approval')).toBeInTheDocument();
+    // Phase 2 is REQUESTED_PAYMENT → the request-payment action is the "requested" badge.
+    expect(screen.getByText('Payment requested')).toBeInTheDocument();
+  });
+
+  it('lets the technician request payment on an approved + pending phase', async () => {
+    const phases = [
+      {
+        id: 11,
+        phaseNumber: 1,
+        description: 'Foundations',
+        moneySpent: 20000,
+        paymentStatus: 'PENDING',
+        approved: true,
+        completed: false,
+      },
+    ];
+    let requestedPhaseId = 0;
+    server.use(
+      http.get('*/projects/:id', () => HttpResponse.json({ project: PROJECT, phases })),
+      http.get('*/phases/project/:projectId', () => HttpResponse.json(phases)),
+      http.post('*/phases/:phaseId/request-payment', ({ params }) => {
+        requestedPhaseId = Number(params.phaseId);
+        return HttpResponse.json({ phaseId: requestedPhaseId, paymentStatus: 'REQUESTED_PAYMENT' });
+      }),
+    );
+
+    renderWithProviders(<InProgressProjectDetail projectId={7} />);
+    const button = await screen.findByRole('button', { name: 'Request payment' });
+    fireEvent.click(button);
+
+    await waitFor(() => expect(requestedPhaseId).toBe(11));
   });
 
   it('surfaces the error state when the project fails to load', async () => {
@@ -87,6 +121,8 @@ describe('InProgressProjectDetail', () => {
   it('has no a11y violations', async () => {
     const { container } = renderWithProviders(<InProgressProjectDetail projectId={7} />);
     await screen.findByRole('heading', { name: 'Riyadh villa' });
+    // Let the change-requests section settle (async fetch) before running axe.
+    await screen.findByText('No change requests yet.');
     expect(await axe(container)).toHaveNoViolations();
   });
 });

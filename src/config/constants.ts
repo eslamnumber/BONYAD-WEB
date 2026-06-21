@@ -32,8 +32,18 @@ export const AUTH_COOKIE_NAME = 'bonyad-token';
  */
 export const API_ENV_COOKIE_NAME = 'bonyad-api-env';
 
-/** Path prefixes that require authentication. Middleware redirects to /login. */
-export const PROTECTED_PATH_PREFIXES = ['/dashboard', '/app'] as const;
+/**
+ * Path prefixes that require authentication. Middleware redirects to /login.
+ * The `(onboarding)` routes are authenticated too — a technician reaches them only
+ * after signing up; the `(app)` / `(onboarding)` layouts then sequence the steps.
+ */
+export const PROTECTED_PATH_PREFIXES = [
+  '/dashboard',
+  '/app',
+  '/complete-profile',
+  '/waiting-approval',
+  '/setup',
+] as const;
 
 // ---------------------------------------------------------------------------
 // Social

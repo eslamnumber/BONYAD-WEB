@@ -2,6 +2,7 @@ import { authHandlers } from './auth';
 import { bidHandlers } from './bids';
 import { blogHandlers } from './blogs';
 import { cardHandlers } from './cards';
+import { changeRequestHandlers } from './change-requests';
 import { chatHandlers } from './chat';
 import { contactHandlers } from './contact';
 import { contractHandlers } from './contracts';
@@ -14,6 +15,7 @@ import { profileHandlers } from './profile';
 import { projectHandlers } from './projects';
 import { referralHandlers } from './referral';
 import { serviceHandlers } from './services';
+import { sketchHandlers } from './sketch';
 import { subscriptionHandlers } from './subscriptions';
 import { technicianHandlers } from './technicians';
 import { termsHandlers } from './terms';
@@ -23,6 +25,7 @@ export const handlers = [
   ...bidHandlers,
   ...blogHandlers,
   ...cardHandlers,
+  ...changeRequestHandlers,
   ...chatHandlers,
   ...contactHandlers,
   ...contractHandlers,
@@ -35,6 +38,7 @@ export const handlers = [
   ...projectHandlers,
   ...referralHandlers,
   ...serviceHandlers,
+  ...sketchHandlers,
   ...subscriptionHandlers,
   ...technicianHandlers,
   ...termsHandlers,

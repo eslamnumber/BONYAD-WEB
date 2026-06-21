@@ -31,7 +31,7 @@ describe('DashboardSidebar role-awareness', () => {
     renderWithProviders(<DashboardSidebar />);
 
     expect(screen.getByRole('link', { name: 'Home' })).toBeInTheDocument();
-    expect(screen.getByRole('link', { name: 'Offers' })).toBeInTheDocument();
+    expect(screen.queryByRole('link', { name: 'Offers' })).not.toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'Job offers' })).not.toBeInTheDocument();
     expect(screen.queryByRole('link', { name: 'Payments' })).not.toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Account menu' })).toBeInTheDocument();

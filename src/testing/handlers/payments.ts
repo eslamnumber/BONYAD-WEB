@@ -1,45 +1,32 @@
 import { http, HttpResponse } from 'msw';
 
-const BASE = 'https://bonyad-app-nyayeditqq-ww.a.run.app/api';
-
 /**
- * HyperPay phase-payment handlers. Defaults model a happy test-mode charge:
- * create-checkout returns a hosted redirectUrl, status reports a test-success
- * code, and pay marks the phase paid. Individual tests override per case via
- * `server.use(...)`.
+ * HyperPay handlers. Defaults model a happy test-mode COPYandPAY checkout:
+ * create-checkout returns a checkoutId + mode (for the embedded widget); status reports
+ * a test-success verdict (`paymentResult`, which also finalizes the phase server-side).
+ * Wildcard-prefixed paths so both node fetcher tests (full backend URL) and happy-dom
+ * component tests (same-origin proxy) match. Tests override via `server.use(...)`.
  */
 export const paymentHandlers = [
-  http.post(`${BASE}/payments/create-checkout`, async ({ request }) => {
-    const body = (await request.json().catch(() => ({}))) as { amount?: number };
-    return HttpResponse.json({
+  http.post('*/payments/create-checkout', () =>
+    HttpResponse.json({
       success: true,
       checkoutId: 'CHK_TEST_1',
-      redirectUrl: 'https://eu-test.oppwa.com/v1/checkouts/CHK_TEST_1',
-      environment: 'test',
-      amount: body.amount,
-    });
-  }),
-  http.get(`${BASE}/payments/status/:checkoutId`, () =>
+      mode: 'TEST',
+      code: '000.200.100',
+      description: 'successfully created checkout',
+      resourcePath: '/v1/checkouts/CHK_TEST_1/payment',
+    }),
+  ),
+  http.get('*/payments/status/:checkoutId', () =>
     HttpResponse.json({
       success: true,
       paymentResult: true,
       code: '000.100.110',
       transactionId: 'TXN-TEST-1',
-      amount: '25000',
+      amount: 25000,
       currency: 'SAR',
       paymentBrand: 'VISA',
-    }),
-  ),
-  http.post(`${BASE}/phases/:phaseId/pay`, ({ params }) =>
-    HttpResponse.json({
-      message: 'Phase paid',
-      phaseId: Number(params.phaseId),
-      phaseNumber: 1,
-      paymentStatus: 'PAID',
-      moneySpent: 25000,
-      amountPaid: 25000,
-      remainingAmount: 0,
-      paidAt: '2026-06-18T10:00:00Z',
     }),
   ),
   http.get('*/payments/my-transactions', () =>
@@ -98,4 +85,17 @@ export const paymentHandlers = [
       { status: 201 },
     );
   }),
+  // Technician request-payment — flips the phase to REQUESTED_PAYMENT.
+  http.post('*/phases/:phaseId/request-payment', ({ params }) =>
+    HttpResponse.json({
+      message: 'Payment requested',
+      phaseId: Number(params.phaseId),
+      phaseNumber: 1,
+      paymentStatus: 'REQUESTED_PAYMENT',
+      moneySpent: 25000,
+      requestedBy: 42,
+      requestedByName: 'فني الاختبار',
+      requestedAt: '2026-06-18T10:00:00Z',
+    }),
+  ),
 ];

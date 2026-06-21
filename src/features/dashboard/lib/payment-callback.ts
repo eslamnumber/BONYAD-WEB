@@ -1,9 +1,10 @@
-/** The phase-payment context recovered on the /payment/callback return. */
+/** The payment context recovered on the phase-payment return (project page / callback). */
 export type PaymentContext = {
   checkoutId: string | null;
   phaseId: number | null;
   paymentType: 'FULL' | 'PARTIAL';
   amount: number | null;
+  /** Explicit payment kind from the querystring — `phase` (default). */
   type: string;
 };
 
@@ -16,13 +17,13 @@ type StoredCheckout = {
   timestamp?: number;
 };
 
-/** 30-minute TTL on the sessionStorage fallback (RN parity). */
+/** 30-minute TTL on the sessionStorage fallback. */
 const STORED_TTL_MS = 30 * 60 * 1000;
 
 /**
  * True when the URL carries a HyperPay return marker (a checkout id / resourcePath).
  * Distinguishes a real payment redirect from a normal visit to the project page, so
- * the in-progress screen only pops the result modal after the gateway sends the
+ * the in-progress screen only pops the result modal after the widget redirects the
  * browser back — never on an ordinary load (a stale sessionStorage record alone must
  * not trigger it).
  */
@@ -37,7 +38,7 @@ function numOrNull(value: string | null | undefined): number | null {
   return Number.isFinite(n) ? n : null;
 }
 
-/** HyperPay sometimes returns only `resourcePath=/v1/checkouts/{id}/payment`. */
+/** The widget redirect carries `resourcePath=/v1/checkouts/{id}/payment`. */
 function checkoutFromResourcePath(resourcePath: string | null): string | null {
   if (!resourcePath) return null;
   return /\/checkouts\/([^/]+)/.exec(resourcePath)?.[1] ?? null;
@@ -70,10 +71,10 @@ function resolveCheckoutId(params: URLSearchParams, stored: StoredCheckout | nul
 }
 
 /**
- * Resolve the checkout context from the callback URL, falling back to the
- * sessionStorage record HyperPay-redirect flows leave behind. URL params win (they
- * always travel in the shopperResultUrl); the store covers gateways that drop the
- * querystring. Mirrors website-bonyad/.../PaymentCallbackScreen.tsx:58-144.
+ * Resolve the checkout context from the return URL, falling back to the sessionStorage
+ * record the checkout flow left behind. URL params win (they travel in the widget form
+ * action); the store covers a dropped querystring. `type` is read explicitly — no
+ * URL-path sniffing like the RN callback.
  */
 export function resolvePaymentContext(
   search: string,

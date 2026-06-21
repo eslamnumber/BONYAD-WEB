@@ -28,12 +28,9 @@ describe('isNavActive', () => {
 });
 
 describe('sidebar nav config', () => {
-  it('customer nav leads with Home and includes a badged Offers item', () => {
+  it('customer nav leads with Home and has no Offers item', () => {
     expect(CUSTOMER_NAV[0]).toMatchObject({ key: 'home', href: ROUTES.DASHBOARD });
-    expect(CUSTOMER_NAV.find((i) => i.key === 'offers')).toMatchObject({
-      href: ROUTES.DASHBOARD_OFFERS,
-      badge: true,
-    });
+    expect(CUSTOMER_NAV.some((i) => i.key === 'offers')).toBe(false);
   });
 
   it('technician nav leads with Job offers + Payments and has no Home/Offers items', () => {

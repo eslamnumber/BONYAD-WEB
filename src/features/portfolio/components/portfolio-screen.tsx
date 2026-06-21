@@ -54,9 +54,7 @@ function ErrorState({ onRetry }: { onRetry: () => void }) {
   return (
     <div className="flex flex-col items-center gap-4 py-12 text-center">
       <p className="text-foreground text-base font-medium">{t('portfolio.error.title')}</p>
-      <p dir="auto" className="text-muted-foreground max-w-sm text-sm">
-        {t('portfolio.error.subtitle')}
-      </p>
+      <p className="text-muted-foreground max-w-sm text-sm">{t('portfolio.error.subtitle')}</p>
       <Button type="button" variant="outline" onClick={onRetry}>
         {t('portfolio.error.retry')}
       </Button>
@@ -92,7 +90,7 @@ export function PortfolioScreen() {
           <h1 className="text-foreground text-start text-2xl font-semibold tracking-tight sm:text-3xl">
             {t('portfolio.title')}
           </h1>
-          <p dir="auto" className="text-muted-foreground mt-1.5 text-start text-sm leading-6">
+          <p className="text-muted-foreground mt-1.5 text-start text-sm leading-6">
             {t('portfolio.subtitle')}
           </p>
         </header>

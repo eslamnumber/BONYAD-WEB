@@ -1,25 +1,43 @@
 import { type AuthUser } from '@/types/auth';
 
-import { type CheckoutSession, type CreateCheckoutRequest } from '../schemas/payment';
+import { type CreateCheckoutRequest } from '../schemas/payment';
 import { type ProjectPhase } from '../schemas/project-phase';
 
-/** sessionStorage key the /payment/callback uses to recover the pending checkout. */
+/** sessionStorage key the /payment/callback (+ inline result modal) use to recover
+ *  the pending checkout if the gateway drops the return querystring. */
 export const PENDING_CHECKOUT_KEY = 'hyperpay_pending_checkout';
 
 type Selection = { amount: number; paymentType: 'FULL' | 'PARTIAL' };
 
-/** Split a display name into HyperPay's givenName / surname (RN parity). */
+/** Fallback e-mail when the user has none — the backend requires a valid address
+ *  (`@Email @NotBlank`). A Bonyad no-reply (not a random fake) keeps records sane. */
+const FALLBACK_EMAIL = 'noreply@bonyad-hub.com';
+
+/** Split a display name into HyperPay's givenName / surname. The backend rejects a
+ *  blank surname (@NotBlank), so a single-word name reuses givenName as the surname. */
 function splitName(name: string | undefined): { givenName: string; surname: string } {
   const parts = (name ?? '').trim().split(/\s+/).filter(Boolean);
-  return { givenName: parts[0] ?? 'User', surname: parts.slice(1).join(' ') };
+  const givenName = parts[0] ?? 'User';
+  const surname = parts.slice(1).join(' ') || givenName;
+  return { givenName, surname };
 }
 
+/** HyperPay billing defaults — the auth user has no address fields, so every checkout
+ *  shares one default address (single source). */
+const DEFAULT_BILLING = {
+  street1: 'King Fahd Road',
+  city: 'Riyadh',
+  state: 'Riyadh',
+  country: 'SA',
+  postcode: '12345',
+} as const;
+
 /**
- * The HyperPay return URL carrying the phase context the gateway echoes back
- * (`?type=phase&phaseId=&paymentType=&amount=`). The browser lands **back on the
- * project detail page**, which verifies the charge, marks the phase paid, and pops
- * the result modal in place (no standalone confirmation screen). Mirrors
- * website-bonyad/.../PhasePaymentModal.tsx:302 (only the path differs).
+ * The widget's return URL (the COPYandPAY form `action`): the project detail page,
+ * carrying the phase context the in-progress screen reads back
+ * (`?type=phase&phaseId=&paymentType=&amount=`). After the widget processes the card it
+ * redirects here, appending `&resourcePath=/v1/checkouts/{id}/payment`; the inline
+ * result modal then verifies the charge (the status GET finalizes it server-side).
  */
 export function buildShopperResultUrl(opts: {
   origin: string;
@@ -38,11 +56,10 @@ export function buildShopperResultUrl(opts: {
 }
 
 /**
- * Build the POST /payments/create-checkout body for a phase payment. Customer
- * identity comes from the signed-in user; billing uses the RN defaults (the auth
- * user has no address fields). `paymentType: 'DB'` is the HyperPay txn type — the
- * FULL/PARTIAL split rides in the merchantTransactionId + shopperResultUrl. Mirrors
- * website-bonyad/src/screens/projects/in-progress/hooks/usePayment.ts:36.
+ * Build the POST /payments/create-checkout body for a phase payment. Customer identity
+ * comes from the signed-in user (with backend-safe fallbacks for a blank email/surname);
+ * billing uses the shared default. `paymentType: 'DB'` is the HyperPay txn type — the
+ * FULL/PARTIAL split rides in merchantTransactionId + the widget form action.
  */
 export function buildCheckoutRequest(opts: {
   phase: ProjectPhase;
@@ -60,27 +77,8 @@ export function buildCheckoutRequest(opts: {
     paymentType: 'DB',
     paymentBrand: 'MADA',
     merchantTransactionId: `PHASE-${phase.id}-${selection.paymentType}-${now}`,
-    customer: { email: user?.email ?? '', givenName, surname },
-    billing: {
-      street1: 'King Fahd Road',
-      city: 'Riyadh',
-      state: 'Riyadh',
-      country: 'SA',
-      postcode: '12345',
-    },
+    customer: { email: user?.email || FALLBACK_EMAIL, givenName, surname },
+    billing: DEFAULT_BILLING,
     shopperResultUrl,
   };
-}
-
-/**
- * Where to send the browser after a checkout is created: the gateway's hosted page
- * for a real charge, or — in mimic mode / when no hosted URL is returned — straight
- * to the callback with the checkoutId so it can verify + mark the phase paid.
- */
-export function resolveRedirectTarget(session: CheckoutSession, shopperResultUrl: string): string {
-  if (session.isMimic || !session.redirectUrl) {
-    const sep = shopperResultUrl.includes('?') ? '&' : '?';
-    return `${shopperResultUrl}${sep}id=${encodeURIComponent(session.checkoutId)}`;
-  }
-  return session.redirectUrl;
 }

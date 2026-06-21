@@ -7,21 +7,41 @@ import { HeroClientShell } from './hero-client-shell';
 
 type HomeHeroProps = { locale: Locale; activeTab?: 'user' | 'pro' };
 
-function HeroBgShapeEnd() {
+const BUILDING_SRC = '/images/hero/hero-building.png';
+
+/**
+ * Decorative hero backdrop (Figma "Herosection" 1811:3048): the glass-tower photo
+ * (1811:3049 / :3050) frames both inline edges — normal on the start, mirrored on
+ * the end — at 60% opacity, with a soft card-coloured radial glow ("Ellipse 27"
+ * 1811:3051) whitening the centre so the search content reads on a clean surface.
+ * Desktop-only (hardcoded size), symmetric so it mirrors with the locale for free,
+ * and inverts in dark mode so the white sky blends into the dark card.
+ */
+function HeroBuildingsBackdrop() {
+  const building =
+    'absolute -top-[89px] hidden h-[711px] w-[573px] max-w-none object-cover opacity-60 select-none lg:block dark:opacity-70 dark:invert';
   return (
-    <div
-      aria-hidden
-      className="pointer-events-none absolute -end-[121px] -top-[159px] hidden h-[901px] w-[696px] lg:block"
-    >
-      <Image src="/images/hero/bg-left.png" alt="" fill priority className="dark:brightness-0" />
-      {/* Fades the inner edge and top into the card background — var(--card) adapts to dark mode */}
-      <div
-        className="absolute inset-0"
-        style={{
-          backgroundImage:
-            'linear-gradient(to left, transparent 38%, var(--card) 78%), linear-gradient(to bottom, var(--card), transparent 18%)',
-        }}
+    <div aria-hidden className="pointer-events-none absolute inset-0 overflow-hidden">
+      <Image
+        src={BUILDING_SRC}
+        alt=""
+        width={1146}
+        height={2292}
+        sizes="573px"
+        priority
+        className={`${building} -start-[44px]`}
       />
+      <Image
+        src={BUILDING_SRC}
+        alt=""
+        width={1146}
+        height={2292}
+        sizes="573px"
+        className={`${building} -end-[44px] -scale-x-100`}
+      />
+      {/* Card-coloured radial glow whitens the centre and softens the buildings'
+          inner edges — var(--card) adapts to dark mode. */}
+      <div className="absolute inset-0 [background:radial-gradient(58%_78%_at_50%_48%,var(--card),transparent_72%)]" />
     </div>
   );
 }
@@ -33,7 +53,7 @@ export function HomeHero({ locale, activeTab = 'user' }: HomeHeroProps) {
     <section className="bg-background py-6">
       <div className="mx-auto max-w-7xl px-4 sm:px-6">
         <div className="bg-card relative min-h-[520px] overflow-hidden rounded-xl lg:h-[622px]">
-          <HeroBgShapeEnd />
+          <HeroBuildingsBackdrop />
           <div className="relative flex flex-col items-center justify-center gap-6 px-4 py-12 sm:px-6 lg:absolute lg:inset-0 lg:py-0">
             <HeroClientShell
               key={activeTab}

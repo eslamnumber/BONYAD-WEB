@@ -7,6 +7,7 @@ import { useAuthStore } from '@/stores/auth-store';
 import { useProject } from '../../api/get-project';
 import { partitionProjectFiles } from '../../lib/project-files';
 import { isPendingOrBidPhase } from '../../lib/project-status';
+import { type ProjectDetail } from '../../schemas/project';
 
 import { AttachmentsCard } from './attachments-card';
 import { CustomerOfferStatus } from './customer-offer-status';
@@ -57,27 +58,77 @@ export function JobOfferDetail({ projectId }: Props) {
         <JobOfferBreadcrumb />
         <ProjectSummaryCard project={project} showStatusBadge={!isTechnician} />
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
-          <div className="flex w-full flex-col gap-6 lg:w-[400px] lg:shrink-0">
-            {isTechnician ? (
-              <>
-                <OfferPanel projectId={projectId} />
-                <AttachmentsCard project={project} files={documents} />
-              </>
-            ) : (
-              <CustomerOfferStatus projectId={projectId} />
-            )}
-          </div>
-          <div className="flex w-full flex-col gap-6 lg:min-w-0 lg:flex-1">
-            <ProjectDescriptionCard project={project} />
-            <ProjectPhasesCard projectId={projectId} />
-            {/* AI Scope-of-Work above the images: objectives + scope. Self-hides for manual. */}
-            <ProjectSowColumn project={project} group="above" />
-            <ProjectImagesCard images={images} />
-            {/* AI Scope-of-Work below the images: deliverables, resources, compliance, risks, KPIs. */}
-            <ProjectSowColumn project={project} group="below" />
-          </div>
+          <OfferSideColumn
+            project={project}
+            projectId={projectId}
+            documents={documents}
+            isTechnician={isTechnician}
+          />
+          <ProjectContentColumn
+            project={project}
+            projectId={projectId}
+            images={images}
+            isTechnician={isTechnician}
+          />
         </div>
       </div>
+    </div>
+  );
+}
+
+type ColumnProps = {
+  project: ProjectDetail;
+  projectId: number;
+  isTechnician: boolean;
+};
+
+/**
+ * Left column. The technician (SP) view stacks the AI Scope-of-Work `above` group
+ * (objectives + scope) under the offer panel + attachments, so the AI cards fill the
+ * left column while the rest of the SOW fills the right — the two-column split. The
+ * customer keeps only the awaiting-offers card here; their SOW stays in the content
+ * column. Self-hides for manual projects (`ProjectSowColumn` → null).
+ */
+function OfferSideColumn({
+  project,
+  projectId,
+  documents,
+  isTechnician,
+}: ColumnProps & { documents: string[] }) {
+  return (
+    <div className="flex w-full flex-col gap-6 lg:w-[400px] lg:shrink-0">
+      {isTechnician ? (
+        <>
+          <OfferPanel projectId={projectId} />
+          <AttachmentsCard project={project} files={documents} />
+          <ProjectSowColumn project={project} group="above" />
+        </>
+      ) : (
+        <CustomerOfferStatus projectId={projectId} />
+      )}
+    </div>
+  );
+}
+
+/**
+ * Right column: description · phases · images, with the AI Scope-of-Work `below`
+ * group (deliverables, resources, compliance, risks, KPIs) after the images. The
+ * `above` group (objectives + scope) renders here only for the customer — the
+ * technician shows it in the left column instead (see {@link OfferSideColumn}).
+ */
+function ProjectContentColumn({
+  project,
+  projectId,
+  images,
+  isTechnician,
+}: ColumnProps & { images: string[] }) {
+  return (
+    <div className="flex w-full flex-col gap-6 lg:min-w-0 lg:flex-1">
+      <ProjectDescriptionCard project={project} />
+      <ProjectPhasesCard projectId={projectId} />
+      {isTechnician ? null : <ProjectSowColumn project={project} group="above" />}
+      <ProjectImagesCard images={images} />
+      <ProjectSowColumn project={project} group="below" />
     </div>
   );
 }

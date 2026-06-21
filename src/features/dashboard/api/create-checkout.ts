@@ -10,41 +10,39 @@ import {
   createCheckoutRequestSchema,
 } from '../schemas/payment';
 
-/** A `MIMIC_…` checkout (or `environment: 'mimic'`) is a backend-simulated charge. */
-function isMimic(checkoutId: string, environment?: string): boolean {
-  return checkoutId.startsWith('MIMIC_') || environment === 'mimic';
-}
-
 /**
- * Throw when the backend forwarded a HyperPay failure over HTTP 200 — either a
- * `result.code` that doesn't start with '000.', or an explicit `success: false`.
+ * Throw when the backend forwarded a failure over HTTP 200 (`success: false`). A hard
+ * failure arrives as HTTP 400 → ApiError before this runs. The result `code` on a
+ * freshly-created checkout is `000.200.100` ("checkout created") — NOT a failure, so
+ * we never gate on it here.
  */
 function assertCheckoutOk(data: CreateCheckoutResponseBody): void {
-  const code = data.result?.code;
-  const failed = (code !== undefined && !code.startsWith('000.')) || data.success === false;
-  if (failed) {
-    const reason = data.result?.description ?? data.error ?? data.message;
-    throw new Error(reason ?? 'Failed to create checkout');
+  if (data.success === false) {
+    throw new Error(data.error ?? data.message ?? 'Failed to create checkout');
   }
 }
 
-/** Resolve the checkout id across the backend's response shapes (or throw). */
 function resolveCheckoutId(data: CreateCheckoutResponseBody): string {
-  const checkoutId = data.checkoutId ?? data.id ?? data.ndc;
-  if (!checkoutId) throw new Error('No checkout ID received from payment gateway');
-  return checkoutId;
+  if (!data.checkoutId) throw new Error('No checkout ID received from payment gateway');
+  return data.checkoutId;
+}
+
+/** Normalise the create-checkout response into a {@link CheckoutSession} (or throw). */
+function toCheckoutSession(data: CreateCheckoutResponseBody): CheckoutSession {
+  assertCheckoutOk(data);
+  return {
+    checkoutId: resolveCheckoutId(data),
+    mode: data.mode ?? null,
+    expiresAt: data.expiresAt ?? null,
+  };
 }
 
 /**
- * Create a HyperPay checkout for a phase payment. Mirrors the RN call sites
- * website-bonyad/src/services/HyperPayService.ts:120 +
- * website-bonyad/src/screens/projects/in-progress/hooks/usePayment.ts:36 — POST
- * /payments/create-checkout. The request is zod-validated (CLAUDE rule 1); the
- * response is permissive and normalised here: `checkoutId = checkoutId ?? id ??
- * ndc`, `redirectUrl = redirectUrl ?? shopperUrl`. A HyperPay error forwarded over
- * HTTP 200 (`result.code` not '000.…', or `success === false`) is thrown so the
- * caller surfaces it instead of redirecting to a dead URL. Browser calls go
- * through `/api/proxy/*`, which attaches the session token.
+ * Create a HyperPay COPYandPAY checkout. POST /payments/create-checkout returns a
+ * `checkoutId` the client feeds to the embedded `paymentWidgets.js` widget — the
+ * backend does NOT return a hosted redirect URL (confirmed in CreateCheckoutResponse).
+ * Strict request (CLAUDE rule 1), permissive response. Browser calls go through
+ * `/api/proxy/*`, which attaches the session token.
  */
 export async function createCheckout(input: CreateCheckoutRequest): Promise<CheckoutSession> {
   const body = createCheckoutRequestSchema.parse(input);
@@ -52,16 +50,7 @@ export async function createCheckout(input: CreateCheckoutRequest): Promise<Chec
     API_ENDPOINTS.PAYMENT.CREATE_CHECKOUT,
     { body },
   );
-
-  assertCheckoutOk(data);
-  const checkoutId = resolveCheckoutId(data);
-
-  return {
-    checkoutId,
-    redirectUrl: data.redirectUrl ?? data.shopperUrl ?? null,
-    environment: data.environment ?? null,
-    isMimic: isMimic(checkoutId, data.environment),
-  };
+  return toCheckoutSession(data);
 }
 
 export function useCreateCheckout() {

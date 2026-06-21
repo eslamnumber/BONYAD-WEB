@@ -5,7 +5,7 @@ import { resolvePaymentContext } from './payment-callback';
 const NOW = 1_700_000_000_000;
 
 describe('resolvePaymentContext', () => {
-  it('reads the phase context from the shopperResultUrl querystring', () => {
+  it('reads the phase context from the return querystring', () => {
     const ctx = resolvePaymentContext(
       '?type=phase&phaseId=12&paymentType=PARTIAL&amount=5000&id=CHK_1',
       null,
@@ -48,13 +48,11 @@ describe('resolvePaymentContext', () => {
 
   it('ignores a stale (>30 min) sessionStorage record', () => {
     const stored = JSON.stringify({ checkoutId: 'CHK_OLD', timestamp: NOW - 31 * 60 * 1000 });
-    const ctx = resolvePaymentContext('?type=phase', stored, NOW);
-    expect(ctx.checkoutId).toBeNull();
+    expect(resolvePaymentContext('?type=phase', stored, NOW).checkoutId).toBeNull();
   });
 
-  it('defaults paymentType to FULL and type to phase, with null ids when nothing is present', () => {
-    const ctx = resolvePaymentContext('', null, NOW);
-    expect(ctx).toEqual({
+  it('defaults paymentType to FULL and type to phase when nothing is present', () => {
+    expect(resolvePaymentContext('', null, NOW)).toEqual({
       checkoutId: null,
       phaseId: null,
       paymentType: 'FULL',

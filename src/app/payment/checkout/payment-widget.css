@@ -1,0 +1,112 @@
+/*
+ * HyperPay COPYandPAY widget — Bonyad theming. Scoped to the `.wpwl-*` nodes
+ * paymentWidgets.js injects into the `<form class="paymentWidgets">` on
+ * /payment/checkout. Tokens-only (Tailwind `--color-*` vars, so it follows light/dark).
+ *
+ * Note: the sensitive card-number / expiry / CVV fields are OPP-hosted iframes (PCI
+ * SAQ-A), so we theme the field wrappers, labels, button and layout here; the text
+ * inside those iframes uses OPP defaults (cross-origin, not stylable from our page).
+ */
+
+.wpwl-form {
+  background: transparent;
+  border: 0;
+  box-shadow: none;
+  margin: 0;
+  padding: 0;
+  max-width: none;
+}
+
+.wpwl-group {
+  margin-bottom: 1rem;
+}
+
+.wpwl-label {
+  color: var(--color-muted-foreground);
+  font-size: 0.8125rem;
+  font-weight: 600;
+  margin-bottom: 0.375rem;
+}
+
+.wpwl-wrapper {
+  width: 100%;
+}
+
+.wpwl-control {
+  background: var(--color-field-surface);
+  border: 1px solid var(--color-border);
+  border-radius: 0.625rem;
+  color: var(--color-foreground);
+  min-height: 3rem;
+  padding: 0.625rem 0.875rem;
+  box-shadow: none;
+  transition: border-color 0.15s ease;
+}
+
+.wpwl-control::placeholder {
+  color: var(--color-input-placeholder);
+}
+
+.wpwl-control:focus,
+.wpwl-control.wpwl-focus {
+  border-color: var(--color-ring);
+  outline: 2px solid var(--color-ring);
+  outline-offset: 1px;
+}
+
+.wpwl-control.wpwl-has-error {
+  border-color: var(--color-destructive);
+}
+
+.wpwl-hint,
+.wpwl-message {
+  color: var(--color-destructive);
+  font-size: 0.75rem;
+  margin-top: 0.25rem;
+}
+
+.wpwl-button-pay {
+  background: var(--color-brand-dark-navy);
+  color: var(--color-on-media);
+  border: 0;
+  border-radius: 0.625rem;
+  font-weight: 600;
+  min-height: 3rem;
+  width: 100%;
+  margin-top: 0.5rem;
+  transition: opacity 0.15s ease;
+}
+
+.wpwl-button-pay:hover {
+  opacity: 0.9;
+}
+
+.wpwl-button-pay:focus-visible {
+  outline: 2px solid var(--color-ring);
+  outline-offset: 2px;
+}
+
+/*
+ * Card-data fields (number / expiry / CVV): keep the digits flowing LTR, but anchor the
+ * field content to the page's reading-start edge — RIGHT in Arabic (rtl), LEFT in English
+ * (ltr) — so the placeholder + caret sit on the same side as the label (fixes the
+ * "تاريخ الإنتهاء" caret-left / placeholder-right split). The cardholder-name field is
+ * left to inherit the page direction (it may hold Arabic or Latin text).
+ */
+.wpwl-control-cardNumber,
+.wpwl-control-expiry,
+.wpwl-control-cvv {
+  direction: ltr;
+}
+
+[dir='rtl'] .wpwl-control-cardNumber,
+[dir='rtl'] .wpwl-control-expiry,
+[dir='rtl'] .wpwl-control-cvv {
+  text-align: right;
+}
+
+[dir='ltr'] .wpwl-control-cardNumber,
+[dir='ltr'] .wpwl-control-expiry,
+[dir='ltr'] .wpwl-control-cvv {
+  text-align: left;
+}

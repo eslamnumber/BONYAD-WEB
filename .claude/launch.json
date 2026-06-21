@@ -4,9 +4,9 @@
     {
       "name": "Bonyad Dev",
       "runtimeExecutable": "npm",
-      "runtimeArgs": ["run", "dev"],
-      "port": 3000,
-      "autoPort": true
+      "runtimeArgs": ["run", "dev", "--", "-p", "4321"],
+      "port": 4321,
+      "autoPort": false
     }
   ]
 }

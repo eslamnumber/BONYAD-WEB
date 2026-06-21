@@ -49,6 +49,8 @@ function mockBackend() {
     http.get('*/users/:id/profile', () =>
       HttpResponse.json({ id: 9, name: 'Ahmed Al-Qahtani', averageRating: 4.8 }),
     ),
+    // Keep the change-requests section's async fetch empty + deterministic here.
+    http.get('*/change-requests/project/:projectId/active', () => HttpResponse.json([])),
   );
 }
 

@@ -94,12 +94,11 @@ function SidebarNavLink({
   onNotifications,
   onNavigate,
 }: NavLinkProps) {
-  const { Icon, href, badge } = item;
+  const { Icon, href } = item;
   const isCustomer = variant === 'customer';
   const inactiveClass = isCustomer ? CUSTOMER_INACTIVE : INACTIVE_ITEM;
   const content = (
     <span className={ITEM_CONTENT}>
-      {badge ? <span className="bg-notif-unread size-1.5 rounded-full" aria-hidden /> : null}
       <span>{label}</span>
       <Icon className={ICON_CLASS} aria-hidden />
     </span>

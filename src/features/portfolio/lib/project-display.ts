@@ -2,6 +2,18 @@ import { type Locale } from '@/types/locale';
 
 import { type PortfolioProject } from '../schemas/portfolio';
 
+/**
+ * Today's local calendar date as `YYYY-MM-DD` — the upper bound for project dates
+ * (a past project can't start or end in the future). Used both as the date inputs'
+ * `max` attribute and by the form schema's future-date refinements.
+ */
+export function todayIso(): string {
+  const now = new Date();
+  const month = String(now.getMonth() + 1).padStart(2, '0');
+  const day = String(now.getDate()).padStart(2, '0');
+  return `${now.getFullYear()}-${month}-${day}`;
+}
+
 /** Format one `YYYY-MM-DD` date to a localized `MMM YYYY`, or null when unparseable. */
 export function formatProjectDate(date: string | undefined, locale: Locale): string | null {
   if (!date) return null;

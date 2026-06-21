@@ -57,12 +57,20 @@ const ACTION_BTN =
 function HeaderContact({ project }: { project: ProjectDetail }) {
   const { t } = useTranslation();
   const location = project.clientLocation || project.address;
+  // Technician-only screen — message the project's client (`userId`), falling back to
+  // the inbox only when the client id is absent. Never the technician themselves.
+  const contactHref = project.userId
+    ? ROUTES.DASHBOARD_MESSAGE_FOR(project.userId, {
+        name: project.userName,
+        projectId: project.id,
+      })
+    : ROUTES.DASHBOARD_MESSAGES;
 
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
       <div className="flex items-center gap-3">
         <Link
-          href={ROUTES.DASHBOARD_MESSAGES}
+          href={contactHref}
           aria-label={t('dashboard.projectDetail.header.message')}
           className={`bg-detail-action text-on-media motion-safe:hover:opacity-90 ${ACTION_BTN}`}
         >

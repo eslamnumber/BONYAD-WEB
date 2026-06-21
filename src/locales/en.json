@@ -53,6 +53,101 @@
     "faq": "FAQ"
   },
   "dashboard": {
+    "changeRequests": {
+      "section": {
+        "title": "Change requests",
+        "subtitle": "Negotiate the scope, budget, or phases of this project.",
+        "loading": "Loading change requests…",
+        "error": "Couldn't load change requests.",
+        "empty": "No change requests yet.",
+        "requestModification": "Request modification",
+        "more": "+{{count}} more"
+      },
+      "status": {
+        "pending": "Pending",
+        "responded": "Responded",
+        "agreed": "Agreed",
+        "rejected": "Rejected",
+        "completed": "Completed"
+      },
+      "card": {
+        "view": "View details",
+        "budget": "New total budget",
+        "phaseChangesCount": "Phase changes ({{count}})",
+        "requestedBy": "Requested by {{name}}",
+        "you": "You"
+      },
+      "agreement": {
+        "title": "Agreement",
+        "you": "You",
+        "customer": "Customer",
+        "technician": "Technician",
+        "agreed": "Agreed",
+        "waiting": "Waiting",
+        "bothAgreed": "Both parties agreed — changes are locked in.",
+        "viewDocument": "View signed document"
+      },
+      "form": {
+        "title": "Request modification",
+        "descriptionLabel": "What you'd like to change",
+        "descriptionPlaceholder": "Describe the changes you're requesting…",
+        "budgetLabel": "New total budget (optional)",
+        "budgetPlaceholder": "e.g. 15000",
+        "phasesTitle": "Phase changes (optional)",
+        "phasesHint": "Edit or remove existing phases, or add new ones.",
+        "addPhase": "Add new phase",
+        "submit": "Send request",
+        "submitting": "Sending…",
+        "cancel": "Cancel",
+        "error": "Couldn't send the request. Please try again."
+      },
+      "phase": {
+        "existingTitle": "Existing phases",
+        "newTitle": "New phases",
+        "edit": "Edit",
+        "remove": "Remove",
+        "undo": "Undo",
+        "willRemove": "Will be removed",
+        "descriptionLabel": "Description",
+        "daysLabel": "Days",
+        "costLabel": "Cost (SAR)",
+        "newPhase": "New phase",
+        "label": "Phase {{number}}"
+      },
+      "phaseAction": {
+        "CREATE": "Add",
+        "UPDATE": "Edit",
+        "DELETE": "Remove"
+      },
+      "thread": {
+        "title": "Negotiation",
+        "loading": "Loading negotiation…",
+        "error": "Couldn't load the negotiation.",
+        "empty": "No messages yet.",
+        "requested": "Requested",
+        "responded": "Responded",
+        "budget": "New total budget",
+        "phaseChanges": "Phase changes"
+      },
+      "actions": {
+        "respond": "Counter-offer",
+        "agree": "Agree",
+        "reject": "Reject",
+        "respondTitle": "Send a counter-offer",
+        "respondPlaceholder": "Your reply…",
+        "rejectTitle": "Reject this request",
+        "rejectPlaceholder": "Reason (optional)…",
+        "agreeTitle": "Agree to these changes",
+        "agreeBody": "Both parties must agree before the changes take effect. You'll be asked to sign by email.",
+        "ownRequestNote": "This is your request — approve and sign to confirm it. The other party must also agree.",
+        "agreeConfirm": "Agree & sign",
+        "confirm": "Confirm",
+        "cancel": "Cancel",
+        "submitting": "Submitting…",
+        "youAgreed": "You've agreed — waiting for the other party.",
+        "error": "Something went wrong. Please try again."
+      }
+    },
     "title": "Dashboard",
     "sidebarAriaLabel": "Dashboard navigation",
     "nav": {
@@ -95,7 +190,7 @@
         "howItWorks": "How does the platform work?"
       },
       "search": {
-        "placeholder": "…Search for an engineer, designer, electrician",
+        "placeholder": "Search for an engineer, designer, electrician…",
         "label": "Search for a technician or service",
         "recent": "Recently",
         "suggested": "Suggestions",
@@ -377,7 +472,7 @@
           "nameLabel": "Project name",
           "namePlaceholder": "Enter the project name",
           "descriptionLabel": "Description",
-          "descriptionPlaceholder": "...Write a detailed description of the project"
+          "descriptionPlaceholder": "Write a detailed description of the project..."
         },
         "budget": {
           "heading": "Budget & timeline",
@@ -393,7 +488,7 @@
           "heading": "Deliverables (optional)",
           "description": "Specify what should be delivered when the project is complete",
           "label": "Deliverables",
-          "placeholder": "...Describe the deliverables expected when the project is complete"
+          "placeholder": "Describe the deliverables expected when the project is complete..."
         },
         "phases": {
           "heading": "Project phases (optional)",
@@ -433,7 +528,7 @@
       },
       "technicianPicker": {
         "title": "Choose a technician",
-        "searchPlaceholder": "...Search by name or phone",
+        "searchPlaceholder": "Search by name or phone...",
         "choose": "Choose",
         "viewProfile": "View profile",
         "close": "Close",
@@ -643,7 +738,7 @@
         "durationLabel": "Implementation duration",
         "durationPlaceholder": "e.g. 8 weeks",
         "messageLabel": "Application message",
-        "messagePlaceholder": "...Write your offer details here",
+        "messagePlaceholder": "Write your offer details here...",
         "submit": "Submit offer",
         "save": "Save",
         "success": "Your offer has been submitted.",
@@ -793,6 +888,9 @@
         "empty": "No phases defined yet.",
         "addUpdate": "Add update",
         "requestApproval": "Request phase approval",
+        "requestPayment": "Request payment",
+        "paymentRequested": "Payment requested",
+        "requestPaymentError": "Couldn't request payment. Please try again.",
         "approve": "Approve",
         "requestChanges": "Request changes",
         "confirmCompletion": "Confirm project completion"
@@ -864,6 +962,16 @@
         "subtitle": "We couldn't process your payment. Please try again.",
         "back": "Back to projects",
         "dismiss": "Try again"
+      },
+      "widget": {
+        "title": "Secure card payment",
+        "subtitle": "Enter your card details to complete the payment.",
+        "amountLabel": "Amount to pay",
+        "secureNote": "Your payment is encrypted and processed securely by HyperPay.",
+        "cancel": "Cancel and go back",
+        "missingTitle": "Payment session expired",
+        "missingSubtitle": "We couldn't find an active payment. Please start again from your project.",
+        "back": "Back to projects"
       }
     },
     "projectEdit": {
@@ -917,6 +1025,11 @@
         "heading": "Selected service provider",
         "role": "Certified general contractor",
         "messageLabel": "Message the service provider"
+      },
+      "client": {
+        "heading": "Project client",
+        "role": "Project owner",
+        "messageLabel": "Message the client"
       },
       "phases": {
         "days": "{{count}} days"
@@ -2043,7 +2156,7 @@
     },
     "selectConversation": "Select a conversation to view it.",
     "threadEmpty": "No messages yet. Type a message to start the conversation.",
-    "inputPlaceholder": "...Type a message",
+    "inputPlaceholder": "Type a message...",
     "send": "Send",
     "attachFile": "Attach file",
     "emoji": "Add emoji",
@@ -2270,7 +2383,14 @@
     "errors": {
       "businessNameRequired": "Please enter a business name",
       "titleRequired": "Please enter a project title",
-      "endBeforeStart": "The end date must be after the start date",
+      "titleTooLong": "Title is too long (max 120 characters)",
+      "descriptionTooLong": "Description is too long (max 1000 characters)",
+      "clientNameTooLong": "Client name is too long (max 120 characters)",
+      "locationTooLong": "Location is too long (max 160 characters)",
+      "startInFuture": "The start date can't be in the future",
+      "endInFuture": "The end date can't be in the future",
+      "endBeforeStart": "The end date can't be before the start date",
+      "valueInvalid": "Enter a valid amount greater than 0",
       "createFailed": "We couldn't create your portfolio. Please try again.",
       "updateFailed": "We couldn't save your changes. Please try again.",
       "projectFailed": "We couldn't save the project. Please try again.",
@@ -2383,6 +2503,259 @@
       "messageRequired": "Please write a message",
       "messageTooLong": "This message is too long",
       "subjectTooLong": "This subject is too long"
+    }
+  },
+  "sketch": {
+    "metaTitle": "Smart 2D → 3D design",
+    "back": "Create a request",
+    "hero": {
+      "badge": "AI · Beta",
+      "title": "Smart 2D → 3D design",
+      "subtitle": "Describe your project and get floor-plan options with a 3D walkthrough"
+    },
+    "form": {
+      "description": {
+        "title": "Describe your project",
+        "label": "Project description",
+        "placeholder": "e.g. A two-storey villa with 4 bedrooms, a men's majlis, a family living room and a kitchen",
+        "hint": "The more detail you add, the better the result"
+      },
+      "buildingType": {
+        "title": "Building type",
+        "options": {
+          "apartment": "Apartment",
+          "villa": "Villa",
+          "duplex": "Duplex",
+          "compound": "Compound",
+          "shop": "Shop"
+        }
+      },
+      "style": {
+        "title": "Architectural style",
+        "options": {
+          "modern": "Modern",
+          "najdi": "Najdi",
+          "hijazi": "Hijazi",
+          "contemporary": "Contemporary"
+        }
+      },
+      "areaRooms": {
+        "title": "Area & rooms",
+        "area": "Total area",
+        "areaUnit": "m²",
+        "bedrooms": "Bedrooms",
+        "bathrooms": "Bathrooms",
+        "decrease": "Decrease",
+        "increase": "Increase",
+        "roomsClause": "with {{bedrooms}} bedrooms and {{bathrooms}} bathrooms"
+      },
+      "plot": {
+        "title": "Plot",
+        "optional": "Optional",
+        "enable": "Add plot details",
+        "shape": "Plot shape",
+        "shapes": {
+          "rectangular": "Rectangular",
+          "l_shaped": "L-shaped",
+          "irregular": "Irregular"
+        },
+        "width": "Width",
+        "length": "Length",
+        "metres": "m",
+        "setbacks": {
+          "title": "Setbacks",
+          "front": "Front",
+          "back": "Back",
+          "left": "Left",
+          "right": "Right"
+        }
+      },
+      "generate": "Generate designs",
+      "generatingCta": "Generating…"
+    },
+    "generating": {
+      "title": "Designing your home",
+      "subtitle": "This usually takes less than a minute",
+      "steps": {
+        "analyze": "Analysing your description",
+        "draw": "Drafting the floor plans",
+        "rooms": "Laying out the rooms",
+        "openings": "Placing doors & windows",
+        "code": "Checking the building code",
+        "prepare": "Preparing the designs"
+      }
+    },
+    "variants": {
+      "title": "Choose a design",
+      "subtitle": "Pick a floor plan to build in 3D",
+      "select": "Select this design",
+      "selected": "Selected",
+      "floorShort": "Floor {{number}}",
+      "floorSwitcher": "Switch floor",
+      "stats": {
+        "rooms": "{{count}} rooms",
+        "area": "{{area}} m²",
+        "floors": "{{count}} floors"
+      },
+      "viewCompliance": "Compliance",
+      "confirm": "View in 3D",
+      "confirming": "Building 3D…",
+      "verdict": {
+        "ok": "Compliant",
+        "needs_fix": "Needs review",
+        "reject": "Major issues"
+      }
+    },
+    "compliance": {
+      "title": "Code compliance",
+      "subtitle": "Saudi Building Code & Balady checks",
+      "close": "Close",
+      "score": "Engineering review",
+      "scoreOutOf": "{{score}}/100",
+      "passed": "Compliant",
+      "summary": "{{passed}} of {{total}} checks passed",
+      "noIssues": "No issues found — all checks passed.",
+      "suggestedFix": "Suggested fix",
+      "issuesCount": "{{count}} issues",
+      "severity": {
+        "critical": "Critical",
+        "warning": "Warning",
+        "minor": "Minor"
+      },
+      "codes": {
+        "sbc_201": "SBC 201",
+        "sbc_501": "SBC 501",
+        "sbc_701": "SBC 701",
+        "sbc_801": "SBC 801",
+        "balady_setbacks": "Balady setbacks",
+        "saudi_privacy": "Privacy"
+      }
+    },
+    "viewer": {
+      "title": "Your home in 3D",
+      "subtitle": "Drag to rotate · scroll to zoom",
+      "loading": "Loading the 3D view…",
+      "canvasLabel": "Interactive 3D model of the generated home",
+      "allFloors": "All floors",
+      "floorSelector": "Show floor",
+      "floorShort": "Floor {{number}}",
+      "viewCompliance": "Code compliance",
+      "startOver": "Start a new design",
+      "unavailable": "The 3D scene isn't ready yet."
+    },
+    "error": {
+      "title": "We couldn't generate your design",
+      "timeout": "This is taking longer than expected. Please try again.",
+      "generic": "Something went wrong while generating your design.",
+      "retry": "Try again",
+      "startOver": "Start over"
+    }
+  },
+  "onboarding": {
+    "logout": "Sign out",
+    "progress": "Step {{step}} of {{total}}",
+    "completeProfile": {
+      "pageTitle": "Complete your profile — Bonyad",
+      "heading": "Complete your profile",
+      "subheading": "A few details so customers can find you and trust your work",
+      "emailLabel": "Email address",
+      "experienceLabel": "Years of experience",
+      "experiencePlaceholder": "Select your experience",
+      "experienceYears": "{{years}} years",
+      "experienceOver": "More than {{years}} years",
+      "regionsLabel": "Service areas",
+      "regionsEmpty": "No service areas are available right now",
+      "regionsError": "We couldn't load the service areas",
+      "bioLabel": "About your work",
+      "bioPlaceholder": "Describe your trade, your specialities, and the kind of jobs you take on.",
+      "addressLabel": "Address",
+      "certificatesLabel": "Certificates & licences",
+      "certificatesCta": "Add files",
+      "certificatesHint": "Optional. Images or PDFs, up to 10 files",
+      "certificatesRemove": "Remove {{name}}",
+      "submit": "Submit for review",
+      "submitting": "Submitting…",
+      "errors": {
+        "emailRequired": "Enter your email address",
+        "emailInvalid": "Enter a valid email address",
+        "emailTaken": "This email is already in use",
+        "bioTooShort": "Tell customers a bit more — at least 10 characters",
+        "bioTooLong": "Keep this under 1000 characters",
+        "addressRequired": "Enter your address",
+        "addressTooLong": "Keep this under 200 characters",
+        "experienceRequired": "Select your years of experience",
+        "regionsRequired": "Choose at least one service area",
+        "fileType": "Only images, PDF, or Word files are allowed",
+        "fileSize": "Each file must be 10 MB or smaller",
+        "fileCount": "You can attach up to {{max}} files",
+        "submitFailed": "We couldn't submit your profile. Please try again."
+      }
+    },
+    "waitingApproval": {
+      "pageTitle": "Profile under review — Bonyad",
+      "heading": "Your profile is under review",
+      "message": "Our team is reviewing your details. We'll let you know as soon as your account is approved — this usually takes about one business day.",
+      "checklist": {
+        "email": "Email address",
+        "bio": "About your work",
+        "regions": "Service areas",
+        "certificates": "Certificates & licences"
+      },
+      "approvedHeading": "You're approved",
+      "approvedMessage": "Taking you to the next step…",
+      "suspendedHeading": "Your account is on hold",
+      "suspendedMessage": "Your account has been suspended. Please contact support to sort this out.",
+      "contactSupport": "Contact support",
+      "statusError": "We couldn't check your status."
+    },
+    "setup": {
+      "pageTitle": "Set up your account — Bonyad",
+      "steps": {
+        "plan": {
+          "title": "Choose your plan",
+          "subtitle": "Pick the subscription that fits how you bid on jobs."
+        },
+        "services": {
+          "title": "Choose your services",
+          "subtitle": "Select the services you offer. You can update these anytime."
+        },
+        "review": {
+          "title": "Review and confirm",
+          "subtitle": "Check that everything looks right, then start using Bonyad."
+        }
+      },
+      "plan": {
+        "free": "Free",
+        "perWeekBids": "{{count}} bids per week",
+        "selected": "Selected",
+        "empty": "No plans are available right now.",
+        "error": "We couldn't load the plans."
+      },
+      "services": {
+        "selectedCount": "{{count}} selected",
+        "categoriesUsed": "{{used}} of {{max}} categories",
+        "capReached": "You've reached your plan's category limit — refine the ones you've chosen.",
+        "showServices": "Show services",
+        "hideServices": "Hide services",
+        "empty": "No services are available right now.",
+        "error": "We couldn't load the services.",
+        "subError": "We couldn't load these services.",
+        "subEmpty": "No services under this category yet.",
+        "selectCategory": "Select all services in {{name}}",
+        "allServices": "All services in this category"
+      },
+      "review": {
+        "planLabel": "Your plan",
+        "servicesLabel": "Your services",
+        "edit": "Change",
+        "submitError": "We couldn't finish setting up your account. Please try again."
+      },
+      "nav": {
+        "back": "Back",
+        "next": "Continue",
+        "finish": "Finish setup",
+        "finishing": "Finishing…"
+      }
     }
   }
 }

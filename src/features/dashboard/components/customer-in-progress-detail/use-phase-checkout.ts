@@ -1,5 +1,6 @@
 'use client';
 
+import { ROUTES } from '@/config/routes';
 import { useAuthStore } from '@/stores/auth-store';
 
 import { useCreateCheckout } from '../../api/create-checkout';
@@ -7,14 +8,13 @@ import {
   buildCheckoutRequest,
   buildShopperResultUrl,
   PENDING_CHECKOUT_KEY,
-  resolveRedirectTarget,
 } from '../../lib/checkout-request';
 import { type ProjectPhase } from '../../schemas/project-phase';
 
 import { type PaymentSelection } from './payment-options-modal';
 
-/** Persist the pending checkout so /payment/callback can recover the phase context
- *  even if HyperPay drops the querystring on the return redirect. Best-effort. */
+/** Persist the pending checkout so the return (project page / callback) can recover the
+ *  phase context even if the widget redirect drops the querystring. Best-effort. */
 function rememberPending(
   checkoutId: string,
   phase: ProjectPhase,
@@ -33,15 +33,18 @@ function rememberPending(
       }),
     );
   } catch {
-    // sessionStorage unavailable — the shopperResultUrl querystring still carries it.
+    // sessionStorage unavailable — the widget form action still carries the context.
   }
 }
 
 /**
- * Drives the checkout step (5d.3): build the create-checkout request from the
- * signed-in user, POST it, stash the pending checkout, and redirect to HyperPay's
- * hosted page (or, in mimic mode, straight to /payment/callback). The callback
- * (5d.4) verifies the charge and marks the phase paid.
+ * Drives the checkout step: build the create-checkout request from the signed-in user,
+ * POST it, stash the pending checkout, then navigate to the standalone COPYandPAY
+ * **widget page** ({@link ROUTES.PAYMENT_CHECKOUT}) carrying the checkoutId + mode +
+ * phase context. The widget collects the card and redirects back to the project page,
+ * where the inline result modal verifies the charge (the status GET finalizes it
+ * server-side). Replaces the old broken "redirect to a gateway URL" — the backend
+ * returns a checkoutId for the embedded widget, never a hosted redirect URL.
  */
 export function usePhaseCheckout(projectId: number) {
   const user = useAuthStore((s) => s.user);
@@ -65,7 +68,14 @@ export function usePhaseCheckout(projectId: number) {
     mutation.mutate(request, {
       onSuccess: (session) => {
         rememberPending(session.checkoutId, phase, selection);
-        window.location.href = resolveRedirectTarget(session, shopperResultUrl);
+        window.location.href = ROUTES.PAYMENT_CHECKOUT({
+          checkoutId: session.checkoutId,
+          mode: session.mode,
+          projectId,
+          phaseId: phase.id,
+          paymentType: selection.paymentType,
+          amount: selection.amount,
+        });
       },
     });
   };

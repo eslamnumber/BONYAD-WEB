@@ -35,7 +35,10 @@ function documentCss(c: TermsDocColors): string {
     'html,body{margin:0}',
     `body{background:${c.surface};color:${c.text};`,
     "font-family:system-ui,-apple-system,'Segoe UI',Roboto,'Noto Sans Arabic',sans-serif;",
-    'font-size:15px;line-height:1.75;padding:4px 2px;-webkit-text-size-adjust:100%}',
+    // `pre-line` keeps the backend body's newline breaks (legal text is often stored
+    // with `\n` line breaks, which HTML would otherwise collapse into one paragraph)
+    // while still collapsing redundant spaces and honouring any real HTML tags.
+    'font-size:15px;line-height:1.75;white-space:pre-line;padding:4px 2px;-webkit-text-size-adjust:100%}',
     `h1,h2,h3,h4{color:${c.heading};line-height:1.3;font-weight:600;margin:1.5em 0 .6em}`,
     'h1{font-size:1.35rem}h2{font-size:1.15rem}h3{font-size:1.02rem}',
     'p,li{margin:0 0 .9em}ul,ol{padding-inline-start:1.4em;margin:0 0 .9em}',

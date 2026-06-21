@@ -32,6 +32,19 @@ export const ROUTES = {
   VERIFY_OTP: '/verify-otp',
   RESET_PASSWORD: '/reset-password',
 
+  // Technician onboarding (post-signup): Complete-your-profile → waiting for admin
+  // approval. Authenticated routes in the `(onboarding)` group; the post-login guard
+  // sends an incomplete/unapproved technician here (see features/onboarding).
+  ONBOARDING_COMPLETE_PROFILE: '/complete-profile',
+  ONBOARDING_WAITING_APPROVAL: '/waiting-approval',
+  /**
+   * Post-approval technician setup wizard (choose plan → choose services → confirm).
+   * The onboarding guard sends an APPROVED-but-not-`onboarded` technician here; finishing
+   * flips `onboarded` and lands on the dashboard. Mirrors the RN `TechnicianOnboarding`
+   * step (flow reference only — the design is generated in-house).
+   */
+  ONBOARDING_SETUP: '/setup',
+
   // Authenticated app surface (not yet implemented)
   APP_HOME: '/app',
   APP_PROFILE: '/app/profile',
@@ -49,16 +62,43 @@ export const ROUTES = {
   /** Omdah AI Q&A interview (Figma 1583:2747) — reached from the method picker's AI
    *  row. A local 7-question guided interview (no backend yet); SOW generation is later. */
   DASHBOARD_PROJECTS_CREATE_AI: '/dashboard/projects/create/ai',
+  /** 2D → 3D sketch planner — reached from the chooser's "Smart 2D → 3D design" card.
+   *  Text description → 2D floor-plan variants → confirm → on-device 3D dollhouse. */
+  DASHBOARD_PROJECTS_CREATE_SKETCH: '/dashboard/projects/create/sketch',
   /** Customer create-project wizard (Figma 1394:7041…). */
   DASHBOARD_PROJECTS_NEW: '/dashboard/projects/new',
   /** Assigned-project detail — dispatches approved / completed (Figma 1103:6757) / in-progress by status. */
   DASHBOARD_PROJECT: (id: string) => `/dashboard/projects/${id}`,
   DASHBOARD_PAYMENTS: '/dashboard/payments',
-  /** Standalone HyperPay return page (fallback). Phase payments now return to the
-   *  project detail page itself, which verifies the charge, marks the phase paid, and
-   *  shows the result as a modal in place (Figma 1553:8142). This page stays as a
-   *  belt-and-braces landing; phase context travels in the querystring
-   *  (`?type=phase&phaseId=&paymentType=&amount=`). */
+  /**
+   * Standalone HyperPay COPYandPAY widget page. The phase pay flow navigates here with
+   * the checkoutId + mode; the embedded widget collects the card, then redirects to the
+   * project page carrying `?resourcePath=` (the inline result modal then verifies).
+   */
+  PAYMENT_CHECKOUT: (params: {
+    checkoutId: string;
+    projectId: number;
+    phaseId: number;
+    paymentType: 'FULL' | 'PARTIAL';
+    amount: number;
+    mode?: string | null;
+  }) => {
+    const q = new URLSearchParams({
+      checkoutId: params.checkoutId,
+      type: 'phase',
+      projectId: String(params.projectId),
+      phaseId: String(params.phaseId),
+      paymentType: params.paymentType,
+      amount: String(params.amount),
+    });
+    if (params.mode) q.set('mode', params.mode);
+    return `/payment/checkout?${q.toString()}`;
+  },
+  /**
+   * Standalone HyperPay return page. The phase pay flow returns to the project detail
+   * page (inline result modal); the callback verifies via the status GET, which
+   * finalizes the phase server-side. Context travels in the querystring.
+   */
   PAYMENT_CALLBACK: '/payment/callback',
   /** Customer "Offers" (العروض) — offers/bids received on the customer's projects. Placeholder; screen TBD. */
   DASHBOARD_OFFERS: '/dashboard/offers',

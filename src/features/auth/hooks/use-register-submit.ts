@@ -2,6 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { type UseFormReturn } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 import { ROUTES } from '@/config/routes';
 import { ApiError } from '@/lib/api-client';
@@ -20,9 +21,22 @@ export function useRegisterSubmit(
   termsId?: number,
 ) {
   const router = useRouter();
+  const { i18n } = useTranslation();
   const mutation = useRegister();
 
   const handleError = (err: Error) => {
+    // Prefer the backend's localized message (messageEn/messageAr on ApiError) —
+    // it carries specific context like "Account already exists. Please sign in
+    // instead." rather than the generic "try again later" fallback. Falls through
+    // to the static labels only when the backend didn't send a localized message.
+    if (err instanceof ApiError) {
+      const locale = i18n.language?.startsWith('ar') ? 'ar' : 'en';
+      const backendMsg = err.localizedMessage(locale);
+      if (backendMsg) {
+        form.setError('root', { message: backendMsg });
+        return;
+      }
+    }
     const msg =
       err instanceof ApiError && err.status === 409
         ? errorLabels.phoneAlreadyRegistered

@@ -53,6 +53,101 @@
     "faq": "الأسئلة الشائعة"
   },
   "dashboard": {
+    "changeRequests": {
+      "section": {
+        "title": "طلبات التعديل",
+        "subtitle": "تفاوض على نطاق المشروع أو ميزانيته أو مراحله.",
+        "loading": "جارٍ تحميل طلبات التعديل…",
+        "error": "تعذّر تحميل طلبات التعديل.",
+        "empty": "لا توجد طلبات تعديل بعد.",
+        "requestModification": "طلب تعديل",
+        "more": "+{{count}} أخرى"
+      },
+      "status": {
+        "pending": "قيد الانتظار",
+        "responded": "تم الرد",
+        "agreed": "تمت الموافقة",
+        "rejected": "مرفوض",
+        "completed": "مكتمل"
+      },
+      "card": {
+        "view": "عرض التفاصيل",
+        "budget": "إجمالي الميزانية الجديد",
+        "phaseChangesCount": "تغييرات المراحل ({{count}})",
+        "requestedBy": "بطلب من {{name}}",
+        "you": "أنت"
+      },
+      "agreement": {
+        "title": "الموافقة",
+        "you": "أنت",
+        "customer": "العميل",
+        "technician": "الفني",
+        "agreed": "وافق",
+        "waiting": "في الانتظار",
+        "bothAgreed": "وافق الطرفان — تم تثبيت التغييرات.",
+        "viewDocument": "عرض المستند الموقّع"
+      },
+      "form": {
+        "title": "طلب تعديل",
+        "descriptionLabel": "ما ترغب في تغييره",
+        "descriptionPlaceholder": "صِف التغييرات التي تطلبها…",
+        "budgetLabel": "إجمالي الميزانية الجديد (اختياري)",
+        "budgetPlaceholder": "مثال: 15000",
+        "phasesTitle": "تغييرات المراحل (اختياري)",
+        "phasesHint": "عدّل أو احذف المراحل الحالية، أو أضف مراحل جديدة.",
+        "addPhase": "إضافة مرحلة جديدة",
+        "submit": "إرسال الطلب",
+        "submitting": "جارٍ الإرسال…",
+        "cancel": "إلغاء",
+        "error": "تعذّر إرسال الطلب. يرجى المحاولة مرة أخرى."
+      },
+      "phase": {
+        "existingTitle": "المراحل الحالية",
+        "newTitle": "المراحل الجديدة",
+        "edit": "تعديل",
+        "remove": "حذف",
+        "undo": "تراجع",
+        "willRemove": "سيتم حذفها",
+        "descriptionLabel": "الوصف",
+        "daysLabel": "الأيام",
+        "costLabel": "التكلفة (ر.س)",
+        "newPhase": "مرحلة جديدة",
+        "label": "المرحلة {{number}}"
+      },
+      "phaseAction": {
+        "CREATE": "إضافة",
+        "UPDATE": "تعديل",
+        "DELETE": "حذف"
+      },
+      "thread": {
+        "title": "التفاوض",
+        "loading": "جارٍ تحميل التفاوض…",
+        "error": "تعذّر تحميل التفاوض.",
+        "empty": "لا توجد رسائل بعد.",
+        "requested": "طلب",
+        "responded": "رد",
+        "budget": "إجمالي الميزانية الجديد",
+        "phaseChanges": "تغييرات المراحل"
+      },
+      "actions": {
+        "respond": "عرض مضاد",
+        "agree": "موافقة",
+        "reject": "رفض",
+        "respondTitle": "إرسال عرض مضاد",
+        "respondPlaceholder": "ردّك…",
+        "rejectTitle": "رفض هذا الطلب",
+        "rejectPlaceholder": "السبب (اختياري)…",
+        "agreeTitle": "الموافقة على هذه التغييرات",
+        "agreeBody": "يجب أن يوافق الطرفان قبل أن تصبح التغييرات سارية. ستتم مطالبتك بالتوقيع عبر البريد الإلكتروني.",
+        "ownRequestNote": "هذا طلبك — وافق ووقّع لتأكيده. يجب أن يوافق الطرف الآخر أيضاً.",
+        "agreeConfirm": "الموافقة والتوقيع",
+        "confirm": "تأكيد",
+        "cancel": "إلغاء",
+        "submitting": "جارٍ الإرسال…",
+        "youAgreed": "لقد وافقت — في انتظار الطرف الآخر.",
+        "error": "حدث خطأ ما. يرجى المحاولة مرة أخرى."
+      }
+    },
     "title": "لوحة التحكم",
     "sidebarAriaLabel": "التنقل في لوحة التحكم",
     "nav": {
@@ -95,7 +190,7 @@
         "howItWorks": "كيف تعمل المنصة؟"
       },
       "search": {
-        "placeholder": "ابحث عن مهندس، مصمم، كهربائي",
+        "placeholder": "ابحث عن مهندس، مصمم، كهربائي…",
         "label": "ابحث عن فني أو خدمة",
         "recent": "مؤخرًا",
         "suggested": "اقتراحات",
@@ -377,7 +472,7 @@
           "nameLabel": "اسم المشروع",
           "namePlaceholder": "أدخل اسم المشروع",
           "descriptionLabel": "الوصف",
-          "descriptionPlaceholder": "...اكتب وصفًا تفصيليًا للمشروع"
+          "descriptionPlaceholder": "اكتب وصفًا تفصيليًا للمشروع..."
         },
         "budget": {
           "heading": "الميزانية والجدول الزمني",
@@ -393,7 +488,7 @@
           "heading": "المخرجات (اختياري)",
           "description": "حدد ما يجب تسليمه عند إكمال المشروع",
           "label": "المخرجات",
-          "placeholder": "...اذكر المخرجات المتوقعة عند اكتمال المشروع"
+          "placeholder": "اذكر المخرجات المتوقعة عند اكتمال المشروع..."
         },
         "phases": {
           "heading": "مراحل المشروع (اختياري)",
@@ -433,7 +528,7 @@
       },
       "technicianPicker": {
         "title": "اختر فنياً",
-        "searchPlaceholder": "...ابحث بالاسم أو رقم الهاتف",
+        "searchPlaceholder": "ابحث بالاسم أو رقم الهاتف...",
         "choose": "اختار",
         "viewProfile": "عرض الملف",
         "close": "إغلاق",
@@ -643,7 +738,7 @@
         "durationLabel": "مدة التنفيذ",
         "durationPlaceholder": "مثلاً: 8 أسابيع",
         "messageLabel": "رسالة التقديم",
-        "messagePlaceholder": "...اكتب تفاصيل عرضك هنا",
+        "messagePlaceholder": "اكتب تفاصيل عرضك هنا...",
         "submit": "تقديم العرض",
         "save": "حفظ",
         "success": "تم تقديم عرضك.",
@@ -793,6 +888,9 @@
         "empty": "لم يتم تحديد مراحل بعد.",
         "addUpdate": "إضافة تحديث",
         "requestApproval": "طلب اعتماد المرحلة",
+        "requestPayment": "طلب الدفع",
+        "paymentRequested": "تم طلب الدفع",
+        "requestPaymentError": "تعذّر طلب الدفع. حاول مرة أخرى.",
         "approve": "موافقة",
         "requestChanges": "طلب تعديل",
         "confirmCompletion": "تأكيد إكمال المشروع"
@@ -864,6 +962,16 @@
         "subtitle": "لم نتمكن من معالجة دفعتك. حاول مرة أخرى.",
         "back": "العودة إلى المشاريع",
         "dismiss": "حاول مرة أخرى"
+      },
+      "widget": {
+        "title": "دفع آمن بالبطاقة",
+        "subtitle": "أدخل بيانات بطاقتك لإتمام الدفع.",
+        "amountLabel": "المبلغ المطلوب",
+        "secureNote": "تتم معالجة دفعتك بشكل آمن ومشفّر عبر HyperPay.",
+        "cancel": "إلغاء والعودة",
+        "missingTitle": "انتهت جلسة الدفع",
+        "missingSubtitle": "لم نعثر على عملية دفع نشطة. ابدأ من جديد من مشروعك.",
+        "back": "العودة إلى المشاريع"
       }
     },
     "projectEdit": {
@@ -917,6 +1025,11 @@
         "heading": "مزود الخدمة المختار",
         "role": "مقاول عام معتمد",
         "messageLabel": "مراسلة مزود الخدمة"
+      },
+      "client": {
+        "heading": "عميل المشروع",
+        "role": "صاحب المشروع",
+        "messageLabel": "مراسلة العميل"
       },
       "phases": {
         "days": "{{count}} أيام"
@@ -2043,7 +2156,7 @@
     },
     "selectConversation": "اختر محادثة لعرضها.",
     "threadEmpty": "لا توجد رسائل بعد. اكتب رسالة لبدء المحادثة.",
-    "inputPlaceholder": "...اكتب رسالة",
+    "inputPlaceholder": "اكتب رسالة...",
     "send": "إرسال",
     "attachFile": "إرفاق ملف",
     "emoji": "إضافة رمز تعبيري",
@@ -2270,7 +2383,14 @@
     "errors": {
       "businessNameRequired": "يرجى إدخال اسم النشاط",
       "titleRequired": "يرجى إدخال عنوان المشروع",
-      "endBeforeStart": "يجب أن يكون تاريخ الانتهاء بعد تاريخ البدء",
+      "titleTooLong": "العنوان طويل جدًا (الحد الأقصى 120 حرفًا)",
+      "descriptionTooLong": "الوصف طويل جدًا (الحد الأقصى 1000 حرف)",
+      "clientNameTooLong": "اسم العميل طويل جدًا (الحد الأقصى 120 حرفًا)",
+      "locationTooLong": "الموقع طويل جدًا (الحد الأقصى 160 حرفًا)",
+      "startInFuture": "لا يمكن أن يكون تاريخ البدء في المستقبل",
+      "endInFuture": "لا يمكن أن يكون تاريخ الانتهاء في المستقبل",
+      "endBeforeStart": "لا يمكن أن يكون تاريخ الانتهاء قبل تاريخ البدء",
+      "valueInvalid": "أدخل مبلغًا صحيحًا أكبر من 0",
       "createFailed": "تعذّر إنشاء معرض أعمالك. يرجى المحاولة مرة أخرى.",
       "updateFailed": "تعذّر حفظ تغييراتك. يرجى المحاولة مرة أخرى.",
       "projectFailed": "تعذّر حفظ المشروع. يرجى المحاولة مرة أخرى.",
@@ -2383,6 +2503,259 @@
       "messageRequired": "يرجى كتابة رسالة",
       "messageTooLong": "هذه الرسالة طويلة جدًا",
       "subjectTooLong": "هذا الموضوع طويل جدًا"
+    }
+  },
+  "sketch": {
+    "metaTitle": "تصميم ذكي ثنائي إلى ثلاثي الأبعاد",
+    "back": "إنشاء طلب",
+    "hero": {
+      "badge": "ذكاء اصطناعي · تجريبي",
+      "title": "تصميم ذكي ثنائي إلى ثلاثي الأبعاد",
+      "subtitle": "صِف مشروعك واحصل على مخططات مع جولة ثلاثية الأبعاد"
+    },
+    "form": {
+      "description": {
+        "title": "صِف مشروعك",
+        "label": "وصف المشروع",
+        "placeholder": "مثال: فيلا من دورين بأربع غرف نوم، مجلس رجال، صالة عائلية ومطبخ",
+        "hint": "كلما أضفت تفاصيل أكثر كانت النتيجة أفضل"
+      },
+      "buildingType": {
+        "title": "نوع المبنى",
+        "options": {
+          "apartment": "شقة",
+          "villa": "فيلا",
+          "duplex": "دوبلكس",
+          "compound": "مجمّع",
+          "shop": "محل"
+        }
+      },
+      "style": {
+        "title": "الطراز المعماري",
+        "options": {
+          "modern": "عصري",
+          "najdi": "نجدي",
+          "hijazi": "حجازي",
+          "contemporary": "معاصر"
+        }
+      },
+      "areaRooms": {
+        "title": "المساحة والغرف",
+        "area": "المساحة الكلية",
+        "areaUnit": "م²",
+        "bedrooms": "غرف النوم",
+        "bathrooms": "دورات المياه",
+        "decrease": "تقليل",
+        "increase": "زيادة",
+        "roomsClause": "عدد غرف النوم {{bedrooms}}، وعدد دورات المياه {{bathrooms}}"
+      },
+      "plot": {
+        "title": "الأرض",
+        "optional": "اختياري",
+        "enable": "إضافة تفاصيل الأرض",
+        "shape": "شكل الأرض",
+        "shapes": {
+          "rectangular": "مستطيلة",
+          "l_shaped": "حرف L",
+          "irregular": "غير منتظمة"
+        },
+        "width": "العرض",
+        "length": "الطول",
+        "metres": "م",
+        "setbacks": {
+          "title": "الارتدادات",
+          "front": "أمامي",
+          "back": "خلفي",
+          "left": "يسار",
+          "right": "يمين"
+        }
+      },
+      "generate": "إنشاء التصاميم",
+      "generatingCta": "جارٍ الإنشاء…"
+    },
+    "generating": {
+      "title": "نُصمّم منزلك",
+      "subtitle": "عادةً ما يستغرق هذا أقل من دقيقة",
+      "steps": {
+        "analyze": "تحليل الوصف",
+        "draw": "رسم المخططات",
+        "rooms": "توزيع الغرف",
+        "openings": "الأبواب والنوافذ",
+        "code": "فحص الكود",
+        "prepare": "تجهيز التصاميم"
+      }
+    },
+    "variants": {
+      "title": "اختر تصميمًا",
+      "subtitle": "اختر مخططًا لبنائه ثلاثي الأبعاد",
+      "select": "اختيار هذا التصميم",
+      "selected": "محدد",
+      "floorShort": "الطابق {{number}}",
+      "floorSwitcher": "تبديل الطابق",
+      "stats": {
+        "rooms": "{{count}} غرفة",
+        "area": "{{area}} م²",
+        "floors": "{{count}} أدوار"
+      },
+      "viewCompliance": "المطابقة",
+      "confirm": "العرض ثلاثي الأبعاد",
+      "confirming": "جارٍ بناء النموذج…",
+      "verdict": {
+        "ok": "مطابق",
+        "needs_fix": "يحتاج مراجعة",
+        "reject": "مشاكل كبيرة"
+      }
+    },
+    "compliance": {
+      "title": "مطابقة الكود",
+      "subtitle": "فحوصات كود البناء السعودي وأمانة البلدية",
+      "close": "إغلاق",
+      "score": "المراجعة الهندسية",
+      "scoreOutOf": "{{score}}/100",
+      "passed": "مطابق",
+      "summary": "اجتاز {{passed}} من {{total}} فحوصات",
+      "noIssues": "لا توجد مشاكل — اجتازت كل الفحوصات.",
+      "suggestedFix": "الحل المقترح",
+      "issuesCount": "{{count}} مشاكل",
+      "severity": {
+        "critical": "حرجة",
+        "warning": "تحذير",
+        "minor": "بسيطة"
+      },
+      "codes": {
+        "sbc_201": "SBC 201",
+        "sbc_501": "SBC 501",
+        "sbc_701": "SBC 701",
+        "sbc_801": "SBC 801",
+        "balady_setbacks": "ارتدادات البلدية",
+        "saudi_privacy": "الخصوصية"
+      }
+    },
+    "viewer": {
+      "title": "منزلك ثلاثي الأبعاد",
+      "subtitle": "اسحب للتدوير · مرّر للتكبير",
+      "loading": "جارٍ تحميل العرض ثلاثي الأبعاد…",
+      "canvasLabel": "نموذج ثلاثي الأبعاد تفاعلي للمنزل المُنشأ",
+      "allFloors": "كل الأدوار",
+      "floorSelector": "إظهار الطابق",
+      "floorShort": "الطابق {{number}}",
+      "viewCompliance": "مطابقة الكود",
+      "startOver": "تصميم جديد",
+      "unavailable": "النموذج ثلاثي الأبعاد غير جاهز بعد."
+    },
+    "error": {
+      "title": "تعذّر إنشاء تصميمك",
+      "timeout": "يستغرق هذا وقتًا أطول من المتوقع. حاول مرة أخرى.",
+      "generic": "حدث خطأ أثناء إنشاء تصميمك.",
+      "retry": "حاول مرة أخرى",
+      "startOver": "البدء من جديد"
+    }
+  },
+  "onboarding": {
+    "logout": "تسجيل الخروج",
+    "progress": "الخطوة {{step}} من {{total}}",
+    "completeProfile": {
+      "pageTitle": "أكمل ملفك الشخصي — بنياد",
+      "heading": "أكمل ملفك الشخصي",
+      "subheading": "بعض التفاصيل ليتمكن العملاء من العثور عليك والوثوق بعملك",
+      "emailLabel": "البريد الإلكتروني",
+      "experienceLabel": "سنوات الخبرة",
+      "experiencePlaceholder": "اختر سنوات خبرتك",
+      "experienceYears": "{{years}} سنوات",
+      "experienceOver": "أكثر من {{years}} سنة",
+      "regionsLabel": "مناطق الخدمة",
+      "regionsEmpty": "لا توجد مناطق خدمة متاحة حاليًا",
+      "regionsError": "تعذّر تحميل مناطق الخدمة",
+      "bioLabel": "عن عملك",
+      "bioPlaceholder": "صِف مهنتك وتخصصاتك ونوع الأعمال التي تنفّذها.",
+      "addressLabel": "العنوان",
+      "certificatesLabel": "الشهادات والتراخيص",
+      "certificatesCta": "إضافة ملفات",
+      "certificatesHint": "اختياري. صور أو ملفات PDF، حتى 10 ملفات",
+      "certificatesRemove": "إزالة {{name}}",
+      "submit": "إرسال للمراجعة",
+      "submitting": "جارٍ الإرسال…",
+      "errors": {
+        "emailRequired": "أدخل بريدك الإلكتروني",
+        "emailInvalid": "أدخل بريدًا إلكترونيًا صحيحًا",
+        "emailTaken": "هذا البريد الإلكتروني مستخدم بالفعل",
+        "bioTooShort": "أخبر العملاء المزيد — 10 أحرف على الأقل",
+        "bioTooLong": "اجعل النص أقل من 1000 حرف",
+        "addressRequired": "أدخل عنوانك",
+        "addressTooLong": "اجعل النص أقل من 200 حرف",
+        "experienceRequired": "اختر سنوات خبرتك",
+        "regionsRequired": "اختر منطقة خدمة واحدة على الأقل",
+        "fileType": "يُسمح فقط بالصور أو ملفات PDF أو Word",
+        "fileSize": "يجب ألا يتجاوز حجم كل ملف 10 ميجابايت",
+        "fileCount": "يمكنك إرفاق حتى {{max}} ملفات",
+        "submitFailed": "تعذّر إرسال ملفك الشخصي. حاول مرة أخرى."
+      }
+    },
+    "waitingApproval": {
+      "pageTitle": "الملف قيد المراجعة — بنياد",
+      "heading": "ملفك الشخصي قيد المراجعة",
+      "message": "يقوم فريقنا بمراجعة بياناتك. سنخبرك فور الموافقة على حسابك — يستغرق ذلك عادةً يوم عمل واحد تقريبًا.",
+      "checklist": {
+        "email": "البريد الإلكتروني",
+        "bio": "عن عملك",
+        "regions": "مناطق الخدمة",
+        "certificates": "الشهادات والتراخيص"
+      },
+      "approvedHeading": "تمت الموافقة على حسابك",
+      "approvedMessage": "جارٍ نقلك إلى الخطوة التالية…",
+      "suspendedHeading": "حسابك متوقّف مؤقتًا",
+      "suspendedMessage": "تم تعليق حسابك. يرجى التواصل مع الدعم لحل هذه المشكلة.",
+      "contactSupport": "تواصل مع الدعم",
+      "statusError": "تعذّر التحقق من حالتك."
+    },
+    "setup": {
+      "pageTitle": "إعداد حسابك — بنياد",
+      "steps": {
+        "plan": {
+          "title": "اختر باقتك",
+          "subtitle": "اختر الاشتراك الذي يناسب طريقتك في تقديم العروض."
+        },
+        "services": {
+          "title": "اختر خدماتك",
+          "subtitle": "حدّد الخدمات التي تقدّمها. يمكنك تحديثها في أي وقت."
+        },
+        "review": {
+          "title": "المراجعة والتأكيد",
+          "subtitle": "تأكّد من أن كل شيء صحيح، ثم ابدأ استخدام بنياد."
+        }
+      },
+      "plan": {
+        "free": "مجاني",
+        "perWeekBids": "{{count}} عروض أسبوعيًا",
+        "selected": "محددة",
+        "empty": "لا توجد باقات متاحة حاليًا.",
+        "error": "تعذّر تحميل الباقات."
+      },
+      "services": {
+        "selectedCount": "{{count}} محددة",
+        "categoriesUsed": "{{used}} من {{max}} فئات",
+        "capReached": "لقد وصلت إلى حد الفئات في باقتك — يمكنك تعديل الفئات التي اخترتها.",
+        "showServices": "عرض الخدمات",
+        "hideServices": "إخفاء الخدمات",
+        "empty": "لا توجد خدمات متاحة حاليًا.",
+        "error": "تعذّر تحميل الخدمات.",
+        "subError": "تعذّر تحميل هذه الخدمات.",
+        "subEmpty": "لا توجد خدمات ضمن هذه الفئة بعد.",
+        "selectCategory": "اختيار كل الخدمات في {{name}}",
+        "allServices": "كل الخدمات في هذه الفئة"
+      },
+      "review": {
+        "planLabel": "باقتك",
+        "servicesLabel": "خدماتك",
+        "edit": "تغيير",
+        "submitError": "تعذّر إكمال إعداد حسابك. يرجى المحاولة مرة أخرى."
+      },
+      "nav": {
+        "back": "رجوع",
+        "next": "متابعة",
+        "finish": "إنهاء الإعداد",
+        "finishing": "جارٍ الإنهاء…"
+      }
     }
   }
 }

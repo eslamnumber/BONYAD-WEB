@@ -38,15 +38,17 @@ function AmbientGlow() {
 
 /** Back link to the profile hub — chevron points to the inline-start under conventional dir. */
 function BackLink() {
-  const { t } = useTranslation();
+  const { t, i18n } = useTranslation();
+  const isAr = i18n.language?.startsWith('ar');
   return (
     <nav className="flex">
       <Link
         href={ROUTES.DASHBOARD_SETTINGS}
         className="text-brand-dark-navy focus-visible:outline-ring inline-flex items-center gap-1.5 rounded text-sm font-semibold transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 motion-safe:hover:opacity-80"
       >
-        {t('referral.back')}
+        {!isAr ? t('referral.back') : null}
         <ChevronLeft className="size-3.5 shrink-0 rtl:-scale-x-100" aria-hidden />
+        {isAr ? t('referral.back') : null}
       </Link>
     </nav>
   );

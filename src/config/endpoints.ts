@@ -7,6 +7,27 @@ export const API_ENDPOINTS = {
   USERS: {
     REGISTER: '/users/register',
     /**
+     * Technician onboarding step 2 — submit the "Complete your profile" form (POST,
+     * **multipart/form-data**, Bearer). Body: `email` · `description` (bio) · `address`
+     * · `yearsOfExperience` (numeric, sent as string) · `regionIds` (repeated field) ·
+     * `certificates` (repeated files, optional). → `{ profileComplete: true, … }`. A
+     * 409 / `errorCode: EMAIL_ALREADY_EXISTS` means the email is already taken. Mirrors
+     * the iOS call site CompleteTechnicianProfileView.swift:781 and the RN call site
+     * website-bonyad/src/screens/profile/CompleteProfileScreen.tsx:308 (RN index
+     * `USER.COMPLETE_PROFILE`).
+     */
+    COMPLETE_PROFILE: '/users/complete-profile',
+    /**
+     * The signed-in technician's onboarding / approval status (GET, Bearer) — drives the
+     * "waiting for admin approval" screen and the post-login onboarding gate. →
+     * `{ status: PENDING|WAITING_ADMIN_APPROVAL|APPROVED|SUSPENDED, profileComplete,
+     * hasEmail, hasDescription, hasCertificates, hasRegions, hasPendingDataRequests,
+     * onboarded, recommendedPage }`. This is the **authoritative** source for
+     * `profileComplete`/approval (validate-token does not carry it). Mirrors the iOS call
+     * site TechnicianStatusService.swift:13.
+     */
+    TECHNICIAN_STATUS: '/users/technician-status',
+    /**
      * Approved technicians with `averageRating` — the direct-assignment picker.
      * Mirrors RN `USER.TECHNICIANS_LIST`. Optional `?serviceId=&searchQuery=`.
      */
@@ -143,7 +164,15 @@ export const API_ENDPOINTS = {
     AGREE: '/terms/agree',
   },
   SUBSCRIPTIONS: {
+    /** All subscription plans/tiers — the post-approval onboarding plan picker + for-pros pricing. */
     CATEGORIES: '/subscriptions/categories',
+    /**
+     * Enroll the signed-in technician in a plan during post-approval onboarding (POST,
+     * Bearer) `{ subscriptionCategoryId }`. No payment step — mirrors the RN onboarding
+     * finish (website-bonyad/src/services/onboardingApi.ts `subscribeToPlan`, RN
+     * `TECHNICIANS.SUBSCRIBE`).
+     */
+    SUBSCRIBE: '/users/subscribe',
   },
   SERVICES: {
     /** All services (categories + subcategories). */
@@ -152,10 +181,36 @@ export const API_ENDPOINTS = {
     CATEGORIES: '/services/categories',
     /** Subcategories of a category. */
     SUBCATEGORIES: '/services/:categoryId/subcategories',
+    /**
+     * The signed-in technician's own offered services (GET, Bearer) → `{ services:
+     * Service[] }` or a bare `Service[]`. Backs the Available-Projects service
+     * filter — a technician only sees offers matching a service they provide.
+     * Mirrors the RN call site
+     * website-bonyad/src/services/TechnicianServiceService.ts:64 (`getMyServices`,
+     * RN `TECHNICIANS.MY_SERVICES`).
+     */
+    MY_FOR_TECHNICIAN: '/technician/services/my-services',
+    /**
+     * Assign the selected leaf service IDs to the signed-in technician during
+     * post-approval onboarding (POST, Bearer) `{ serviceIds: number[] }`. Mirrors the RN
+     * onboarding finish (website-bonyad/src/services/onboardingApi.ts `saveServices`, RN
+     * `TECHNICIANS.ADD_SERVICES`).
+     */
+    ADD_FOR_TECHNICIAN: '/technician/services/add',
   },
   /** Service regions/zones (mirrors RN `ZONES.LIST`). The create-project location picker. */
   ZONES: {
     LIST: '/regions',
+  },
+  /**
+   * Technician onboarding lifecycle. `COMPLETE` flips the authoritative `onboarded`
+   * flag (PUT, Bearer, no body) at the end of the post-approval setup wizard, mirroring
+   * the RN finish (website-bonyad/src/services/onboardingApi.ts `markOnboardingComplete`,
+   * RN `ONBOARDING.COMPLETE`). After it succeeds, `technician-status` returns
+   * `onboarded: true` and the onboarding guard stops redirecting to `/setup`.
+   */
+  ONBOARDING: {
+    COMPLETE: '/onboarding/:userId/complete',
   },
   FAQS: {
     LIST: '/faqs',
@@ -225,6 +280,31 @@ export const API_ENDPOINTS = {
     OWNER_EDIT: '/projects/:id/owner-edit',
   },
   /**
+   * Change requests — the customer↔technician negotiation over an IN_PROGRESS
+   * project's scope / total budget / phases. Parent→child thread (`parentRequestId`)
+   * moving PENDING → RESPONDED → AGREED | REJECTED → COMPLETED; both parties must
+   * `/agree` before it locks. Mirrors the iOS call site
+   * bonayd-ios/.../new_request/ChangeRequestService.swift (backend-integration
+   * reference only). Verified live on dev (data shapes confirmed against GET
+   * /change-requests/project/183).
+   */
+  CHANGE_REQUESTS: {
+    /** Active (PENDING/RESPONDED) negotiations for a project (GET → bare array). */
+    ACTIVE: '/change-requests/project/:projectId/active',
+    /** Every change request for a project incl. history (GET → bare array). */
+    LIST: '/change-requests/project/:projectId',
+    /** Full negotiation chain for one request (GET → bare array). */
+    THREAD: '/change-requests/:id/thread',
+    /** Open a change request (POST { description, newBudget?, phaseChanges?, …emails }). */
+    CREATE: '/change-requests/project/:projectId/request',
+    /** Counter-offer reply on a request (POST { response }). */
+    RESPOND: '/change-requests/:id/respond',
+    /** Agree to a request — per party; both must call (POST { agreedChanges?, signingMethod }). */
+    AGREE: '/change-requests/:id/agree',
+    /** Reject a request, ending the negotiation (POST { reason? }). */
+    REJECT: '/change-requests/:id/reject',
+  },
+  /**
    * Omdah AI project creation. The conversational/refine endpoints live on separate
    * hosts (see `src/config/ai-hosts.ts`) and are reached through same-origin Next
    * route handlers under `/api/ai/*` (browser → route → foreign host); the create /
@@ -247,6 +327,21 @@ export const API_ENDPOINTS = {
     /** Project photo/attachment (multipart) — main API `POST /v1/projects/:id/attachments`. */
     ATTACHMENTS: '/v1/projects/:id/attachments',
   },
+  /**
+   * 2D → 3D sketch planner — the SAME Cloud Run chatbot host as `AI` (foreign host,
+   * reached via the same-origin `/api/sketch/*` route handlers). Every call returns
+   * the SPJob snapshot except `IDEA` → `{ jobId, status }`. Mirrors iOS `SketchPlannerAPI`.
+   */
+  SKETCH: {
+    /** Create a job from a text description — `POST /api/sketch/idea` → `{ jobId, status }`. */
+    IDEA: '/api/sketch/idea',
+    /** Poll the job snapshot — `GET /api/sketch/:jobId` (status parsing→parsed→ready). */
+    GET_JOB: '/api/sketch/:jobId',
+    /** Pin the chosen 2D variant — `POST /api/sketch/:jobId/select-variant` `{ variant_index }`. */
+    SELECT_VARIANT: '/api/sketch/:jobId/select-variant',
+    /** Build the 3D scene from the active variant — `POST /api/sketch/:jobId/confirm` (slow, ~60s). */
+    CONFIRM: '/api/sketch/:jobId/confirm',
+  },
   PHASES: {
     LIST: '/phases/project/:projectId',
     /** Create one phase (JSON). RN posts this once per phase after project create. */
@@ -265,6 +360,14 @@ export const API_ENDPOINTS = {
      * charge. Mirrors RN `PHASES.PAY` (website-bonyad/src/services/PhaseService.ts:138).
      */
     PAY: '/phases/:phaseId/pay',
+    /**
+     * Technician requests payment for an approved phase (POST, **no body**). Flips
+     * the phase paymentStatus PENDING → REQUESTED_PAYMENT so the customer is asked
+     * to pay. Backend-gated: technician-only, phase approved, paymentStatus PENDING,
+     * project IN_PROGRESS. Mirrors RN `PHASES.REQUEST_PAYMENT`
+     * (website-bonyad/src/services/PhaseService.ts:105).
+     */
+    REQUEST_PAYMENT: '/phases/:phaseId/request-payment',
   },
   /**
    * HyperPay payment gateway (per-phase payments). `create-checkout` returns a
@@ -410,4 +513,15 @@ export const AI_INTERNAL_ROUTES = {
   CHAT: '/api/ai/chat',
   CHAT_STREAM: '/api/ai/chat/stream',
   REFINE: '/api/ai/refine',
+  /**
+   * Same-origin sketch-planner route handlers (forward to the Cloud Run host).
+   * Client fetchers call these with `internal: true`; `:jobId` is interpolated
+   * before the call. Mirror of `API_ENDPOINTS.SKETCH.*` on the same-origin side.
+   */
+  SKETCH: {
+    IDEA: '/api/sketch/idea',
+    GET_JOB: '/api/sketch/:jobId',
+    SELECT_VARIANT: '/api/sketch/:jobId/select-variant',
+    CONFIRM: '/api/sketch/:jobId/confirm',
+  },
 } as const;

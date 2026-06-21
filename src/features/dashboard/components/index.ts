@@ -8,6 +8,7 @@ export { CompletedProjectDetail } from './completed-project-detail';
 export { CustomerApprovedDetail } from './customer-approved-detail';
 export { CustomerInProgressDetail } from './customer-in-progress-detail';
 export { PaymentCallbackView } from './payment-callback';
+export { PaymentWidgetView } from './payment-widget';
 export { DashboardHero } from './dashboard-hero';
 export { InProgressProjectDetail } from './in-progress-project-detail';
 export { DashboardSearch } from './dashboard-search';

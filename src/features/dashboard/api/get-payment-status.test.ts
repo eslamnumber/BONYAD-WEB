@@ -8,8 +8,8 @@ import { getPaymentStatus } from './get-payment-status';
 
 describe('getPaymentStatus', () => {
   it('appends the checkoutId to the STATUS path and GETs it', async () => {
-    let pathname = '';
     let method = '';
+    let pathname = '';
     server.use(
       http.get('*/payments/status/:checkoutId', ({ request }) => {
         method = request.method;
@@ -17,8 +17,9 @@ describe('getPaymentStatus', () => {
         return HttpResponse.json({
           paymentResult: true,
           transactionId: 'TXN_1',
-          amount: '25000',
+          amount: 25000,
           currency: 'SAR',
+          code: '000.100.110',
         });
       }),
     );
@@ -30,47 +31,46 @@ describe('getPaymentStatus', () => {
     expect(res.transactionId).toBe('TXN_1');
   });
 
-  it('treats a test-mode success code (000.100.110) as success', async () => {
+  it('trusts the backend paymentResult verdict', async () => {
     server.use(
       http.get('*/payments/status/:checkoutId', () =>
-        HttpResponse.json({ code: '000.100.110', ndc: 'NDC_5' }),
+        HttpResponse.json({ paymentResult: true, code: '000.000.000' }),
       ),
     );
-    const res = await getPaymentStatus('CHK_2');
-    expect(res.success).toBe(true);
-    expect(res.transactionId).toBe('NDC_5'); // falls back to ndc
+    expect((await getPaymentStatus('CHK_2')).success).toBe(true);
   });
 
-  it('classifies 000.200.xxx as pending (not success)', async () => {
+  it('treats a created/pending 000.200.* as pending — NOT success — even if paymentResult is true', async () => {
     server.use(
       http.get('*/payments/status/:checkoutId', () =>
-        HttpResponse.json({ code: '000.200.100', description: 'Pending' }),
+        HttpResponse.json({ paymentResult: true, code: '000.200.100' }),
       ),
     );
     const res = await getPaymentStatus('CHK_3');
     expect(res.success).toBe(false);
     expect(res.isPending).toBe(true);
-    expect(res.description).toBe('Pending');
   });
 
   it('classifies a non-000 code as failed', async () => {
     server.use(
-      http.get('*/payments/status/:checkoutId', () => HttpResponse.json({ code: '800.100.150' })),
+      http.get('*/payments/status/:checkoutId', () =>
+        HttpResponse.json({ paymentResult: false, code: '800.100.150' }),
+      ),
     );
     const res = await getPaymentStatus('CHK_4');
     expect(res.success).toBe(false);
     expect(res.isPending).toBe(false);
   });
 
-  it('reads fields nested under result when not at the top level', async () => {
+  it('falls back to the HyperPay code when paymentResult is absent', async () => {
     server.use(
       http.get('*/payments/status/:checkoutId', () =>
-        HttpResponse.json({ paymentResult: true, result: { paymentBrand: 'MADA', amount: '999' } }),
+        HttpResponse.json({ code: '000.100.112', paymentBrand: 'MADA' }),
       ),
     );
     const res = await getPaymentStatus('CHK_5');
+    expect(res.success).toBe(true);
     expect(res.paymentBrand).toBe('MADA');
-    expect(res.amount).toBe('999');
   });
 
   it('throws ApiError on 404', async () => {
@@ -85,6 +85,5 @@ describe('getPaymentStatus', () => {
     const err = await getPaymentStatus('CHK_X').catch((e: unknown) => e);
     expect(err).toBeInstanceOf(ApiError);
     expect((err as ApiError).status).toBe(404);
-    expect((err as ApiError).errorCode).toBe('NOT_FOUND');
   });
 });

@@ -75,7 +75,7 @@ describe('getProject', () => {
             address: 'الرياض',
             timeRequiredDays: 90,
             projectType: 'ALL',
-            user: { name: 'أحمد الزهراني', profileImage: null },
+            user: { id: 55, name: 'أحمد الزهراني', profileImage: null },
             service: { nameEn: 'Construction', nameAr: 'البناء والتشطيب' },
             assignedTechnician: { id: 444, name: 'م. أحمد القحطاني' },
           },
@@ -90,7 +90,10 @@ describe('getProject', () => {
     expect(project.serviceNameAr).toBe('البناء والتشطيب');
     expect(project.budget).toBe(20000);
     expect(project.address).toBe('الرياض');
-    // The detail endpoint nests the technician — flattened for the provider card.
+    // The detail endpoint nests the client (`user`) and the technician — both flattened
+    // so the contact buttons have a real peer (the technician messages `userId`, the
+    // customer messages `assignedTechnicianId`).
+    expect(project.userId).toBe(55);
     expect(project.assignedTechnicianId).toBe(444);
   });
 });

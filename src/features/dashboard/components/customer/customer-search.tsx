@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import { DashboardSearchIcon, SearchClearIcon, SearchResultArrowIcon } from '@/components/icons';
 import { cn } from '@/lib/utils';
-import type { Locale } from '@/types/locale';
+import { conventionalDirection, type Locale } from '@/types/locale';
 
 import { useCustomerSearch } from '../../hooks/use-customer-search';
 import type { ServiceMatch } from '../../lib/dashboard-search';
@@ -49,6 +49,7 @@ export function CustomerSearch() {
       >
         <SearchField
           value={query}
+          locale={locale}
           expanded={expanded}
           hasQuery={hasQuery}
           onChange={onQueryChange}
@@ -107,6 +108,7 @@ function SearchDropdown({
 
 type SearchFieldProps = {
   value: string;
+  locale: Locale;
   expanded: boolean;
   hasQuery: boolean;
   onChange: (value: string) => void;
@@ -115,7 +117,7 @@ type SearchFieldProps = {
   onClear: () => void;
 };
 
-function SearchField({ value, expanded, hasQuery, ...handlers }: SearchFieldProps) {
+function SearchField({ value, locale, expanded, hasQuery, ...handlers }: SearchFieldProps) {
   const { t } = useTranslation();
   const { onChange, onFocus, onSubmit, onClear } = handlers;
   return (
@@ -131,17 +133,17 @@ function SearchField({ value, expanded, hasQuery, ...handlers }: SearchFieldProp
       <label htmlFor="customer-search" className="sr-only">
         {t('dashboard.customer.search.label')}
       </label>
-      {/* Bilingual free-text field. text-end + [direction:inherit] anchors both the
-          placeholder and the typed value to the document/locale side, so text always
-          sits next to the magnifier (right in ar, left in en) — matching Figma.
-          Strong-directional Arabic/Latin content resolves its own run direction; the
-          placeholder uses the app convention of leading weak punctuation so a trailing
-          "…" renders correctly (docs/i18n-and-rtl.md §bidi). type="text" avoids the
-          type=search UA `direction: ltr` override. */}
+      {/* Single-language search field the user fills in their own UI language: its
+          writing direction is the locale's natural script via conventionalDirection
+          (ar→rtl, en→ltr) + text-start, so the Arabic placeholder's trailing "…" stays
+          attached at its natural end instead of floating. [direction:inherit] resolved
+          the field to ltr in ar and floated it. type="text" avoids the type=search UA
+          `direction: ltr` override. See docs/i18n-and-rtl.md RTL rule 4. */}
       <input
         id="customer-search"
         name="q"
         type="text"
+        dir={conventionalDirection(locale)}
         role="combobox"
         inputMode="search"
         autoComplete="off"
@@ -155,7 +157,7 @@ function SearchField({ value, expanded, hasQuery, ...handlers }: SearchFieldProp
           if (event.key === 'Enter') onSubmit();
         }}
         placeholder={t('dashboard.customer.search.placeholder')}
-        className="text-foreground placeholder:text-input-placeholder min-w-0 flex-1 bg-transparent text-end text-base [direction:inherit] focus-visible:outline-none"
+        className="text-foreground placeholder:text-input-placeholder min-w-0 flex-1 bg-transparent text-start text-base focus-visible:outline-none"
       />
       <DashboardSearchIcon className="text-foreground size-6 shrink-0" aria-hidden />
     </div>

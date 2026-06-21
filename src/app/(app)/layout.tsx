@@ -1,3 +1,4 @@
+import { redirect } from 'next/navigation';
 import { type ReactNode } from 'react';
 
 import {
@@ -8,9 +9,10 @@ import {
 } from '@/components/layout';
 import { AuthProvider } from '@/features/auth';
 import { NotificationsDrawer } from '@/features/notifications';
+import { appOnboardingRedirect } from '@/features/onboarding';
 import { getTranslations } from '@/lib/get-translations';
 import { getServerLocale } from '@/lib/locale';
-import { getServerUser } from '@/lib/server-auth';
+import { getServerToken, getServerUser } from '@/lib/server-auth';
 
 type AppLayoutProps = { children: ReactNode };
 
@@ -21,8 +23,18 @@ type AppLayoutProps = { children: ReactNode };
  * is gated by `middleware.ts` (redirects unauthenticated requests to /login).
  */
 export default async function AppLayout({ children }: AppLayoutProps) {
-  const [user, locale] = await Promise.all([getServerUser(), getServerLocale()]);
+  const [user, token, locale] = await Promise.all([
+    getServerUser(),
+    getServerToken(),
+    getServerLocale(),
+  ]);
   const { t } = getTranslations(locale);
+
+  // A technician who hasn't finished onboarding (or awaits approval) is sequenced
+  // into the `(onboarding)` flow before they can use the dashboard. Customers and
+  // approved technicians fall through. Fail-open if the status read fails.
+  const onboardingTarget = await appOnboardingRedirect(user, token);
+  if (onboardingTarget) redirect(onboardingTarget);
 
   return (
     <AuthProvider initialUser={user}>

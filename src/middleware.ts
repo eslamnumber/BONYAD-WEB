@@ -36,7 +36,7 @@ export function middleware(request: NextRequest) {
   }
 
   const nonce = generateNonce();
-  const csp = buildCsp(nonce);
+  const csp = buildCsp(nonce, pathname.startsWith('/payment'));
 
   const requestHeaders = new Headers(request.headers);
   requestHeaders.set('x-nonce', nonce);
@@ -71,30 +71,42 @@ function generateNonce(): string {
   return btoa(String.fromCharCode(...bytes));
 }
 
-function buildCsp(nonce: string): string {
+function buildCsp(nonce: string, isPaymentRoute: boolean): string {
   // Google Maps SDK (location picker): the script host (needed in dev; ignored under
   // prod `strict-dynamic`, where the nonce'd loader propagates trust) + the Places/
   // Geocoding XHR origins. Map tiles are images, covered by `img-src https:`.
   const maps = 'https://maps.googleapis.com https://maps.gstatic.com';
+  // HyperPay COPYandPAY widget (payment route only): in prod the widget script is
+  // injected by our nonce-trusted bundle, so `strict-dynamic` covers it (no host
+  // needed); in dev we add the host. Its XHR / inline styles / fonts also need oppwa.
+  const opp = isPaymentRoute ? ' https://*.oppwa.com' : '';
   // Dev mode needs to allow eval + inline for React Fast Refresh + Tailwind.
   // Production locks down to nonce + strict-dynamic.
   const scriptSrc = isDevelopment
-    ? `'self' 'nonce-${nonce}' 'unsafe-eval' 'unsafe-inline' ${maps}`
+    ? `'self' 'nonce-${nonce}' 'unsafe-eval' 'unsafe-inline' ${maps}${opp}`
     : `'self' 'nonce-${nonce}' 'strict-dynamic' ${maps}`;
 
-  return [
+  const directives = [
     `default-src 'self'`,
     `script-src ${scriptSrc}`,
-    `style-src 'self' 'unsafe-inline'`,
+    `style-src 'self' 'unsafe-inline'${opp}`,
     `img-src 'self' data: blob: https:`,
-    `font-src 'self' data:`,
-    `connect-src 'self' https://*.sentry.io wss://admin.bonyad-hub.com ${maps}`,
+    `font-src 'self' data:${opp}`,
+    `connect-src 'self' https://*.sentry.io wss://admin.bonyad-hub.com ${maps}${opp}`,
     `frame-ancestors 'none'`,
     `base-uri 'self'`,
-    `form-action 'self'`,
+    `form-action 'self'${opp}`,
     `object-src 'none'`,
     `upgrade-insecure-requests`,
-  ].join('; ');
+  ];
+  // 3DS ACS challenge pages render in iframes on arbitrary bank domains — allow https:
+  // frames on the payment route ONLY. Elsewhere we add no `frame-src`, so frames fall
+  // back to `default-src 'self'` (which keeps the sandboxed terms `srcDoc` iframe working).
+  if (isPaymentRoute) {
+    directives.push(`frame-src 'self' https://*.oppwa.com https:`);
+  }
+
+  return directives.join('; ');
 }
 
 export const config = {

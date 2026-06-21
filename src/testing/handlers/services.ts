@@ -42,7 +42,21 @@ const SAMPLE_ALL_SERVICES = [
   },
 ];
 
+/**
+ * The signed-in technician's own offered services — backs the Available-Projects
+ * service filter. Ids cover the sample projects' `serviceId` so the default
+ * dashboard render shows them. Wildcard path: component renders reach the proxy
+ * URL (`/api/proxy/...`), which a full-BASE handler would miss.
+ */
+const SAMPLE_MY_SERVICES = [
+  { id: 1, nameEn: 'Construction', nameAr: 'البناء' },
+  { id: 2, nameEn: 'Interior design', nameAr: 'التصميم الداخلي' },
+];
+
 export const serviceHandlers = [
   http.get(`${BASE}/services/categories`, () => HttpResponse.json(SAMPLE_CATEGORIES)),
   http.get(`${BASE}/services`, () => HttpResponse.json(SAMPLE_ALL_SERVICES)),
+  http.get('*/technician/services/my-services', () =>
+    HttpResponse.json({ services: SAMPLE_MY_SERVICES }),
+  ),
 ];

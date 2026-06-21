@@ -44,9 +44,7 @@ function ProjectsBody({ projects, isPending, isError, locale, onEdit, onDelete }
   }
   if (isError) {
     return (
-      <p dir="auto" className="text-muted-foreground text-start text-sm">
-        {t('portfolio.projects.error')}
-      </p>
+      <p className="text-muted-foreground text-start text-sm">{t('portfolio.projects.error')}</p>
     );
   }
   if (projects.length === 0) {
@@ -54,7 +52,7 @@ function ProjectsBody({ projects, isPending, isError, locale, onEdit, onDelete }
       <div className="border-border flex flex-col items-center gap-2 rounded-2xl border border-dashed py-12 text-center">
         <DashboardProjectsIcon className="text-muted-foreground size-8 opacity-60" aria-hidden />
         <p className="text-foreground text-sm font-medium">{t('portfolio.projects.emptyTitle')}</p>
-        <p dir="auto" className="text-muted-foreground max-w-xs text-sm">
+        <p className="text-muted-foreground max-w-xs text-sm">
           {t('portfolio.projects.emptyBody')}
         </p>
       </div>

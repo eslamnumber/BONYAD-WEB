@@ -16,23 +16,18 @@ afterEach(() => {
 });
 
 describe('PaymentCallbackView', () => {
-  it('verifies the charge, marks the phase paid, and shows the success card', async () => {
-    let paidPhaseId = '';
+  it('verifies the charge (the status GET finalizes the phase server-side) and shows the success card', async () => {
     server.use(
       http.get('*/payments/status/:checkoutId', () =>
         HttpResponse.json({
           paymentResult: true,
           code: '000.100.110',
           transactionId: 'TXN-TEST-1',
-          amount: '25000',
+          amount: 25000,
           currency: 'SAR',
           paymentBrand: 'VISA',
         }),
       ),
-      http.post('*/phases/:phaseId/pay', ({ params }) => {
-        paidPhaseId = String(params.phaseId);
-        return HttpResponse.json({ phaseId: Number(params.phaseId), paymentStatus: 'PAID' });
-      }),
     );
     window.history.pushState(
       {},
@@ -48,12 +43,13 @@ describe('PaymentCallbackView', () => {
       'href',
       '/dashboard/projects',
     );
-    expect(paidPhaseId).toBe('12');
   });
 
   it('shows the failed state when the charge cannot be verified', async () => {
     server.use(
-      http.get('*/payments/status/:checkoutId', () => HttpResponse.json({ code: '800.100.150' })),
+      http.get('*/payments/status/:checkoutId', () =>
+        HttpResponse.json({ paymentResult: false, code: '800.100.150' }),
+      ),
     );
     window.history.pushState({}, '', '/payment/callback?type=phase&phaseId=12&id=CHK_FAIL');
 

@@ -1,10 +1,10 @@
 import { z } from 'zod';
 
-/** Customer identity block HyperPay requires (strict). */
+/** Customer identity block HyperPay requires (strict; the backend rejects blanks). */
 const checkoutCustomerSchema = z.object({
   email: z.string().email(),
   givenName: z.string().min(1),
-  surname: z.string(),
+  surname: z.string().min(1),
 });
 
 /** Billing address block HyperPay requires (strict). `country` is the ISO-2 code. */
@@ -17,13 +17,11 @@ const checkoutBillingSchema = z.object({
 });
 
 /**
- * Request body for POST /payments/create-checkout (phase payment). Strict (CLAUDE
- * rule 1). Mirrors the RN call site
- * website-bonyad/src/services/HyperPayService.ts:120 (PrepareCheckoutRequest) +
- * website-bonyad/src/screens/projects/in-progress/hooks/usePayment.ts:36.
- * `paymentType` here is the HyperPay transaction type ('DB' = debit), NOT the
- * FULL/PARTIAL split — that travels in `merchantTransactionId` + `shopperResultUrl`
- * and is settled on the later POST /phases/:id/pay call.
+ * Request body for POST /payments/create-checkout. Strict (CLAUDE rule 1). Mirrors the
+ * backend CreateCheckoutRequest (bonyad/.../dto/CreateCheckoutRequest.java): amount,
+ * currency, paymentType ('DB'), merchantTransactionId, customer, billing, optional
+ * phaseId + shopperResultUrl. The FULL/PARTIAL split rides in merchantTransactionId +
+ * the widget's form `action`, not here.
  */
 export const createCheckoutRequestSchema = z.object({
   phaseId: z.number().int().positive(),
@@ -40,96 +38,74 @@ export const createCheckoutRequestSchema = z.object({
 export type CreateCheckoutRequest = z.infer<typeof createCheckoutRequestSchema>;
 
 /**
- * Response from POST /payments/create-checkout. Permissive TS type (CLAUDE rule 1:
- * never strict-parse a backend response). The backend returns one of several
- * shapes; the fetcher normalises `checkoutId` (`checkoutId ?? id ?? ndc`) and
- * `redirectUrl` (`redirectUrl ?? shopperUrl`). A `result.code` not starting with
- * '000.' is a HyperPay error forwarded over HTTP 200.
+ * Response from POST /payments/create-checkout — the real backend DTO
+ * (bonyad/.../dto/CreateCheckoutResponse.java). Permissive (CLAUDE rule 1). Returns
+ * `checkoutId` for the embedded COPYandPAY widget (`paymentWidgets.js?checkoutId=`) —
+ * there is **no** hosted redirect URL. `mode` (TEST/LIVE) selects the widget host
+ * (present once the backend serializes it; else the client falls back to
+ * env.NEXT_PUBLIC_HYPERPAY_MODE). A failure arrives as HTTP 400 (→ ApiError) or
+ * `success: false`; the `code` on a created checkout is `000.200.100`, not an error.
  */
 export type CreateCheckoutResponseBody = {
   success?: boolean;
   checkoutId?: string;
-  id?: string;
-  ndc?: string;
-  shopperUrl?: string;
-  redirectUrl?: string;
-  environment?: string;
-  transactionId?: number | string;
-  result?: { code?: string; description?: string };
-  error?: string;
+  /** 'TEST' | 'LIVE' — backend admin toggle; selects the OPP widget host. */
+  mode?: string;
+  integrity?: string;
+  expiresAt?: string;
+  resourcePath?: string;
+  code?: string;
+  description?: string;
   message?: string;
+  error?: string;
 };
 
-/** Normalised checkout result the UI consumes (the raw body collapsed to essentials). */
+/** Normalised checkout the UI consumes: the id for the widget + the host mode. */
 export type CheckoutSession = {
   checkoutId: string;
-  /** HyperPay hosted-page URL to redirect to (null in mimic mode). */
-  redirectUrl: string | null;
-  environment: string | null;
-  /** True when the backend simulated the charge (no real gateway) — skip the redirect. */
-  isMimic: boolean;
+  /** 'TEST' | 'LIVE', or null when the backend didn't send it (env fallback then). */
+  mode: string | null;
+  expiresAt: string | null;
 };
 
 /**
- * Request body for POST /phases/:phaseId/pay. Strict. Every field optional — RN
- * sends an empty body for a plain pay, or this block for gateway-backed payments.
- * Mirrors website-bonyad/src/services/PhaseService.ts:138 (payPhase params).
+ * Response from POST /phases/:phaseId/request-payment (technician). Permissive
+ * (CLAUDE rule 1) — `paymentStatus` is backend-controlled, never z.enum'd. Mirrors the
+ * backend RequestPaymentResponse (PhaseService).
  */
-export const payPhaseRequestSchema = z.object({
-  paymentType: z.enum(['FULL', 'PARTIAL']).optional(),
-  amount: z.number().positive().optional(),
-  paymentMethod: z.string().min(1).optional(),
-  paymentReference: z.string().min(1).optional(),
-  gatewayTransactionId: z.string().min(1).optional(),
-});
-
-export type PayPhaseRequest = z.infer<typeof payPhaseRequestSchema>;
-
-/**
- * Response from POST /phases/:phaseId/pay. Permissive. Mirrors
- * website-bonyad/src/services/PhaseService.ts:55 (PayPhaseResponse).
- */
-export type PayPhaseResponse = {
+export type RequestPaymentResponse = {
   message?: string;
   phaseId?: number;
   phaseNumber?: number;
   paymentStatus?: string;
   moneySpent?: number;
-  amountPaid?: number;
-  remainingAmount?: number;
-  paidAt?: string;
+  requestedBy?: number;
+  requestedByName?: string;
+  requestedAt?: string;
   projectId?: number;
 };
 
 /**
- * Response from GET /payments/status/:checkoutId. Permissive. The backend surfaces
- * the HyperPay result at the top level (and may also wrap it under `result`).
- * Mirrors website-bonyad/src/services/HyperPayService.ts:78 (PaymentStatusResponse).
+ * Response from GET /payments/status/:checkoutId — the real backend (flat)
+ * PaymentStatusResponse (bonyad/.../dto/PaymentStatusResponse.java). Permissive. The
+ * backend pre-classifies the verdict in `paymentResult`; the raw HyperPay `code` is
+ * also surfaced. `amount` is a BigDecimal (number over the wire).
  */
 export type PaymentStatusBody = {
   success?: boolean;
   paymentResult?: boolean;
-  code?: string;
-  description?: string;
+  transactionId?: string;
   amount?: string | number;
   currency?: string;
   paymentBrand?: string;
-  transactionId?: string;
-  ndc?: string;
   status?: string;
-  isPending?: boolean;
-  error?: string;
+  code?: string;
+  description?: string;
   message?: string;
-  result?: {
-    code?: string;
-    description?: string;
-    paymentBrand?: string;
-    amount?: string | number;
-    currency?: string;
-  };
+  error?: string;
 };
 
-/** Normalised payment status the /payment/callback page consumes. */
+/** Normalised payment status the /payment/callback page + inline result modal consume. */
 export type PaymentResult = {
   success: boolean;
   isPending: boolean;

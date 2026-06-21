@@ -31,6 +31,13 @@ const clientSchema = z.object({
    * script + XHR origins are allow-listed in the CSP (`src/middleware.ts`).
    */
   NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: z.string().default('AIzaSyA0bEyvVa8NecLryi5DOiEjXQvOQ3p0CfA'),
+  /**
+   * HyperPay COPYandPAY widget host selector — TEST → eu-test.oppwa.com, LIVE →
+   * eu-prod.oppwa.com. **Temporary fallback only:** the authoritative source is the
+   * `mode` field on the create-checkout response (driven by the backend admin toggle).
+   * Used solely when that field is absent; remove once the backend always returns it.
+   */
+  NEXT_PUBLIC_HYPERPAY_MODE: z.enum(['TEST', 'LIVE']).default('TEST'),
 });
 
 const serverSchema = z.object({
@@ -53,6 +60,7 @@ const clientRaw = {
   NEXT_PUBLIC_ANALYTICS_KEY: raw.NEXT_PUBLIC_ANALYTICS_KEY,
   NEXT_PUBLIC_MQTT_BROKER_URL: raw.NEXT_PUBLIC_MQTT_BROKER_URL,
   NEXT_PUBLIC_GOOGLE_MAPS_API_KEY: raw.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY,
+  NEXT_PUBLIC_HYPERPAY_MODE: raw.NEXT_PUBLIC_HYPERPAY_MODE,
 };
 
 const parsed = isServer

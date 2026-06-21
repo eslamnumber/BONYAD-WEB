@@ -16,6 +16,23 @@ export function paymentState(status: string | undefined): PaymentState {
   return 'upcoming';
 }
 
+/**
+ * What the technician can do about a phase's payment on the in-progress timeline:
+ * `request` = the phase is approved and still PENDING (show "Request payment");
+ * `requested` = payment already requested (show the "Payment requested" badge,
+ * awaiting the customer); `none` = paid / partially-paid / not-yet-approved.
+ * Mirrors RN's gating `phase.approved && phase.paymentStatus === 'PENDING'`
+ * (website-bonyad/src/screens/projects/in-progress/components/PhaseItem.tsx).
+ */
+export type PhasePaymentAction = 'request' | 'requested' | 'none';
+
+export function phasePaymentAction(phase: ProjectPhase): PhasePaymentAction {
+  const s = (phase.paymentStatus ?? '').toUpperCase();
+  if (s === 'REQUESTED_PAYMENT') return 'requested';
+  if (phase.approved === true && s === 'PENDING') return 'request';
+  return 'none';
+}
+
 /** Sum of `moneySpent` across phases whose payment is settled (state `paid`). */
 export function paidSoFar(phases: ProjectPhase[]): number {
   return phases.reduce(

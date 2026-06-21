@@ -19,6 +19,8 @@ const PROJECT = {
   timeRequiredDays: 84, // → 12 weeks
   expectedStartDate: '2026-08-01T00:00:00Z',
   address: 'Riyadh, Saudi Arabia',
+  userId: 100, // the project owner / client
+  userName: 'Owner Saleh',
   assignedTechnicianId: 9,
   serviceNameEn: 'Construction',
   serviceNameAr: 'البناء',
@@ -58,12 +60,25 @@ const TECHNICIAN = {
   email: 'tech@example.com',
 };
 
+const CLIENT = {
+  id: 100,
+  name: 'Owner Saleh',
+  email: 'owner@example.com',
+};
+
+/** GET /users/:id/profile — the card fetches whichever peer it points at, so the
+ *  handler answers per id (technician 9 for the customer's card, client 100 for the
+ *  technician's). */
+const profileHandler = http.get('*/users/:id/profile', ({ params }) =>
+  HttpResponse.json(String(params.id) === '100' ? CLIENT : TECHNICIAN),
+);
+
 function mockBackend() {
   server.use(
     http.get('*/projects/:id', () => HttpResponse.json({ project: PROJECT, phases: PHASES })),
     http.get('*/phases/project/:projectId', () => HttpResponse.json(PHASES)),
     http.get('*/contracts/project/:projectId', () => HttpResponse.json(CONTRACT)),
-    http.get('*/users/:id/profile', () => HttpResponse.json(TECHNICIAN)),
+    profileHandler,
   );
 }
 
@@ -93,6 +108,11 @@ describe('ContractSigningProjectDetail', () => {
     expect(screen.getByText('Selected service provider')).toBeInTheDocument();
     expect(await screen.findByText('Ahmed Al-Qahtani')).toBeInTheDocument();
     expect(screen.getByText('4.8')).toBeInTheDocument();
+    // The customer messages the technician (the selected provider).
+    expect(screen.getByRole('link', { name: 'Message the service provider' })).toHaveAttribute(
+      'href',
+      expect.stringContaining('user=9'),
+    );
 
     // Sent card: title, the customer's email, both actions.
     expect(screen.getByText('The contract was sent to your email')).toBeInTheDocument();
@@ -138,9 +158,20 @@ describe('ContractSigningProjectDetail', () => {
       http.get('*/contracts/project/:projectId', () =>
         HttpResponse.json({ ...CONTRACT, documentUrl: 'https://cdn.example.com/c/501.pdf' }),
       ),
-      http.get('*/users/:id/profile', () => HttpResponse.json(TECHNICIAN)),
+      profileHandler,
     );
     renderWithProviders(<ContractSigningProjectDetail projectId={PROJECT_ID} />);
+
+    // The counterpart card flips to the CLIENT for the technician — heading + client
+    // name, and the message action targets the client (`user=100`), never the
+    // technician themselves (the prior self-chat bug).
+    expect(await screen.findByText('Project client')).toBeInTheDocument();
+    expect(await screen.findByText('Owner Saleh')).toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'Message the client' })).toHaveAttribute(
+      'href',
+      expect.stringContaining('user=100'),
+    );
+    expect(screen.queryByText('Selected service provider')).not.toBeInTheDocument();
 
     // Technician's view+download card (RN's isTechnician branch).
     expect(await screen.findByText('Contract ready for signature')).toBeInTheDocument();

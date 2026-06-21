@@ -14,6 +14,7 @@ beforeAll(async () => {
 const OPEN_PROJECTS = [
   {
     id: 1,
+    serviceId: 1,
     serviceNameEn: 'Renovation',
     title: 'Older offer',
     description: 'd1',
@@ -26,6 +27,7 @@ const OPEN_PROJECTS = [
   },
   {
     id: 2,
+    serviceId: 2,
     serviceNameEn: 'Building',
     title: 'Newer offer',
     description: 'd2',
@@ -37,6 +39,13 @@ const OPEN_PROJECTS = [
     timeRequiredDays: 140,
   },
 ];
+
+/** Restrict the technician's services to one of the two open offers. */
+function onlyService(id: number) {
+  return http.get('*/technician/services/my-services', () =>
+    HttpResponse.json({ services: [{ id }] }),
+  );
+}
 
 describe('JobOffersSection', () => {
   it('renders the heading + tabs and lists available offers on the default tab', async () => {
@@ -66,5 +75,16 @@ describe('JobOffersSection', () => {
     server.use(http.get('*/projects', () => HttpResponse.json([])));
     renderWithProviders(<JobOffersSection />);
     expect(await screen.findByText(/no offers available/i)).toBeInTheDocument();
+  });
+
+  it("only lists offers matching the technician's own services", async () => {
+    server.use(
+      http.get('*/projects', () => HttpResponse.json(OPEN_PROJECTS)),
+      onlyService(1), // technician offers serviceId 1 → only the "Older offer" qualifies
+    );
+    renderWithProviders(<JobOffersSection />);
+
+    expect(await screen.findByRole('heading', { name: /older offer/i })).toBeInTheDocument();
+    expect(screen.queryByRole('heading', { name: /newer offer/i })).not.toBeInTheDocument();
   });
 });

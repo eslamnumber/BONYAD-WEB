@@ -17,6 +17,8 @@ export function TextField({
   placeholder,
   type = 'text',
   inputMode,
+  min,
+  max,
 }: {
   id: string;
   label: string;
@@ -25,6 +27,9 @@ export function TextField({
   placeholder?: string;
   type?: 'text' | 'date' | 'number';
   inputMode?: 'numeric' | 'decimal';
+  /** Native `min`/`max` bounds — used to gate date pickers and numeric inputs. */
+  min?: string;
+  max?: string;
 }) {
   const { t } = useTranslation();
   return (
@@ -40,6 +45,9 @@ export function TextField({
         type={type}
         inputMode={inputMode}
         placeholder={placeholder}
+        min={min}
+        max={max}
+        aria-invalid={error ? true : undefined}
         className="text-start"
         {...register}
       />
@@ -68,10 +76,14 @@ export function TextAreaField({
       <Label htmlFor={id} className={LABEL}>
         {label}
       </Label>
+      {/* Multi-line field: inherit the document dir (no `dir="auto"`) and align
+          `text-start`, same as TextField. On an empty textarea `dir="auto"` resolves
+          to LTR and floats the Arabic placeholder to the left edge, fighting the
+          screen's RTL. */}
       <Textarea
         id={id}
-        dir="auto"
         placeholder={placeholder}
+        aria-invalid={error ? true : undefined}
         className="bg-field-surface border-border text-foreground min-h-[96px] rounded-lg text-start text-[15px]"
         {...register}
       />
@@ -108,9 +120,7 @@ export function VisibilityToggle({
       </button>
       <span className="min-w-0 flex-1">
         <span className="text-foreground block text-start text-sm font-medium">{label}</span>
-        <span dir="auto" className="text-muted-foreground block text-start text-xs">
-          {hint}
-        </span>
+        <span className="text-muted-foreground block text-start text-xs">{hint}</span>
       </span>
     </div>
   );

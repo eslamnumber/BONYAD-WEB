@@ -4,6 +4,8 @@ import { describe, expect, it } from 'vitest';
 import { ApiError } from '@/lib/api-client';
 import { server } from '@/testing/handlers/server';
 
+import { PortfolioAlreadyExistsError } from '../lib/portfolio-error';
+
 import { createPortfolio } from './create-portfolio';
 
 describe('createPortfolio', () => {
@@ -50,5 +52,38 @@ describe('createPortfolio', () => {
 
   it('rejects a negative yearsActive before any network call (zod)', async () => {
     await expect(createPortfolio({ yearsActive: -1 })).rejects.toBeTruthy();
+  });
+
+  it('throws PortfolioAlreadyExistsError when the backend reports a duplicate', async () => {
+    server.use(
+      http.post('*/portfolios/create', () =>
+        HttpResponse.json({ error: 'Portfolio already exists for this user' }, { status: 400 }),
+      ),
+    );
+    const err = await createPortfolio({ businessName: 'Co' }).catch((e: unknown) => e);
+    expect(err).toBeInstanceOf(PortfolioAlreadyExistsError);
+    // The original ApiError must be preserved as `.cause` for localized messaging.
+    expect((err as PortfolioAlreadyExistsError).cause).toBeInstanceOf(ApiError);
+  });
+
+  it('matches the duplicate message under either `error` or `message` and on 409', async () => {
+    server.use(
+      http.post('*/portfolios/create', () =>
+        HttpResponse.json({ message: 'portfolio already exists' }, { status: 409 }),
+      ),
+    );
+    const err = await createPortfolio({ businessName: 'Co' }).catch((e: unknown) => e);
+    expect(err).toBeInstanceOf(PortfolioAlreadyExistsError);
+  });
+
+  it('does NOT classify an unrelated 400 as a duplicate', async () => {
+    server.use(
+      http.post('*/portfolios/create', () =>
+        HttpResponse.json({ error: 'Invalid specialties' }, { status: 400 }),
+      ),
+    );
+    const err = await createPortfolio({ businessName: 'Co' }).catch((e: unknown) => e);
+    expect(err).not.toBeInstanceOf(PortfolioAlreadyExistsError);
+    expect(err).toBeInstanceOf(ApiError);
   });
 });

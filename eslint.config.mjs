@@ -313,4 +313,14 @@ export default tseslint.config(
       'max-lines-per-function': 'off',
     },
   },
+
+  // react-three-fiber scene files: `<mesh>` / `<boxGeometry args>` / `<meshStandardMaterial>`
+  // and friends are three.js intrinsics, not DOM elements — eslint-plugin-react's
+  // DOM-oriented `no-unknown-property` can't know their props. Scoped to the 3D viewer.
+  {
+    files: ['src/features/sketch/components/viewer/**/*.tsx'],
+    rules: {
+      'react/no-unknown-property': 'off',
+    },
+  },
 );

@@ -36,21 +36,28 @@ export function useProjectForm(project: PortfolioProject | undefined, onClose: (
     resolver: zodResolver(projectFormSchema),
     defaultValues: project ? projectToForm(project) : emptyProjectForm,
     mode: 'onTouched',
+    reValidateMode: 'onChange',
   });
 
-  const onSubmit = form.handleSubmit(async (values) => {
-    try {
-      const uploaded = await uploadPhotos(files);
-      const input = toProjectInput(values, [...existing, ...uploaded]);
-      if (project) await update.mutateAsync({ id: project.id, input });
-      else await add.mutateAsync(input);
-      onClose();
-    } catch (err) {
-      form.setError('root', {
-        message: localizedPortfolioError(err, locale, t('portfolio.errors.projectFailed')),
-      });
-    }
-  });
+  const onSubmit = form.handleSubmit(
+    async (values) => {
+      try {
+        const uploaded = await uploadPhotos(files);
+        const input = toProjectInput(values, [...existing, ...uploaded]);
+        if (project) await update.mutateAsync({ id: project.id, input });
+        else await add.mutateAsync(input);
+        onClose();
+      } catch (err) {
+        form.setError('root', {
+          message: localizedPortfolioError(err, locale, t('portfolio.errors.projectFailed')),
+        });
+      }
+    },
+    (errors) => {
+      const first = Object.keys(errors)[0] as keyof ProjectFormValues | undefined;
+      if (first) form.setFocus(first);
+    },
+  );
 
   return {
     form,

@@ -44,7 +44,8 @@ export function CustomerApprovedDetail({ projectId }: Props) {
         <ContractSummaryCard project={project} variant="approved" />
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
           <div className="flex w-full flex-col gap-6 lg:w-[400px] lg:shrink-0">
-            <ContractProviderCard project={project} />
+            {/* Customer-only screen — the card shows the customer their selected provider. */}
+            <ContractProviderCard project={project} isTechnician={false} />
             <SigningMethodCard project={project} phases={phases ?? []} />
           </div>
           <div className="flex w-full flex-col gap-6 lg:min-w-0 lg:flex-1">

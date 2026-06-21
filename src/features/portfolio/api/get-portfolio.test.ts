@@ -17,6 +17,16 @@ const NO_STATIC_RESOURCE = () =>
     },
     { status: 500 },
   );
+/**
+ * A deployment that has PATCH /portfolios/me (builder-draft save) but NOT the newer
+ * GET handler — the path matches, but GET isn't accepted → 405. The fetcher must
+ * treat this as "not readable here" and fall back to /my, not error out.
+ */
+const METHOD_NOT_ALLOWED_405 = () =>
+  HttpResponse.json(
+    { success: false, error: 'Method not allowed', status: 'METHOD_NOT_ALLOWED' },
+    { status: 405 },
+  );
 
 describe('getPortfolio', () => {
   it('returns the v2 /me portfolio, normalising specialties (string → array)', async () => {
@@ -85,6 +95,21 @@ describe('getPortfolio', () => {
     expect((await getPortfolio())?.id).toBe(7);
   });
 
+  it('falls back to /my when /me 405s (GET handler missing, PATCH exists)', async () => {
+    // Regression: a partial backend deployment can have PATCH /portfolios/me (the
+    // builder-draft save) without the newer GET handler. The path matches a controller,
+    // so Spring returns 405 instead of 404. Without treating 405 as "missing route",
+    // the error propagated and the portfolio screen showed a hard error instead of
+    // falling through to the legacy /my endpoint.
+    server.use(
+      http.get('*/portfolios/me', METHOD_NOT_ALLOWED_405),
+      http.get('*/portfolios/my', () => HttpResponse.json({ id: 7, businessName: 'Legacy' })),
+    );
+    const portfolio = await getPortfolio();
+    expect(portfolio?.id).toBe(7);
+    expect(portfolio?.businessName).toBe('Legacy');
+  });
+
   it('returns null when both endpoints report no portfolio (404)', async () => {
     server.use(
       http.get('*/portfolios/me', NOT_FOUND_404),
@@ -98,5 +123,29 @@ describe('getPortfolio', () => {
     const err = await getPortfolio().catch((e: unknown) => e);
     expect(err).toBeInstanceOf(ApiError);
     expect((err as ApiError).status).toBe(401);
+  });
+
+  it('recognises backend-updated /me builder-draft shape (the create-deadlock root cause)', async () => {
+    // Regression: backend-updated returns 200 from /me with a PortfolioMeResponse
+    // (`{draft, isPublic, publicHtmlUrl, pdfUrl, lastPublishedAt}`) once the user has
+    // any builder state. The legacy /my then 500s ("No static resource"). Before the
+    // fix, the builder-draft shape was discarded as "no portfolio" → the screen showed
+    // the create panel → POST /create rejected as duplicate → user stuck.
+    server.use(
+      http.get('*/portfolios/me', () =>
+        HttpResponse.json({
+          draft: JSON.stringify({ businessName: 'Builder Co', specialties: ['Finishing'] }),
+          isPublic: true,
+          publicHtmlUrl: 'https://bonyad.test/p/42',
+          lastPublishedAt: '2026-06-01T10:00:00',
+        }),
+      ),
+      http.get('*/portfolios/my', NO_STATIC_RESOURCE),
+    );
+    const portfolio = await getPortfolio();
+    expect(portfolio).not.toBeNull();
+    expect(portfolio?.businessName).toBe('Builder Co');
+    expect(portfolio?.isPublic).toBe(true);
+    expect(portfolio?.published).toBe(true);
   });
 });

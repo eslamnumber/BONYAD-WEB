@@ -60,7 +60,7 @@ With this in place `rtl:` fires **only in `en`** (`<html dir="rtl">`) and `ltr:`
    - `rounded-s-*`, `rounded-e-*` for direction-aware corners
 2. **Direction-aware icons** (arrows, chevrons, back buttons) live in a `<DirectionalIcon />` wrapper that flips when `dir="rtl"` via `scaleX(-1)`. Non-directional icons (search, settings, user) do not flip.
 3. **No conditional `language === 'ar' ? … : …` in components.** The `dir` attribute + logical properties handle everything. If you find yourself writing that conditional, the bug is in the styling.
-4. **Inputs `dir="auto"` for user content** (names, addresses, descriptions). The browser detects the script and aligns text correctly even in a mixed-language UI.
+4. **Inputs `dir="auto"` for _mixed-language_ user content** (names, addresses, descriptions that may be typed in either script). The browser detects the script from the typed value and aligns correctly. **Caveat — `dir="auto"` reads the _value_, not the placeholder, and defaults to LTR while empty.** For a `<textarea>` / `<input>`, the auto algorithm scans the element's value for the first strong directional character; an empty field has none, so it falls back to **LTR** — and because Arabic runs under `<html dir="ltr">` (the inverted `LOCALE_DIRECTION`), there is no ambient RTL to inherit either. The result: the Arabic placeholder + caret anchor to the **left** until the user types a strong RTL character, and `text-start` (now resolving against the LTR element) keeps them there. So `dir="auto"` is only right for fields whose content language is genuinely unknown at fill time. **For a single-language free-text field — one the user fills in their own UI language (a reply, a note, a description in an Arabic-primary flow)** — set the field's _writing_ direction explicitly to the locale's natural script via `dir={conventionalDirection(locale)}` (`ar → rtl`, `en → ltr`) and keep `text-start`. The empty state then matches the locale (Arabic → RTL placeholder/caret on the right; English → LTR), and once typed the content already flows the right way. This is the one **field-level** use of `conventionalDirection` that is _not_ a screen-wide opt-out — it sets a single text field's writing direction, not the surrounding layout, so it composes with the inverted page layout. **Real regression:** the IN_PROGRESS change-request reply / counter-offer textarea (`change-request-action-panels.tsx`) shipped `dir="auto"` and rendered the Arabic `ردّك…` placeholder flush-**left** in `ar`; fixed to `dir={conventionalDirection(locale)}`.
 5. **`type="tel" | "email" | "number" | "url" | "search"` inputs lie about their direction — the browser UA stylesheet hard-codes `direction: ltr` on them, even when `<html dir="rtl">`.** Inheritance is silently broken: `getComputedStyle(input).direction` returns `"ltr"` regardless of the ancestor chain. That means `text-end` inside the input resolves to the **opposite physical side** from the parent's `end-3` icon — text on the right, icon on the left (or vice versa). The fix lives in the `Input` primitive ([src/components/ui/input.tsx](../src/components/ui/input.tsx)): a baked-in `[direction:inherit]` Tailwind class forces the input to inherit `<html dir>`, so `text-end` and `end-*` on the wrapper resolve to the same side. **Do not pass `dir="auto"` to the primitive by default** — for digit-only content (phone, OTP, credit card, IBAN, postal code), `dir="auto"` falls back to the parent and then the UA `direction: ltr` overrides it anyway. Pass `dir="auto"` _explicitly_ only for mixed-language free-text fields (names, addresses, descriptions). For numeric fields, add `text-end` on the input so typed content anchors to the same side as the parent's leading icon. Verification: in `en` (html dir=rtl), confirm `getComputedStyle(input).direction === 'rtl'` — if you see `'ltr'` here, the primitive's `[direction:inherit]` is missing or the input is being styled by a UA rule. See [forms-validation.md](forms-validation.md) §Numeric inputs.
 6. **Never hand-roll a raw `<input>` or `<textarea>` in a feature component — use the shared `Input` primitive at [src/components/ui/input.tsx](../src/components/ui/input.tsx) (and the matching textarea primitive when one exists).** The primitive bakes in `[direction:inherit]` and the focus-ring tokens. Re-implementing in `features/<f>/components/` is how the rule 5 bug returns — the contact form's `ContactField` did exactly this and shipped with `<input>` (and `<textarea>`) elements missing `[direction:inherit]`, so the tel input rendered `direction: ltr` while every other field rendered `rtl`, putting placeholder + icon on the same side of email / title / description but opposite sides on phone. If the primitive is missing a prop you need (icon slot, `aria-invalid` styling, etc.), extend the primitive — do not fork. If you must use a raw `<input>` / `<textarea>` (e.g. multi-cell OTP boxes where the primitive shape doesn't fit), add `[direction:inherit]` explicitly and link to rule 5 in a comment.
 7. **Inputs with a leading icon — which side goes where depends on the design intent, but the two utilities must be on opposite ends.** Two valid layouts:
@@ -122,6 +122,42 @@ The same logic applies to flex: `items-end` / `justify-end` for content anchorin
 ### Verification
 
 After building any section, **toggle the `bonyad-lang` cookie between `en` and `ar` and reload each time**. The layout must mirror: card content right-anchored in `ar`, left-anchored in `en`. If a section stays anchored to the same physical side across both locales, you used `-start` where you needed `-end` (or a physical `left-*`/`right-*` slipped through). ESLint catches the physical utilities; choosing `-end` over `-start` is on you.
+
+## Horizontal icon+label rows — scope `dir`, don't `flex-row-reverse`
+
+> **Scope: in-house GENERATED designs only.** This is the preference when you compose a
+> design from the Bonyad identity (the `bonyad-production-design` path). A **Figma import**
+> (the explicit `figma-to-code` workflow, run only when the user hands over a Figma link)
+> follows the imported node layout + the prior rules — do **not** re-architect its rows with a
+> `dir` scope. Everything below applies to generated designs.
+
+A horizontal row that pairs a **leading icon with a label** (a checklist item, a list row, an icon + stat, a file row) has a reading order: the icon leads, the label follows. Under the inverted map a plain `flex` row flows the **document** direction, which is the _opposite_ of the content's reading direction — so in `ar` (`<html dir="ltr">`) the icon lands on the **left** (document-start) and `text-start` left-aligns the label, while the rest of the Arabic content is right-anchored. The row reads backwards against everything around it.
+
+**Do NOT "fix" this with `flex-row-reverse`.** It reverses only the _visual order_; it does **not** change how `text-start` / `text-end` / `ps-*` / `pe-*` resolve. So you end up hand-flipping every logical utility inside the row to compensate (`text-start` → `text-end`, …) — brittle, and it obscures intent. This is the single most-repeated direction mistake on generated designs: reaching for `flex-row-reverse` on a content row.
+
+**The idiomatic fix:** scope the row/list **container** to the locale's _natural_ reading direction with an explicit `dir={conventionalDirection(locale)}` (`ar → rtl`, `en → ltr` — the opposite of the page's inverted map, from `src/types/locale.ts`). Inside that scope, use **plain `flex`** and **plain logical CSS** (`text-start`, leading icon first) and it mirrors **automatically**, because `dir` now matches the content. This is the same mechanism `features/feedback` / `features/support` / `features/sketch` use on their screen root + portalled modals; apply it at the **row/list-container level** when only a sub-tree needs natural flow (a small `useConventionalDir()` hook is fine).
+
+```tsx
+// ❌ Wrong — manual reversal + hand-flipped alignment (the leading-icon "fix" that keeps coming back)
+<li className="flex flex-row-reverse items-center gap-3">
+  <CheckIcon />
+  <span className="flex-1 text-end">{t(label)}</span>
+</li>;
+
+// ✓ Right — scope the natural reading direction; plain logical CSS mirrors on its own
+const dir = conventionalDirection(locale); // ar → rtl, en → ltr
+<ul dir={dir}>
+  <li className="flex items-center gap-3">
+    <CheckIcon />
+    <span className="flex-1 text-start">{t(label)}</span>
+  </li>
+</ul>;
+// ar (dir=rtl): icon on the right (reading-start), label right-aligned. en (dir=ltr): the mirror. No reverse.
+```
+
+**When `flex-row-reverse` IS correct** — a row that flips **as a single unit** with no per-item logical alignment to fight: a segmented pill / tab / filter row, or a progress track of equal segments (so segment 1 sits at the reading-start / inline-end). There the reverse is the established, intended pattern (`projects-toolbar`, `customer-projects-toolbar`, `transaction-tabs`, `transaction-filters`, `wizard-progress-bar`). **The dividing line: icon+label content rows → scope `dir`; flip-as-a-unit bars → `flex-row-reverse`.**
+
+> The explicit-`dir`-on-a-container here is **not** the forbidden `dir="auto"` (which sniffs content and can silently flip a layout container — see the bidi rule above). A literal `dir="rtl"` / `dir="ltr"` value (what `conventionalDirection(locale)` returns) is a deliberate, sanctioned direction scope — the same one the conventional-direction features use. **Real regression:** the technician-onboarding checklist + certificate-list rows + progress track first shipped with `flex-row-reverse` (and `text-end` hand-flips); replaced with a `dir={conventionalDirection(locale)}` scope + plain `flex` + `text-start`.
 
 ## Directional icons — flipping chevrons / arrows
 

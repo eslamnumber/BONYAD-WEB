@@ -48,7 +48,7 @@ export function ContractSigningProjectDetail({ projectId }: Props) {
         <ContractSummaryCard project={project} />
         <div className="flex flex-col gap-6 lg:flex-row lg:items-start">
           <div className="flex w-full flex-col gap-6 lg:w-[400px] lg:shrink-0">
-            <ContractProviderCard project={project} />
+            <ContractProviderCard project={project} isTechnician={isTechnician} />
             {isTechnician ? (
               <TechnicianContractCard
                 projectId={projectId}

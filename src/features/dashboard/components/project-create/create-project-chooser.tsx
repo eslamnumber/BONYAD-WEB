@@ -21,10 +21,10 @@ type CreationOption = Pick<CreationOptionCardProps, 'Icon' | 'accentText' | 'glo
 };
 
 /**
- * The four creation methods. Only "New project" is wired today (→ the project
- * method picker, which branches to the manual wizard); the AI-assisted flows are
- * not built yet, so they render inert with a "coming soon" badge. Each carries its
- * accent token (icon stroke + corner glow).
+ * The four creation methods. "New project" routes to the method picker (→ manual
+ * wizard) and "Smart 2D → 3D design" routes to the sketch planner; the remaining
+ * AI-assisted flows aren't built yet, so they render inert with a "coming soon"
+ * badge. Each carries its accent token (icon stroke + corner glow).
  */
 const OPTIONS: CreationOption[] = [
   {
@@ -44,6 +44,7 @@ const OPTIONS: CreationOption[] = [
     Icon: SmartDesignIcon,
     accentText: 'text-create-option-purple',
     glowBg: 'bg-create-option-purple',
+    href: ROUTES.DASHBOARD_PROJECTS_CREATE_SKETCH,
   },
   {
     key: 'newProject',

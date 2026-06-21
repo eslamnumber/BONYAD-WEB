@@ -8,7 +8,7 @@ import { type ProjectPhase } from '../../schemas/project-phase';
 
 import { PhaseStep } from './phase-step';
 
-type Props = { phases: ProjectPhase[]; pending?: boolean };
+type Props = { phases: ProjectPhase[]; pending?: boolean; projectId: number };
 
 /**
  * Project phases timeline card (Figma node 1103:6689): a heading + a list of
@@ -16,7 +16,7 @@ type Props = { phases: ProjectPhase[]; pending?: boolean };
  * by default; toggling a step collapses the rest (single-open accordion).
  * Backend-driven from `PHASES.LIST`. No drop-shadow per the Figma node.
  */
-export function ProjectPhasesTimeline({ phases, pending }: Props) {
+export function ProjectPhasesTimeline({ phases, pending, projectId }: Props) {
   const { t } = useTranslation();
   const states = phaseProgress(phases);
   const activeId = phases.find((_, i) => states[i] === 'active')?.id ?? null;
@@ -37,6 +37,7 @@ export function ProjectPhasesTimeline({ phases, pending }: Props) {
         states={states}
         pending={pending}
         openId={openId}
+        projectId={projectId}
         onToggle={(id) => setExpanded(openId === id ? null : id)}
       />
     </section>
@@ -48,10 +49,11 @@ type ListProps = {
   states: ReturnType<typeof phaseProgress>;
   pending?: boolean;
   openId: number | null;
+  projectId: number;
   onToggle: (id: number) => void;
 };
 
-function PhaseList({ phases, states, pending, openId, onToggle }: ListProps) {
+function PhaseList({ phases, states, pending, openId, projectId, onToggle }: ListProps) {
   const { t } = useTranslation();
   if (pending) return <Note>{t('dashboard.projectDetail.phases.loading')}</Note>;
   if (phases.length === 0) return <Note>{t('dashboard.projectDetail.phases.empty')}</Note>;
@@ -65,6 +67,7 @@ function PhaseList({ phases, states, pending, openId, onToggle }: ListProps) {
           state={states[i] ?? 'upcoming'}
           index={i}
           expanded={openId === phase.id}
+          projectId={projectId}
           onToggle={() => onToggle(phase.id)}
         />
       ))}

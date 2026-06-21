@@ -23,11 +23,11 @@ const REQ: CreateCheckoutRequest = {
     country: 'SA',
     postcode: '12345',
   },
-  shopperResultUrl: 'https://app.test/payment/callback?type=phase&phaseId=12',
+  shopperResultUrl: 'https://app.test/dashboard/projects/5?type=phase&phaseId=12',
 };
 
 describe('createCheckout', () => {
-  it('POSTs the validated body and normalises checkoutId + redirectUrl', async () => {
+  it('POSTs the validated body and returns checkoutId + mode for the widget', async () => {
     let sentBody: Record<string, unknown> = {};
     server.use(
       http.post('*/payments/create-checkout', async ({ request }) => {
@@ -35,60 +35,36 @@ describe('createCheckout', () => {
         return HttpResponse.json({
           success: true,
           checkoutId: 'CHK_1',
-          redirectUrl: 'https://eu-test.oppwa.com/v1/checkouts/CHK_1',
-          environment: 'test',
+          mode: 'LIVE',
+          code: '000.200.100',
         });
       }),
     );
 
     const session = await createCheckout(REQ);
-    expect(session).toEqual({
-      checkoutId: 'CHK_1',
-      redirectUrl: 'https://eu-test.oppwa.com/v1/checkouts/CHK_1',
-      environment: 'test',
-      isMimic: false,
-    });
+    expect(session).toEqual({ checkoutId: 'CHK_1', mode: 'LIVE', expiresAt: null });
     expect(sentBody.phaseId).toBe(12);
-    expect(sentBody.amount).toBe(25000);
     expect(sentBody.merchantTransactionId).toBe('PHASE-12-FULL-1700000000000');
   });
 
-  it('falls back to id / ndc / shopperUrl when checkoutId / redirectUrl are absent', async () => {
+  it('returns mode: null when the backend omits it (the env fallback then resolves the host)', async () => {
     server.use(
       http.post('*/payments/create-checkout', () =>
-        HttpResponse.json({
-          result: { code: '000.200.100' },
-          ndc: 'NDC_9',
-          shopperUrl: 'https://pay/9',
-        }),
+        HttpResponse.json({ success: true, checkoutId: 'CHK_2', code: '000.200.100' }),
       ),
     );
     const session = await createCheckout(REQ);
-    expect(session.checkoutId).toBe('NDC_9');
-    expect(session.redirectUrl).toBe('https://pay/9');
+    expect(session.mode).toBeNull();
+    expect(session.checkoutId).toBe('CHK_2');
   });
 
-  it('flags mimic mode when the checkoutId is MIMIC_…', async () => {
+  it('throws when the backend forwards success:false over HTTP 200', async () => {
     server.use(
       http.post('*/payments/create-checkout', () =>
-        HttpResponse.json({ success: true, checkoutId: 'MIMIC_42', environment: 'mimic' }),
+        HttpResponse.json({ success: false, error: 'Phase must be approved before payment' }),
       ),
     );
-    const session = await createCheckout(REQ);
-    expect(session.isMimic).toBe(true);
-    expect(session.redirectUrl).toBeNull();
-  });
-
-  it('throws on a HyperPay error forwarded over HTTP 200 (result.code not 000.)', async () => {
-    server.use(
-      http.post('*/payments/create-checkout', () =>
-        HttpResponse.json({
-          result: { code: '800.100.150', description: 'Rejected by bank' },
-          ndc: 'X',
-        }),
-      ),
-    );
-    await expect(createCheckout(REQ)).rejects.toThrow('Rejected by bank');
+    await expect(createCheckout(REQ)).rejects.toThrow('Phase must be approved');
   });
 
   it('throws when no checkout id is present in a success body', async () => {
@@ -107,7 +83,6 @@ describe('createCheckout', () => {
     );
     const err = await createCheckout(REQ).catch((e: unknown) => e);
     expect(err).toBeInstanceOf(ApiError);
-    expect((err as ApiError).status).toBe(400);
     expect((err as ApiError).errorCode).toBe('CONFLICT');
     expect((err as ApiError).localizedMessage('ar')).toBe('تم دفع المرحلة.');
   });

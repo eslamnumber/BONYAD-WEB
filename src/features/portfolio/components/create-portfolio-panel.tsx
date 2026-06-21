@@ -25,16 +25,14 @@ import { PortfolioBasicFields } from './portfolio-basic-fields';
 
 type IconType = ComponentType<SVGProps<SVGSVGElement>>;
 
-/** One value-prop row — an icon chip + a sentence (dynamic copy → `dir="auto"`). */
+/** One value-prop row — an icon chip + a static translated sentence. */
 function BenefitRow({ Icon, text }: { Icon: IconType; text: string }) {
   return (
     <li className="flex items-start gap-3">
       <span className="bg-primary/10 text-primary flex size-8 shrink-0 items-center justify-center rounded-lg">
         <Icon className="size-4" aria-hidden />
       </span>
-      <span dir="auto" className="text-foreground/90 text-start text-sm leading-7">
-        {text}
-      </span>
+      <span className="text-foreground/90 text-start text-sm leading-7">{text}</span>
     </li>
   );
 }
@@ -52,7 +50,7 @@ function CreateIntro() {
           <h2 className="text-foreground text-start text-xl font-semibold">
             {t('portfolio.create.title')}
           </h2>
-          <p dir="auto" className="text-muted-foreground mt-1 text-start text-sm leading-6">
+          <p className="text-muted-foreground mt-1 text-start text-sm leading-6">
             {t('portfolio.create.subtitle')}
           </p>
         </div>

@@ -1,10 +1,12 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useState } from 'react';
+import { useRouter } from 'next/navigation';
+import { useEffect, useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
+import { ROUTES } from '@/config/routes';
 import { ApiError } from '@/lib/api-client';
 
 import { useResendOtp, useVerifyOtp } from '../api/verify-otp';
@@ -120,6 +122,20 @@ function SuccessMessage({ label }: { label: string }) {
   );
 }
 
+// Navigate after a brief success indication — TECHNICIAN → complete-profile,
+// USER → dashboard. The route handler has already set the session cookie by this
+// point, so the onboarding guard admits the technician to /complete-profile.
+function useOtpSuccessRedirect(isSuccess: boolean, role: Role) {
+  const router = useRouter();
+  useEffect(() => {
+    if (!isSuccess) return;
+    const timer = setTimeout(() => {
+      router.replace(role === 'TECHNICIAN' ? ROUTES.ONBOARDING_COMPLETE_PROFILE : ROUTES.DASHBOARD);
+    }, 1500);
+    return () => clearTimeout(timer);
+  }, [isSuccess, role, router]);
+}
+
 export function VerifyOtpForm({
   labels,
   phone,
@@ -134,6 +150,8 @@ export function VerifyOtpForm({
   const state = useVerifyOtpFormState(labels, phone, accountRole, termsId);
   const { mutation, form, localRole, setLocalRole, secondsLeft, otpValue } = state;
   const { onSubmit, isPending, otpError, canResend, handleResend, handleOtpChange } = state;
+
+  useOtpSuccessRedirect(mutation.isSuccess, localRole);
 
   if (mutation.isSuccess) return <SuccessMessage label={labels.successMessage} />;
 

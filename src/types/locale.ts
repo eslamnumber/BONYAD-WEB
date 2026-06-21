@@ -20,11 +20,15 @@ export const LOCALE_DIRECTION: Record<Locale, 'ltr' | 'rtl'> = {
 
 /**
  * Conventional (non-inverted) direction — English LTR, Arabic RTL. The OPPOSITE of
- * {@link LOCALE_DIRECTION}. It exists only for the handful of screens that opt out of the
- * project's inverted default at an explicit product request (currently `features/support`
- * and `features/feedback`), applied as a scoped `dir` attribute on that screen's root + its
- * portalled modals. Do NOT use it as a general default — the app-wide direction stays
- * `LOCALE_DIRECTION`.
+ * {@link LOCALE_DIRECTION}. Two legitimate uses, both narrow:
+ *   1. Screen-wide opt-out at explicit product request (currently `features/support` and
+ *      `features/feedback`) — a scoped `dir` on that screen's root + its portalled modals.
+ *   2. A single free-text input's *writing* direction, when the user fills it in their own
+ *      UI language (a reply / note / description). `dir="auto"` defaults an EMPTY field to
+ *      LTR (it reads the value, not the placeholder), so under the inverted map an Arabic
+ *      field's placeholder + caret land on the wrong side; `dir={conventionalDirection(locale)}`
+ *      fixes the empty state without touching layout. See docs/i18n-and-rtl.md RTL rule 4.
+ * Do NOT use it as a general layout default — the app-wide direction stays `LOCALE_DIRECTION`.
  */
 export const CONVENTIONAL_DIRECTION: Record<Locale, 'ltr' | 'rtl'> = {
   en: 'ltr',

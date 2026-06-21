@@ -5,7 +5,6 @@ import {
   DashboardJobOffersIcon,
   DashboardMessagesIcon,
   DashboardNotificationsIcon,
-  DashboardOffersIcon,
   DashboardPaymentsIcon,
   DashboardProjectsIcon,
   DashboardSettingsIcon,
@@ -22,8 +21,6 @@ export type SidebarNavItem = {
   /** i18n key under `dashboard.nav`. */
   key: string;
   Icon: IconComponent;
-  /** Renders the red unread dot (customer "Offers"). */
-  badge?: boolean;
 };
 
 /** Service-provider nav — unchanged from the original sidebar. */
@@ -37,13 +34,11 @@ export const TECHNICIAN_NAV: readonly SidebarNavItem[] = [
 ];
 
 /**
- * Customer (USER) nav — Figma 1394:6518: Home / Projects / Offers⦁ / Messages /
- * Notifications / Settings. "Offers" carries the red unread dot.
+ * Customer (USER) nav — Home / Projects / Messages / Notifications / Settings.
  */
 export const CUSTOMER_NAV: readonly SidebarNavItem[] = [
   { href: ROUTES.DASHBOARD, key: 'home', Icon: DashboardHomeIcon },
   { href: ROUTES.DASHBOARD_PROJECTS, key: 'projects', Icon: DashboardProjectsIcon },
-  { href: ROUTES.DASHBOARD_OFFERS, key: 'offers', Icon: DashboardOffersIcon, badge: true },
   { href: ROUTES.DASHBOARD_MESSAGES, key: 'messages', Icon: DashboardMessagesIcon },
   { href: null, key: 'notifications', Icon: DashboardNotificationsIcon },
   { href: ROUTES.DASHBOARD_SETTINGS, key: 'settings', Icon: DashboardSettingsIcon },

@@ -32,15 +32,18 @@ function normalizeProjectDetail(data: unknown): ProjectDetail {
 }
 
 /**
- * Flatten the nested relations the detail endpoint returns (`project.user.name`,
+ * Flatten the nested relations the detail endpoint returns (`project.user.{id,name}`,
  * `project.service.name{En,Ar}`, `project.assignedTechnician.id`) onto the flat
  * fields the cards read. Each falls back to an already-flat value, so a flat body
- * (tests / other shapes) passes through unchanged.
+ * (tests / other shapes) passes through unchanged. `userId` (the project owner /
+ * client) is flattened so the technician's "message the client" deep-link has a
+ * real peer — without it the contact buttons fall back to the generic inbox.
  */
 function flattenRelations(raw: Record<string, unknown>): Partial<ProjectDetail> {
-  const user = raw.user as { name?: string } | undefined;
+  const user = raw.user as { id?: number; name?: string } | undefined;
   const service = raw.service as { nameEn?: string; nameAr?: string } | undefined;
   const flat: Partial<ProjectDetail> = {
+    userId: (raw.userId as number | undefined) ?? user?.id,
     userName: (raw.userName as string | undefined) ?? user?.name,
     serviceNameEn: (raw.serviceNameEn as string | undefined) ?? service?.nameEn,
     serviceNameAr: (raw.serviceNameAr as string | undefined) ?? service?.nameAr,
