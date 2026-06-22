@@ -5,13 +5,64 @@
     "description": "A marketplace connecting customers in Saudi Arabia with verified construction and home-service technicians.",
     "copyright": "Bonyad. All rights reserved."
   },
+  "assistant": {
+    "fabLabel": "Open Bonyad assistant",
+    "title": "Bonyad Assistant",
+    "close": "Close assistant",
+    "emptyTitle": "Smart Assistant",
+    "emptySubtitle": "Chat with our smart assistant for quick help.",
+    "inputPlaceholder": "Type your message here",
+    "send": "Send message",
+    "currency": "SAR",
+    "typing": "Assistant is typing…",
+    "error": "Something went wrong. Please try again.",
+    "retry": "Retry",
+    "starter1": "What services does Bonyad offer?",
+    "starter2": "Help me start a project",
+    "starter3": "How do I get a price estimate?",
+    "nav": {
+      "projects": "My projects",
+      "projectsMap": "Projects map",
+      "createProject": "Create a project",
+      "aiProject": "Create with AI",
+      "sketch": "Smart 2D → 3D design",
+      "settings": "Account settings",
+      "profile": "My profile",
+      "accountType": "Account type",
+      "subscriptions": "My subscription",
+      "myServices": "My services",
+      "portfolio": "My portfolio",
+      "cards": "Payment cards",
+      "payments": "Transactions",
+      "support": "Support center",
+      "referral": "Refer & earn",
+      "feedback": "Send feedback",
+      "notifications": "Notifications",
+      "messages": "Messages",
+      "offers": "Offers",
+      "home": "Home",
+      "dashboard": "Dashboard",
+      "services": "Services",
+      "technicians": "Technicians",
+      "forPros": "For professionals",
+      "howItWorks": "How it works",
+      "about": "About us",
+      "contact": "Contact us",
+      "faq": "FAQ",
+      "blog": "Blog",
+      "help": "Help center",
+      "terms": "Terms & Conditions",
+      "privacy": "Privacy policy"
+    }
+  },
   "common": {
     "loading": "Loading…",
     "tryAgain": "Try again",
     "goToHome": "Go to homepage",
     "comingSoon": "Coming soon",
-    "demoBanner": "Demo platform",
-    "dismiss": "Dismiss"
+    "demoBanner": "Demo version",
+    "dismiss": "Dismiss",
+    "close": "Close"
   },
   "a11y": {
     "skipToMain": "Skip to main content",
@@ -53,6 +104,80 @@
     "faq": "FAQ"
   },
   "dashboard": {
+    "home": {
+      "greeting": "Welcome, {{name}}",
+      "greetingFallback": "Welcome back",
+      "subtitle": "An overview of your activity and dues",
+      "error": "We couldn't load your dashboard. Please try again.",
+      "retry": "Try again",
+      "kpis": {
+        "activeProjects": "Active projects",
+        "pendingPayments": "Pending payments",
+        "totalEarned": "Total earned",
+        "outstanding": "Outstanding dues"
+      },
+      "activeProjects": {
+        "title": "Active projects",
+        "viewAll": "View all",
+        "untitled": "Project #{{id}}",
+        "phases": "{{done}} of {{total}} phases",
+        "outstanding": "Outstanding",
+        "empty": "No active projects yet",
+        "emptyHint": "Projects you're executing will appear here with their progress."
+      },
+      "ads": {
+        "title": "My ads",
+        "untitled": "Untitled ad",
+        "impressions": "views",
+        "clicks": "clicks",
+        "ctr": "CTR",
+        "empty": "No ads yet",
+        "emptyHint": "Promote your services to reach more customers.",
+        "error": "We couldn't load your ads. Please try again.",
+        "status": {
+          "active": "Active",
+          "pendingApproval": "Under review",
+          "paused": "Paused",
+          "rejected": "Rejected",
+          "expired": "Expired",
+          "unknown": "—"
+        }
+      },
+      "earnings": {
+        "title": "Earnings & transfers",
+        "available": "Available to transfer",
+        "inEscrow": "In escrow",
+        "totalEarned": "Total earned",
+        "totalPaidOut": "Paid out",
+        "error": "We couldn't load your wallet. Please try again."
+      },
+      "externalProjects": {
+        "title": "External projects",
+        "untitled": "Untitled project",
+        "completion": "Completion",
+        "empty": "No external projects yet",
+        "emptyHint": "Track your off-platform work and share progress with your clients.",
+        "error": "We couldn't load your external projects. Please try again.",
+        "status": {
+          "inProgress": "In progress",
+          "completed": "Completed",
+          "onHold": "On hold",
+          "unknown": "—"
+        }
+      },
+      "contracts": {
+        "title": "Contracts",
+        "untitled": "Contract #{{id}}",
+        "viewDocument": "View document",
+        "empty": "No contracts yet",
+        "emptyHint": "Signed project contracts will appear here.",
+        "error": "We couldn't load your contracts. Please try again.",
+        "status": {
+          "signed": "Signed",
+          "pending": "Awaiting signature"
+        }
+      }
+    },
     "changeRequests": {
       "section": {
         "title": "Change requests",
@@ -159,7 +284,8 @@
       "saved": "Saved",
       "messages": "Messages",
       "notifications": "Notifications",
-      "settings": "Settings"
+      "settings": "Settings",
+      "supervision": "Supervision"
     },
     "menu": {
       "ariaLabel": "Account menu",
@@ -197,6 +323,58 @@
         "submit": "Search",
         "clear": "Clear search",
         "noResults": "No matching services"
+      },
+      "home": {
+        "greeting": "Welcome back",
+        "greetingNamed": "Welcome back, {{name}}",
+        "subtitle": "Track your projects, payments and offers at a glance",
+        "addProject": "Add a project",
+        "error": "We couldn't load your dashboard.",
+        "retry": "Try again",
+        "kpis": {
+          "dueNow": "Due now",
+          "paidSoFar": "Paid so far",
+          "activeProjects": "Active projects",
+          "openRequests": "Open requests"
+        },
+        "payments": {
+          "title": "Payments & installments",
+          "viewAll": "All payments",
+          "empty": "No payments due right now.",
+          "payNow": "Pay now",
+          "state": {
+            "due": "Due",
+            "upcoming": "Upcoming",
+            "paid": "Paid"
+          }
+        },
+        "requests": {
+          "title": "My requests",
+          "viewAll": "View all",
+          "empty": "You have no open price-quote requests.",
+          "compare": "Compare offers",
+          "view": "View"
+        },
+        "contracts": {
+          "title": "Contracts",
+          "viewAll": "View all",
+          "empty": "No contracts awaiting your signature.",
+          "reviewSign": "Review & sign"
+        },
+        "active": {
+          "title": "Active projects",
+          "viewAll": "View all",
+          "empty": "No active projects yet.",
+          "phases": "{{done}} of {{total}} phases"
+        },
+        "offers": {
+          "title": "Explore offers",
+          "empty": "No offers available right now.",
+          "error": "We couldn't load offers.",
+          "untitled": "Service offer",
+          "by": "By {{name}}",
+          "contact": "Contact"
+        }
       }
     },
     "createProject": {
@@ -682,10 +860,12 @@
       }
     },
     "pageTitle": "Discover projects",
+    "viewOnMap": "View on map",
     "tabs": {
       "saved": "Saved offers",
       "newest": "Newest",
-      "bestForYou": "Best for you"
+      "bestForYou": "Best for you",
+      "supervision": "Supervision invitations"
     },
     "offer": {
       "daysLeft": "{{count}} days left",
@@ -826,7 +1006,23 @@
         "dateLabel": "Acceptance date",
         "days": "{{count}} days",
         "reviewContract": "Review & sign the contract",
+        "reviewContractUnavailable": "The contract isn't ready to view yet.",
+        "reviewContractError": "Couldn't open the contract. Please try again.",
         "contactClient": "Contact the client"
+      },
+      "editPhases": {
+        "cta": "Edit phase plan",
+        "title": "Edit phase plan",
+        "subtitle": "Update the phases, durations and costs, then save to share the revised plan.",
+        "phaseLabel": "Phase {{number}}",
+        "addPhase": "Add phase",
+        "remove": "Remove phase",
+        "close": "Close",
+        "save": "Save changes",
+        "saving": "Saving…",
+        "cancel": "Cancel",
+        "empty": "No phases yet. Add the first one to build the plan.",
+        "error": "Couldn't save the phase plan. Please try again."
       }
     },
     "completedProject": {
@@ -1049,6 +1245,14 @@
       "downloadPreparing": "Preparing PDF…",
       "downloadError": "Couldn't prepare the PDF. Please try again.",
       "downloadUnavailable": "Contract PDF not ready yet",
+      "view": "View contract",
+      "viewer": {
+        "title": "Service contract",
+        "close": "Close",
+        "loading": "Loading the contract…",
+        "frameTitle": "Contract PDF",
+        "hint": "Can't see the contract above? Download it instead."
+      },
       "technician": {
         "title": "Contract ready for signature",
         "description": "Review and download the service agreement. You will receive an email with a link to sign it.",
@@ -1163,6 +1367,123 @@
         "cancel": "Cancel",
         "submit": "Submit request",
         "error": "Couldn't submit your request. Please try again."
+      }
+    },
+    "supervision": {
+      "title": "Supervision",
+      "subtitle": "Projects you've been invited to supervise, and the ones you're actively overseeing.",
+      "tabsAria": "Supervision filter",
+      "tabs": {
+        "invitations": "Invitations",
+        "active": "Active"
+      },
+      "status": {
+        "invited": "Invited",
+        "active": "Supervising",
+        "declined": "Declined",
+        "removed": "Removed",
+        "unknown": "—"
+      },
+      "card": {
+        "owner": "Project owner",
+        "accept": "Accept",
+        "decline": "Decline",
+        "viewDetails": "View details",
+        "manage": "Manage project"
+      },
+      "respond": {
+        "accepting": "Accepting…",
+        "declining": "Declining…",
+        "error": "We couldn't update the invitation. Please try again."
+      },
+      "invited": {
+        "empty": {
+          "title": "No invitations right now",
+          "body": "When a customer invites you to supervise a project, it'll show up here."
+        }
+      },
+      "active": {
+        "empty": {
+          "title": "You're not supervising any projects yet",
+          "body": "Accept a supervision invitation and the project will appear here for you to manage."
+        }
+      },
+      "error": {
+        "title": "Couldn't load supervision projects",
+        "body": "Something went wrong while loading. Please try again."
+      },
+      "back": "Back to supervision",
+      "notActive": {
+        "title": "You're not the active supervisor",
+        "body": "This project's supervision isn't active for you, so there's nothing to manage here."
+      },
+      "bids": {
+        "title": "Bids",
+        "amount": "Bid amount",
+        "accept": "Accept bid",
+        "reject": "Reject",
+        "accepting": "Accepting…",
+        "rejecting": "Rejecting…",
+        "accepted": "Accepted",
+        "rejected": "Rejected",
+        "unknownTechnician": "Technician",
+        "empty": {
+          "title": "No bids yet",
+          "body": "When technicians bid on this project, you'll be able to accept or reject them here."
+        },
+        "error": {
+          "title": "Couldn't load bids",
+          "body": "Something went wrong while loading the bids. Please try again."
+        }
+      },
+      "activity": {
+        "title": "Activity log",
+        "empty": {
+          "title": "No activity yet",
+          "body": "Your supervision actions on this project will appear here."
+        },
+        "error": {
+          "title": "Couldn't load the activity log",
+          "body": "Something went wrong while loading. Please try again."
+        }
+      },
+      "home": {
+        "title": "Supervision invitations",
+        "viewAll": "View all"
+      },
+      "customer": {
+        "column": "Supervisor",
+        "hire": "Hire supervisor",
+        "active": "Supervising",
+        "pending": "Pending",
+        "remove": "Remove",
+        "cancel": "Cancel",
+        "picker": {
+          "title": "Hire a supervisor",
+          "subtitle": "Choose a verified technician to oversee this project.",
+          "search": "Search by name, company, or phone",
+          "hireAction": "Hire",
+          "hiring": "Hiring…",
+          "empty": "No technicians available to hire right now.",
+          "error": "We couldn't hire this supervisor. Please try again.",
+          "loadError": {
+            "title": "Couldn't load technicians",
+            "body": "Something went wrong. Please try again."
+          }
+        },
+        "confirm": {
+          "cancelTitle": "Cancel invitation?",
+          "cancelBody": "The invitation to supervise this project will be withdrawn.",
+          "cancelConfirm": "Cancel invitation",
+          "removeTitle": "Remove supervisor?",
+          "removeBody": "The supervisor will lose access to manage this project.",
+          "removeConfirm": "Remove supervisor",
+          "keep": "Keep",
+          "working": "Working…",
+          "error": "Something went wrong. Please try again."
+        },
+        "panelTitle": "Project supervisor",
+        "panelHint": "Hire a verified technician to oversee this project from start to finish."
       }
     }
   },
@@ -2341,6 +2662,8 @@
       "years": "{{count}} years of experience",
       "projectsStat": "Projects",
       "yearsStat": "Years",
+      "projectsLabel": "Projects delivered",
+      "yearsLabel": "Years of experience",
       "public": "Public",
       "private": "Private"
     },
@@ -2349,7 +2672,8 @@
       "add": "Add work",
       "error": "Couldn't load your projects.",
       "emptyTitle": "No projects yet",
-      "emptyBody": "Add your completed work so clients can see what you do."
+      "emptyBody": "Add your completed work so clients can see what you do.",
+      "emptyCta": "Add your first project"
     },
     "project": {
       "addTitle": "Add a project",
@@ -2757,5 +3081,51 @@
         "finishing": "Finishing…"
       }
     }
+  },
+  "services": {
+    "title": "My services",
+    "subtitle": "{{count}} services offered",
+    "back": "Profile",
+    "empty": {
+      "title": "No services yet",
+      "subtitle": "Add the services you offer so customers can find you and you receive matching project leads."
+    },
+    "error": {
+      "title": "Couldn't load your services",
+      "subtitle": "Something went wrong while loading your services.",
+      "retry": "Try again"
+    },
+    "remove": {
+      "label": "Remove {{name}}",
+      "success": "{{name}} removed from your services.",
+      "error": "Couldn't remove the service. Please try again."
+    },
+    "add": {
+      "cta": "Add services",
+      "title": "Add services",
+      "close": "Close",
+      "cancel": "Cancel",
+      "confirm": "Add ({{count}})",
+      "adding": "Adding…",
+      "empty": "You already offer every available service.",
+      "error": "Something went wrong while loading services.",
+      "success": "Added {{count}} to your services.",
+      "submitError": "Couldn't add the services. Please try again."
+    }
+  },
+  "projectsMap": {
+    "title": "Projects Map",
+    "loadingMap": "Loading map…",
+    "allKsa": "All KSA",
+    "nearMe": "Near Me",
+    "locationFound": "Location found",
+    "locationDenied": "Location access denied",
+    "radius": "{{km}} km",
+    "legend": "Projects available to bid",
+    "viewAndBid": "View & Bid",
+    "budgetUnspecified": "Budget unspecified",
+    "empty": "No projects with location data",
+    "error": "Could not load projects. Please try again.",
+    "sar": "SAR"
   }
 }

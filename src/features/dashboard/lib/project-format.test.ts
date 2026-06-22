@@ -1,6 +1,32 @@
 import { describe, expect, it } from 'vitest';
 
-import { daysRemaining, durationWeeks, formatBudget, localizedServiceName } from './project-format';
+import {
+  daysRemaining,
+  durationWeeks,
+  formatBudget,
+  localizedServiceName,
+  shortLocation,
+} from './project-format';
+
+describe('shortLocation', () => {
+  it('returns the district/city of a long geocoded address (drops building + country)', () => {
+    expect(
+      shortLocation(
+        'برج 2CW4+W65 Mansoura Qism 2, El Mansoura 2, Dakahlia Governorate 7661660, Egypt',
+      ),
+    ).toBe('El Mansoura 2');
+  });
+
+  it('falls back to the first segment when dropping the country leaves one part', () => {
+    expect(shortLocation('Riyadh, Saudi Arabia')).toBe('Riyadh');
+  });
+
+  it('returns a single-part address unchanged, and undefined for empty/missing', () => {
+    expect(shortLocation('Jeddah')).toBe('Jeddah');
+    expect(shortLocation('')).toBeUndefined();
+    expect(shortLocation(undefined)).toBeUndefined();
+  });
+});
 
 describe('formatBudget', () => {
   it('formats the full figure with grouped Western digits (no K/M)', () => {

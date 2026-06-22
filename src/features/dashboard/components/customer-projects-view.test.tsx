@@ -1,10 +1,12 @@
 import { http, HttpResponse } from 'msw';
-import { beforeAll, beforeEach, describe, expect, it } from 'vitest';
+import { beforeAll, beforeEach, describe, expect, it, vi } from 'vitest';
 import { axe } from 'vitest-axe';
 
 import { i18n } from '@/lib/i18n';
 import { server } from '@/testing/handlers/server';
 import { fireEvent, renderWithProviders, screen, within } from '@/testing/render';
+
+vi.mock('next/navigation', () => ({ useSearchParams: () => new URLSearchParams() }));
 
 import { CustomerProjectsView } from './customer-projects-view';
 

@@ -15,6 +15,7 @@ import { ProjectImagesCard } from '../job-offer-detail/project-images-card';
 import { ProjectPhasesCard } from '../job-offer-detail/project-phases-card';
 
 import { ApprovedProjectSummaryCard } from './approved-project-summary-card';
+import { EditPhasePlan } from './edit-phase-plan';
 import { OfferAcceptedCard } from './offer-accepted-card';
 
 type Props = { projectId: number };
@@ -54,6 +55,7 @@ export function ApprovedProjectDetail({ projectId }: Props) {
           </div>
           <div className="flex w-full flex-col gap-6 lg:min-w-0 lg:flex-1">
             <ProjectDescriptionCard project={project} />
+            <EditPhasePlan projectId={projectId} />
             <ProjectPhasesCard projectId={projectId} />
             <ProjectImagesCard images={images} />
           </div>

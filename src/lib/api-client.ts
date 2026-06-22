@@ -135,8 +135,20 @@ async function streamRequest(path: string, opts: StreamOptions = {}): Promise<Re
   return res;
 }
 
+/**
+ * GET that returns the raw {@link Response} without parsing — for binary / streamed
+ * bodies (e.g. the contract PDF piped through `/api/contract-pdf`). `url` is used as-is,
+ * so the caller passes an already-absolute URL. Throws {@link ApiError} on a non-2xx.
+ */
+async function getRaw(url: string, opts: { signal?: AbortSignal } = {}): Promise<Response> {
+  const res = await fetch(url, { signal: opts.signal });
+  if (!res.ok) throw new ApiError(res.status, null);
+  return res;
+}
+
 export const apiClient = {
   stream: streamRequest,
+  getRaw,
   get: <T>(path: string, opts?: Omit<RequestOptions<T>, 'body'>) => request<T>('GET', path, opts),
   post: <T>(path: string, opts?: RequestOptions<T>) => request<T>('POST', path, opts),
   put: <T>(path: string, opts?: RequestOptions<T>) => request<T>('PUT', path, opts),

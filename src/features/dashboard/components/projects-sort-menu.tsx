@@ -2,10 +2,10 @@
 
 import { useTranslation } from 'react-i18next';
 
-import { type CustomerSortKey } from '../lib/project-customer';
+import { type ProjectSortKey } from '../lib/project-sort';
 
 /** Down-direction options render the up-glyph flipped (Figma 1469:7438 / 7441). */
-const SORT_ITEMS: { key: CustomerSortKey; down: boolean }[] = [
+const SORT_ITEMS: { key: ProjectSortKey; down: boolean }[] = [
   { key: 'highPrice', down: false },
   { key: 'lowPrice', down: true },
   { key: 'oldest', down: false },
@@ -13,8 +13,8 @@ const SORT_ITEMS: { key: CustomerSortKey; down: boolean }[] = [
 ];
 
 type Props = {
-  value: CustomerSortKey;
-  onSelect: (key: CustomerSortKey) => void;
+  value: ProjectSortKey;
+  onSelect: (key: ProjectSortKey) => void;
 };
 
 /**

@@ -67,7 +67,7 @@ export function LoginPage({
   return (
     <div className="bg-login-bg flex min-h-dvh flex-col lg:flex-row">
       <div className="flex flex-1 flex-col lg:max-w-[549px]">
-        <AuthHeader locale={locale} labels={headerLabels} />
+        <AuthHeader locale={locale} labels={headerLabels} backHref={ROUTES.HOME} />
         <div className="flex flex-1 items-center justify-center px-6 py-10">
           <div className="flex w-full max-w-[364px] flex-col gap-8">
             <LoginEnvHeading heading={labels.heading} brand={labels.headingBrand} envKey={envKey} />

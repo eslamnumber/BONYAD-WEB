@@ -11,9 +11,9 @@ beforeAll(async () => {
 });
 
 describe('JobOfferTabs', () => {
-  it('renders three tabs with the active one selected', () => {
+  it('renders the tabs with the active one selected', () => {
     renderWithProviders(<JobOfferTabs active="bestForYou" onSelect={vi.fn()} panelId="p" />);
-    expect(screen.getAllByRole('tab')).toHaveLength(3);
+    expect(screen.getAllByRole('tab')).toHaveLength(4);
     expect(screen.getByRole('tab', { name: /best for you/i })).toHaveAttribute(
       'aria-selected',
       'true',

@@ -123,6 +123,68 @@ The same logic applies to flex: `items-end` / `justify-end` for content anchorin
 
 After building any section, **toggle the `bonyad-lang` cookie between `en` and `ar` and reload each time**. The layout must mirror: card content right-anchored in `ar`, left-anchored in `en`. If a section stays anchored to the same physical side across both locales, you used `-start` where you needed `-end` (or a physical `left-*`/`right-*` slipped through). ESLint catches the physical utilities; choosing `-end` over `-start` is on you.
 
+## Direction-sensitive components — copy the existing one, never hand-roll
+
+The single most-repeated design defect is **re-deriving a direction-dependent element from first
+principles** instead of copying the established component. Logical CSS mirrors _static_ layout, but
+elements with **runtime, direction-dependent behaviour** — a continuous progress/meter fill, a slider
+track, an edge-pinned overlay, a carousel — have a bespoke implementation in this codebase that the
+conventional LTR default gets wrong under the inverted map. **Before writing one, `grep` for the
+existing version and lift its markup verbatim.**
+
+### Continuous progress / percent bar — the canonical copy
+
+Mirror [`in-progress-project-detail/project-progress-card.tsx`](../src/features/dashboard/components/in-progress-project-detail/project-progress-card.tsx) exactly:
+
+```tsx
+<div
+  className="bg-progress-track flex h-2.5 w-full items-center justify-end overflow-hidden rounded-full"
+  role="progressbar"
+  aria-label={label}
+  aria-valuenow={pct}
+  aria-valuemin={0}
+  aria-valuemax={100}
+>
+  <div
+    className="from-progress-from to-progress-to h-full rounded-full bg-gradient-to-r rtl:bg-gradient-to-l"
+    style={{ width: `${pct}%` }}
+  />
+</div>
+```
+
+- The **`flex … justify-end` track pins the fill to the inline-end** so it fills from the correct side under the inverted map (`-end` = left in `en`/RTL, right in `ar`/LTR).
+- ❌ **Never** a plain block child `("<div style={{ width }}/>")` inside the track — a block pins to the inline-**start** and fills from the wrong side. This is exactly the recurring bug.
+- Colours come from the `progress-*` tokens (each has a `.dark` pair); the gradient flips with `rtl:bg-gradient-to-l`. Always include the `role="progressbar"` aria set.
+
+### Which component to copy for what
+
+| Building…                              | Copy from                                                                                                                                                                                                                                                   |
+| -------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| continuous progress / completion bar   | `project-progress-card.tsx` (in-progress + completed variants)                                                                                                                                                                                              |
+| section heading + trailing action link | `JobOffersSection` (`text-end` heading, `order-first` action)                                                                                                                                                                                               |
+| a project/list card row (title + meta) | `job-offer-item.tsx` (`items-end`, `w-full text-end` title)                                                                                                                                                                                                 |
+| KPI / stat card row                    | `customer-project-stat-cards.tsx`                                                                                                                                                                                                                           |
+| label/value (stat) row                 | `ActiveProjectRow` (technician-active-projects) — `flex justify-between`, **value pinned to the inline-start via `order-first`, label text at the inline-end** (under the heading). Label-first-then-value reads on the wrong sides under the inverted map. |
+| segmented step/wizard progress         | `project-create/wizard-progress-bar.tsx` (`flex-row-reverse` segments)                                                                                                                                                                                      |
+
+If no precedent exists, build it with logical utilities AND verify it in both `en` (RTL) and `ar` (LTR)
+before reporting done — never assume it mirrors.
+
+## Conventional-direction screens — the screen-wide opt-out + the shared-component hazard
+
+A set of surfaces opt **out** of the inverted map and read **conventionally** (English LTR, Arabic RTL) at explicit product request — flows that should feel like a "normal" app: form-heavy screens, full-screen tools, and anything where the inverted anchor reads wrong. They scope direction with `dir={conventionalDirection(locale)}` (from [src/types/locale.ts](../src/types/locale.ts) — `en → ltr`, `ar → rtl`, the **opposite** of `LOCALE_DIRECTION`) on the **screen root**. The set includes `features/support`, `features/feedback`, `features/onboarding`, `features/sketch`, the create-project / AI-SOW flow, the change-request panels, `customer-search`, `features/portfolio`, and `features/projects-map` — **grep `conventionalDirection` (plus screen-local dir hooks like `usePortfolioDir`) for the live list before assuming a screen is or isn't one.**
+
+**Rule 1 — the `dir` scope goes on the screen root AND on every portalled modal.** A `Modal` renders through a portal to `document.body`, so it does **not** inherit the screen's `dir` — it falls back to the inverted `<html dir>`. Pass `dir={conventionalDirection(locale)}` to the `Modal` (its `dir` prop) for **each** modal a conventional-direction screen opens, or the modal's header/fields land on the inverted side. **Real regression:** `features/projects-map` shipped with **no** `dir` scope at all, so the whole screen inherited the inverted map — the filter chips scrolled the wrong way and the count/close badges sat on the wrong corner against the always-LTR Google canvas (mirror problem in each locale). Fixed by adding `dir={conventionalDirection(locale)}` to the screen root.
+
+**Rule 2 — shared components hand-tuned for the inverted map REVERSE inside a conventional-direction screen; use a conventional-dialect local variant.** Some shared chrome encodes the inverted map in its DOM order / utilities so that — _under the inverted `<html dir>`_ — it renders conventionally app-wide. Two known ones:
+
+- **`ModalHeader`** ([src/components/ui/modal.tsx](../src/components/ui/modal.tsx)) puts the **close-X first** in the DOM with `justify-between`, so under the inverted map the X lands top-right in `en` / top-left in `ar`.
+- **`SettingsBackLink`** uses `justify-end` + a `ltr:` chevron flip.
+
+Drop either inside a conventional-`dir` screen and the compensation now runs the wrong way: the close-X, back-arrow, or title flips to the **opposite** physical side from where that locale expects it (the Arabic convention shown to an English user, and the mirror in Arabic). The fix is a **conventional-dialect local variant** — a header with the **title first, close-X trailing** (`text-start` title + close at the inline-end); a back link with `justify-start`. Precedents already doing this: `SupportModalHeader`, `FeedbackModalHeader`, `PortfolioModalHeader`, and `PortfolioBackLink`. (Features can't import each other — hard rule 6 — so each conventional-dir feature carries its own copy; lifting a shared `ConventionalModalHeader` into `src/components/ui` would consolidate them.) **Real regression:** the portfolio Add / Edit / Delete modals reused the shared `ModalHeader` under the screen's conventional `dir` and rendered the close-X + title reversed in both locales; fixed with a local `PortfolioModalHeader`.
+
+**Verification:** toggle `bonyad-lang` between `en` and `ar` on the screen **and** open each modal. A close-X, back-arrow, or section title sitting on the **opposite** side from the content it belongs to is the tell-tale — it means either the screen/modal is missing its `dir` scope (Rule 1) or it's reusing an inverted-map shared component instead of the conventional-dialect variant (Rule 2).
+
 ## Horizontal icon+label rows — scope `dir`, don't `flex-row-reverse`
 
 > **Scope: in-house GENERATED designs only.** This is the preference when you compose a

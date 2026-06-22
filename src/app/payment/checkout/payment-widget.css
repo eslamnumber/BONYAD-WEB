@@ -3,9 +3,9 @@
  * paymentWidgets.js injects into the `<form class="paymentWidgets">` on
  * /payment/checkout. Tokens-only (Tailwind `--color-*` vars, so it follows light/dark).
  *
- * Note: the sensitive card-number / expiry / CVV fields are OPP-hosted iframes (PCI
- * SAQ-A), so we theme the field wrappers, labels, button and layout here; the text
- * inside those iframes uses OPP defaults (cross-origin, not stylable from our page).
+ * Note: with `wpwlOptions.style: 'plain'` the card-number / expiry / CVV fields render as
+ * same-origin `.wpwl-control-*` inputs (NOT iframes), so we fully theme their box, label,
+ * placeholder, button and layout here.
  */
 
 .wpwl-form {
@@ -90,8 +90,10 @@
  * Card-data fields (number / expiry / CVV): keep the digits flowing LTR, but anchor the
  * field content to the page's reading-start edge — RIGHT in Arabic (rtl), LEFT in English
  * (ltr) — so the placeholder + caret sit on the same side as the label (fixes the
- * "تاريخ الإنتهاء" caret-left / placeholder-right split). The cardholder-name field is
- * left to inherit the page direction (it may hold Arabic or Latin text).
+ * "رمز التحقق (CVV)" placeholder hugging the wrong edge in Arabic). `!important` is
+ * required: OPP's runtime sets an inline `text-align` on these numeric inputs, which a
+ * plain selector can't beat. The cardholder-name field is left to inherit the page
+ * direction (it may hold Arabic or Latin text).
  */
 .wpwl-control-cardNumber,
 .wpwl-control-expiry,
@@ -102,11 +104,11 @@
 [dir='rtl'] .wpwl-control-cardNumber,
 [dir='rtl'] .wpwl-control-expiry,
 [dir='rtl'] .wpwl-control-cvv {
-  text-align: right;
+  text-align: right !important;
 }
 
 [dir='ltr'] .wpwl-control-cardNumber,
 [dir='ltr'] .wpwl-control-expiry,
 [dir='ltr'] .wpwl-control-cvv {
-  text-align: left;
+  text-align: left !important;
 }

@@ -3,11 +3,12 @@
 import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Button, FieldHint, Modal, ModalFooter, ModalHeader } from '@/components/ui';
+import { Button, FieldHint, Modal, ModalFooter } from '@/components/ui';
 
 import { type PortfolioProject } from '../schemas/portfolio';
 
 import { ImageUploader } from './image-uploader';
+import { PortfolioModalHeader } from './portfolio-modal-header';
 import { ProjectFields } from './project-fields';
 import { usePortfolioDir } from './use-portfolio-dir';
 import { useProjectForm } from './use-project-form';
@@ -61,7 +62,7 @@ export function ProjectFormModal({
 
   return (
     <Modal open={open} onClose={onClose} labelledBy={titleId} dir={dir} className="max-w-[560px]">
-      <ModalHeader
+      <PortfolioModalHeader
         titleId={titleId}
         title={project ? t('portfolio.project.editTitle') : t('portfolio.project.addTitle')}
         closeLabel={t('portfolio.project.close')}

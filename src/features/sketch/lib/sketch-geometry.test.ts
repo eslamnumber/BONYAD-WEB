@@ -47,6 +47,15 @@ describe('placeOpening', () => {
   it('returns null for an unknown wall', () => {
     expect(placeOpening(bounds, { wall: 'ceiling' })).toBeNull();
   });
+
+  it('clamps doors that extend beyond wall boundaries', () => {
+    // Wall spans 0–6; offset 5 + width 1.2/2 = 5.6 center (valid)
+    // But offset 5.5 + width 1.2/2 = 6.1 extends past the wall
+    const p = placeOpening(bounds, { type: 'door', wall: 'north', offset_m: 5.5, width_m: 1.2 });
+    // Without clamping, x would be 0 + 5.5 + 0.6 = 6.1 (outside wall)
+    // Should clamp to fit within [0, 6]
+    expect(p?.x).toBeLessThanOrEqual(bounds.maxX);
+  });
 });
 
 describe('stairSteps', () => {

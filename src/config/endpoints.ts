@@ -194,9 +194,17 @@ export const API_ENDPOINTS = {
      * Assign the selected leaf service IDs to the signed-in technician during
      * post-approval onboarding (POST, Bearer) `{ serviceIds: number[] }`. Mirrors the RN
      * onboarding finish (website-bonyad/src/services/onboardingApi.ts `saveServices`, RN
-     * `TECHNICIANS.ADD_SERVICES`).
+     * `TECHNICIANS.ADD_SERVICES`). Also backs the profile "My services" add flow.
      */
     ADD_FOR_TECHNICIAN: '/technician/services/add',
+    /**
+     * Remove one service from the signed-in technician's offered set (DELETE, Bearer,
+     * no body) — the profile "My services" screen's per-row remove. `:serviceId` is
+     * replaced at the call site. Mirrors the RN call site
+     * website-bonyad/src/services/TechnicianServiceService.ts:165 (`removeService`,
+     * RN `TECHNICIANS.REMOVE_SERVICE`).
+     */
+    REMOVE_FOR_TECHNICIAN: '/technician/services/remove/:serviceId',
   },
   /** Service regions/zones (mirrors RN `ZONES.LIST`). The create-project location picker. */
   ZONES: {
@@ -278,6 +286,102 @@ export const API_ENDPOINTS = {
     DELETE: '/projects/:id',
     /** Owner load/save of an editable pending project — GET + PUT (RN OwnerProjectEditScreen). */
     OWNER_EDIT: '/projects/:id/owner-edit',
+    /** GET → projects matched to the technician's services + regions (map default feed). */
+    SUGGESTED: '/projects/technician/suggestions',
+    /** GET → projects near GPS coords. Query: `?latitude=X&longitude=Y`. */
+    NEAR_ME: '/projects/near-me',
+    /**
+     * Project supervision (technician-as-supervisor). A customer hires a technician
+     * to supervise a project end-to-end; the SP accepts/declines the invitation and,
+     * once ACTIVE, manages the project's bids + sees an audit log. Mirrors the iOS
+     * call site bonayd-ios/.../App/Utils/SupervisorAPIService.swift (backend-integration
+     * reference only). Verified live on the dev backend (GET shapes + accept + the
+     * customer hire/remove cycle confirmed against projects 213/223; the per-project
+     * path carries the project id as `:id`, matching `DETAILS`).
+     */
+    /** GET → technicians eligible to be hired as a supervisor (the customer picker).
+     *  → `HireableTechnician[]` `{ id, name, phoneNumber, profileImage, companyName }`. */
+    HIREABLE_TECHNICIANS: '/projects/hireable-technicians',
+    /** GET → projects this technician supervises. Query `?status=invited|active` →
+     *  bare array of full project DTOs carrying `supervisor*` fields + `phases[]`. */
+    SUPERVISING: '/projects/supervising',
+    /** The per-project supervisor assignment — ONE path, three verbs (all → the
+     *  `ProjectSupervisor` envelope): **GET** reads the assignment (owner + supervisor);
+     *  **POST** `{ technicianId }` hires/invites a technician (owner-only) → status
+     *  INVITED; **DELETE** cancels the invitation / removes the supervisor (owner-only)
+     *  → status REMOVED. Verified live on the dev backend. */
+    SUPERVISOR: '/projects/:id/supervisor',
+    /** POST `{ accept: boolean }` → the invited technician accepts/declines; returns
+     *  the updated `ProjectSupervisor` (status flips INVITED → ACTIVE | DECLINED). */
+    SUPERVISOR_RESPOND: '/projects/:id/supervisor/respond',
+    /** GET → the supervisor activity/audit log (bare array). 403 until the supervisor
+     *  is ACTIVE (only the owner or active supervisor may read it). */
+    SUPERVISOR_ACTIVITY: '/projects/:id/supervisor/activity',
+  },
+  /**
+   * Technician self-service endpoints (`/technicians/me/*` + off-platform projects).
+   * Power the new SP tracking dashboard. Mirror the iOS call sites
+   * bonayd-ios/.../App/Services/TechnicianDashboardAPIService.swift +
+   * App/Models/ExternalProjectModels.swift (backend-integration reference only).
+   * Verified live on the dev backend (technician 444) — the dashboard summary is
+   * snake_case; see features/dashboard/schemas/technician-dashboard.ts.
+   */
+  TECHNICIANS: {
+    /** GET → SP home snapshot: `summary` KPIs + `active_projects[]` (with progress) +
+     *  `next_payments[]` (phases) + `recent_bids[]` + `earnings_chart.monthly[]`. */
+    ME_DASHBOARD: '/technicians/me/dashboard',
+    /** GET → off-platform projects the technician tracks (`{ projects, count, success }`);
+     *  POST to create. Verified live (technician 444): list item carries `progress`
+     *  0–100, `status`, `location`, `clientName`, `isPublic`/`publicUrl`. */
+    EXTERNAL_PROJECTS: '/technicians/external-projects',
+    /** GET/PUT/DELETE one external project. */
+    EXTERNAL_PROJECT: '/technicians/external-projects/:id',
+    /** POST milestones / updates; POST `/share` to publish a public tracking link. */
+    EXTERNAL_PROJECT_MILESTONES: '/technicians/external-projects/:projectId/milestones',
+    EXTERNAL_PROJECT_SHARE: '/technicians/external-projects/:projectId/share',
+  },
+  /**
+   * Technician advertisements ("إعلاناتي" on the SP dashboard + the customer-facing
+   * "Explore offers" feed). Mirrors the iOS `AdModels.swift` (backend-integration
+   * reference only). Verified live on the dev backend (technician 444): `/ads/mine`
+   * and `/ads/feed` return `{ ads: [...] }`; an ad carries `status` ACTIVE |
+   * PENDING_APPROVAL | PAUSED | REJECTED, `impressions`/`clicks`/`ctr`, and the
+   * `technician*` + `service*` fields. See features/dashboard/schemas/ad.ts.
+   */
+  ADS: {
+    /** GET → the signed-in technician's own ads (`{ ads: Ad[] }`). */
+    MINE: '/ads/mine',
+    /** GET → the customer-facing ads feed (`{ ads: Ad[] }`). Optional service/region filters. */
+    FEED: '/ads/feed',
+    /** POST → create an ad. PUT/DELETE `/ads/:id` edit/remove. */
+    CREATE: '/ads',
+    BY_ID: '/ads/:id',
+    /** POST → pause / resume an ad (no body). */
+    PAUSE: '/ads/:id/pause',
+    UNPAUSE: '/ads/:id/unpause',
+    /** GET → per-ad analytics (impressions, clicks, ctr, clicksByDay). */
+    STATS: '/ads/:id/stats',
+    /** POST → track a customer impression / click on a feed ad (no body). */
+    IMPRESSION: '/ads/:id/impression',
+    CLICK: '/ads/:id/click',
+  },
+  /**
+   * Technician wallet / earnings & payouts ("الأرباح والتحويلات" on the SP dashboard).
+   * Mirrors the iOS `TechnicianWalletService.swift` (backend-integration reference only).
+   * Verified live on the dev backend (technician 444): GET /technician/wallet returns
+   * `{ success, wallet }` where `wallet` carries `availableBalance` / `inEscrow` /
+   * `totalEarned` / `earnedFromPhases` / `totalPaidOut` / `pendingPayouts` / `currency`
+   * (camelCase). See features/dashboard/schemas/wallet.ts. NOTE: `/technician/*` is
+   * singular, distinct from the `/technicians/me/*` dashboard endpoints.
+   */
+  WALLET: {
+    /** GET → the technician's wallet snapshot (`{ success, wallet }`). */
+    ME: '/technician/wallet',
+    /** GET → payout requests (paged). POST `/request` to withdraw, POST `/:id/cancel`. */
+    PAYOUTS: '/technician/payouts',
+    REQUEST_PAYOUT: '/technician/payouts/request',
+    /** GET/POST → the technician's bank accounts (payout destinations). */
+    BANK_ACCOUNTS: '/technician/bank-accounts',
   },
   /**
    * Change requests — the customer↔technician negotiation over an IN_PROGRESS
@@ -347,6 +451,20 @@ export const API_ENDPOINTS = {
     /** Create one phase (JSON). RN posts this once per phase after project create. */
     CREATE: '/phases',
     /**
+     * Update one phase (PUT, full JSON body { projectId, phaseNumber, description,
+     * timeSpentDays, moneySpent }). The technician's "edit phase plan" save on the
+     * APPROVED/PHASE_PLANNING screen re-sends every surviving phase. Mirrors the iOS
+     * call site bonayd-ios/.../new_request/PhasePlanningView.swift (updatePhase).
+     * Verified on dev: PUT /phases/:phaseId → 400 on an empty body (route exists).
+     */
+    UPDATE: '/phases/:phaseId',
+    /**
+     * Delete one phase (DELETE, no body) — a phase dropped from the technician's
+     * edit-phase-plan editor. Mirrors iOS PhasePlanningView.deletePhase. Verified on
+     * dev: DELETE /phases/:phaseId → 403 unauthenticated (route exists, ownership-gated).
+     */
+    DELETE: '/phases/:phaseId',
+    /**
      * Customer approves every phase at once (POST, empty JSON body). The backend
      * saves the phases and moves the project APPROVED/PHASE_PLANNING → CONTRACT_SIGNING
      * (the only transition that unlocks POST /signatures). Idempotent. Mirrors RN
@@ -405,6 +523,10 @@ export const API_ENDPOINTS = {
     DELETE: '/bids/:id',
     /** Customer accepts a technician's bid (POST, empty body). Mirrors RN `BIDS.ACCEPT`. */
     ACCEPT: '/bids/:id/accept',
+    /** Reject a bid (POST, empty body). Used by an ACTIVE project supervisor managing
+     *  the project's bids. Plain `{ error }` body on failure (e.g. "Bid not found").
+     *  Mirrors iOS SupervisorActionsService.swift; verified live on the dev backend. */
+    REJECT: '/bids/:id/reject',
   },
   CONTRACTS: {
     /**
@@ -413,6 +535,14 @@ export const API_ENDPOINTS = {
      * show when the contract was sent. Mirrors RN `CONTRACTS.BY_PROJECT`.
      */
     BY_PROJECT: '/contracts/project/:projectId',
+    /**
+     * GET → every contract the signed-in user is party to (role-agnostic — works for both
+     * customer and technician). `{ userName, contracts: MyContract[], userId, totalContracts }`;
+     * each contract carries `project{id,description}` + `technician{id,name}` + `originalDocumentUrl`
+     * / `signedDocumentUrl` + `signedAt`. Verified live on the dev backend (customer 443 had 9,
+     * technician 444 had 0). Powers the dashboard "Contracts" panel on both sides.
+     */
+    MY: '/contracts/my',
     /**
      * Generate / refresh the contract PDF and return its URL — **form-urlencoded** body
      * (`projectId, technicianId, language, returnPdf=false`) → `{ downloadUrl | pdfUrl }`.

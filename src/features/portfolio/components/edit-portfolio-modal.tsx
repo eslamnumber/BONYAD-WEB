@@ -5,7 +5,7 @@ import { useId } from 'react';
 import { useForm } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-import { Button, FieldHint, Modal, ModalFooter, ModalHeader } from '@/components/ui';
+import { Button, FieldHint, Modal, ModalFooter } from '@/components/ui';
 import { type Locale } from '@/types/locale';
 
 import { useUpdatePortfolio } from '../api/update-portfolio';
@@ -19,6 +19,7 @@ import {
 } from '../schemas/portfolio-form';
 
 import { PortfolioBasicFields } from './portfolio-basic-fields';
+import { PortfolioModalHeader } from './portfolio-modal-header';
 import { usePortfolioDir } from './use-portfolio-dir';
 
 const ACTION = 'h-11 rounded-lg text-base font-medium';
@@ -80,7 +81,7 @@ export function EditPortfolioModal({
 
   return (
     <Modal open={open} onClose={onClose} labelledBy={titleId} dir={dir} className="max-w-[520px]">
-      <ModalHeader
+      <PortfolioModalHeader
         titleId={titleId}
         title={t('portfolio.edit.title')}
         closeLabel={t('portfolio.edit.close')}

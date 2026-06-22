@@ -12,5 +12,7 @@ package-lock.json
 yarn.lock
 .husky
 public
-# Generated lookup table — machine-emitted by scripts/gen-rn-index.mjs, never hand-formatted.
+# Generated lookup tables — machine-emitted by scripts/gen-*.mjs, never hand-formatted.
 docs/rn-call-site-index.md
+docs/ios-call-site-index.md
+docs/repo-map.md

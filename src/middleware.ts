@@ -111,7 +111,10 @@ function buildCsp(nonce: string, isPaymentRoute: boolean): string {
 
 export const config = {
   matcher: [
-    // Run on every path EXCEPT static assets and Next internals.
-    '/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)',
+    // Run on every path EXCEPT static assets, Next internals, and the contract-PDF
+    // stream. The latter is excluded so the global `frame-ancestors 'none'` CSP never
+    // lands on it — that response sets its own `frame-ancestors 'self'` so the
+    // CONTRACT_SIGNING screen can embed it in a same-origin iframe (see route handler).
+    '/((?!_next/static|_next/image|favicon.ico|api/contract-pdf|.*\\.(?:svg|png|jpg|jpeg|gif|webp|ico)$).*)',
   ],
 };

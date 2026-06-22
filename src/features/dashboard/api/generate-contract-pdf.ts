@@ -1,8 +1,8 @@
 import { useQuery } from '@tanstack/react-query';
 
 import { API_ENDPOINTS } from '@/config/endpoints';
-import { env } from '@/config/env';
 import { apiClient } from '@/lib/api-client';
+import { resolvePdfUrl } from '@/lib/contract-pdf';
 
 type GeneratePdfInput = { projectId: number; technicianId: number; language: 'EN' | 'AR' };
 
@@ -25,23 +25,6 @@ export async function generateContractPdf(input: GeneratePdfInput): Promise<stri
   form.set('returnPdf', 'false');
   const data = await apiClient.post<unknown>(API_ENDPOINTS.CONTRACTS.GENERATE_PDF, { body: form });
   return resolvePdfUrl(data);
-}
-
-/** Read `downloadUrl` / `pdfUrl` / `documentUrl` and make it absolute (site origin). */
-function resolvePdfUrl(data: unknown): string | null {
-  if (!data || typeof data !== 'object') return null;
-  const o = data as Record<string, unknown>;
-  const raw = firstString(o.downloadUrl, o.pdfUrl, o.documentUrl);
-  if (!raw) return null;
-  if (/^https?:\/\//i.test(raw)) return raw;
-  return new URL(raw, env.NEXT_PUBLIC_SITE_URL).toString();
-}
-
-function firstString(...values: unknown[]): string {
-  for (const v of values) {
-    if (typeof v === 'string' && v.trim()) return v.trim();
-  }
-  return '';
 }
 
 /**

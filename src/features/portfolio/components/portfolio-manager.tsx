@@ -7,15 +7,15 @@ import { type Locale } from '@/types/locale';
 import { type Portfolio } from '../schemas/portfolio';
 
 import { EditPortfolioModal } from './edit-portfolio-modal';
-import { PortfolioInfoCard } from './portfolio-info-card';
+import { PortfolioHeader } from './portfolio-header';
 import { ProjectsSection } from './projects-section';
 
 /**
- * The "portfolio exists" view: a dashboard split — the work gallery takes the wide
- * column on the inline-START, the identity card sits in a sticky sidebar on the
- * inline-END (→ right in Arabic, left in English). Column order follows DOM order (no
- * `order` utilities), so the grid mirrors cleanly between LTR and RTL with no slip.
- * Two real columns fill the width instead of stretching a single full-width bar.
+ * The "portfolio exists" view: the merged identity masthead on top (photo · name · trade
+ * tags · stats · edit), then the work gallery full-width below — so the projects, the
+ * whole point of a portfolio, get room to breathe across up to three columns instead of
+ * being cramped into a 2/3 sidebar split. Stacked top-to-bottom, so it mirrors cleanly
+ * between LTR and RTL with no column-order slip. My own web design.
  */
 export function PortfolioManager({ portfolio, locale }: { portfolio: Portfolio; locale: Locale }) {
   const [editOpen, setEditOpen] = useState(false);
@@ -24,17 +24,13 @@ export function PortfolioManager({ portfolio, locale }: { portfolio: Portfolio; 
 
   return (
     <>
-      <div className="grid gap-6 lg:grid-cols-3 lg:items-start lg:gap-8">
-        <div className="lg:col-span-2">
-          <ProjectsSection locale={locale} fallbackProjects={embedded} />
-        </div>
-        <div className="lg:sticky lg:top-8 lg:col-span-1">
-          <PortfolioInfoCard
-            portfolio={portfolio}
-            projectCount={projectCount}
-            onEdit={() => setEditOpen(true)}
-          />
-        </div>
+      <div className="flex flex-col gap-6 lg:gap-8">
+        <PortfolioHeader
+          portfolio={portfolio}
+          projectCount={projectCount}
+          onEdit={() => setEditOpen(true)}
+        />
+        <ProjectsSection locale={locale} fallbackProjects={embedded} />
       </div>
       {editOpen ? (
         <EditPortfolioModal open portfolio={portfolio} onClose={() => setEditOpen(false)} />

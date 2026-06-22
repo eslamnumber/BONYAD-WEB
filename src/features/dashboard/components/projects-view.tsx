@@ -4,6 +4,7 @@ import { useMemo, useState, type ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { useTechnicianProjects } from '../api';
+import { sortProjects, type ProjectSortKey } from '../lib/project-sort';
 import { matchesFilter } from '../lib/project-status';
 import type { Project } from '../schemas/project';
 
@@ -28,21 +29,37 @@ type Props = {
  */
 export function ProjectsView({ emptyState }: Props) {
   const [filter, setFilter] = useState<ProjectFilterKey>('all');
+  const [sort, setSort] = useState<ProjectSortKey>('newest');
+  const [sortOpen, setSortOpen] = useState(false);
   const { data, isPending, isError } = useTechnicianProjects();
   const total = data?.length ?? 0;
-  const filtered = useMemo(
-    () => (data ?? []).filter((p) => matchesFilter(p, filter)),
-    [data, filter],
+  const visible = useMemo(
+    () =>
+      sortProjects(
+        (data ?? []).filter((p) => matchesFilter(p, filter)),
+        sort,
+      ),
+    [data, filter, sort],
   );
 
   return (
     <div className="flex flex-1 flex-col gap-6">
-      <ProjectsToolbar active={filter} onSelect={setFilter} />
+      <ProjectsToolbar
+        active={filter}
+        onSelect={setFilter}
+        sort={sort}
+        onSort={(key) => {
+          setSort(key);
+          setSortOpen(false);
+        }}
+        sortOpen={sortOpen}
+        onToggleSort={() => setSortOpen((open) => !open)}
+      />
       <ProjectsBody
         isPending={isPending}
         isError={isError}
         total={total}
-        filtered={filtered}
+        visible={visible}
         emptyState={emptyState}
       />
     </div>
@@ -53,11 +70,11 @@ type BodyProps = {
   isPending: boolean;
   isError: boolean;
   total: number;
-  filtered: Project[];
+  visible: Project[];
   emptyState: ReactNode;
 };
 
-function ProjectsBody({ isPending, isError, total, filtered, emptyState }: BodyProps) {
+function ProjectsBody({ isPending, isError, total, visible, emptyState }: BodyProps) {
   const { t } = useTranslation();
 
   if (isPending) return <TableSkeleton />;
@@ -65,9 +82,9 @@ function ProjectsBody({ isPending, isError, total, filtered, emptyState }: BodyP
   if (total === 0) {
     return <div className="flex flex-1 items-center justify-center py-12">{emptyState}</div>;
   }
-  if (filtered.length === 0) return <Centered text={t('dashboard.projects.table.filterEmpty')} />;
+  if (visible.length === 0) return <Centered text={t('dashboard.projects.table.filterEmpty')} />;
 
-  return <ProjectsTable projects={filtered} />;
+  return <ProjectsTable projects={visible} />;
 }
 
 function Centered({ text }: { text: string }) {

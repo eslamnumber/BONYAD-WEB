@@ -8,7 +8,8 @@ import { useContractPdfUrl } from '../../api/generate-contract-pdf';
 
 type Props = { projectId: number; technicianId: number | null | undefined };
 
-const BASE_CLASS =
+/** Shared outlined action-button style for the contract view / download actions. */
+export const CONTRACT_ACTION_CLASS =
   'border-brand-dark-navy text-brand-dark-navy focus-visible:outline-ring motion-safe:hover:bg-field-surface flex w-full items-center justify-center gap-2 rounded-lg border p-3 text-[15px] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2 disabled:cursor-not-allowed disabled:opacity-50';
 
 /**
@@ -43,7 +44,7 @@ export function ContractDownloadButton({ projectId, technicianId }: Props) {
         onClick={onClick}
         disabled={!hasTechnician || isFetching}
         title={hasTechnician ? undefined : t('dashboard.contractSigning.downloadUnavailable')}
-        className={BASE_CLASS}
+        className={CONTRACT_ACTION_CLASS}
       >
         <FileIcon className="size-[18px] shrink-0" aria-hidden />
         {isFetching

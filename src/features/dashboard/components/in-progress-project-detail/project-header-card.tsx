@@ -8,7 +8,7 @@ import { Avatar } from '@/components/avatar';
 import { FileIcon, MessageCircleIcon, SaudiRiyalIcon } from '@/components/icons';
 import { ROUTES } from '@/config/routes';
 
-import { localizedServiceName } from '../../lib/project-format';
+import { localizedServiceName, shortLocation } from '../../lib/project-format';
 import { type ProjectDetail } from '../../schemas/project';
 // Generic project formatters shared with the job-offer summary card (same
 // PROJECTS.DETAILS fields). TODO: lift to lib/project-format.ts when the
@@ -56,7 +56,7 @@ const ACTION_BTN =
 
 function HeaderContact({ project }: { project: ProjectDetail }) {
   const { t } = useTranslation();
-  const location = project.clientLocation || project.address;
+  const location = shortLocation(project.clientLocation || project.address);
   // Technician-only screen — message the project's client (`userId`), falling back to
   // the inbox only when the client id is absent. Never the technician themselves.
   const contactHref = project.userId
@@ -109,7 +109,7 @@ function HeaderStats({ project }: { project: ProjectDetail }) {
   const months = durationMonths(project.timeRequiredDays);
   const start = formatLongDate(project.expectedStartDate, locale);
   const budget = formatBudgetRange(project.budgetMin, project.budgetMax, project.budget);
-  const location = project.address || project.clientLocation;
+  const location = shortLocation(project.address || project.clientLocation);
 
   return (
     <div className="border-border grid grid-cols-2 gap-x-4 gap-y-5 border-t pt-6 sm:grid-cols-3 lg:flex lg:justify-between lg:gap-6">

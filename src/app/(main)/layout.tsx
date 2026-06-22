@@ -1,4 +1,5 @@
 import { AppShell, DemoBanner, getAppShellLabels } from '@/components/layout';
+import { AssistantLauncher } from '@/features/assistant';
 import { HomeAppDownloadBar } from '@/features/home';
 import { getTranslations } from '@/lib/get-translations';
 import { getServerLocale } from '@/lib/locale';
@@ -12,17 +13,20 @@ export default async function MainLayout({ children }: MainLayoutProps) {
   const labels = getAppShellLabels(t, locale as Locale);
 
   return (
-    <AppShell
-      locale={locale as Locale}
-      labels={labels}
-      topBanner={
-        <>
-          <DemoBanner label={t('common.demoBanner')} />
-          <HomeAppDownloadBar locale={locale as Locale} />
-        </>
-      }
-    >
-      {children}
-    </AppShell>
+    <>
+      <AppShell
+        locale={locale as Locale}
+        labels={labels}
+        topBanner={
+          <>
+            <DemoBanner label={t('common.demoBanner')} />
+            <HomeAppDownloadBar locale={locale as Locale} />
+          </>
+        }
+      >
+        {children}
+      </AppShell>
+      <AssistantLauncher />
+    </>
   );
 }

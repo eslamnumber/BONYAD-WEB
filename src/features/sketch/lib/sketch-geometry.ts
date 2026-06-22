@@ -45,25 +45,69 @@ export type OpeningPlacement = {
 /**
  * Place an opening at its offset along the named bounding-box wall (data-space
  * coords). Approximate — uses the room's bbox edge — which is robust for the
- * axis-aligned rooms the backend emits. Returns `null` for an unknown wall.
+ * axis-aligned rooms the backend emits. Clamps to keep doors within bounds.
  */
 export function placeOpening(bounds: Bounds, opening: SketchOpening): OpeningPlacement | null {
   const width = opening.width_m ?? 0.9;
   const offset = (opening.offset_m ?? 0) + width / 2;
   const isDoor = opening.type !== 'window';
-  const { minX, minY, maxX, maxY } = bounds;
-  switch (opening.wall) {
-    case 'north':
-      return { x: minX + offset, y: maxY, isHorizontal: true, width, isDoor };
-    case 'south':
-      return { x: minX + offset, y: minY, isHorizontal: true, width, isDoor };
-    case 'east':
-      return { x: maxX, y: minY + offset, isHorizontal: false, width, isDoor };
-    case 'west':
-      return { x: minX, y: minY + offset, isHorizontal: false, width, isDoor };
-    default:
-      return null;
-  }
+
+  const walls: Record<string, () => OpeningPlacement | null> = {
+    north: () => {
+      const min = bounds.minX + width / 2;
+      const max = bounds.maxX - width / 2;
+      return max < min
+        ? null
+        : {
+            x: clamp(bounds.minX + offset, min, max),
+            y: bounds.maxY,
+            isHorizontal: true,
+            width,
+            isDoor,
+          };
+    },
+    south: () => {
+      const min = bounds.minX + width / 2;
+      const max = bounds.maxX - width / 2;
+      return max < min
+        ? null
+        : {
+            x: clamp(bounds.minX + offset, min, max),
+            y: bounds.minY,
+            isHorizontal: true,
+            width,
+            isDoor,
+          };
+    },
+    east: () => {
+      const min = bounds.minY + width / 2;
+      const max = bounds.maxY - width / 2;
+      return max < min
+        ? null
+        : {
+            x: bounds.maxX,
+            y: clamp(bounds.minY + offset, min, max),
+            isHorizontal: false,
+            width,
+            isDoor,
+          };
+    },
+    west: () => {
+      const min = bounds.minY + width / 2;
+      const max = bounds.maxY - width / 2;
+      return max < min
+        ? null
+        : {
+            x: bounds.minX,
+            y: clamp(bounds.minY + offset, min, max),
+            isHorizontal: false,
+            width,
+            isDoor,
+          };
+    },
+  };
+
+  return walls[opening.wall ?? '']?.() ?? null;
 }
 
 const TREAD_DEPTH = 0.28;

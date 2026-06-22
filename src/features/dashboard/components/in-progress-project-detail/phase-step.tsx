@@ -2,7 +2,7 @@
 
 import { useTranslation } from 'react-i18next';
 
-import { ChevronUpIcon, PhaseCheckIcon, PlusIcon } from '@/components/icons';
+import { ChevronUpIcon, PhaseCheckIcon } from '@/components/icons';
 import { ApiError } from '@/lib/api-client';
 
 import { useRequestPhasePayment } from '../../api/request-phase-payment';
@@ -31,7 +31,6 @@ type Props = {
  * phase mutations are wired.
  */
 export function PhaseStep({ phase, state, index, expanded, onToggle, projectId }: Props) {
-  const { t } = useTranslation();
   const number = phase.phaseNumber ?? index + 1;
 
   return (
@@ -91,18 +90,8 @@ function StatusIcon({ state }: { state: PhaseProgress }) {
 }
 
 function PhaseBody({ phase, projectId }: { phase: ProjectPhase; projectId: number }) {
-  const { t } = useTranslation();
   return (
     <div className="flex flex-wrap justify-end gap-3 pb-4">
-      <PlaceholderAction icon={<PlusIcon className="size-4" aria-hidden />}>
-        {t('dashboard.projectDetail.phases.addUpdate')}
-      </PlaceholderAction>
-      <button
-        type="button"
-        className="bg-brand-dark-navy text-on-media rounded-lg px-4 py-2.5 text-sm font-medium"
-      >
-        {t('dashboard.projectDetail.phases.requestApproval')}
-      </button>
       <PhasePaymentAction phase={phase} projectId={projectId} />
     </div>
   );
@@ -152,23 +141,5 @@ function PhasePaymentAction({ phase, projectId }: { phase: ProjectPhase; project
         </p>
       ) : null}
     </div>
-  );
-}
-
-function PlaceholderAction({
-  icon,
-  children,
-}: {
-  icon: React.ReactNode;
-  children: React.ReactNode;
-}) {
-  return (
-    <button
-      type="button"
-      className="border-border text-foreground bg-card flex items-center gap-2 rounded-lg border px-4 py-2.5 text-sm font-medium"
-    >
-      {icon}
-      {children}
-    </button>
   );
 }

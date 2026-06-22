@@ -6,19 +6,28 @@ import { AwaitingOffersIcon } from '@/components/icons';
 import { Skeleton } from '@/components/ui';
 
 import { useProjectBids } from '../../api/get-project-bids';
+import type { Project } from '../../schemas/project';
 
 import { CustomerBidList } from './customer-bid-list';
 import { CustomerProjectActions } from './customer-project-actions';
+import { ProjectSowColumn } from './project-sow-column';
 
 /**
  * Customer's offer column on a pending project. Replaces the technician's
  * submit-offer panel and branches on whether bids have arrived: with at least one
  * bid it renders the {@link CustomerBidList} (Figma "Dashboard - Bids Recieved",
  * node 1473:7808); with none, the "no offers yet" card (Figma "Waiting for Bids",
- * node 1394:8565) + the owner's Edit/Delete actions. Rendered only for the project
- * owner via the role gate in {@link JobOfferDetail}.
+ * node 1394:8565) + the project's success-indicators (مؤشرات النجاح) card + the owner's
+ * Edit/Delete actions. Rendered only for the project owner via the role gate in
+ * {@link JobOfferDetail}.
  */
-export function CustomerOfferStatus({ projectId }: { projectId: number }) {
+export function CustomerOfferStatus({
+  project,
+  projectId,
+}: {
+  project?: Project;
+  projectId: number;
+}) {
   const { t } = useTranslation();
   const { bids, isPending } = useProjectBids(projectId);
 
@@ -45,6 +54,7 @@ export function CustomerOfferStatus({ projectId }: { projectId: number }) {
           </p>
         </div>
       </section>
+      {project ? <ProjectSowColumn project={project} group="kpis" /> : null}
       <CustomerProjectActions projectId={projectId} />
     </div>
   );

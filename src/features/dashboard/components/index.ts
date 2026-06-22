@@ -24,7 +24,14 @@ export { ProjectsTable } from './projects-table';
 export { ProjectsView } from './projects-view';
 export { CustomerProjectsView } from './customer-projects-view';
 export { TransactionsView } from './transactions/transactions-view';
+export { SupervisionScreen } from './supervision';
+export { SupervisionControlPanel } from './supervision';
+export { SupervisionInvitesHomeSection } from './supervision';
 
-/* Dashboard landing — role-branched at /dashboard (server-side by user.role) */
+/* Dashboard landing — role-branched at /dashboard (server-side by user.role).
+   Technicians get the new tracking dashboard ({@link TechnicianDashboardHome});
+   the discover/job-offers landing ({@link TechnicianDashboard}) moved to
+   /dashboard/job-offers. Customers (USER) get {@link CustomerDashboard}. */
 export { TechnicianDashboard } from './technician-dashboard';
+export { TechnicianDashboardHome } from './technician-dashboard-home';
 export { CustomerDashboard } from './customer/customer-dashboard';

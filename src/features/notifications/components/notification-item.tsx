@@ -1,27 +1,32 @@
 'use client';
 
+import Link from 'next/link';
 import { useTranslation } from 'react-i18next';
 
 import { NotificationBellIcon } from '@/components/icons';
+import { useAuthStore } from '@/stores/auth-store';
+import { useNotificationsStore } from '@/stores/notifications-store';
 import { type Locale } from '@/types/locale';
 
+import { useMarkNotificationRead } from '../api';
+import { notificationHref } from '../notification-href';
 import { type Notification } from '../schemas/notification';
 import { formatNotificationTime, notificationMessage, notificationTitle } from '../utils';
 
 type NotificationItemProps = { notification: Notification; locale: Locale };
 
-/**
- * One notification row (Figma 1046:7850): unread dot at the start, then the
- * text block (title / 2-line message / time) and a 48px bell-circle at the end.
- * The design's one un-iconned mock row is treated as a placeholder — every type
- * renders the bell-circle (see Phase 3 notes).
- */
-export function NotificationItem({ notification, locale }: NotificationItemProps) {
-  const { t } = useTranslation();
-  const unread = !notification.read;
+const ROW = 'border-border flex w-full items-center justify-between border-b px-6 py-4';
+const ROW_INTERACTIVE = `${ROW} transition-colors focus-visible:outline-2 focus-visible:-outline-offset-2 focus-visible:outline-ring motion-safe:hover:bg-nav-hover`;
 
+/** Unread dot + text block (title / 2-line message / time) + the 48px bell-circle (Figma 1046:7850). */
+function NotificationRowBody({
+  notification,
+  locale,
+  unread,
+}: NotificationItemProps & { unread: boolean }) {
+  const { t } = useTranslation();
   return (
-    <article className="border-border flex w-full items-center justify-between border-b px-6 py-4">
+    <>
       <span
         className={`size-2.5 shrink-0 rounded-full ${unread ? 'bg-notif-unread' : ''}`}
         aria-hidden={!unread}
@@ -46,6 +51,38 @@ export function NotificationItem({ notification, locale }: NotificationItemProps
           <NotificationBellIcon className="text-notif-icon-fg size-6" aria-hidden />
         </div>
       </div>
-    </article>
+    </>
+  );
+}
+
+/**
+ * One notification row. When the notification resolves to an in-app destination
+ * ({@link notificationHref}) the whole row is a `next/link` that marks it read,
+ * closes the drawer, and navigates there. Rows with no destination (informational
+ * types) render as a static, non-interactive row.
+ */
+export function NotificationItem({ notification, locale }: NotificationItemProps) {
+  const role = useAuthStore((s) => s.user?.role);
+  const closeDrawer = useNotificationsStore((s) => s.close);
+  const markRead = useMarkNotificationRead();
+  const unread = !notification.read;
+  const href = notificationHref(notification, role);
+
+  const body = <NotificationRowBody notification={notification} locale={locale} unread={unread} />;
+
+  if (!href) {
+    return <article className={ROW}>{body}</article>;
+  }
+  return (
+    <Link
+      href={href}
+      onClick={() => {
+        if (unread) markRead.mutate(notification.id);
+        closeDrawer();
+      }}
+      className={ROW_INTERACTIVE}
+    >
+      {body}
+    </Link>
   );
 }

@@ -47,13 +47,15 @@ describe('ProfileScreen role-awareness', () => {
     expect(screen.getByText('Account type')).toBeInTheDocument();
   });
 
-  it('keeps not-yet-built rows visible-but-non-clickable, but links the built ones', () => {
+  it('links the built rows', () => {
     setUser('TECHNICIAN');
     renderWithProviders(<ProfileScreen />);
 
-    // "Services & subscription" has no screen yet → visible label, but not a link.
-    expect(screen.getByText('Services & subscription')).toBeInTheDocument();
-    expect(screen.queryByRole('link', { name: /Services & subscription/ })).toBeNull();
+    // "Services & subscription" ships a screen now → a real navigation link.
+    expect(screen.getByRole('link', { name: /Services & subscription/ })).toHaveAttribute(
+      'href',
+      '/dashboard/settings/services',
+    );
 
     // Payment cards + Feedback ship a screen now → they are real navigation links.
     expect(screen.getByRole('link', { name: /Payment cards/ })).toHaveAttribute(

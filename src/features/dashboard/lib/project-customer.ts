@@ -21,6 +21,14 @@ export const CUSTOMER_FILTERS = [
 ] as const;
 export type CustomerFilterKey = (typeof CUSTOMER_FILTERS)[number];
 
+/** Coerce a URL `?filter=` value to a valid customer filter, defaulting to `all`.
+ *  Lets the dashboard sections deep-link the Projects screen to an exact status. */
+export function parseCustomerFilter(value: string | null | undefined): CustomerFilterKey {
+  return (CUSTOMER_FILTERS as readonly string[]).includes(value ?? '')
+    ? (value as CustomerFilterKey)
+    : 'all';
+}
+
 /** Each filter → the status badge variant it narrows to (`null` = all). */
 const FILTER_VARIANT: Record<CustomerFilterKey, ProjectStatusVariant | null> = {
   all: null,
@@ -37,28 +45,6 @@ const FILTER_VARIANT: Record<CustomerFilterKey, ProjectStatusVariant | null> = {
 export function matchesCustomerFilter(project: MyProject, key: CustomerFilterKey): boolean {
   const variant = FILTER_VARIANT[key];
   return variant === null || statusVariant(project.status) === variant;
-}
-
-/** Sort options in the menu (Figma 1468:7376). */
-export const CUSTOMER_SORTS = ['highPrice', 'lowPrice', 'oldest', 'newest'] as const;
-export type CustomerSortKey = (typeof CUSTOMER_SORTS)[number];
-
-const createdMs = (p: MyProject): number => {
-  const ms = p.createdAt ? new Date(p.createdAt).getTime() : Number.NaN;
-  return Number.isNaN(ms) ? 0 : ms;
-};
-const budgetOf = (p: MyProject): number => (typeof p.budget === 'number' ? p.budget : 0);
-
-const COMPARATORS: Record<CustomerSortKey, (a: MyProject, b: MyProject) => number> = {
-  highPrice: (a, b) => budgetOf(b) - budgetOf(a),
-  lowPrice: (a, b) => budgetOf(a) - budgetOf(b),
-  oldest: (a, b) => createdMs(a) - createdMs(b),
-  newest: (a, b) => createdMs(b) - createdMs(a),
-};
-
-/** Order projects by the chosen sort key. Pure — returns a new array. */
-export function sortProjects(projects: MyProject[], key: CustomerSortKey): MyProject[] {
-  return [...projects].sort(COMPARATORS[key]);
 }
 
 export type CustomerStatCard = { value: number; delta: number };

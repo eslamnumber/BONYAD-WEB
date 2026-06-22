@@ -8,8 +8,10 @@ import { renderWithProviders, screen } from '@/testing/render';
 
 import { JobOfferDetail } from './job-offer-detail';
 
+const nav = vi.hoisted(() => ({ search: '' }));
 vi.mock('next/navigation', () => ({
   useRouter: () => ({ push: vi.fn(), replace: vi.fn(), prefetch: vi.fn() }),
+  useSearchParams: () => new URLSearchParams(nav.search),
 }));
 
 beforeAll(async () => {
@@ -17,6 +19,7 @@ beforeAll(async () => {
 });
 
 beforeEach(() => {
+  nav.search = '';
   server.use(
     http.get('*/bids/project/:projectId', () => HttpResponse.json([])),
     http.get('*/phases/project/:projectId', () => HttpResponse.json([])),
@@ -94,6 +97,14 @@ describe('JobOfferDetail role gating', () => {
 
     expect(await screen.findByRole('button', { name: 'Submit offer' })).toBeInTheDocument();
     expect(screen.queryByRole('button', { name: 'Delete project' })).not.toBeInTheDocument();
+  });
+
+  it('hides the submit-offer form when opened as the project supervisor (?supervisor=1)', async () => {
+    nav.search = 'supervisor=1';
+    renderWithProviders(<JobOfferDetail projectId={42} />);
+
+    await screen.findByText('Brief.');
+    expect(screen.queryByRole('button', { name: 'Submit offer' })).not.toBeInTheDocument();
   });
 });
 

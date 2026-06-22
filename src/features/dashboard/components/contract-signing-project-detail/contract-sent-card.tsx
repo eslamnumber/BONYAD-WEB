@@ -14,7 +14,7 @@ import { type Contract } from '../../schemas/contract';
 import { type ProjectDetail } from '../../schemas/project';
 import { type ProjectPhase } from '../../schemas/project-phase';
 
-import { ContractDownloadButton } from './contract-download-button';
+import { ContractViewButton } from './contract-view-button';
 
 type Props = { project: ProjectDetail; phases: ProjectPhase[] };
 type ResendState = { isPending: boolean; isSuccess: boolean };
@@ -150,7 +150,7 @@ function SentActions({
       >
         {t(`dashboard.contractSigning.sent.${acknowledged ? 'signedAck' : 'signed'}`)}
       </button>
-      <ContractDownloadButton projectId={projectId} technicianId={technicianId} />
+      <ContractViewButton projectId={projectId} technicianId={technicianId} />
       <button
         type="button"
         onClick={onResend}

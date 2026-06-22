@@ -58,3 +58,26 @@ export function daysRemaining(bidsCloseAt: string | null | undefined): number | 
   const days = Math.ceil((close - Date.now()) / 86_400_000);
   return days > 0 ? days : null;
 }
+
+/** Trailing country segments dropped from a geocoded address by {@link shortLocation}. */
+const ADDRESS_COUNTRIES = /^(egypt|مصر|saudi arabia|السعودية|ksa|المملكة العربية السعودية)$/i;
+
+/**
+ * The recognizable part of a long geocoded address — the locality/city, not the full
+ * "building, district, city, governorate postal, country" string the backend stores.
+ * Splits on commas, drops a trailing country segment, and returns the district/city
+ * segment (the 2nd of a Google-style address), falling back to the first for short
+ * addresses. e.g. "برج 2CW4+W65 …, El Mansoura 2, Dakahlia … 7661660, Egypt" → "El Mansoura 2".
+ */
+export function shortLocation(address: string | null | undefined): string | undefined {
+  const raw = address?.trim();
+  if (!raw) return undefined;
+  const parts = raw
+    .split(',')
+    .map((s) => s.trim())
+    .filter(Boolean);
+  if (parts.length <= 1) return parts[0] ?? raw;
+  const last = parts[parts.length - 1] ?? '';
+  const meaningful = ADDRESS_COUNTRIES.test(last) ? parts.slice(0, -1) : parts;
+  return meaningful[1] ?? meaningful[0];
+}

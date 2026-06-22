@@ -119,8 +119,8 @@ describe('ContractSigningProjectDetail', () => {
     expect(await screen.findByText('owner@example.com')).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'I have signed' })).toBeInTheDocument();
     expect(screen.getByRole('button', { name: 'Resend' })).toBeInTheDocument();
-    // Download pre-generates the PDF, so its label flips from "Preparing…" once ready.
-    expect(await screen.findByRole('button', { name: 'Download contract (PDF)' })).toBeEnabled();
+    // The in-app PDF viewer opens from the "View contract" action.
+    expect(await screen.findByRole('button', { name: 'View contract' })).toBeEnabled();
 
     // Progress card.
     expect(screen.getByText('Project progress')).toBeInTheDocument();
@@ -147,7 +147,7 @@ describe('ContractSigningProjectDetail', () => {
     expect(resend).toBeEnabled();
   });
 
-  it('shows the technician a view + download card — no send / resend / "I have signed"', async () => {
+  it('shows the technician a view card — no send / resend / "I have signed"', async () => {
     useAuthStore.setState({
       user: { id: 9, role: 'TECHNICIAN', email: 'tech@example.com' },
       isAuthenticated: true,
@@ -173,10 +173,10 @@ describe('ContractSigningProjectDetail', () => {
     );
     expect(screen.queryByText('Selected service provider')).not.toBeInTheDocument();
 
-    // Technician's view+download card (RN's isTechnician branch).
+    // Technician's view card (RN's isTechnician branch).
     expect(await screen.findByText('Contract ready for signature')).toBeInTheDocument();
-    // Download pre-generates the PDF (POST /contracts/test/generate-pdf) then opens it.
-    expect(await screen.findByRole('button', { name: 'Download contract (PDF)' })).toBeEnabled();
+    // The contract is shown in-app via the "View contract" action.
+    expect(await screen.findByRole('button', { name: 'View contract' })).toBeEnabled();
 
     // The technician cannot initiate / resend / acknowledge — both parties sign by email.
     expect(screen.queryByRole('button', { name: 'Resend' })).not.toBeInTheDocument();

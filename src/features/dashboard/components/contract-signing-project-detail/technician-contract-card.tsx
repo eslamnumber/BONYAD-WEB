@@ -4,15 +4,15 @@ import { useTranslation } from 'react-i18next';
 
 import { ContractSentIcon } from '@/components/icons';
 
-import { ContractDownloadButton } from './contract-download-button';
+import { ContractViewButton } from './contract-view-button';
 
 type Props = { projectId: number; technicianId: number | null | undefined };
 
 /**
  * Technician's CONTRACT_SIGNING card — RN's `isTechnician` branch of
- * ContractSigningProjectScreen (view + download only). The technician cannot send or
+ * ContractSigningProjectScreen (view only). The technician cannot send or
  * resend the contract: both parties sign through the link emailed to them, so this
- * shows the "contract ready" state, a waiting note, and the download action. Routed
+ * shows the "contract ready" state, a waiting note, and the in-app view action. Routed
  * from {@link AssignedProjectDetail} for technicians (customers get the sent card).
  */
 export function TechnicianContractCard({ projectId, technicianId }: Props) {
@@ -31,7 +31,7 @@ export function TechnicianContractCard({ projectId, technicianId }: Props) {
           {t('dashboard.contractSigning.technician.waiting')}
         </p>
       </div>
-      <ContractDownloadButton projectId={projectId} technicianId={technicianId} />
+      <ContractViewButton projectId={projectId} technicianId={technicianId} />
     </section>
   );
 }

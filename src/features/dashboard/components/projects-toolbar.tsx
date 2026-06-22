@@ -4,9 +4,12 @@ import { useTranslation } from 'react-i18next';
 
 import { FilterIcon } from '@/components/icons';
 
+import { type ProjectSortKey } from '../lib/project-sort';
+
+import { ProjectsSortMenu } from './projects-sort-menu';
+
 export const PROJECT_FILTERS = [
   'all',
-  'available',
   'directAssignment',
   'bidding',
   'approved',
@@ -24,6 +27,10 @@ const TAB_INACTIVE = `${TAB_BASE} text-toggle-inactive font-medium motion-safe:h
 type Props = {
   active: ProjectFilterKey;
   onSelect: (key: ProjectFilterKey) => void;
+  sort: ProjectSortKey;
+  onSort: (key: ProjectSortKey) => void;
+  sortOpen: boolean;
+  onToggleSort: () => void;
 };
 
 /**
@@ -31,22 +38,28 @@ type Props = {
  * segmented control of status filters on the right. The segment row uses
  * `flex-row-reverse` so the default "All" segment sits at the reading-start edge
  * (right in `ar`, left in `en`) matching the RTL-first Figma, and the whole row
- * mirrors when the locale toggles. Controlled — the active filter lives in the
- * parent view so the table can read it. The filter pill is presentational for
- * now (no filter sheet in scope).
+ * mirrors when the locale toggles. Controlled — the active filter + sort state
+ * live in the parent view so the table can read them. The left filter pill opens
+ * the shared price/date {@link ProjectsSortMenu} (the parent owns its open state).
  */
-export function ProjectsToolbar({ active, onSelect }: Props) {
+export function ProjectsToolbar({ active, onSelect, sort, onSort, sortOpen, onToggleSort }: Props) {
   const { t } = useTranslation();
 
   return (
     <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
-      <button
-        type="button"
-        className="border-filter-border text-foreground/60 inline-flex shrink-0 items-center gap-2.5 self-end rounded-full border px-6 py-2.5 text-base font-medium motion-safe:transition-colors sm:self-auto"
-      >
-        {t('dashboard.projects.filter')}
-        <FilterIcon className="size-4 shrink-0" aria-hidden />
-      </button>
+      <div className="relative self-end sm:self-auto">
+        <button
+          type="button"
+          aria-haspopup="menu"
+          aria-expanded={sortOpen}
+          onClick={onToggleSort}
+          className="border-filter-border text-foreground/60 inline-flex shrink-0 items-center gap-2.5 rounded-full border px-6 py-2.5 text-base font-medium motion-safe:transition-colors"
+        >
+          {t('dashboard.projects.filter')}
+          <FilterIcon className="size-4 shrink-0" aria-hidden />
+        </button>
+        {sortOpen ? <ProjectsSortMenu value={sort} onSelect={onSort} /> : null}
+      </div>
       <div
         role="tablist"
         aria-label={t('dashboard.projects.title')}

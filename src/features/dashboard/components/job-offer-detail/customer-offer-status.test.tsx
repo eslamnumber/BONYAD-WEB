@@ -6,6 +6,8 @@ import { useAuthStore } from '@/stores/auth-store';
 import { server } from '@/testing/handlers/server';
 import { fireEvent, renderWithProviders, screen, waitFor } from '@/testing/render';
 
+import type { Project } from '../../schemas/project';
+
 import { CustomerOfferStatus } from './customer-offer-status';
 
 vi.mock('next/navigation', () => ({
@@ -59,6 +61,22 @@ describe('CustomerOfferStatus', () => {
     server.use(http.get('*/bids/project/:projectId', () => HttpResponse.json([])));
     renderWithProviders(<CustomerOfferStatus projectId={42} />);
     expect(await screen.findByText('No offers yet')).toBeInTheDocument();
+  });
+
+  it('renders the success-metrics (مؤشرات النجاح) card before the Edit project button when no bids', async () => {
+    server.use(http.get('*/bids/project/:projectId', () => HttpResponse.json([])));
+    const project = {
+      aiGenerated: true,
+      sowKpis: JSON.stringify([{ metric: 'On-time delivery', target: '95%' }]),
+    } as unknown as Project;
+    renderWithProviders(<CustomerOfferStatus project={project} projectId={42} />);
+
+    const kpis = await screen.findByText('Success metrics');
+    const editButton = screen.getByRole('button', { name: 'Edit project' });
+    // The KPIs card precedes the Edit/Delete actions in the DOM (rendered above them).
+    expect(
+      kpis.compareDocumentPosition(editButton) & Node.DOCUMENT_POSITION_FOLLOWING,
+    ).toBeTruthy();
   });
 
   it('lists bid cards, flags the lowest as best value, and enriches from the profile', async () => {

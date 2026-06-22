@@ -13,10 +13,12 @@ import { paymentHandlers } from './payments';
 import { portfolioHandlers } from './portfolio';
 import { profileHandlers } from './profile';
 import { projectHandlers } from './projects';
+import { projectsMapHandlers } from './projects-map';
 import { referralHandlers } from './referral';
 import { serviceHandlers } from './services';
 import { sketchHandlers } from './sketch';
 import { subscriptionHandlers } from './subscriptions';
+import { supervisionHandlers } from './supervision';
 import { technicianHandlers } from './technicians';
 import { termsHandlers } from './terms';
 
@@ -35,7 +37,10 @@ export const handlers = [
   ...paymentHandlers,
   ...portfolioHandlers,
   ...profileHandlers,
+  // Before projectHandlers so `*/projects/supervising` wins over `*/projects/:id`.
+  ...supervisionHandlers,
   ...projectHandlers,
+  ...projectsMapHandlers,
   ...referralHandlers,
   ...serviceHandlers,
   ...sketchHandlers,

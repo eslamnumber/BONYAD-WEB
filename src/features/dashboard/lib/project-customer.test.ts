@@ -2,7 +2,11 @@ import { describe, expect, it } from 'vitest';
 
 import type { MyProject } from '../schemas/project';
 
-import { computeCustomerStats, matchesCustomerFilter, sortProjects } from './project-customer';
+import {
+  computeCustomerStats,
+  matchesCustomerFilter,
+  parseCustomerFilter,
+} from './project-customer';
 
 const p = (over: Partial<MyProject> & { id: number }): MyProject => ({ ...over });
 
@@ -33,26 +37,6 @@ describe('matchesCustomerFilter', () => {
   });
 });
 
-describe('sortProjects', () => {
-  it('orders by price high→low and low→high', () => {
-    expect(sortProjects(SAMPLE, 'highPrice').map((x) => x.budget)).toEqual([
-      300000, 300000, 250000, 180000, 2700,
-    ]);
-    expect(sortProjects(SAMPLE, 'lowPrice')[0]?.budget).toBe(2700);
-  });
-
-  it('orders by date newest→oldest and oldest→newest', () => {
-    expect(sortProjects(SAMPLE, 'newest')[0]?.id).toBe(1);
-    expect(sortProjects(SAMPLE, 'oldest')[0]?.id).toBe(4);
-  });
-
-  it('does not mutate the input array', () => {
-    const before = SAMPLE.map((x) => x.id);
-    sortProjects(SAMPLE, 'highPrice');
-    expect(SAMPLE.map((x) => x.id)).toEqual(before);
-  });
-});
-
 describe('computeCustomerStats', () => {
   const now = new Date('2026-06-16T00:00:00Z');
 
@@ -76,5 +60,19 @@ describe('computeCustomerStats', () => {
       active: { value: 0, delta: 0 },
       completed: { value: 0, delta: 0 },
     });
+  });
+});
+
+describe('parseCustomerFilter', () => {
+  it('passes through valid filter keys', () => {
+    expect(parseCustomerFilter('contract')).toBe('contract');
+    expect(parseCustomerFilter('inProgress')).toBe('inProgress');
+    expect(parseCustomerFilter('bidding')).toBe('bidding');
+  });
+
+  it('defaults to "all" for missing or unknown values', () => {
+    expect(parseCustomerFilter(null)).toBe('all');
+    expect(parseCustomerFilter(undefined)).toBe('all');
+    expect(parseCustomerFilter('bogus')).toBe('all');
   });
 });

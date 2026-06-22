@@ -1,6 +1,6 @@
 import type { Metadata } from 'next';
 
-import { CustomerDashboard, TechnicianDashboard } from '@/features/dashboard';
+import { CustomerDashboard, TechnicianDashboardHome } from '@/features/dashboard';
 import { getTranslations } from '@/lib/get-translations';
 import { getServerLocale } from '@/lib/locale';
 import { getServerUser } from '@/lib/server-auth';
@@ -13,11 +13,11 @@ export async function generateMetadata(): Promise<Metadata> {
 
 /**
  * Dashboard landing — role-branched server-side from the validated session.
- * Customers (role `USER`) get the welcome / start-a-project landing
- * (Figma 1394:6486); technicians (and any other role) keep the job-offers +
- * projects landing. `role` is a bare string (may be ADMIN etc.), so we narrow
- * explicitly here rather than assume a union. The `getServerUser()` call is
- * deduped with the `(app)` layout's via React `cache()`.
+ * Customers (role `USER`) get the welcome / start-a-project landing; technicians
+ * (and any other role) get the SP tracking dashboard ({@link TechnicianDashboardHome})
+ * — the discover/job-offers landing moved to `/dashboard/job-offers`. `role` is a
+ * bare string (may be ADMIN etc.), so we narrow explicitly here rather than assume a
+ * union. The `getServerUser()` call is deduped with the `(app)` layout's via React `cache()`.
  */
 export default async function DashboardPage() {
   const user = await getServerUser();
@@ -27,6 +27,6 @@ export default async function DashboardPage() {
   return (user?.role ?? '').toUpperCase() === 'USER' ? (
     <CustomerDashboard />
   ) : (
-    <TechnicianDashboard />
+    <TechnicianDashboardHome />
   );
 }

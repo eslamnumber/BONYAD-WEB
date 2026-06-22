@@ -67,10 +67,25 @@ export type Project = {
  * The customer projects table derives its "current phase" column from `phases`
  * (falling back to the localized service name).
  */
-export type MyProject = Project & {
-  assignedTechnicianName?: string;
-  phases?: ProjectPhase[];
+/**
+ * Supervisor-assignment fields the backend returns on project DTOs (`/projects/my`,
+ * `/projects/supervising`). Permissive — all nullable; `supervisorStatus` is a
+ * backend-controlled string (INVITED | ACTIVE | DECLINED | REMOVED), never
+ * zod-enumerated. `canHireSupervisor` gates the customer's "Hire supervisor" action.
+ */
+export type SupervisorFields = {
+  supervisorId?: number | null;
+  supervisorName?: string | null;
+  supervisorStatus?: string | null;
+  hasActiveSupervisor?: boolean | null;
+  canHireSupervisor?: boolean | null;
 };
+
+export type MyProject = Project &
+  SupervisorFields & {
+    assignedTechnicianName?: string;
+    phases?: ProjectPhase[];
+  };
 
 /**
  * Single-project detail (GET /projects/:id). Mirrors the extra fields the RN

@@ -18,6 +18,8 @@
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit",
     "gen:rn-index": "node scripts/gen-rn-index.mjs",
+    "gen:ios-index": "node scripts/gen-ios-index.mjs",
+    "gen:repo-map": "node scripts/gen-repo-map.mjs",
     "test": "vitest run",
     "test:watch": "vitest",
     "test:coverage": "vitest run --coverage",

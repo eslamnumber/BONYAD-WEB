@@ -1,5 +1,6 @@
 'use client';
 
+import { useSearchParams } from 'next/navigation';
 import { useTranslation } from 'react-i18next';
 
 import { useAuthStore } from '@/stores/auth-store';
@@ -8,6 +9,7 @@ import { useProject } from '../../api/get-project';
 import { partitionProjectFiles } from '../../lib/project-files';
 import { isPendingOrBidPhase } from '../../lib/project-status';
 import { type ProjectDetail } from '../../schemas/project';
+import { CustomerSupervisorPanel } from '../supervision/customer-supervisor-panel';
 
 import { AttachmentsCard } from './attachments-card';
 import { CustomerOfferStatus } from './customer-offer-status';
@@ -37,6 +39,9 @@ export function JobOfferDetail({ projectId }: Props) {
   // Service providers see the submit-offer panel; the project owner (customer)
   // sees the awaiting-offers card + Edit/Delete (RN `isTechnician` gate).
   const isTechnician = (useAuthStore((s) => s.user?.role) ?? '').toUpperCase() === 'TECHNICIAN';
+  // Opened via a supervision invitation's "View details" (`?supervisor=1`): the SP is
+  // previewing the project as its supervisor, not bidding — so suppress the offer panel.
+  const supervisorPreview = useSearchParams().get('supervisor') === '1';
 
   if (isPending) return <JobOfferStatus>{t('dashboard.jobOffer.loading')}</JobOfferStatus>;
   if (isError || !project) return <JobOfferStatus>{t('dashboard.jobOffer.error')}</JobOfferStatus>;
@@ -63,6 +68,7 @@ export function JobOfferDetail({ projectId }: Props) {
             projectId={projectId}
             documents={documents}
             isTechnician={isTechnician}
+            supervisorPreview={supervisorPreview}
           />
           <ProjectContentColumn
             project={project}
@@ -94,17 +100,22 @@ function OfferSideColumn({
   projectId,
   documents,
   isTechnician,
-}: ColumnProps & { documents: string[] }) {
+  supervisorPreview,
+}: ColumnProps & { documents: string[]; supervisorPreview: boolean }) {
   return (
     <div className="flex w-full flex-col gap-6 lg:w-[400px] lg:shrink-0">
       {isTechnician ? (
         <>
-          <OfferPanel projectId={projectId} />
+          {/* Suppressed in supervisor preview — the SP manages the project, doesn't bid. */}
+          {supervisorPreview ? null : <OfferPanel projectId={projectId} />}
           <AttachmentsCard project={project} files={documents} />
           <ProjectSowColumn project={project} group="above" />
         </>
       ) : (
-        <CustomerOfferStatus projectId={projectId} />
+        <>
+          <CustomerSupervisorPanel projectId={projectId} />
+          <CustomerOfferStatus project={project} projectId={projectId} />
+        </>
       )}
     </div>
   );

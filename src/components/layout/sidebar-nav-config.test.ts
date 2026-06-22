@@ -9,11 +9,13 @@ describe('isNavActive', () => {
     expect(isNavActive('/dashboard', ROUTES.DASHBOARD)).toBe(true);
   });
 
-  it('keeps the /dashboard item active on job-offer detail subpaths', () => {
-    expect(isNavActive('/dashboard/job-offers/42', ROUTES.DASHBOARD)).toBe(true);
+  it('keeps the Job offers item active on its detail subpaths', () => {
+    expect(isNavActive('/dashboard/job-offers/42', ROUTES.DASHBOARD_JOB_OFFERS)).toBe(true);
+    expect(isNavActive('/dashboard/job-offers', ROUTES.DASHBOARD_JOB_OFFERS)).toBe(true);
   });
 
-  it('does not activate /dashboard for an unrelated sibling route', () => {
+  it('does not keep Home active on any /dashboard child route', () => {
+    expect(isNavActive('/dashboard/job-offers/42', ROUTES.DASHBOARD)).toBe(false);
     expect(isNavActive('/dashboard/projects', ROUTES.DASHBOARD)).toBe(false);
   });
 
@@ -33,10 +35,13 @@ describe('sidebar nav config', () => {
     expect(CUSTOMER_NAV.some((i) => i.key === 'offers')).toBe(false);
   });
 
-  it('technician nav leads with Job offers + Payments and has no Home/Offers items', () => {
-    expect(TECHNICIAN_NAV[0]).toMatchObject({ key: 'jobOffers', href: ROUTES.DASHBOARD });
+  it('technician nav leads with Home, then Job offers (at its own route) + Payments', () => {
+    expect(TECHNICIAN_NAV[0]).toMatchObject({ key: 'home', href: ROUTES.DASHBOARD });
+    expect(TECHNICIAN_NAV).toContainEqual(
+      expect.objectContaining({ key: 'jobOffers', href: ROUTES.DASHBOARD_JOB_OFFERS }),
+    );
     expect(TECHNICIAN_NAV.some((i) => i.key === 'payments')).toBe(true);
-    expect(TECHNICIAN_NAV.some((i) => i.key === 'home' || i.key === 'offers')).toBe(false);
+    expect(TECHNICIAN_NAV.some((i) => i.key === 'offers')).toBe(false);
   });
 
   it('exposes notifications as a drawer button (null href) in both variants', () => {

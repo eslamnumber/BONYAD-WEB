@@ -7,6 +7,7 @@ import {
   PageTransition,
   SkipLink,
 } from '@/components/layout';
+import { AssistantLauncher } from '@/features/assistant';
 import { AuthProvider } from '@/features/auth';
 import { NotificationsDrawer } from '@/features/notifications';
 import { appOnboardingRedirect } from '@/features/onboarding';
@@ -53,6 +54,7 @@ export default async function AppLayout({ children }: AppLayoutProps) {
         <DashboardSidebar />
       </div>
       <NotificationsDrawer />
+      <AssistantLauncher />
     </AuthProvider>
   );
 }

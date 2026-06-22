@@ -3,8 +3,9 @@
 import { useId } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { Button, FieldHint, Modal, ModalFooter, ModalHeader } from '@/components/ui';
+import { Button, FieldHint, Modal, ModalFooter } from '@/components/ui';
 
+import { PortfolioModalHeader } from './portfolio-modal-header';
 import { usePortfolioDir } from './use-portfolio-dir';
 
 const ACTION = 'h-11 flex-1 rounded-lg text-base font-medium';
@@ -66,7 +67,7 @@ export function DeleteProjectModal({
 
   return (
     <Modal open={open} onClose={onClose} labelledBy={titleId} dir={dir}>
-      <ModalHeader
+      <PortfolioModalHeader
         titleId={titleId}
         title={t('portfolio.project.deleteTitle')}
         closeLabel={t('portfolio.project.close')}

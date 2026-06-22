@@ -38,11 +38,11 @@ function PortfolioBackLink({ label }: { label: string }) {
 
 function LoadingState() {
   return (
-    <div className="flex flex-col gap-6" aria-hidden>
-      <Skeleton className="h-[180px] w-full rounded-2xl" />
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4">
-        {[0, 1, 2, 3].map((i) => (
-          <Skeleton key={i} className="h-[280px] w-full rounded-2xl" />
+    <div className="flex flex-col gap-6 lg:gap-8" aria-hidden>
+      <Skeleton className="h-[220px] w-full rounded-2xl" />
+      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+        {[0, 1, 2].map((i) => (
+          <Skeleton key={i} className="h-[300px] w-full rounded-2xl" />
         ))}
       </div>
     </div>
@@ -74,6 +74,9 @@ export function PortfolioScreen() {
   const locale: Locale = i18n.language?.startsWith('ar') ? 'ar' : 'en';
   const dir = usePortfolioDir();
   const portfolio = usePortfolio();
+  // The populated view renders its own h1 inside the masthead header; the other states
+  // keep the plain page title so every state still has exactly one h1.
+  const hasPortfolio = !portfolio.isPending && !portfolio.isError && portfolio.data !== null;
 
   return (
     // `dir` overrides the app's inverted en→rtl map so this screen reads conventionally
@@ -86,14 +89,16 @@ export function PortfolioScreen() {
           exception: settings sub-screens are centered, not sidebar-flush. */}
       <div className="mx-auto flex w-full max-w-5xl flex-col gap-6 lg:gap-8">
         <PortfolioBackLink label={t('portfolio.back')} />
-        <header>
-          <h1 className="text-foreground text-start text-2xl font-semibold tracking-tight sm:text-3xl">
-            {t('portfolio.title')}
-          </h1>
-          <p className="text-muted-foreground mt-1.5 text-start text-sm leading-6">
-            {t('portfolio.subtitle')}
-          </p>
-        </header>
+        {hasPortfolio ? null : (
+          <header>
+            <h1 className="text-foreground text-start text-2xl font-semibold tracking-tight sm:text-3xl">
+              {t('portfolio.title')}
+            </h1>
+            <p className="text-muted-foreground mt-1.5 text-start text-sm leading-6">
+              {t('portfolio.subtitle')}
+            </p>
+          </header>
+        )}
 
         {portfolio.isPending ? (
           <LoadingState />

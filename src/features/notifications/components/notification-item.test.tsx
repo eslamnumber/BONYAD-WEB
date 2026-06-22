@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from 'vitest';
+import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { i18n } from '@/lib/i18n';
 import { renderWithProviders, screen } from '@/testing/render';
@@ -6,6 +6,11 @@ import { renderWithProviders, screen } from '@/testing/render';
 import { type Notification } from '../schemas/notification';
 
 import { NotificationItem } from './notification-item';
+
+vi.mock('next/navigation', () => ({
+  usePathname: () => '/dashboard',
+  useRouter: () => ({ push: vi.fn(), replace: vi.fn(), refresh: vi.fn(), prefetch: vi.fn() }),
+}));
 
 const UNREAD: Notification = {
   id: 1,
@@ -50,5 +55,21 @@ describe('NotificationItem', () => {
   it('formats the timestamp with the Gregorian month', () => {
     renderWithProviders(<NotificationItem notification={UNREAD} locale="en" />);
     expect(screen.getByText(/October/)).toBeInTheDocument();
+  });
+
+  it('renders a link to the project detail when the notification targets a project', () => {
+    const projectNotification: Notification = {
+      id: 9,
+      type: 'BID_RECEIVED',
+      relatedProjectId: 42,
+      titleEn: 'New bid received',
+    };
+    renderWithProviders(<NotificationItem notification={projectNotification} locale="en" />);
+    expect(screen.getByRole('link')).toHaveAttribute('href', '/dashboard/projects/42');
+  });
+
+  it('renders a non-interactive row (no link) when the notification has no destination', () => {
+    renderWithProviders(<NotificationItem notification={UNREAD} locale="en" />);
+    expect(screen.queryByRole('link')).not.toBeInTheDocument();
   });
 });

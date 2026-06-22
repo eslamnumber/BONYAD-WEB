@@ -1,5 +1,6 @@
 'use client';
 
+import { useSearchParams } from 'next/navigation';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
@@ -7,10 +8,10 @@ import { useMyProjects } from '../api';
 import {
   computeCustomerStats,
   matchesCustomerFilter,
-  sortProjects,
+  parseCustomerFilter,
   type CustomerFilterKey,
-  type CustomerSortKey,
 } from '../lib/project-customer';
+import { sortProjects, type ProjectSortKey } from '../lib/project-sort';
 import type { MyProject } from '../schemas/project';
 
 import { CustomerProjectStatCards } from './customer-project-stat-cards';
@@ -26,8 +27,13 @@ import { CustomerProjectsToolbar } from './customer-projects-toolbar';
  */
 export function CustomerProjectsView() {
   const { data, isPending, isError } = useMyProjects();
-  const [filter, setFilter] = useState<CustomerFilterKey>('all');
-  const [sort, setSort] = useState<CustomerSortKey>('newest');
+  // Seed the toolbar from `?filter=` so the dashboard sections' "view all" links open
+  // the screen on their exact status (read once on mount — fresh navigation each time).
+  const searchParams = useSearchParams();
+  const [filter, setFilter] = useState<CustomerFilterKey>(() =>
+    parseCustomerFilter(searchParams.get('filter')),
+  );
+  const [sort, setSort] = useState<ProjectSortKey>('newest');
   const [sortOpen, setSortOpen] = useState(false);
 
   const projects = useMemo(() => data ?? [], [data]);

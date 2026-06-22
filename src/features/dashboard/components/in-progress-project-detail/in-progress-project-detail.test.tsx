@@ -78,7 +78,6 @@ describe('InProgressProjectDetail', () => {
     // Phase timeline; the active phase (2) is expanded by default → shows actions.
     expect(screen.getByText('Project phases')).toBeInTheDocument();
     expect(screen.getByText('Concrete structure')).toBeInTheDocument();
-    expect(screen.getByText('Request phase approval')).toBeInTheDocument();
     // Phase 2 is REQUESTED_PAYMENT → the request-payment action is the "requested" badge.
     expect(screen.getByText('Payment requested')).toBeInTheDocument();
   });

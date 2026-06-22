@@ -16,28 +16,59 @@ import { DeleteProjectModal } from './delete-project-modal';
 import { ProjectCard } from './project-card';
 import { ProjectFormModal } from './project-form-modal';
 
-// The gallery sits in the dashboard's wide (2/3) column inside a capped width, so two
-// columns keep each card a comfortable size — mobile-first 1 → sm:2 (never wider here).
-const GRID = 'grid gap-4 sm:grid-cols-2';
+// The gallery now spans the full content width (the identity moved into the banner
+// above), so the work gets up to three columns — mobile-first 1 → sm:2 → lg:3.
+const GRID = 'grid gap-4 sm:grid-cols-2 lg:grid-cols-3';
 
 type BodyProps = {
   projects: PortfolioProject[];
   isPending: boolean;
   isError: boolean;
   locale: Locale;
+  onAdd: () => void;
   onEdit: (p: PortfolioProject) => void;
   onDelete: (p: PortfolioProject) => void;
 };
 
+/** Empty state — an invitation to act, with its own distinct first-project CTA. */
+function ProjectsEmpty({ onAdd }: { onAdd: () => void }) {
+  const { t } = useTranslation();
+  return (
+    <div className="border-border flex flex-col items-center gap-3 rounded-2xl border border-dashed px-6 py-14 text-center">
+      <span className="bg-primary/10 text-primary flex size-12 items-center justify-center rounded-2xl">
+        <DashboardProjectsIcon className="size-6" aria-hidden />
+      </span>
+      <p className="text-foreground text-base font-semibold">
+        {t('portfolio.projects.emptyTitle')}
+      </p>
+      <p className="text-muted-foreground max-w-xs text-sm leading-6">
+        {t('portfolio.projects.emptyBody')}
+      </p>
+      <Button type="button" onClick={onAdd} className="mt-1 gap-1.5">
+        <PlusIcon className="size-4" aria-hidden />
+        {t('portfolio.projects.emptyCta')}
+      </Button>
+    </div>
+  );
+}
+
 /** Empty / loading / error / grid for the projects region (every branch rendered). */
-function ProjectsBody({ projects, isPending, isError, locale, onEdit, onDelete }: BodyProps) {
+function ProjectsBody({
+  projects,
+  isPending,
+  isError,
+  locale,
+  onAdd,
+  onEdit,
+  onDelete,
+}: BodyProps) {
   const { t } = useTranslation();
 
   if (isPending) {
     return (
       <div className={GRID} aria-hidden>
         {[0, 1, 2].map((i) => (
-          <Skeleton key={i} className="h-[280px] w-full rounded-2xl" />
+          <Skeleton key={i} className="h-[300px] w-full rounded-2xl" />
         ))}
       </div>
     );
@@ -48,15 +79,7 @@ function ProjectsBody({ projects, isPending, isError, locale, onEdit, onDelete }
     );
   }
   if (projects.length === 0) {
-    return (
-      <div className="border-border flex flex-col items-center gap-2 rounded-2xl border border-dashed py-12 text-center">
-        <DashboardProjectsIcon className="text-muted-foreground size-8 opacity-60" aria-hidden />
-        <p className="text-foreground text-sm font-medium">{t('portfolio.projects.emptyTitle')}</p>
-        <p className="text-muted-foreground max-w-xs text-sm">
-          {t('portfolio.projects.emptyBody')}
-        </p>
-      </div>
-    );
+    return <ProjectsEmpty onAdd={onAdd} />;
   }
   return (
     <ul className={GRID}>
@@ -124,6 +147,7 @@ export function ProjectsSection({
         isPending={isPending}
         isError={isError}
         locale={locale}
+        onAdd={() => setAddOpen(true)}
         onEdit={setEditing}
         onDelete={setDeleting}
       />

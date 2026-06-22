@@ -21,8 +21,15 @@ export const LOCALE_DIRECTION: Record<Locale, 'ltr' | 'rtl'> = {
 /**
  * Conventional (non-inverted) direction — English LTR, Arabic RTL. The OPPOSITE of
  * {@link LOCALE_DIRECTION}. Two legitimate uses, both narrow:
- *   1. Screen-wide opt-out at explicit product request (currently `features/support` and
- *      `features/feedback`) — a scoped `dir` on that screen's root + its portalled modals.
+ *   1. Screen-wide opt-out at explicit product request — a scoped `dir` on that screen's
+ *      root AND every portalled modal (modals portal to <body> and don't inherit the screen
+ *      dir). The set includes support, feedback, onboarding, sketch, the create-project /
+ *      AI-SOW flow, change-request panels, portfolio, and projects-map (grep
+ *      `conventionalDirection` + screen dir hooks for the live list). CAUTION: shared chrome
+ *      tuned for the inverted map (`ModalHeader`, `SettingsBackLink`) REVERSES inside these
+ *      screens — use a conventional-dialect local variant (`PortfolioModalHeader` /
+ *      `SupportModalHeader` / `PortfolioBackLink`). See docs/i18n-and-rtl.md
+ *      §Conventional-direction screens.
  *   2. A single free-text input's *writing* direction, when the user fills it in their own
  *      UI language (a reply / note / description). `dir="auto"` defaults an EMPTY field to
  *      LTR (it reads the value, not the placeholder), so under the inverted map an Arabic

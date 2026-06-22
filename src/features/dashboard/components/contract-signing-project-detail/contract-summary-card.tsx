@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 
 import { SaudiRiyalIcon } from '@/components/icons';
 
-import { localizedServiceName } from '../../lib/project-format';
+import { localizedServiceName, shortLocation } from '../../lib/project-format';
 import { type ProjectStatusVariant } from '../../lib/project-status';
 import { type ProjectDetail } from '../../schemas/project';
 import { formatBudgetRange, formatLongDate } from '../job-offer-detail/job-offer-format';
@@ -82,7 +82,7 @@ function SummaryStats({ project }: { project: ProjectDetail }) {
         {start ?? '—'}
       </SummaryStat>
       <SummaryStat label={t('dashboard.jobOffer.summary.locationLabel')}>
-        {project.address ?? project.clientLocation ?? '—'}
+        {shortLocation(project.address ?? project.clientLocation) ?? '—'}
       </SummaryStat>
     </div>
   );

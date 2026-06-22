@@ -55,7 +55,6 @@ export const ACCOUNT_ROWS: readonly ProfileLinkRow[] = [
     Icon: Wrench,
     href: ROUTES.DASHBOARD_SETTINGS_SERVICES,
     technicianOnly: true,
-    disabled: true,
   },
   {
     key: 'subscriptions',

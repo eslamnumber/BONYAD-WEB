@@ -52,6 +52,11 @@ export const ROUTES = {
   DASHBOARD_JOB_OFFERS: '/dashboard/job-offers',
   DASHBOARD_JOB_OFFER: (id: string) => `/dashboard/job-offers/${id}`,
   DASHBOARD_PROJECTS: '/dashboard/projects',
+  /** Projects screen pre-filtered to a status — the dashboard sections' "view all" links.
+   *  `filter` is a customer filter key (all/pending/bidding/approved/contract/inProgress/completed);
+   *  the customer Projects view reads `?filter=` to seed its toolbar (see project-customer.ts). */
+  DASHBOARD_PROJECTS_FILTERED: (filter: string) => `/dashboard/projects?filter=${filter}`,
+  DASHBOARD_PROJECTS_MAP: '/dashboard/projects-map',
   /** Create-a-project chooser — the launcher that offers the four creation methods
    *  (Figma 1574:2384); "New project" routes on to the method picker below. */
   DASHBOARD_PROJECTS_CREATE: '/dashboard/projects/create',
@@ -69,6 +74,11 @@ export const ROUTES = {
   DASHBOARD_PROJECTS_NEW: '/dashboard/projects/new',
   /** Assigned-project detail — dispatches approved / completed (Figma 1103:6757) / in-progress by status. */
   DASHBOARD_PROJECT: (id: string) => `/dashboard/projects/${id}`,
+  /** Supervision hub (technician-only) — Invitations + Active tabs of projects the
+   *  technician supervises (PROJECTS.SUPERVISING). */
+  DASHBOARD_SUPERVISION: '/dashboard/supervision',
+  /** Supervisor control panel for one supervised project — manage bids + activity log. */
+  DASHBOARD_SUPERVISION_PROJECT: (id: string) => `/dashboard/supervision/${id}`,
   DASHBOARD_PAYMENTS: '/dashboard/payments',
   /**
    * Standalone HyperPay COPYandPAY widget page. The phase pay flow navigates here with

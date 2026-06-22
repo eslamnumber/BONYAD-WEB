@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { Avatar } from '@/components/avatar';
 import { BookmarkIcon, SaudiRiyalIcon } from '@/components/icons';
 
-import { daysRemaining, localizedServiceName } from '../../lib/project-format';
+import { daysRemaining, localizedServiceName, shortLocation } from '../../lib/project-format';
 import { type ProjectDetail } from '../../schemas/project';
 import { ProjectStatusBadge } from '../project-status-badge';
 
@@ -90,7 +90,7 @@ function SummaryHeader({
 function SummaryClient({ project }: { project: ProjectDetail }) {
   const { t } = useTranslation();
   const days = daysSince(project.createdAt);
-  const location = project.clientLocation || project.address;
+  const location = shortLocation(project.clientLocation || project.address);
 
   return (
     <div className="flex flex-wrap items-center gap-4">
@@ -147,7 +147,7 @@ function SummaryStats({ project }: { project: ProjectDetail }) {
         )}
       </SummaryStat>
       <SummaryStat label={t('dashboard.jobOffer.summary.locationLabel')}>
-        {project.address ?? project.clientLocation ?? '—'}
+        {shortLocation(project.address ?? project.clientLocation) ?? '—'}
       </SummaryStat>
     </div>
   );

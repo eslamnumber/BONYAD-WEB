@@ -53,9 +53,18 @@ describe('JobOffersSection', () => {
     renderWithProviders(<JobOffersSection />);
 
     expect(screen.getByRole('heading', { name: /discover projects/i })).toBeInTheDocument();
-    expect(screen.getAllByRole('tab')).toHaveLength(3);
+    expect(screen.getAllByRole('tab')).toHaveLength(4);
     expect(await screen.findByRole('heading', { name: /older offer/i })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: /newer offer/i })).toBeInTheDocument();
+  });
+
+  it('links to the projects map', () => {
+    server.use(http.get('*/projects', () => HttpResponse.json([])));
+    renderWithProviders(<JobOffersSection />);
+    expect(screen.getByRole('link', { name: /view on map/i })).toHaveAttribute(
+      'href',
+      '/dashboard/projects-map',
+    );
   });
 
   it('switches to the Saved tab and shows its empty state', async () => {
@@ -69,6 +78,15 @@ describe('JobOffersSection', () => {
       'true',
     );
     expect(screen.getByText(/no saved offers/i)).toBeInTheDocument();
+  });
+
+  it('switches to the Supervision invitations tab and shows the invitation cards', async () => {
+    server.use(http.get('*/projects', () => HttpResponse.json(OPEN_PROJECTS)));
+    renderWithProviders(<JobOffersSection />);
+    await screen.findByRole('heading', { name: /older offer/i });
+
+    fireEvent.click(screen.getByRole('tab', { name: /supervision invitations/i }));
+    expect(await screen.findByRole('button', { name: 'Accept' })).toBeInTheDocument();
   });
 
   it('shows the empty state when no offers are available', async () => {

@@ -19,29 +19,52 @@ export type AuthHeaderLabels = {
   themeToggle: { ariaLabel: string; labels: { light: string; dark: string; system: string } };
 };
 
-type AuthHeaderProps = { locale: Locale; labels: AuthHeaderLabels };
+type AuthHeaderProps = {
+  locale: Locale;
+  labels: AuthHeaderLabels;
+  /**
+   * When set, the back control links to this route instead of going back in
+   * browser history. Login passes `ROUTES.HOME` so it always returns home.
+   */
+  backHref?: string;
+};
 
-/**
- * Top bar for the auth screens: a browser-history back button at the logical
- * start, with the language + theme toggles (and the mobile-only logo) at the
- * logical end. The desktop logo lives in each screen's image panel, so it is
- * hidden here past `lg`.
- */
-export function AuthHeader({ locale, labels }: AuthHeaderProps) {
+function BackControl({ labels, backHref }: { labels: AuthHeaderLabels; backHref?: string }) {
   const router = useRouter();
+  const icon = <ChevronRight className="ltr:-scale-x-100" aria-hidden />;
+  const shared = {
+    variant: 'ghost',
+    size: 'icon',
+    'aria-label': labels.backAriaLabel,
+    title: labels.back,
+  } as const;
+
+  if (backHref) {
+    return (
+      <Button asChild {...shared}>
+        <Link href={backHref}>{icon}</Link>
+      </Button>
+    );
+  }
 
   return (
+    <Button type="button" {...shared} onClick={() => router.back()}>
+      {icon}
+    </Button>
+  );
+}
+
+/**
+ * Top bar for the auth screens: a back control at the logical start, with the
+ * language + theme toggles (and the mobile-only logo) at the logical end. The
+ * back control follows browser history by default, or links to `backHref` when
+ * provided (login pins it to the home screen). The desktop logo lives in each
+ * screen's image panel, so it is hidden here past `lg`.
+ */
+export function AuthHeader({ locale, labels, backHref }: AuthHeaderProps) {
+  return (
     <header className="flex h-[78px] shrink-0 items-center justify-between gap-2 px-6">
-      <Button
-        type="button"
-        variant="ghost"
-        size="icon"
-        aria-label={labels.backAriaLabel}
-        title={labels.back}
-        onClick={() => router.back()}
-      >
-        <ChevronRight className="ltr:-scale-x-100" aria-hidden />
-      </Button>
+      <BackControl labels={labels} backHref={backHref} />
       <div className="flex items-center gap-1">
         <LanguageToggle
           current={locale}

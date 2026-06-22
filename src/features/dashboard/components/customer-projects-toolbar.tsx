@@ -4,11 +4,8 @@ import { useTranslation } from 'react-i18next';
 
 import { FilterIcon } from '@/components/icons';
 
-import {
-  CUSTOMER_FILTERS,
-  type CustomerFilterKey,
-  type CustomerSortKey,
-} from '../lib/project-customer';
+import { CUSTOMER_FILTERS, type CustomerFilterKey } from '../lib/project-customer';
+import { type ProjectSortKey } from '../lib/project-sort';
 
 import { ProjectsSortMenu } from './projects-sort-menu';
 
@@ -20,8 +17,8 @@ const TAB_INACTIVE = `${TAB_BASE} text-toggle-inactive font-medium motion-safe:h
 type Props = {
   filter: CustomerFilterKey;
   onFilter: (key: CustomerFilterKey) => void;
-  sort: CustomerSortKey;
-  onSort: (key: CustomerSortKey) => void;
+  sort: ProjectSortKey;
+  onSort: (key: ProjectSortKey) => void;
   sortOpen: boolean;
   onToggleSort: () => void;
 };

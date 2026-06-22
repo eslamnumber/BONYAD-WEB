@@ -17,12 +17,11 @@ type Props = { project: ProjectDetail };
  * "Offer accepted" card (Figma node 1103:6446) — the left column of the approved
  * screen. Backend-driven from the project's ACCEPTED bid (`useAcceptedBid` →
  * GET /bids/project/:id): shows the accepted offer value, execution period, and
- * acceptance date, then the contract / contact actions. The bid carries no
+ * acceptance date, then the "Contact the client" action. The bid carries no
  * `acceptedAt`, so the acceptance date falls back to its `createdAt`. Each value
  * degrades to "—" while the bid loads or if none is present. "Contact the client"
  * deep-links to the chat with the project owner (an existing room, or a fresh one
- * created on first message); "Review & sign contract" is a placeholder until the
- * contract flow ships on web.
+ * created on first message).
  */
 export function OfferAcceptedCard({ project }: Props) {
   const { t, i18n } = useTranslation();
@@ -63,29 +62,13 @@ export function OfferAcceptedCard({ project }: Props) {
         <InfoRow label={t('dashboard.approvedProject.accepted.dateLabel')}>{date ?? '—'}</InfoRow>
       </div>
 
-      <AcceptedActions contactHref={contactHref} />
-    </section>
-  );
-}
-
-/** Contract / contact action buttons (review-&-sign placeholder + contact-client link). */
-function AcceptedActions({ contactHref }: { contactHref: string }) {
-  const { t } = useTranslation();
-  return (
-    <div className="flex w-full flex-col gap-3">
-      <button
-        type="button"
-        className="bg-brand-dark-navy text-on-media focus-visible:outline-ring flex w-full items-center justify-center rounded-lg p-3 text-[15px] font-medium transition-opacity focus-visible:outline-2 focus-visible:outline-offset-2 motion-safe:hover:opacity-90"
-      >
-        {t('dashboard.approvedProject.accepted.reviewContract')}
-      </button>
       <Link
         href={contactHref}
         className="border-brand-dark-navy text-brand-dark-navy focus-visible:outline-ring motion-safe:hover:bg-field-surface flex w-full items-center justify-center rounded-lg border p-3 text-[15px] font-medium transition-colors focus-visible:outline-2 focus-visible:outline-offset-2"
       >
         {t('dashboard.approvedProject.accepted.contactClient')}
       </Link>
-    </div>
+    </section>
   );
 }
 

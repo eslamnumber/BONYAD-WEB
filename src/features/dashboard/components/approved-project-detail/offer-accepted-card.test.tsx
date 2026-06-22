@@ -41,7 +41,7 @@ describe('OfferAcceptedCard', () => {
     expect(screen.getByText('Your offer was accepted')).toBeInTheDocument();
   });
 
-  it('links "Contact the client" to the client conversation; the contract action stays a button', async () => {
+  it('links "Contact the client" to the client conversation; no contract action is shown', async () => {
     server.use(http.get('*/bids/project/:projectId', () => HttpResponse.json([ACCEPTED])));
     renderWithProviders(<OfferAcceptedCard project={PROJECT} />);
     const contact = await screen.findByRole('link', { name: /contact the client/i });
@@ -49,7 +49,9 @@ describe('OfferAcceptedCard', () => {
     expect(href).toContain('/dashboard/messages?');
     expect(href).toContain('user=7');
     expect(href).toContain('project=42');
-    expect(screen.getByRole('button', { name: /review & sign the contract/i })).toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: /review & sign the contract/i }),
+    ).not.toBeInTheDocument();
   });
 
   it('falls back to "—" for every value when no bid is accepted', async () => {
