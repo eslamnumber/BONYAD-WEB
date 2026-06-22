@@ -81,6 +81,18 @@ function StateMessage({ title, body }: { title: string; body: string }) {
  * theme's token colours injected so it follows light/dark. Pending / error / empty /
  * loaded states are all rendered.
  */
+function TermsErrorState({ onRetry }: { onRetry: () => void }) {
+  const { t } = useTranslation();
+  return (
+    <div className="flex flex-col gap-4">
+      <StateMessage title={t('auth.terms.errorTitle')} body={t('auth.terms.errorBody')} />
+      <Button type="button" variant="outline" onClick={onRetry} className="self-center">
+        {t('auth.terms.retry')}
+      </Button>
+    </div>
+  );
+}
+
 export function TermsDocument({ query, locale }: { query: Query; locale: Locale }) {
   const { t } = useTranslation();
   const colors = useDocumentColors();
@@ -99,21 +111,7 @@ export function TermsDocument({ query, locale }: { query: Query; locale: Locale 
   }, [body, colors, isArabic]);
 
   if (query.isPending) return <DocumentSkeleton />;
-  if (query.isError) {
-    return (
-      <div className="flex flex-col gap-4">
-        <StateMessage title={t('auth.terms.errorTitle')} body={t('auth.terms.errorBody')} />
-        <Button
-          type="button"
-          variant="outline"
-          onClick={() => query.refetch()}
-          className="self-center"
-        >
-          {t('auth.terms.retry')}
-        </Button>
-      </div>
-    );
-  }
+  if (query.isError) return <TermsErrorState onRetry={() => query.refetch()} />;
   if (!terms || !body) {
     return (
       <StateMessage title={t('auth.terms.unavailableTitle')} body={t('auth.terms.unavailable')} />

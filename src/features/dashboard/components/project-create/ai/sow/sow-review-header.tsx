@@ -49,17 +49,21 @@ export function SowReviewHeader({
         </div>
       </div>
 
-      {degraded ? (
-        <div
-          role="status"
-          className="border-warning/40 bg-warning/10 flex items-start gap-2.5 rounded-xl border p-3"
-        >
-          <Info className="text-warning mt-0.5 size-4 shrink-0" aria-hidden />
-          <p className="text-foreground/80 text-start text-xs leading-relaxed">
-            {t(`${K}.review.degraded`)}
-          </p>
-        </div>
-      ) : null}
+      {degraded ? <DegradedNotice t={t} /> : null}
     </header>
+  );
+}
+
+function DegradedNotice({ t }: { t: T }) {
+  return (
+    <div
+      role="status"
+      className="border-warning/40 bg-warning/10 flex items-start gap-2.5 rounded-xl border p-3"
+    >
+      <Info className="text-warning mt-0.5 size-4 shrink-0" aria-hidden />
+      <p className="text-foreground/80 text-start text-xs leading-relaxed">
+        {t(`${K}.review.degraded`)}
+      </p>
+    </div>
   );
 }

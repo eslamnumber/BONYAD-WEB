@@ -18,19 +18,12 @@ const EMPTY_DRAFT: PublishDraft = { address: '', photos: [] };
  * machine, and the publish pipeline. A failed publish sets `error` (the orchestrator
  * surfaces the error screen) without losing the gathered draft.
  */
-export function useSowPublish(args: {
-  sow: SowDocument | null;
-  setSow: (sow: SowDocument) => void;
-  conversationId: string;
-  locale: string;
-}) {
-  const { sow, setSow, conversationId, locale } = args;
-  const [stage, setStage] = useState<PublishStage>('review');
-  const [error, setError] = useState<PublishErr | null>(null);
-  const [projectId, setProjectId] = useState<number | null>(null);
-  const [draft, setDraft] = useState<PublishDraft>(EMPTY_DRAFT);
+function useSowRefine(
+  sow: SowDocument | null,
+  setSow: (sow: SowDocument) => void,
+  conversationId: string,
+) {
   const [isRefining, setIsRefining] = useState(false);
-
   const refine = useCallback(
     async (message: string): Promise<boolean> => {
       if (!sow || !message.trim()) return false;
@@ -47,6 +40,21 @@ export function useSowPublish(args: {
     },
     [sow, setSow, conversationId],
   );
+  return { isRefining, refine };
+}
+
+export function useSowPublish(args: {
+  sow: SowDocument | null;
+  setSow: (sow: SowDocument) => void;
+  conversationId: string;
+  locale: string;
+}) {
+  const { sow, setSow, conversationId, locale } = args;
+  const [stage, setStage] = useState<PublishStage>('review');
+  const [error, setError] = useState<PublishErr | null>(null);
+  const [projectId, setProjectId] = useState<number | null>(null);
+  const [draft, setDraft] = useState<PublishDraft>(EMPTY_DRAFT);
+  const { isRefining, refine } = useSowRefine(sow, setSow, conversationId);
 
   const publish = useCallback(async () => {
     if (!sow) return;

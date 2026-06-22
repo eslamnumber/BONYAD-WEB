@@ -49,65 +49,31 @@ export type OpeningPlacement = {
  */
 export function placeOpening(bounds: Bounds, opening: SketchOpening): OpeningPlacement | null {
   const width = opening.width_m ?? 0.9;
-  const offset = (opening.offset_m ?? 0) + width / 2;
+  const half = width / 2;
+  const offset = (opening.offset_m ?? 0) + half;
   const isDoor = opening.type !== 'window';
 
-  const walls: Record<string, () => OpeningPlacement | null> = {
-    north: () => {
-      const min = bounds.minX + width / 2;
-      const max = bounds.maxX - width / 2;
-      return max < min
-        ? null
-        : {
-            x: clamp(bounds.minX + offset, min, max),
-            y: bounds.maxY,
-            isHorizontal: true,
-            width,
-            isDoor,
-          };
-    },
-    south: () => {
-      const min = bounds.minX + width / 2;
-      const max = bounds.maxX - width / 2;
-      return max < min
-        ? null
-        : {
-            x: clamp(bounds.minX + offset, min, max),
-            y: bounds.minY,
-            isHorizontal: true,
-            width,
-            isDoor,
-          };
-    },
-    east: () => {
-      const min = bounds.minY + width / 2;
-      const max = bounds.maxY - width / 2;
-      return max < min
-        ? null
-        : {
-            x: bounds.maxX,
-            y: clamp(bounds.minY + offset, min, max),
-            isHorizontal: false,
-            width,
-            isDoor,
-          };
-    },
-    west: () => {
-      const min = bounds.minY + width / 2;
-      const max = bounds.maxY - width / 2;
-      return max < min
-        ? null
-        : {
-            x: bounds.minX,
-            y: clamp(bounds.minY + offset, min, max),
-            isHorizontal: false,
-            width,
-            isDoor,
-          };
-    },
-  };
+  // Horizontal walls clamp X (fixed Y); vertical walls clamp Y (fixed X).
+  const h = { min: bounds.minX + half, max: bounds.maxX - half, c: bounds.minX + offset };
+  const v = { min: bounds.minY + half, max: bounds.maxY - half, c: bounds.minY + offset };
+  const make = (
+    span: { min: number; max: number; c: number },
+    build: (p: number) => OpeningPlacement,
+  ): OpeningPlacement | null =>
+    span.max < span.min ? null : build(clamp(span.c, span.min, span.max));
 
-  return walls[opening.wall ?? '']?.() ?? null;
+  switch (opening.wall) {
+    case 'north':
+      return make(h, (x) => ({ x, y: bounds.maxY, isHorizontal: true, width, isDoor }));
+    case 'south':
+      return make(h, (x) => ({ x, y: bounds.minY, isHorizontal: true, width, isDoor }));
+    case 'east':
+      return make(v, (y) => ({ x: bounds.maxX, y, isHorizontal: false, width, isDoor }));
+    case 'west':
+      return make(v, (y) => ({ x: bounds.minX, y, isHorizontal: false, width, isDoor }));
+    default:
+      return null;
+  }
 }
 
 const TREAD_DEPTH = 0.28;

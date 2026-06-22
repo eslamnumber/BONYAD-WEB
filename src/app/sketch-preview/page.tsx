@@ -12,7 +12,8 @@ import { useTheme } from 'next-themes';
 import { useState } from 'react';
 
 import type { SketchJob } from '@/features/sketch';
-import sketchPreviewJob from '@/public/sketch-preview-job.json';
+
+import sketchPreviewJob from '../../../public/sketch-preview-job.json';
 
 const SketchScene = dynamic(() => import('@/features/sketch/components/viewer/sketch-scene'), {
   ssr: false,
@@ -26,7 +27,7 @@ const FLOORS: { label: string; value: number | null }[] = [
 
 export default function SketchPreviewPage() {
   const { resolvedTheme, setTheme } = useTheme();
-  const [job] = useState<SketchJob | null>(() => sketchPreviewJob as SketchJob);
+  const [job] = useState<SketchJob | null>(() => sketchPreviewJob as unknown as SketchJob);
   const [floor, setFloor] = useState<number | null>(0);
 
   if (!job?.parse || !job?.scene) return null;

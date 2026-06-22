@@ -31,6 +31,7 @@ type Props = {
  * phase mutations are wired.
  */
 export function PhaseStep({ phase, state, index, expanded, onToggle, projectId }: Props) {
+  const { t } = useTranslation();
   const number = phase.phaseNumber ?? index + 1;
 
   return (

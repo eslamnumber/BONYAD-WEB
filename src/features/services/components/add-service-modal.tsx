@@ -1,6 +1,6 @@
 'use client';
 
-import { useId, useMemo, useState } from 'react';
+import { type ReactNode, useId, useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 import { Button, Modal, ModalFooter, ModalHeader } from '@/components/ui';
@@ -69,10 +69,7 @@ export function AddServiceModal({ open, onClose, locale, ownedIds, onToast }: Pr
         closeLabel={t('services.add.close')}
         onClose={onClose}
       />
-      <div
-        dir={conventionalDirection(locale)}
-        className="flex max-h-[60dvh] flex-col gap-2 overflow-y-auto p-4"
-      >
+      <AddServiceScroller dir={conventionalDirection(locale)}>
         <AddServiceBody
           isPending={isPending}
           isError={isError}
@@ -82,7 +79,7 @@ export function AddServiceModal({ open, onClose, locale, ownedIds, onToast }: Pr
           onToggle={toggle}
           onRetry={() => void refetch()}
         />
-      </div>
+      </AddServiceScroller>
       <AddServiceFooter
         count={selected.size}
         isAdding={add.isPending}
@@ -90,6 +87,15 @@ export function AddServiceModal({ open, onClose, locale, ownedIds, onToast }: Pr
         onConfirm={handleConfirm}
       />
     </Modal>
+  );
+}
+
+function AddServiceScroller({ dir, children }: { dir: 'rtl' | 'ltr'; children: ReactNode }) {
+  // Option rows scope natural reading direction; header/footer stay inverted-map.
+  return (
+    <div dir={dir} className="flex max-h-[60dvh] flex-col gap-2 overflow-y-auto p-4">
+      {children}
+    </div>
   );
 }
 
